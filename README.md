@@ -60,6 +60,25 @@ npm run deploy       # wrangler deploy (perlu auth Cloudflare)
 - Tidak menampilkan pengalaman, klien, atau kemampuan yang tidak terverifikasi.
 - Data terpisah dari presentasi: menambah proyek = mengedit `src/data/site.ts`.
 
+## React Bits MCP
+
+React Bits tersedia melalui shadcn MCP server (7 tools). Registry di `components.json`:
+`@react-bits` -> `https://reactbits.dev/r/{name}.json` (872 items terverifikasi).
+Hermes memakai `scripts/react-bits-mcp.sh` agar proses MCP berjalan dari project root;
+konfigurasi MCP ada di `~/.hermes/config.yaml` (bukan file repo).
+
+Cari komponen lewat tool MCP `search_items_in_registries`, lalu lihat detail dan
+contoh sebelum memasang. Instalasi:
+
+```bash
+npx shadcn@latest add @react-bits/<Component-TS-TW> --cwd . --yes
+```
+
+CLI akan menambahkan source ke `src/components/` dan memasang dependency yang perlu.
+Sesudah add, jalankan `npm run build`, `npm run typecheck`, dan `npm audit`.
+Komponen React Bits memakai React islands (`client:visible` / `client:load`) di Astro;
+jangan import komponen langsung sebagai server-only Astro component.
+
 ## Deploy
 
 Butuh akun Cloudflare dan domain `mifdlal.com` terhubung ke akun tersebut.
