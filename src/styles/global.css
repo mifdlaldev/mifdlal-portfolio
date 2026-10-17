@@ -76,7 +76,8 @@
 }
 
 .section > .wrap {
-  border-top: none;
+  /* Jarak label fig. dari garis section: jangan rapat. */
+  padding-block-start: clamp(1.5rem, 3vw, 2rem);
 }
 
 /* Rail vertikal di tepi container, menerus melewati padding section. */
