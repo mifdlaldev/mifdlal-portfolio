@@ -1,15 +1,17 @@
-/* Navbar glass setelah melewati hero. Same-origin (CSP script-src 'self'). */
+/* Navbar glass: aktif begitu halaman digeser sedikit dari paling atas.
+   Same-origin (CSP script-src 'self'), passive listener, rAF-throttled. */
 (() => {
   const nav = document.querySelector('.nav');
-  const hero = document.querySelector('.hero');
-  if (!nav || !hero) return;
+  if (!nav) return;
+
+  // Ambang kecil: blur aktif walau masih di dalam hero.
+  const THRESHOLD = 4;
 
   let ticking = false;
 
   const update = () => {
     ticking = false;
-    const threshold = Math.max(0, hero.offsetTop + hero.offsetHeight - nav.offsetHeight);
-    nav.classList.toggle('is-scrolled', window.scrollY >= threshold);
+    nav.classList.toggle('is-scrolled', window.scrollY > THRESHOLD);
   };
 
   const onScroll = () => {

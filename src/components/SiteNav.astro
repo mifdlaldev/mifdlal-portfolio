@@ -37,10 +37,10 @@ const links = [
     inset-inline: 0;
     top: 0;
     z-index: 50;
-    /* Posisi atas: dark glass blur, ASCII tetap tampak sebagai warna dasar. */
-    background: color-mix(in srgb, var(--color-ink) 62%, transparent);
-    -webkit-backdrop-filter: blur(14px) saturate(1.2);
-    backdrop-filter: blur(14px) saturate(1.2);
+    /* Posisi atas: tanpa blur, latar transparan — ASCII tampil apa adanya. */
+    background: transparent;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
     /* Garis pemisah hanya muncul setelah bergeser dari paling atas. */
     border-bottom: 1px solid transparent;
     isolation: isolate;
@@ -59,9 +59,6 @@ const links = [
   @supports not (backdrop-filter: blur(1px)) {
     .nav.is-scrolled {
       background: var(--color-paper);
-    }
-    .nav:not(.is-scrolled) {
-      background: var(--color-ink);
     }
   }
 
