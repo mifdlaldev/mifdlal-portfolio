@@ -58,6 +58,49 @@
   padding-block-end: var(--space-section);
 }
 
+/* ============================================================
+   BLUEPRINT FRAME PER SECTION
+   Garis solid (bukan putus-putus) mulai section 2 dan setelahnya.
+   Hero (class .hero) tidak diberi garis.
+   - Horizontal: selebar container .wrap (1180px, ada gutter)
+   - Vertikal: rail di tepi container, menerus setinggi section
+   ============================================================ */
+.section {
+  position: relative;
+}
+
+.section > .wrap {
+  border-top: 1px solid var(--color-line);
+}
+
+/* Rail vertikal di tepi container, menerus melewati padding section. */
+.section::before,
+.section::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--color-line);
+  pointer-events: none;
+}
+
+.section::before {
+  left: max(var(--grid-gutter), calc(50% - var(--grid-max) / 2));
+}
+
+.section::after {
+  right: max(var(--grid-gutter), calc(50% - var(--grid-max) / 2));
+}
+
+/* Layar kecil: cukup garis horizontal, rail vertikal disembunyikan. */
+@media (max-width: 719px) {
+  .section::before,
+  .section::after {
+    display: none;
+  }
+}
+
 html {
   scroll-padding-top: var(--nav-h);
   background-color: var(--color-paper);
