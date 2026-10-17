@@ -55,6 +55,16 @@ public/
 wrangler.toml           konfigurasi deploy Workers Static Assets
 ```
 
+## Urutan section
+
+1. Hero
+2. Tentang
+3. Proyek
+4. Layanan
+5. Kontak
+
+Navigasi utama mengikuti urutan yang sama untuk section setelah hero.
+
 ## Navbar (frosted glass, dua state)
 
 Navbar `position: fixed`, selalu kaca buram (`backdrop-filter: blur(14px) saturate(1.2)`).
