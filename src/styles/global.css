@@ -34,12 +34,28 @@
   /* Spasi */
   --grid-max: 1180px;
   --grid-gutter: 24px;
-  --space-section: clamp(3.5rem, 7vw, 5.5rem);
+  --space-section: clamp(5rem, 10vw, 8rem);
+
+
 }
 
 /* ============================================================
    BASE
    ============================================================ */
+
+
+/* ============================================================
+   SECTION SPACING
+   Jarak antar section: padding atas tiap section, jarak bawah
+   hanya untuk section terakhir (kontak) sebelum footer.
+   ============================================================ */
+.section {
+  padding-block-start: var(--space-section);
+}
+
+.section:last-of-type {
+  padding-block-end: var(--space-section);
+}
 
 html {
   background-color: var(--color-paper);

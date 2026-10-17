@@ -1,10 +1,37 @@
 ---
 import { projects } from '../data/site'
+import GradientASCII from '../components/GradientASCII'
+
 const liveCount = projects.length
 ---
 
 <section class="hero">
-  <div class="wrap">
+  <!-- Background ASCII bergerak (React Bits). Dekoratif: aria-hidden di dalam komponen.
+       client:visible -> hidrasi ditunda sampai terlihat, jaga LCP. -->
+  <div class="hero-bg" aria-hidden="true">
+    <GradientASCII
+      client:visible
+      colors={['#2a1eff', '#6b7bff', '#1a1522']}
+      shape="rise"
+      characters=" .:-=+xX0S8#@"
+      cellSize={22}
+      density={0.68}
+      glyphOpacity={0.5}
+      glow={0}
+      gradientOpacity={0.3}
+      flicker={0.08}
+      grain={0.03}
+      speed={0.5}
+      mouseInteraction={false}
+      clickEffect="none"
+      lightMode={true}
+      dpr={1}
+      fontFamily='"Azeret Mono Variable", ui-monospace, monospace'
+    />
+    <div class="hero-veil"></div>
+  </div>
+
+  <div class="wrap hero-inner">
     <p class="fig-label">portfolio · fig. 01</p>
 
     <h1 class="hero-title">
@@ -54,9 +81,52 @@ const liveCount = projects.length
 </section>
 
 <style>
+  /* Satu layar penuh di bawah nav 64px */
   .hero {
-    padding-top: clamp(3rem, 8vh, 5.5rem);
-    padding-bottom: var(--space-section);
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+    min-height: calc(100svh - 64px);
+    padding-block: clamp(2.5rem, 6vh, 4.5rem);
+    background: var(--color-paper);
+    overflow: hidden;
+  }
+
+  /* Background ASCII + veil untuk keterbacaan teks */
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .hero-bg :global(canvas) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Veil cream tipis: jaga kontras teks di atas karakter ASCII */
+  .hero-veil {
+    position: absolute;
+    inset: 0;
+    /* Overlay rata: menurunkan seluruh ASCII supaya halus, tanpa lubang. */
+    background: linear-gradient(
+      to top,
+      color-mix(in srgb, var(--color-paper) 58%, transparent) 0%,
+      color-mix(in srgb, var(--color-paper) 50%, transparent) 52%,
+      color-mix(in srgb, var(--color-paper) 42%, transparent) 100%
+    );
+  }
+
+  /* Semua konten hero terpusat */
+  .hero-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
   }
 
   .hero-title {
@@ -70,26 +140,30 @@ const liveCount = projects.length
   }
 
   .hero-sub {
-    margin: 1.5rem 0 0;
-    max-width: 52ch;
+    margin: 1.5rem auto 0;
+    max-width: 48ch;
     font-size: clamp(1rem, 2vw, 1.125rem);
     line-height: 1.55;
-    color: var(--color-muted);
+    color: var(--color-ink);
     text-wrap: pretty;
   }
 
   .hero-actions {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 0.75rem;
-    margin-top: 2.75rem;
+    margin-top: 2.25rem;
   }
 
-  /* Panel data gaya Warp: dl/dt/dd, bukan list proyek */
+  /* Panel data gaya Warp: ringkasan bukti, bukan duplikat list proyek */
   .proof-panel {
-    margin: clamp(2.5rem, 6vw, 4rem) 0 0;
+    width: 100%;
+    max-width: 34rem;
+    margin: clamp(2.25rem, 5vw, 3.25rem) auto 0;
     border: 1px solid var(--color-line);
     background: color-mix(in srgb, var(--color-paper) 88%, white);
+    text-align: left;
   }
 
   .proof-cap {
@@ -169,6 +243,12 @@ const liveCount = projects.length
     }
     .stat:last-child {
       border-right: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-bg {
+      display: none; /* dekoratif: matikan sepenuhnya saat reduced-motion */
     }
   }
 </style>
