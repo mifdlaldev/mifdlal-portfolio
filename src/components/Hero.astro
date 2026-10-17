@@ -7,10 +7,11 @@ const liveCount = projects.length
 
 <section class="hero">
   <!-- Background ASCII bergerak (React Bits). Dekoratif: aria-hidden di dalam komponen.
-       client:visible -> hidrasi ditunda sampai terlihat, jaga LCP. -->
+       client:load -> hidrasi saat load karena hero selalu above the fold.
+       intro={false} -> ASCII tampil penuh sejak frame pertama, tanpa animasi reveal. -->
   <div class="hero-bg" aria-hidden="true">
     <GradientASCII
-      client:visible
+      client:load
       colors={['#2a1eff', '#6b7bff', '#1a1522']}
       shape="horizon"
       density={1}
@@ -23,6 +24,7 @@ const liveCount = projects.length
       mouseInteraction={false}
       clickEffect="none"
       lightMode={false}
+      intro={false}
       fontFamily='"Azeret Mono Variable", ui-monospace, monospace'
     />
     <div class="hero-veil"></div>
