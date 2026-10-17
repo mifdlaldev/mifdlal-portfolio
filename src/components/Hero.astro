@@ -129,9 +129,12 @@ const liveCount = projects.length
     width: 100%;
   }
 
-  /* Label fig. 01 di atas ASCII: putih agar menyatu dengan glyph. */
+  /* Label fig. 01 di atas ASCII: lemon, lebih besar dan tebal. */
   .hero-inner > .fig-label {
-    color: var(--color-paper);
+    color: var(--color-lemon);
+    font-size: clamp(0.8125rem, 1.1vw, 0.9375rem);
+    font-weight: 700;
+    letter-spacing: 0.1em;
   }
 
   .hero-title {
