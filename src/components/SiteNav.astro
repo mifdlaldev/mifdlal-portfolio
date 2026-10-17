@@ -37,7 +37,9 @@ const links = [
     top: 0;
     z-index: 50;
     background: var(--color-paper);
-    border-bottom: 1px solid var(--color-line);
+    /* Garis pemisah hanya muncul saat navbar sudah bergeser dari atas.
+       Warna transparan (bukan border: none) supaya tinggi navbar tetap. */
+    border-bottom: 1px solid transparent;
     isolation: isolate;
   }
 
@@ -45,6 +47,7 @@ const links = [
   /* Glass state: ditoggle oleh /js/nav-scroll.js (same-origin, CSP-safe).
      Tanpa JS / tanpa backdrop-filter: tetap solid seperti semula. */
   .nav.is-scrolled {
+    border-bottom-color: var(--color-line);
     background: color-mix(in srgb, var(--color-paper) 76%, transparent);
     -webkit-backdrop-filter: blur(14px) saturate(1.2);
     backdrop-filter: blur(14px) saturate(1.2);
@@ -59,7 +62,8 @@ const links = [
 
   @media (prefers-reduced-motion: no-preference) {
     .nav {
-      transition: background-color 200ms ease, box-shadow 200ms ease;
+      transition: background-color 200ms ease, box-shadow 200ms ease,
+        border-color 200ms ease;
     }
   }
 
