@@ -33,14 +33,21 @@ public/
 wrangler.toml           konfigurasi deploy Workers Static Assets
 ```
 
-## Navbar scroll (frosted glass)
+## Navbar (frosted glass, dua state)
 
-Setelah hero keluar dari viewport, navbar menjadi kaca buram:
+Navbar `position: fixed`, selalu kaca buram (`backdrop-filter: blur(14px) saturate(1.2)`).
+Warna menyesuaikan posisi scroll:
 
-- Threshold dihitung dari tinggi hero dikurangi tinggi navbar.
-- Efek: background transparan 76%, `backdrop-filter: blur(14px) saturate(1.2)`, shadow halus.
-- Tanpa JS: navbar tetap solid sebagai graceful fallback.
-- `/js/nav-scroll.js` same-origin, scroll listener passive dan dibatasi `requestAnimationFrame`.
+| State | Latar | Teks / tombol |
+|---|---|---|
+| Paling atas | glass gelap (ink 62%) | teks putih, CTA putih + teks ink |
+| Setelah scroll | glass terang (paper 76%) | teks ink/muted, CTA ink + teks paper |
+
+- Threshold: `hero.offsetTop + hero.offsetHeight - nav.offsetHeight`.
+- Border bawah tersembunyi di posisi atas, muncul setelah scroll.
+- Transisi 200 ms (`prefers-reduced-motion` dihormati).
+- Tanpa `backdrop-filter`: fallback solid (ink di atas, paper saat scroll).
+- `/js/nav-scroll.js` same-origin, passive listener, dibatasi `requestAnimationFrame`.
 
 ## CSP dan inline script
 
