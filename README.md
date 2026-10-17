@@ -1,10 +1,32 @@
 # mifdlal.com
 
-Situs portofolio pribadi Mifdlal Tsaqib Alfarras — freelance web & AI automation
-developer, Bandung.
+[![CI](https://github.com/mifdlaldev/mifdlal-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/mifdlaldev/mifdlal-portfolio/actions/workflows/ci.yml)
+[![License](https://img.shields.io/badge/license-proprietary-inactive.svg)](LICENSE)
+[![Node](https://img.shields.io/badge/node-22.x-3c873a.svg)](https://nodejs.org)
+[![Astro](https://img.shields.io/badge/Astro-7-ff5d01.svg)](https://astro.build)
+[![Built with Cloudflare](https://img.shields.io/badge/deploy-Workers%20Static%20Assets-f38020.svg)](https://developers.cloudflare.com/workers/static-assets/)
+
+Situs portofolio pribadi **Mifdlal Tsaqib Alfarras**, freelance web & AI automation
+developer di Bandung, Indonesia.
 
 Satu halaman, statis, tanpa runtime server. Fokus: bukti kerja yang bisa diklik
 sendiri, bukan klaim.
+
+
+## Daftar isi
+
+- [Stack](#stack)
+- [Struktur](#struktur)
+- [Navbar (frosted glass, dua state)](#navbar-frosted-glass-dua-state)
+- [CSP dan inline script](#csp-dan-inline-script)
+- [Perintah](#perintah)
+- [Validasi (hasil terakhir)](#validasi-hasil-terakhir)
+- [Aturan konten](#aturan-konten)
+- [React Bits MCP](#react-bits-mcp)
+- [Deploy](#deploy)
+- [Kontribusi](#kontribusi)
+- [Keamanan](#keamanan)
+- [Lisensi](#lisensi)
 
 ## Stack
 
@@ -43,7 +65,7 @@ Warna menyesuaikan posisi scroll:
 | Paling atas | glass gelap (ink 62%) | teks putih, CTA putih + teks ink |
 | Setelah scroll | glass terang (paper 76%) | teks ink/muted, CTA ink + teks paper |
 
-- Threshold: 4px — blur aktif begitu halaman digeser sedikit, bahkan masih di dalam hero.
+- Threshold: 4px | blur aktif begitu halaman digeser sedikit, bahkan masih di dalam hero.
 - Border bawah tersembunyi di posisi atas, muncul setelah scroll.
 - Transisi 200 ms (`prefers-reduced-motion` dihormati).
 - Tanpa `backdrop-filter`: fallback solid (ink di atas, paper saat scroll).
@@ -74,10 +96,10 @@ npm run deploy       # wrangler deploy (perlu auth Cloudflare)
 
 ## Validasi (hasil terakhir)
 
-- `npm run build` — sukses
-- `npm run typecheck` — bersih
-- `npm audit --omit=dev` — 0 vulnerabilities
-- Lighthouse — mobile 100/100/100/100, desktop 100/100/100/100 (FCP 1.0s/0.3s, CLS 0)
+- `npm run build` | sukses
+- `npm run typecheck` | bersih
+- `npm audit --omit=dev` | 0 vulnerabilities
+- Lighthouse | mobile 100/100/100/100, desktop 100/100/100/100 (FCP 1.0s/0.3s, CLS 0)
 - Output: 0 script tag, CSS 21.6 KB (5 KB gzip), 0 em dash
 
 ## Aturan konten
@@ -121,3 +143,15 @@ di dashboard Cloudflare. Security headers diserve dari `public/_headers`.
 
 `hello@mifdlal.com` (tujuan utama). Fallback sementara sampai email domain aktif
 tercatat di `src/data/site.ts`.
+
+## Kontribusi
+
+Lihat [CONTRIBUTING.md](CONTRIBUTING.md) dan [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+
+## Keamanan
+
+Kebijakan pelaporan ada di [SECURITY.md](SECURITY.md).
+
+## Lisensi
+
+Proprietary. Lihat [LICENSE](LICENSE). Seluruh hak cipta milik Mifdlal Tsaqib Alfarras.

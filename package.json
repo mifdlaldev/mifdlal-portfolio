@@ -41,5 +41,16 @@
     "@fontsource-variable/space-grotesk": "^5.3.0",
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.7.0"
+  },
+  "description": "Personal portfolio of Mifdlal Tsaqib Alfarras. Evidence-first projects, services, and contact.",
+  "author": "Mifdlal Tsaqib Alfarras",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mifdlaldev/mifdlal-portfolio.git"
+  },
+  "homepage": "https://mifdlal.com",
+  "bugs": {
+    "url": "https://github.com/mifdlaldev/mifdlal-portfolio/issues"
   }
 }
