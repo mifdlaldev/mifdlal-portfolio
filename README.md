@@ -33,6 +33,25 @@ public/
 wrangler.toml           konfigurasi deploy Workers Static Assets
 ```
 
+## Navbar scroll (frosted glass)
+
+Setelah hero keluar dari viewport, navbar menjadi kaca buram:
+
+- Threshold dihitung dari tinggi hero dikurangi tinggi navbar.
+- Efek: background transparan 76%, `backdrop-filter: blur(14px) saturate(1.2)`, shadow halus.
+- Tanpa JS: navbar tetap solid sebagai graceful fallback.
+- `/js/nav-scroll.js` same-origin, scroll listener passive dan dibatasi `requestAnimationFrame`.
+
+## CSP dan inline script
+
+CSP memakai `script-src 'self'` tanpa `unsafe-inline`. Astro menghasilkan inline
+script untuk island hydration; `scripts/csp-hash.mjs` menghitung SHA-256 tiap inline
+script setelah build dan menyuntik hash ke `dist/_headers`.
+
+Jalankan `npm run build`; `postbuild` berjalan otomatis. Deploy `dist/_headers`.
+Validasi produksi memakai server yang mengirim CSP tersebut: React canvas hydrate,
+navbar beralih ke `blur(14px)` saat scroll, kembali solid di atas, tanpa error CSP.
+
 ## Perintah
 
 ```bash
