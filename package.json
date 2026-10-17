@@ -12,7 +12,8 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lh": "lighthouse http://localhost:4321/ --only-categories=performance,accessibility,best-practices,seo --output=html --chrome-flags=--headless=new --no-sandbox",
     "lint:css": "echo 'no stylelint configured'",
-    "audit": "npm audit --omit=dev"
+    "audit": "npm audit --omit=dev",
+    "postbuild": "node scripts/csp-hash.mjs"
   },
   "devDependencies": {
     "@astrojs/react": "^7.1.0",
