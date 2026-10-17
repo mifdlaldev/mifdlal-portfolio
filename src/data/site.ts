@@ -1,5 +1,5 @@
 /**
- * Data konten — satu sumber kebenaran.
+ * Data konten: satu sumber kebenaran.
  * Semua nilai di sini berasal dari KONTEN.md (berbukti).
  * MENAMBAH proyek = menambah entri di sini, bukan mengedit JSX.
  */

@@ -4,7 +4,7 @@
 @import "@fontsource-variable/azeret-mono";
 
 /* ============================================================
-   DESIGN TOKENS — mifdlal.com (Warp.dev grammar)
+   DESIGN TOKENS: mifdlal.com (Warp.dev grammar)
    Ekstrak dari warp.dev CSS nyata (2026-10-17):
      --p-space #1a1522 (ink) | --p-8bit #2a1eff (aksen elektrik)
      --p-lilac #b7a4f2 | --p-lemon #eef17c (highlight)
@@ -15,7 +15,7 @@
    ============================================================ */
 
 @theme {
-  /* Palet — dari warp.dev :root */
+  /* Palet: dari warp.dev :root */
   --color-ink: #1a1522;        /* --p-space: near-black ungu */
   --color-paper: #fdfcf1;      /* bg cream warp */
   --color-electric: #2a1eff;   /* --p-8bit: aksen biru elektrik */
@@ -113,7 +113,7 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Dot grid blueprint — latar warp.dev */
+/* Dot grid blueprint: latar warp.dev */
 body {
   margin: 0;
   min-height: 100dvh;
@@ -133,7 +133,7 @@ body {
   }
 }
 
-/* Fokus keyboard — non-negotiable a11y */
+/* Fokus keyboard: non-negotiable a11y */
 :focus-visible {
   outline: 2px solid var(--color-electric);
   outline-offset: 2px;
@@ -145,7 +145,7 @@ body {
 }
 
 /* ============================================================
-   PRIMITIVES — grammar Warp.dev
+   PRIMITIVES: grammar Warp.dev
    ============================================================ */
 
 /* Wrap: max 1180px, gutter 24px (dari warp .wrap) */
@@ -156,7 +156,7 @@ body {
   padding-inline: var(--grid-gutter);
 }
 
-/* Label mono kecil: "fig. 1 — selected work" */
+/* Label mono kecil: "fig. 1: selected work" */
 .fig-label {
   font-family: var(--font-mono);
   font-size: 0.6875rem;

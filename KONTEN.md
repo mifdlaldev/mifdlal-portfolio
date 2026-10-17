@@ -1,4 +1,4 @@
-# KONTEN.md — mifdlal.com
+# KONTEN.md: mifdlal.com
 
 Konten berbukti. Aturan: yang tidak ada buktinya tidak ditulis (R-17, R-36, R-38).
 Bahasa: Indonesia untuk narasi, istilah teknis English. Tanpa em dash.

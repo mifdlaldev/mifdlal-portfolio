@@ -1,11 +1,11 @@
-# DESIGN.md — mifdlal.com
+# DESIGN.md: mifdlal.com
 
 Arah desain untuk situs personal brand Mifdlal Tsaqib Alfarras.
 File ini = arah (soul). Filter = antislop (core + antislop-ui).
 
 **Revisi 2026-10-17 (v2):** operator meminta bahasa desain mengikuti **warp.dev**
 secara presisi (layout, komponen, tipografi, warna). Sebelumnya memakai arah
-dark-navy + amber + liquid glass — dibuang seluruhnya. Klon eksplisit diizinkan
+dark-navy + amber + liquid glass: dibuang seluruhnya. Klon eksplisit diizinkan
 oleh R-30 hanya bila operator meminta langsung (dokumen ini mencatat permintaan itu).
 
 Yang DIADOSI = bahasa desain Warp, diukur dari CSS produksi mereka, bukan aset brand:
@@ -65,7 +65,7 @@ Skala:
 - Nav: tinggi 64px, link mono uppercase 12px.
 - Section: `padding-block: clamp(3.5rem, 7vw, 5.5rem)`.
 - Urutan: Hero (fig. 01) -> Proyek (fig. 02) -> Tentang (fig. 03) -> Layanan (fig. 04) -> Kontak (fig. 05) -> Footer.
-- Motif identitas: label `fig. NN — nama` (mono lowercase) di atas tiap section headline.
+- Motif identitas: label `fig. NN: nama` (mono lowercase) di atas tiap section headline.
 
 ## Komponen (grammar Warp)
 
@@ -132,8 +132,8 @@ fonts and brand assets substituted with open alternatives.
 
 ## Sumber
 
-- warp.dev production CSS (`/_next/static/immutable/chunks/*.css`, diambil 2026-10-17) —
+- warp.dev production CSS (`/_next/static/immutable/chunks/*.css`, diambil 2026-10-17) -
   token `--p-space`, `--p-8bit`, `--p-lilac`, `--p-lemon`, `.wrap`, `.btn`, `.tag`,
   `.section-headline`, dot-grid background.
-- warp.dev rendered @1440px — hierarki hero (fig label -> headline -> subhead -> 2 tombol -> panel fig).
+- warp.dev rendered @1440px: hierarki hero (fig label -> headline -> subhead -> 2 tombol -> panel fig).
 - Antislop core + antislop-ui (R-02, R-05, R-06, R-11, R-13, R-17, R-30, R-36, R-37).
