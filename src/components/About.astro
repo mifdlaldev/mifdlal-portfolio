@@ -1,0 +1,108 @@
+---
+import { stack } from '../data/site'
+---
+
+<section id="tentang" class="section">
+  <div class="wrap">
+    {/* Eyebrow di atas — axis konsisten dengan 01/03/04 */}
+    <span class="eyebrow">02 / Tentang</span>
+    <h2 class="section-title">Developer di Bandung.</h2>
+
+    <div class="about-grid">
+      {/* Kolom kiri: stack, bukan label kosong lagi */}
+      <div class="about-stack">
+        <p class="stack-label">Yang saya pakai</p>
+        <ul class="stack-list">
+          {stack.map((s) => <li class="tag">{s}</li>)}
+        </ul>
+      </div>
+
+      <div class="about-body">
+        <p class="lede">
+          Saya bangun aplikasi web dan otomasi AI untuk bisnis kecil dan menengah
+          di Indonesia. Fokus saya: hasil yang jalan, bukan slide.
+        </p>
+
+        <p>
+          Semua proyek di halaman ini bisa kamu buka dan periksa sendiri, bukan
+          gambar. Setiap tahap saya tangani sendiri, dan AI dipakai sebagai alat
+          kerja supaya pengiriman lebih cepat tanpa menurunkan mutu.
+        </p>
+
+        <p class="learning">
+          Sedang dipelajari: otomasi workflow dengan n8n.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-title {
+    margin: 0.75rem 0 0;
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-top: 2.25rem;
+  }
+
+  .about-stack {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 1.5rem;
+  }
+
+  .stack-label {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin: 0 0 0.85rem;
+  }
+
+  .stack-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    align-items: center;
+  }
+
+  .about-body {
+    max-width: 62ch;
+  }
+
+  .lede {
+    font-size: 1.15rem;
+    line-height: 1.6;
+    margin: 0 0 1.25rem;
+    color: var(--color-paper);
+    text-wrap: pretty;
+  }
+
+  .about-body p {
+    color: var(--color-muted);
+    line-height: 1.65;
+    margin: 0 0 1.25rem;
+  }
+
+  .learning {
+    font-size: 0.9rem;
+    color: var(--color-muted);
+    font-style: italic;
+    margin: 0;
+  }
+
+  @media (min-width: 860px) {
+    .about-grid {
+      grid-template-columns: 14rem 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+  }
+</style>

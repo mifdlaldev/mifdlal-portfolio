@@ -1,0 +1,101 @@
+---
+import { projects } from '../data/site'
+const liveCount = projects.length
+---
+
+<section class="hero section">
+  <div class="wrap">
+    <p class="eyebrow">Portfolio</p>
+
+    <h1 class="hero-title">
+      Mifdlal Tsaqib Alfarras
+    </h1>
+
+    <p class="hero-role">
+      Freelance Web &amp; AI Automation Developer, Bandung
+    </p>
+
+    <p class="hero-value">
+      Bangun web app dan otomasi AI untuk UMKM Indonesia, dari nol sampai live.
+    </p>
+
+    <p class="hero-proof">
+      {liveCount} proyek live. Kode terbuka di GitHub. Kerjakan sendiri dari desain sampai deploy.
+    </p>
+
+    <div class="hero-actions">
+      <a href="#proyek" class="cta-primary">Lihat proyek</a>
+      <a href="#kontak" class="cta-ghost">Email saya</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-top: clamp(4rem, 11vh, 7rem);
+    /* .section memberi padding-block penuh; hero override supaya jeda ke
+       section berikutnya tidak jadi void. Section berikutnya tetap punya
+       padding atas sendiri, jadi total jarak tetap lega tapi tidak terlalu renggang. */
+    padding-bottom: 0;
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 7vw, 4.5rem);
+    line-height: 1.1; /* 1.0 bikin descender "q" menyentuh baris bawah */
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    margin: 1rem 0 0;
+    /* tanpa max-width: judul panjang tidak dipaksa jadi widow "Alfarras" */
+    text-wrap: balance;
+  }
+
+  .hero-role {
+    margin: 1.25rem 0 0;
+    font-size: clamp(1rem, 2.2vw, 1.15rem);
+    color: var(--color-paper);
+    opacity: 0.72;
+    letter-spacing: 0.01em;
+  }
+
+  .hero-value {
+    margin: 2rem 0 0;
+    font-size: clamp(1.15rem, 2.8vw, 1.5rem);
+    line-height: 1.5;
+    max-width: 34ch;
+    color: var(--color-paper);
+    text-wrap: pretty;
+  }
+
+  .hero-proof {
+    margin: 1rem 0 0;
+    font-size: 0.95rem; /* tidak dikecilkan: teks bukti harus terbaca jelas */
+    color: var(--color-muted);
+    max-width: 46ch;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.25rem;
+    margin-top: 2.5rem;
+  }
+
+  .cta-ghost {
+    display: inline-flex;
+    align-items: center;
+    height: 44px; /* alignment optical center dengan CTA utama */
+    padding: 0 0.25rem;
+    color: var(--color-muted);
+    font-size: 0.95rem;
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-concrete);
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .cta-ghost:hover {
+    color: var(--color-paper);
+    border-bottom-color: var(--color-amber);
+  }
+</style>

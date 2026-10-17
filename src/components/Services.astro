@@ -1,0 +1,83 @@
+---
+import { services } from '../data/site'
+---
+
+<section id="layanan" class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">03 / Layanan</span>
+      <h2 class="section-title">Yang bisa saya kerjakan untuk bisnis kamu.</h2>
+    </div>
+
+    <ul class="service-list">
+      {services.map((s) => (
+        <li class="service-row">
+          <span class="service-no">{s.no}</span>
+          <div class="service-body">
+            <h3 class="service-title">{s.title}</h3>
+            <p class="service-text">{s.body}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .section-head {
+    margin-bottom: 2.5rem;
+    max-width: 52ch;
+  }
+
+
+  /* List, bukan 3 kartu sama (RHYTHM 3). */
+  .service-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .service-row {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.25rem;
+    padding: 1.75rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .service-row:last-child {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .service-no {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-amber);
+    padding-top: 0.35rem;
+    letter-spacing: 0.05em;
+  }
+
+  .service-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    margin: 0 0 0.5rem;
+    letter-spacing: -0.01em;
+  }
+
+  .service-text {
+    margin: 0;
+    color: var(--color-muted);
+    line-height: 1.6;
+    font-size: 0.95rem;
+    max-width: 58ch;
+  }
+
+  @media (max-width: 560px) {
+    .service-row {
+      grid-template-columns: 1fr;
+      gap: 0.6rem;
+    }
+  }
+</style>

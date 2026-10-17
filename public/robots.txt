@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mifdlal.com/sitemap-index.xml

@@ -1,0 +1,115 @@
+---
+import { contact } from '../data/site'
+const subject = encodeURIComponent('Diskusi proyek web atau otomasi AI')
+---
+
+<section id="kontak" class="section">
+  <div class="wrap contact-grid">
+    <div class="contact-left">
+      <span class="eyebrow">04 / Kontak</span>
+      <h2 class="section-title">Ceritakan kebutuhanmu.</h2>
+      <p class="contact-note">
+        Email adalah cara terbaik untuk menghubungi saya. Balas dalam satu hari kerja.
+      </p>
+    </div>
+
+    <div class="contact-actions">
+      <a
+        href={`mailto:${contact.email}?subject=${subject}`}
+        class="contact-email"
+      >
+        {contact.email}
+      </a>
+
+      <div class="contact-links">
+        <a href={contact.github} target="_blank" rel="noopener noreferrer">
+          GitHub <span aria-hidden="true">↗</span>
+        </a>
+        <a href={contact.business} target="_blank" rel="noopener noreferrer">
+          MTA Devworks <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+
+      <p class="contact-fallback">
+        Jika email domain belum aktif, kirim ke {contact.emailFallback}.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .contact-note {
+    color: var(--color-muted);
+    margin: 1rem 0 0;
+    line-height: 1.6;
+    max-width: 42ch;
+  }
+
+  .contact-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    align-items: flex-start;
+  }
+
+  .contact-email {
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
+    color: var(--color-paper);
+    text-decoration: none;
+    border-bottom: 2px solid var(--color-amber);
+    padding-bottom: 0.25rem;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    transition: color 0.15s ease;
+  }
+
+  .contact-email:hover {
+    color: var(--color-amber);
+  }
+
+  .contact-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+  }
+
+  .contact-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--color-muted);
+    text-decoration: none;
+    font-size: 0.95rem;
+    border-bottom: 1px solid transparent;
+    padding-bottom: 2px;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .contact-links a:hover {
+    color: var(--color-paper);
+    border-bottom-color: var(--color-amber);
+  }
+
+  .contact-fallback {
+    font-size: 0.82rem;
+    color: var(--color-muted);
+    opacity: 0.85;
+  }
+
+  @media (min-width: 860px) {
+    .contact-grid {
+      /* kolom label sama lebar dengan About -> ritme grid seragam di halaman */
+      grid-template-columns: 14rem 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+  }
+</style>

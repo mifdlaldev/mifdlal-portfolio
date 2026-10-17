@@ -1,0 +1,42 @@
+---
+const year = new Date().getFullYear()
+---
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <p class="footer-copy">
+      © {year} Mifdlal Tsaqib Alfarras. Dibangun dari nol, dikerjakan sendiri.
+    </p>
+    <p class="footer-meta">
+      <span class="tag">Astro</span>
+      <span class="tag">Cloudflare</span>
+    </p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-block: 2rem;
+  }
+
+  .footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .footer-copy {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--color-muted);
+  }
+
+  .footer-meta {
+    display: flex;
+    gap: 0.4rem;
+    margin: 0;
+  }
+</style>

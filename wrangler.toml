@@ -1,0 +1,17 @@
+# Cloudflare Workers Static Assets — mifdlal.com
+# Deploy: npm run deploy  (= wrangler deploy)
+# Preview lokal: npm run preview
+
+name = "mifdlal"
+compatibility_date = "2026-10-17"
+
+# Astro output: static -> langsung diserve dari ./dist
+[assets]
+directory = "./dist"
+not_found_handling = "404-page"
+run_worker_first = false
+
+# Catatan: route pattern dan zone_name dikonfigurasi di dashboard Cloudflare
+# atau via `wrangler deploy` setelah domain mifdlal.com sudah terhubung ke akun.
+# Redirect www -> apex dan HTTPS enforcement dikelola lewat Cloudflare SSL/TLS
+# settings (Flexible/Full) + Page Rules, bukan di sini.

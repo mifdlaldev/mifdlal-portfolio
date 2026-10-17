@@ -1,0 +1,33 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+.astro/
+
+# env & secrets — JANGAN pernah commit
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# wrangler state
+.wrangler/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# logs
+npm-debug.log*
+yarn-error.log*
+
+# artefak kerja lokal — jangan masuk repo
+.shots/
+.lh-*.json
+.lighthouse*.json
+*.local

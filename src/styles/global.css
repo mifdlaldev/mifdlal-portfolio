@@ -1,0 +1,193 @@
+@import "tailwindcss";
+
+/* ============================================================
+   DESIGN TOKENS — mifdlal.com
+   Sumber: DESIGN.md. Tailwind v4 (config CSS-first, @theme).
+   Palet: 2 core + 1 accent (R-29). Semua lewat WCAG AA.
+   ============================================================ */
+
+@theme {
+  /* Palet */
+  --color-ink: #0a1628;        /* base gelap */
+  --color-ink-2: #0e1c33;      /* layer naik satu (panel) */
+  --color-paper: #f4f1ea;      /* teks utama / permukaan terang */
+  --color-amber: #f59e0b;      /* accent tunggal */
+  --color-concrete: #3a4a63;   /* garis, surface, non-aktif */
+  --color-muted: #a3b0c0;      /* teks sekunder (≈8:1 di navy, nyaman di ukuran kecil) */
+
+  /* Radius (Tahoe rounded, R-11: variasi = hierarki) */
+  --radius-panel: 24px;
+  --radius-card: 16px;
+  --radius-field: 8px;
+
+  /* Tipografi — system stack, nol CDN (constraint operator) */
+  --font-display: Georgia, "Iowan Old Style", "Palatino Linotype", "Times New Roman", serif;
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  /* Spasi vertikal section */
+  --space-section: clamp(3.5rem, 7vw, 5.5rem);
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+
+html {
+  background-color: var(--color-ink);
+  color: var(--color-paper);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  /* Latar bertekstur: glass butuh latar non-polos di belakangnya.
+     Satu gradient besar di kiri-atas saja, subtle. Tanpa orb glow
+     di kanan-bawah (itu tell AI-slop, dan melonjak saat di-crop). */
+  background-image:
+    radial-gradient(70rem 50rem at 8% -8%, rgba(58, 74, 99, 0.32), transparent 55%);
+  background-attachment: fixed;
+}
+
+/* Fokus keyboard selalu terlihat (aksesibilitas non-negotiable). */
+:focus-visible {
+  outline: 2px solid var(--color-amber);
+  outline-offset: 3px;
+  border-radius: var(--radius-field);
+}
+
+::selection {
+  background: rgba(245, 158, 11, 0.28);
+  color: var(--color-paper);
+}
+
+/* ============================================================
+   GLASS SURFACE — pakai maks 2 per viewport (R-10 dose cap)
+   Fakta: web tidak bisa refraction asli (backdrop-filter tidak
+   menggeser piksel). Yang direplikasi: blur + translucency +
+   specular edge. Specular edge = kunci baca "kaca".
+   ============================================================ */
+
+.glass {
+  background: rgba(255, 255, 255, 0.06);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  backdrop-filter: blur(10px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.55),   /* specular edge atas */
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08),
+    0 10px 30px rgba(0, 0, 0, 0.32);
+}
+
+/* Film solid di belakang teks di atas kaca: jaga kontras WCAG. */
+.glass-solid {
+  background: rgba(10, 22, 40, 0.72);
+}
+
+/* Fallback: browser tanpa backdrop-filter -> solid, tidak tembus. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass {
+    background: rgba(14, 28, 51, 0.96);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+}
+
+/* Hormati preferensi transparansi rendah (macOS/iOS setting). */
+@media (prefers-reduced-transparency: reduce) {
+  .glass {
+    background: #12203a;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    border-color: rgba(255, 255, 255, 0.16);
+  }
+}
+
+/* Kaca OFF di mobile: GPU rendah + teks kecil di atas kaca susah dibaca. */
+@media (max-width: 768px) {
+  .glass {
+    background: rgba(14, 28, 51, 0.94);
+    -webkit-backdrop-filter: blur(6px) saturate(120%);
+    backdrop-filter: blur(6px) saturate(120%);
+  }
+}
+
+/* ============================================================
+   UTIL
+   ============================================================ */
+
+.section {
+  padding-block: var(--space-section);
+}
+
+/* Heading section — dipakai lintas komponen, bukan diduplikasi per-file.
+   Astro tidak punya partial: jadi didefinisikan sekali di sini. */
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 4vw, 2.25rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--color-paper);
+  margin: 0.75rem 0 0;
+  text-wrap: balance;
+}
+
+.cta-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 1.5rem;
+  background: var(--color-amber);
+  color: #0a1628;
+  font-weight: 650;
+  font-size: 0.95rem;
+  text-decoration: none;
+  border-radius: 999px;
+  border: 0;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cta-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.22);
+}
+
+.wrap {
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+/* Nomor section besar + label mono = motif identitas (dari CommandCode). */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.tag {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid var(--color-concrete);
+  border-radius: var(--radius-field);
+  color: var(--color-muted);
+  white-space: nowrap;
+}
