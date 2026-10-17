@@ -23,6 +23,8 @@ const { title, description } = Astro.props
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="generator" content={Astro.generator} />
 
+    <!-- Font: self-hosted via @fontsource (nol CDN eksternal, nol CSP hole) -->
+
     <!-- SEO dasar -->
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -41,8 +43,8 @@ const { title, description } = Astro.props
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
 
-    <!-- Favicon: inisial M, teks, nol aset eksternal -->
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230A1628'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='20' fill='%23F59E0B' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E" />
+    <!-- Favicon: kotak ink + M elektrik (grammar Warp) -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231a1522'/%3E%3Ctext x='16' y='23' font-family='monospace' font-size='19' font-weight='600' fill='%23eef17c' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E" />
   </head>
   <body>
     <a href="#main" class="skip-link">Lewati ke konten</a>
@@ -65,10 +67,12 @@ const { title, description } = Astro.props
     top: 0;
     z-index: 100;
     padding: 0.75rem 1rem;
-    background: var(--color-amber);
-    color: #0a1628;
+    background: var(--color-ink);
+    color: var(--color-lemon);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
     font-weight: 600;
-    border-radius: 0 0 var(--radius-field) 0;
+    text-transform: lowercase;
   }
   .skip-link:focus {
     left: 0;

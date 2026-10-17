@@ -4,35 +4,47 @@ const subject = encodeURIComponent('Diskusi proyek web atau otomasi AI')
 ---
 
 <section id="kontak" class="section">
-  <div class="wrap contact-grid">
-    <div class="contact-left">
-      <span class="eyebrow">04 / Kontak</span>
-      <h2 class="section-title">Ceritakan kebutuhanmu.</h2>
-      <p class="contact-note">
-        Email adalah cara terbaik untuk menghubungi saya. Balas dalam satu hari kerja.
-      </p>
-    </div>
-
-    <div class="contact-actions">
-      <a
-        href={`mailto:${contact.email}?subject=${subject}`}
-        class="contact-email"
-      >
-        {contact.email}
-      </a>
-
-      <div class="contact-links">
-        <a href={contact.github} target="_blank" rel="noopener noreferrer">
-          GitHub <span aria-hidden="true">↗</span>
-        </a>
-        <a href={contact.business} target="_blank" rel="noopener noreferrer">
-          MTA Devworks <span aria-hidden="true">↗</span>
-        </a>
+  <div class="wrap">
+    <div class="contact-grid">
+      <div class="contact-left">
+        <span class="fig-label">fig. 05 — kontak</span>
+        <h2 class="section-headline">Ceritakan kebutuhanmu.</h2>
+        <p class="contact-note">
+          Email adalah cara terbaik. Balas dalam satu hari kerja.
+        </p>
       </div>
 
-      <p class="contact-fallback">
-        Jika email domain belum aktif, kirim ke {contact.emailFallback}.
-      </p>
+      <div class="contact-actions">
+        <a
+          href={`mailto:${contact.email}?subject=${subject}`}
+          class="contact-email"
+        >
+          {contact.email}
+        </a>
+
+        <dl class="contact-list">
+          <div class="contact-row">
+            <dt>github</dt>
+            <dd>
+              <a href={contact.github} target="_blank" rel="noopener noreferrer">
+                github.com/mifdlaldev <span aria-hidden="true">↗</span>
+              </a>
+            </dd>
+          </div>
+          <div class="contact-row">
+            <dt>bisnis</dt>
+            <dd>
+              <a href={contact.business} target="_blank" rel="noopener noreferrer">
+                mtadevworks.web.id <span aria-hidden="true">↗</span>
+              </a>
+            </dd>
+          </div>
+        </dl>
+
+        <p class="contact-fallback">
+          Jika email domain belum aktif, kirim ke {contact.emailFallback}.
+        </p>
+      </div>
     </div>
   </div>
 </section>
@@ -41,7 +53,7 @@ const subject = encodeURIComponent('Diskusi proyek web atau otomasi AI')
   .contact-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 2.5rem;
   }
 
   .contact-note {
@@ -49,67 +61,94 @@ const subject = encodeURIComponent('Diskusi proyek web atau otomasi AI')
     margin: 1rem 0 0;
     line-height: 1.6;
     max-width: 42ch;
+    font-size: 0.9375rem;
   }
 
   .contact-actions {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 2rem;
     align-items: flex-start;
   }
 
   .contact-email {
     font-family: var(--font-display);
-    font-size: clamp(1.2rem, 3vw, 1.6rem);
-    color: var(--color-paper);
+    font-size: clamp(1.25rem, 3.5vw, 1.875rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
     text-decoration: none;
-    border-bottom: 2px solid var(--color-amber);
-    padding-bottom: 0.25rem;
+    border-bottom: 2px solid var(--color-electric);
+    padding-bottom: 0.2rem;
+    min-height: 44px;
     display: inline-flex;
     align-items: center;
-    min-height: 44px;
-    transition: color 0.15s ease;
-  }
-
-  .contact-email:hover {
-    color: var(--color-amber);
-  }
-
-  .contact-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.25rem;
-  }
-
-  .contact-links a {
-    display: inline-flex;
-    align-items: center;
-    min-height: 44px;
-    color: var(--color-muted);
-    text-decoration: none;
-    font-size: 0.95rem;
-    border-bottom: 1px solid transparent;
-    padding-bottom: 2px;
     transition: color 0.15s ease, border-color 0.15s ease;
   }
 
-  .contact-links a:hover {
-    color: var(--color-paper);
-    border-bottom-color: var(--color-amber);
+  .contact-email:hover {
+    color: var(--color-electric);
+  }
+
+  /* Tabel data gaya blueprint */
+  .contact-list {
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--color-line);
+    width: 100%;
+  }
+
+  .contact-row {
+    display: grid;
+    grid-template-columns: 5rem 1fr;
+    gap: 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--color-line);
+    align-items: baseline;
+  }
+
+  .contact-row dt {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    text-transform: lowercase;
+    letter-spacing: 0.06em;
+    color: var(--color-muted);
+  }
+
+  .contact-row dd {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+  }
+
+  .contact-row a {
+    color: var(--color-ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-line);
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .contact-row a:hover {
+    color: var(--color-electric);
+    border-bottom-color: var(--color-electric);
   }
 
   .contact-fallback {
-    font-size: 0.82rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
     color: var(--color-muted);
-    opacity: 0.85;
+    margin: 0;
+    line-height: 1.5;
   }
 
   @media (min-width: 860px) {
     .contact-grid {
-      /* kolom label sama lebar dengan About -> ritme grid seragam di halaman */
       grid-template-columns: 14rem 1fr;
       gap: 3rem;
       align-items: start;
+    }
+    .contact-actions {
+      padding-top: 2rem;
     }
   }
 </style>

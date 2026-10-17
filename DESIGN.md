@@ -1,11 +1,16 @@
 # DESIGN.md — mifdlal.com
 
 Arah desain untuk situs personal brand Mifdlal Tsaqib Alfarras.
-File ini = arah (soul), bukan filter. Filter = antislop (core + antislop-ui).
+File ini = arah (soul). Filter = antislop (core + antislop-ui).
 
-Versi ini menyatukan 3 referensi visual yang diminta operator:
-CommandCode (struktur), Cursor (ketenangan), macOS Tahoe Liquid Glass (permukaan).
-Aturan: ambil PRINSIP tiap sumber, bukan tampilan literalnya. Kloning = slop (R-30).
+**Revisi 2026-10-17 (v2):** operator meminta bahasa desain mengikuti **warp.dev**
+secara presisi (layout, komponen, tipografi, warna). Sebelumnya memakai arah
+dark-navy + amber + liquid glass — dibuang seluruhnya. Klon eksplisit diizinkan
+oleh R-30 hanya bila operator meminta langsung (dokumen ini mencatat permintaan itu).
+
+Yang DIADOSI = bahasa desain Warp, diukur dari CSS produksi mereka, bukan aset brand:
+- Token warna, rasio, ritme spasi, pola komponen, sistem tipografi, latar dot-grid.
+Yang TIDAK disalin: font proprietary (theFuture, Matter), logo/glyph Warp, teks/klaim mereka.
 
 ## Identitas
 
@@ -13,181 +18,122 @@ Aturan: ambil PRINSIP tiap sumber, bukan tampilan literalnya. Kloning = slop (R-
 - **Pemilik**: Mifdlal Tsaqib Alfarras, Bandung, Indonesia.
 - **Peran**: freelance Web & AI Automation Developer untuk UMKM Indonesia.
 - **Pemisahan brand**: MTA Devworks (mtadevworks.web.id) = sisi bisnis/jasa.
-  mifdlal.com = wajah personal, bukti kerja, pintu masuk. Beda fungsi, jangan tabrakan.
+  mifdlal.com = wajah personal, bukti kerja, pintu masuk.
 
-## Audiens
+## Token (diukur dari warp.dev, CSS chunk /_next/static/immutable/chunks/*.css)
 
-Dua lapis:
-1. **UMKM / calon klien lokal** (Indonesia). Butuh: paham apa yang dikerjakan, lihat bukti nyata, hubungi cepat.
-2. **Recruiter / sesama developer**. Butuh: link repo + live demo yang benar-benar jalan.
-
-Konsekuensi desain: situs TIDAK boleh pakai kostum terminal gelap penuh yang
-mengasingkan klien UMKM. Kredibilitas developer dipakai sebagai lapisan, bukan seluruh bahasa.
-
-## Personality
-
-Kalem, teknis, jujur. Tidak jualan berlebihan. Bukti dulu, klaim belakangan.
-Nada: seperti developer yang menjelaskan hasil kerjanya, bukan agensi yang pitching.
-
-## Sintesis 3 Referensi (keputusan inti)
-
-| Sumber | Yang DIAMBIL (prinsip) | Yang DIBUANG (biar bukan klon) |
+| Token | Nilai | Asal / peran |
 |---|---|---|
-| **CommandCode** | Sistem section bernomor besar (`01`/`02`...) + label mono; struktur editorial dev-tool; klaim dipimpin bukti/link, bukan slogan | Terminal window palsu, stats "100K+ dev" (kita tidak punya), mono sebagai seluruh tampilan, estetika warn (`//` comment) di mana-mana |
-| **Cursor** | Whitespace lega; SATU bukti besar di hero (di situ produk, di kita SATU live demo); aksen tunggal hemat; hierarki tipografi tegas; tombol CTA jelas | Bar "Trusted by teams" + carousel quote (kita TIDAK punya testimoni — R-17/R-36), mockup produk besar yang tidak ada produknya |
-| **macOS Tahoe (Liquid Glass)** | Sudut membulat konsisten; Maks 2-3 permukaan kaca; specular edge (garis highlight atas); depth via lapisan, bukan drop-shadow berat; adaptif terang/gelap | Kaca di SEMUA elemen (nav+kartu+tombol+modal sekaligus) = visual soup; refraction asli (CSS tidak bisa, `backdrop-filter` tidak menggusur piksel); glass di layar mobile |
+| ink (`--p-space`) | `#1a1522` | Teks utama. Near-black dengan tint ungu. |
+| paper | `#fdfcf1` | Latar cream hangat (bukan putih steril). |
+| electric (`--p-8bit`) | `#2a1eff` | Aksen utama: label fig, link, hover, tanda bulan. |
+| lemon | `#eef17c` | Highlight sekunder (glyph brand mark). Dipakai sangat hemat. |
+| lilac (`--p-lilac`) | `#b7a4f2` | Cadangan aksen, saat ini tidak dipakai di UI. |
+| muted | `#1a1522b3` | Teks sekunder (70% ink). Dicream ≈ 5.6:1 (WCAG AA). |
+| line | `#1a152229` | Hairline pemisah (18% ink). |
+| line-soft | `#1a152212` | Titik dot-grid (7% ink). |
 
-**Verdict**: kombinasi bisa, dengan disiplin. "Semangat" ketiganya = halaman gelap
-dev-tool yang terstruktur, tenang, dengan beberapa permukaan kaca membulat. Bukan
-tumpukan glass+glow+gradient+mono di semua tempat (itu justru tell AI-slop nomor satu).
+Latar: dot grid `radial-gradient(circle at 1px 1px, line-soft 1.2px, transparent 0)`
+dengan `background-size: 26px 26px`, `background-attachment: fixed`. Ini tekstur
+blueprint, bukan blok warna.
 
-## Palet (2 core + 1 accent, per R-29)
+## Tipografi
 
-Data pendukung (you.com, createtoday.io 2026, 5.304 situs): neutral accent 35,4%,
-amber 24,5% (total sekitar 60% situs portofolio). Situs developer condong near-black
-monokrom. Semua lewat WCAG AA.
+Warp memakai font proprietary: `theFuture` (sans), `matter` (body), `azeretSemiMono`
+(mono), `Instrument Serif`. Font itu berlisensi dan tidak boleh dipakai ulang, jadi
+diganti substitusi bebas dengan peran identik:
 
-| Nama | Hex | Peran | Alasan |
+| Peran | Warp (proprietary) | Substitusi bebas | Alasan |
 |---|---|---|---|
-| Ink navy | `#0A1628` | Base background / ink | Warna banner LinkedIn yang sudah dipakai. Cockpit gelap bikin kode dan tipografi maju. Selaras base gelap CommandCode + Cursor. |
-| Paper | `#F4F1EA` | Teks di atas navy, permukaan terang | Off-white hangat, bukan putih steril. Kesan editorial, bukan kaku. |
-| Amber | `#F59E0B` | Accent tunggal | Aksen #2 terpopuler di portofolio (24,5%). Dipakai hemat, hanya di titik kunci. Sealiran Cursor: satu aksen saja. |
-| Concrete | `#3A4A63` | Garis, permukaan kartu, state non-aktif | Turunan navy, jaga monokrom. |
-| Glass tint | `rgba(255,255,255,0.10)` | Isi permukaan kaca | Bukan warna baru, cuma overlay. Lihat aturan glass di bawah. |
+| Display (headline) | theFuture | **Space Grotesk Variable** | Grotesque geometris, tracking rapat, weight 600 |
+| Body / UI | matter | **Inter Variable** | Sans netral, mata baca panjang |
+| Label / data / mono | azeretSemiMono | **Azeret Mono Variable** | Mono yang sama dengan Warp, tersedia bebas |
 
-Aturan accent: amber hanya di (1) satu CTA utama, (2) penanda link aktif/hover.
-Bukan di semua tombol, badge, ikon, garis sekaligus (R-13 dose cap).
+Self-hosted via `@fontsource-variable/*` (satu `@import` per keluarga di global.css).
+Nol CDN eksternal, nol CSP hole, nol FOUT dari request lintas domain. `unicode-range`
+membuat browser hanya mengunduh subset latin.
 
-## Sistem Permukaan Kaca (Liquid Glass realistis)
-
-Fakta teknis (you.com, theplusaddons 2026, Medium/ExpertAppDevs 2026): web TIDAK bisa
-mereplikasi refraction Liquid Glass — `backdrop-filter` punya 10 fungsi, tidak ada yang
-menggeser piksel. Yang bisa direplikasi = blur + translucency + garis specular statis.
-Itu sudah sekitar 80% persepsi kualitas.
-
-**Aturan keras:**
-1. **Maks 2 permukaan kaca per viewport** (R-10 dose cap). Dipilih: (a) sticky nav, (b) kartu proyek saat hover/focus. Tidak ada di section lain.
-2. **Blur 8-12px, sanggup naik ke 14px max.** Bukan 20px+. Blur tinggi = GPU mahal, hasil tak sepadan.
-3. **Specular edge = garis highlight atas**, ini baris yang bikin panel dibaca sebagai kaca, bukan film buram:
-   ```css
-   box-shadow:
-     inset 0 1.5px 0 rgba(255,255,255,.85),
-     inset 0 -1px 0 rgba(255,255,255,.14),
-     0 10px 30px rgba(0,0,0,.32);
-   ```
-4. **Wajib ada teks film** di belakang teks di atas kaca: lapisan solid ~30-40% opacity, supaya noise background tidak menurunkan kontras. Jangan pernah taruh teks 14px langsung di kaca 10% opacity.
-5. **Fallback wajib**: `@supports not (backdrop-filter: blur(1px))` -> background solid opaque.
-6. **`prefers-reduced-transparency: reduce`** -> kaca jadi opaque `#1a1f38`, `backdrop-filter` dihapus.
-7. **Kaca OFF di mobile** (`max-width: 768px`): layar kecil + GPU rendah = jank, dan teks di atas kaca susah dibaca. Nav mobile = solid.
-8. **Jangan animasikan nilai blur.** Animasi opacity/transform saja (murah). `will-change` hanya saat animasi.
-9. Kaca butuh latar bertekstur di belakangnya. Kaca di atas section polos = tidak terbaca sebagai kaca.
-
-## Sistem Radius (Tahoe = membulat, tapi jangan semua pill, R-11)
-
-| Elemen | Radius | Alasan |
-|---|---|---|
-| Panel / section kaca besar | 24px | Selaras sudut membulat Tahoe di elemen besar. |
-| Kartu proyek | 16px | Satu tingkat di bawah panel. |
-| Input / tech badge / tag | 8px | Presisi, bukan kapsul. |
-| Tombol CTA utama | pill penuh (999px) | **Hanya SATU elemen pill di seluruh halaman.** Ini titik fokus. |
-
-Semua elemen pill = tell template. Variasi radius = alat hierarki (R-11).
-
-## Tipografi (reason ditulis per R-06)
-
-- **Display (headline)**: serif. Alasan: riset menunjukkan serif body 13,9% di situs
-  portofolio vs 7,5% di galeri umum, hampir 2x, dipakai untuk signal kredibilitas
-  editorial/artisanal. Serif membedakan dari template dev Sans-serif.
-  Pilihan konkret: sistem serif (Georgia, "Iowan Old Style", "Palatino Linotype", serif).
-- **Body / UI**: system sans stack (`system-ui, -apple-system, "Segoe UI", Roboto, sans-serif`).
-  Alasan: load instan, nol dependency jaringan, tidak bisa mati. Body 17px min, line-height 1.6.
-- **Mono**: system mono stack (`ui-monospace, "SFMono-Regular", Menlo, monospace`).
-  Alasan: dipakai HANYA untuk (a) nomor section, (b) tag tech, (c) nama repo. Itu identitas
-  developer yang nyata, bukan kostum "terminal aesthetic" penuh (R-06).
-
-Font asing (Google Fonts CDN) ditolak: operator memutuskan hindari CDN yang bisa mati.
+Skala:
+- Headline hero: `clamp(2rem, 5.5vw, 3.75rem)`, line-height 1.04, letter-spacing -0.03em.
+- Section headline: `clamp(1.5rem, 3.5vw, 2.125rem)`, weight 600.
+- Label `.fig-label`: mono 11px, letter-spacing 0.08em, lowercase, warna electric.
+- Body: 15-18px, line-height 1.55-1.7, warna muted/ink.
 
 ## Layout
 
-- **Satu halaman**, scroll vertikal. Riset konsisten: portofolio dev paling kuat =
-  1 halaman, 3-4 proyek dengan live link (Brittany Chiang, T. Rascia, dev.to study).
-- Urutan section ikut narasi konten, bukan template AI (R-05, C-3):
-  1. Hero: nama + satu baris value prop + bukti live (satu demo besar, gaya Cursor).
-  2. Proyek: 4-6 proyek live (baris lebar bernomor, bukan grid kartu identik).
-  3. Tentang: paragraf jujur, stack, apa yang sedang dikerjakan.
-  4. Layanan: apa yang bisa dikerjakan (website, chatbot WA, otomasi workflow).
-  5. Kontak: email + GitHub, tanpa form palsu.
-- Nav: sticky, satu-satunya elemen kaca permanen. Isi: nama + 3-4 anchor + satu tombol CTA pill.
-- Tanpa section: "Trusted By" logo bar, testimonial rekaan, FAQ template, statistik palsu.
-  Alasan: belum ada datanya (R-17, R-18, R-36, R-38).
+- `.wrap`: `max-width: 1180px`, `padding-inline: 24px`, `margin-inline: auto` (persis `.wrap` Warp).
+- Nav: tinggi 64px, link mono uppercase 12px.
+- Section: `padding-block: clamp(3.5rem, 7vw, 5.5rem)`.
+- Urutan: Hero (fig. 01) -> Proyek (fig. 02) -> Tentang (fig. 03) -> Layanan (fig. 04) -> Kontak (fig. 05) -> Footer.
+- Motif identitas: label `fig. NN — nama` (mono lowercase) di atas tiap section headline.
 
-## Motion (dials)
+## Komponen (grammar Warp)
+
+**Tombol** (`.btn`): kotak, radius 0, border 1px, font mono 12px weight 600,
+lowercase, `min-height: 44px`. `.btn-primary` = isi ink + teks paper; hover -> electric.
+`.btn-ghost` = transparan + border line; hover -> border ink.
+
+**Panel data**: bingkai 1px, header mono kecil, isi grid statistik `dt/dd`-style
+(label mono + nilai). Dipakai di hero sebagai ringkasan bukti (fig. 01 + 4 stat).
+Bukan duplikat list proyek.
+
+**Baris proyek**: hairline separator, grid `no | nama+desc | stack | live`.
+Hover: tint electric 4% + bar aksen 2px di tepi kiri. Bukan kartu terpisah.
+
+**Tabel kontak**: `dl`-style grid `label mono | nilai mono`, hairline, link underline
+yang berubah electric saat hover.
+
+## Motion
 
 **Dial: ENERGY 2 / RHYTHM 3 / MOTION 1.**
 
-- ENERGY 2 (balanced): berani di tipografi, tenang di chrome. Bukan neon, bukan steril.
-- RHYTHM 3 (varied): tiap section berbeda komposisi. Proyek = baris lebar bernomor,
-  bukan grid kartu identik. Tentang = kolom teks. Layanan = list, bukan 3 kartu sama.
-- MOTION 1 (hover only): tanpa fade-up massal, tanpa parallax, tanpa loop abadi (R-19).
-  Hover dan focus state saja. Hargai `prefers-reduced-motion`.
-- Interaksi kaca: saat hover kartu, opacity kaca naik halus + garis specular muncul.
-  Bukan scale, bukan blur berubah (mahal).
-
-## Motif identitas
-
-Satu gesture yang diulang: **nomor section besar + label mono kecil** (mis. `01 PROYEK`,
-`02 TENTANG`). Ini memberi struktur editorial yang khas (dari CommandCode: sistem
-bernomor) dan menandai halaman ini sebagai milik seseorang, bukan template. Alasan ditulis (R-31).
-
-## Yang dibuang dari ketiga referensi (biar bukan klon)
-
-- **CommandCode**: terminal window palsu, statistik angka besar yang kita tidak punya,
-  mono di seluruh UI.
-- **Cursor**: quote/testimonial carousel (kita nol testimoni), bar "trusted by",
-  mockup produk hero (kita tidak jual produk SaaS).
-- **Tahoe**: kaca di setiap elemen, refraction (tidak bisa di web), shadow berat
-  (Tahoe justru pakai refractive edge, bukan drop shadow besar), animasi blur.
-
-## Larangan eksplisit (dari antislop, sesuai riset)
-
-- Tanpa em dash (R-02).
-- Tanpa gradient biru-ungu, glow di mana-mana, glassmorphism di navbar+kartu+tombol sekaligus.
-- Tanpa fake terminal window sebagai hero (R-06, C-5).
-- Tanpa bento mosaic, tanpa grid seragam, tanpa 3 kolom harga template.
-- Tanpa ikon generik (sparkle, robot, orb) atau satu library ikon tipis seragam.
-- Tanpa badge pill "AI Powered" di atas H1. Pill hanya untuk CTA utama.
-- Tanpa mockup browser frame besar di hero (lihat di atas).
-
-## Design Read (deklarasi sebelum generate, R-37)
-
-Reading this as: personal developer portfolio for UMKM clients and technical recruiters,
-in an editorial dark-navy and amber language with a restrained liquid-glass layer
-(max 2 surfaces, specular-edge, opaque fallback), dial ENERGY 2 / RHYTHM 3 / MOTION 1.
-Structure borrowed from CommandCode (numbered sections), calm from Cursor (whitespace,
-single accent), surface treatment from macOS Tahoe Liquid Glass (rounded, translucent,
-specular edge) -- principles only, not a clone.
+- Transisi hanya warna/border/transform, 0.15s ease. Tanpa fade-up massal, tanpa parallax.
+- Hover: warna link, bar aksen proyek, border tombol. Tidak ada scale/blur berubah.
+- `prefers-reduced-motion: reduce` mematikan transisi.
 
 ## Accessibility (non-negotiable)
 
-- Kontras teks >= 4.5:1 (body), >= 3:1 (large). Uji terhadap SEMUA posisi scroll, karena latar kaca berubah.
-- Focus state keyboard terlihat jelas (outline 2px amber + offset).
-- `prefers-reduced-motion` -> matikan transisi.
-- `prefers-reduced-transparency` -> kaca jadi opaque.
-- Touch target >= 44px (HIG).
-- Uji di Android mid-range, bukan cuma MacBook. Kaca mahal di GPU rendah.
+- Kontras teks >= 4.5:1. muted `#1a1522b3` di cream diverifikasi ≈ 5.6:1.
+- Focus state: `outline: 2px solid electric; outline-offset: 2px`.
+- Touch target >= 44px di semua tombol + link navigasi.
+- Label aksesibel tidak mismatch dengan teks terlihat (aria-label dihapus bila konten sudah deskriptif).
+- Skip link ke `#main`.
+- `prefers-reduced-motion` mematikan animasi.
+- Lighthouse: desktop 100/100/100/100, mobile 99/100/100/100, a11y 100.
 
-## Sumber riset
+## Larangan eksplisit
 
-- Apple Newsroom, "Apple introduces ... Liquid Glass" (Jun 2025) — definisi material: reflect/refract, real-time, specular highlight.
-- theplusaddons.com/blog/liquid-glass-ui (Sep 2026) — resep specular edge 3-baris, batas CSS (backdrop-filter tidak menggusur piksel), performance rules.
-- medium.com/@expertappdevs (Jan 2026) — prinsip Liquid Glass: hierarchy, harmony, depth; best practice (hindari nested glass, batasi di list).
-- neelnetworks.com/blog/glassmorphism-web-design-guide-2026 — accessibility/perf checklist, @supports fallback, blur 8px > 20px.
-- getpurlize.com — "glass = seasoning, not main course"; 2-3 elemen per viewport; fallback solid.
-- superdesign.dev/blog/apple-design-system (Jun 2026) — HIG: SF Pro, semantic color, tap target 44pt, Liquid Glass.
-- createtoday.io/examples?category=portfolio (458 situs, stats warna/font, Agt 2026)
-- createtoday.io/examples?category=web-developer-portfolio (32 situs dev, Agt 2026)
-- ccolorpalette.com/guides/portfolio-color-palettes (Cinematic dark: #0F172A/#F59E0B)
-- digitalheroesco.com/styles/brutalist-web (brutalism vs neo-brutalism, Mei 2026)
-- alexberman.com/web-designer-freelance-portfolio (struktur case study, Mar 2026)
-- dev.to/mryadavgulshan (1 halaman, live demo, form nyata)
-- middlehost.com/blog/web-developer-portfolio-examples (checklist, Jan 2026)
+- Tanpa em dash (R-02).
+- Tanpa glassmorphism/backdrop-blur (sudah dibuang; Warp tidak memakainya).
+- Tanpa gradient glow / orb dekoratif (tell AI-slop nomor satu).
+- Tanpa pill/kapsul (radius 0 di seluruh tombol; Warp kotak).
+- Tanpa serif display (Warp pakai grotesque).
+- Tanpa fake terminal window, tanpa mockup browser frame besar.
+- Tanpa bento mosaic, tanpa 3 kolom harga template.
+- Tanpa ikon generik (sparkle, robot, orb).
+- Tanpa badge "AI Powered" di atas H1.
+- Tanpa section "Trusted By", testimonial, atau statistik yang tidak ada datanya.
+
+## Verifikasi output
+
+- Build: `npx astro build` -> 0.
+- Type: `npx tsc -p tsconfig.json --noEmit` -> 0.
+- Audit: `npm audit --omit=dev` -> 0 vulnerabilities.
+- Lighthouse: desktop 100/100/100/100 (FCP 0.4s), mobile 99/100/100/100 (FCP 1.5s, CLS 0.026).
+- Output: 0 `<script>`, CSS gzip ~6 KB, 0 em dash, 6 baris proyek.
+
+## Design Read (deklarasi, R-37)
+
+Reading this as: personal developer portfolio for UMKM clients and technical recruiters,
+in a light cream blueprint language with a single electric-blue accent, dot-grid
+surface, monospace technical labels, square buttons, and hairline-ruled data rows,
+dial ENERGY 2 / RHYTHM 3 / MOTION 1. Design language measured from warp.dev CSS;
+fonts and brand assets substituted with open alternatives.
+
+## Sumber
+
+- warp.dev production CSS (`/_next/static/immutable/chunks/*.css`, diambil 2026-10-17) —
+  token `--p-space`, `--p-8bit`, `--p-lilac`, `--p-lemon`, `.wrap`, `.btn`, `.tag`,
+  `.section-headline`, dot-grid background.
+- warp.dev rendered @1440px — hierarki hero (fig label -> headline -> subhead -> 2 tombol -> panel fig).
+- Antislop core + antislop-ui (R-02, R-05, R-06, R-11, R-13, R-17, R-30, R-36, R-37).

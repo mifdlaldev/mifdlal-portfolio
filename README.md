@@ -13,9 +13,9 @@ sendiri, bukan klaim.
 | Framework | Astro 7 (output `static`) | Konten-first, JS nol di klien |
 | Interaksi | React 19 islands | Hanya bila benar-benar perlu |
 | Styling | Tailwind CSS 4 + `@tailwindcss/vite` | Config CSS-first `@theme` |
+| Font | Space Grotesk + Inter + Azeret Mono (self-hosted, `@fontsource-variable`) | Bahasa desain warp.dev, nol CDN |
 | Bahasa | TypeScript (strict) | Kontrak tipe di source data |
 | Hosting | Cloudflare Workers Static Assets | Edge, cepat, tanpa server Node |
-| Font | System stack | Nol CDN, nol FOUT/FOIT |
 
 ## Struktur
 
@@ -26,7 +26,7 @@ src/
   components/           SiteNav, Hero, Projects, About, Services, Contact, Footer
   pages/index.astro     halaman utama
   pages/404.astro       halaman 404
-  styles/global.css     design token, glass surface, primitive .section-title/.cta-primary
+  styles/global.css     token desain (warp.dev grammar), primitive .btn/.fig-label/.section-headline
 public/
   _headers              security headers (CSP, HSTS, X-Frame-Options, ...)
   robots.txt            crawler rules + URL sitemap

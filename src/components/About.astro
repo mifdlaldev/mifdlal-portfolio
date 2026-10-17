@@ -4,104 +4,124 @@ import { stack } from '../data/site'
 
 <section id="tentang" class="section">
   <div class="wrap">
-    {/* Eyebrow di atas — axis konsisten dengan 01/03/04 */}
-    <span class="eyebrow">02 / Tentang</span>
-    <h2 class="section-title">Developer di Bandung.</h2>
+    <div class="section-head">
+      <span class="fig-label">fig. 03 — tentang</span>
+      <h2 class="section-headline">Developer di Bandung.</h2>
+    </div>
 
     <div class="about-grid">
-      {/* Kolom kiri: stack, bukan label kosong lagi */}
-      <div class="about-stack">
-        <p class="stack-label">Yang saya pakai</p>
-        <ul class="stack-list">
-          {stack.map((s) => <li class="tag">{s}</li>)}
-        </ul>
-      </div>
-
-      <div class="about-body">
+      <div class="about-copy">
         <p class="lede">
           Saya bangun aplikasi web dan otomasi AI untuk bisnis kecil dan menengah
-          di Indonesia. Fokus saya: hasil yang jalan, bukan slide.
+          di Indonesia. Fokus: hasil yang jalan, bukan slide.
         </p>
-
         <p>
-          Semua proyek di halaman ini bisa kamu buka dan periksa sendiri, bukan
-          gambar. Setiap tahap saya tangani sendiri, dan AI dipakai sebagai alat
-          kerja supaya pengiriman lebih cepat tanpa menurunkan mutu.
+          Semua proyek di halaman ini bisa kamu buka dan periksa sendiri. Saya
+          tangani setiap tahap sendiri, dari desain sampai deploy. AI saya pakai
+          sebagai alat kerja untuk mengurangi kerja berulang.
         </p>
-
-        <p class="learning">
-          Sedang dipelajari: otomasi workflow dengan n8n.
-        </p>
+        <p class="learning">Sedang dipelajari: otomasi workflow dengan n8n.</p>
       </div>
+
+      <aside class="about-stack" aria-label="Teknologi yang digunakan">
+        <p class="stack-label">tools / stack</p>
+        <ul class="stack-list">
+          {stack.map((s, i) => (
+            <li class="stack-item">
+              <span class="stack-no">{String(i + 1).padStart(2, '0')}</span>
+              <span>{s}</span>
+            </li>
+          ))}
+        </ul>
+      </aside>
     </div>
   </div>
 </section>
 
 <style>
-  .section-title {
-    margin: 0.75rem 0 0;
+  .section-head {
+    margin-bottom: 2rem;
   }
 
   .about-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2rem;
-    margin-top: 2.25rem;
+    gap: 2.5rem;
+  }
+
+  .about-copy {
+    max-width: 62ch;
+  }
+
+  .lede {
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 2.5vw, 1.625rem);
+    line-height: 1.35;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    margin: 0 0 1.25rem;
+    color: var(--color-ink);
+    text-wrap: pretty;
+  }
+
+  .about-copy p:not(.lede) {
+    color: var(--color-muted);
+    line-height: 1.7;
+    margin: 0 0 1.25rem;
+    font-size: 0.9375rem;
+  }
+
+  .about-copy .learning {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem !important;
+    color: var(--color-muted);
+    margin: 0 !important;
   }
 
   .about-stack {
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-line);
   }
 
   .stack-label {
     font-family: var(--font-mono);
-    font-size: 0.8rem;
+    font-size: 0.6875rem;
     letter-spacing: 0.06em;
-    text-transform: uppercase;
+    text-transform: lowercase;
     color: var(--color-muted);
-    margin: 0 0 0.85rem;
+    margin: 0;
+    padding: 0.625rem 0;
+    border-bottom: 1px solid var(--color-line);
   }
 
   .stack-list {
     list-style: none;
     margin: 0;
     padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 1.5rem;
+  }
+
+  .stack-item {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.45rem;
-    align-items: center;
+    align-items: baseline;
+    gap: 0.75rem;
+    padding: 0.625rem 0;
+    border-bottom: 1px solid var(--color-line);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-ink);
   }
 
-  .about-body {
-    max-width: 62ch;
-  }
-
-  .lede {
-    font-size: 1.15rem;
-    line-height: 1.6;
-    margin: 0 0 1.25rem;
-    color: var(--color-paper);
-    text-wrap: pretty;
-  }
-
-  .about-body p {
+  .stack-no {
     color: var(--color-muted);
-    line-height: 1.65;
-    margin: 0 0 1.25rem;
-  }
-
-  .learning {
-    font-size: 0.9rem;
-    color: var(--color-muted);
-    font-style: italic;
-    margin: 0;
+    font-size: 0.625rem;
   }
 
   @media (min-width: 860px) {
     .about-grid {
-      grid-template-columns: 14rem 1fr;
-      gap: 3rem;
+      grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.8fr);
+      gap: clamp(3rem, 8vw, 7rem);
       align-items: start;
     }
   }

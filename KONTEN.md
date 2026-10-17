@@ -16,7 +16,7 @@ Value prop (satu baris, tanpa filler):
 Sub-line (bukti langsung, bukan klaim):
 "6 proyek live. Kode terbuka di GitHub. Kerjakan sendiri dari desain sampai deploy."
 
-CTA utama (satu, amber):
+CTA utama (satu, isi ink):
 "Lihat proyek" -> scroll ke section proyek.
 CTA kedua (teks/ghost):
 "Email saya" -> mailto hello@mifdlal.com (aktif nanti; sementara pakai alamat yang ada).

@@ -5,8 +5,8 @@ import { services } from '../data/site'
 <section id="layanan" class="section">
   <div class="wrap">
     <div class="section-head">
-      <span class="eyebrow">03 / Layanan</span>
-      <h2 class="section-title">Yang bisa saya kerjakan untuk bisnis kamu.</h2>
+      <span class="fig-label">fig. 04 — layanan</span>
+      <h2 class="section-headline">Yang bisa saya kerjakan untuk bisnis kamu.</h2>
     </div>
 
     <ul class="service-list">
@@ -26,58 +26,61 @@ import { services } from '../data/site'
 <style>
   .section-head {
     margin-bottom: 2.5rem;
-    max-width: 52ch;
+    max-width: 56ch;
   }
 
-
-  /* List, bukan 3 kartu sama (RHYTHM 3). */
+  /* Baris dengan hairline — bukan 3 kartu sama */
   .service-list {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
+    border-top: 1px solid var(--color-line);
   }
 
   .service-row {
     display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 1.25rem;
-    padding: 1.75rem 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-  }
-
-  .service-row:last-child {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    grid-template-columns: 2.5rem 1fr;
+    gap: 1rem 1.25rem;
+    padding: 1.75rem 0.5rem;
+    border-bottom: 1px solid var(--color-line);
   }
 
   .service-no {
     font-family: var(--font-mono);
-    font-size: 0.85rem;
-    color: var(--color-amber);
-    padding-top: 0.35rem;
-    letter-spacing: 0.05em;
+    font-size: 0.6875rem;
+    color: var(--color-electric);
+    padding-top: 0.3rem;
   }
 
   .service-title {
     font-family: var(--font-display);
     font-size: 1.25rem;
-    margin: 0 0 0.5rem;
-    letter-spacing: -0.01em;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    margin: 0 0 0.4rem;
   }
 
   .service-text {
     margin: 0;
     color: var(--color-muted);
-    line-height: 1.6;
-    font-size: 0.95rem;
+    line-height: 1.65;
+    font-size: 0.9375rem;
     max-width: 58ch;
   }
 
-  @media (max-width: 560px) {
+  @media (min-width: 860px) {
     .service-row {
-      grid-template-columns: 1fr;
-      gap: 0.6rem;
+      grid-template-columns: 3rem 22rem 1fr;
+      align-items: baseline;
+    }
+    .service-body {
+      display: contents;
+    }
+    .service-title {
+      margin: 0;
+    }
+    .service-text {
+      max-width: 52ch;
     }
   }
 </style>

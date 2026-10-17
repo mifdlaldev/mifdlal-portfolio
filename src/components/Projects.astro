@@ -5,21 +5,20 @@ import { projects } from '../data/site'
 <section id="proyek" class="section">
   <div class="wrap">
     <div class="section-head">
-      <span class="eyebrow">01 / Proyek</span>
-      <h2 class="section-title">Hasil kerja yang bisa kamu klik sendiri.</h2>
+      <span class="fig-label">fig. 02 — proyek</span>
+      <h2 class="section-headline">Hasil kerja yang bisa kamu klik sendiri.</h2>
     </div>
 
     <ol class="project-list">
       {projects.map((p) => (
-        <li>
+        <li class="project-row-li">
           <a
             href={p.live}
             target="_blank"
             rel="noopener noreferrer"
-            class="project-row glass-hover"
-            aria-label={`${p.name}: ${p.description} (buka di tab baru)`}
+            class="project-row"
           >
-            <span class="project-no">{p.no}</span>
+            <span class="proof-no">{p.no}</span>
 
             <div class="project-main">
               <div class="project-head">
@@ -27,15 +26,13 @@ import { projects } from '../data/site'
                 <span class="project-role">{p.role}</span>
               </div>
               <p class="project-desc">{p.description}</p>
-              <div class="project-meta">
-                <span class="project-stack">
-                  {p.stack.map((s) => <span class="tag">{s}</span>)}
-                </span>
-                <span class="project-link">
-                  Lihat live
-                  <span aria-hidden="true">↗</span>
-                </span>
-              </div>
+            </div>
+
+            <div class="project-side">
+              <span class="project-stack">{p.stack.join(' · ')}</span>
+              <span class="project-link">
+                live<span class="arrow" aria-hidden="true">↗</span>
+              </span>
             </div>
           </a>
         </li>
@@ -47,56 +44,65 @@ import { projects } from '../data/site'
 <style>
   .section-head {
     margin-bottom: 2.5rem;
-    max-width: 52ch;
+    max-width: 56ch;
   }
 
-
-  /* Baris lebar bernomor — bukan grid kartu identik (RHYTHM 3). */
+  /* Baris lebar bernomor — bukan grid kartu identik */
   .project-list {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .project-row-li {
+    border-bottom: 1px solid var(--color-line);
   }
 
   .project-row {
     display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 1.25rem;
-    padding: 1.5rem;
-    border-radius: var(--radius-card);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    background: rgba(255, 255, 255, 0.02);
+    grid-template-columns: 2rem 1fr;
+    gap: 1rem 1.25rem;
+    padding: 1.375rem 0.5rem;
     text-decoration: none;
     color: inherit;
-    transition:
-      border-color 0.18s ease,
-      background 0.18s ease,
-      box-shadow 0.18s ease;
+    position: relative;
+    transition: background-color 0.15s ease;
   }
 
-  /* Kaca hanya saat hover/focus, bukan default. */
+  .project-row::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--color-electric);
+    transform: scaleY(0);
+    transform-origin: center;
+    transition: transform 0.18s ease;
+  }
+
   .project-row:hover,
   .project-row:focus-visible {
-    border-color: rgba(255, 255, 255, 0.16);
-    background: rgba(255, 255, 255, 0.06);
-    -webkit-backdrop-filter: blur(10px) saturate(150%);
-    backdrop-filter: blur(10px) saturate(150%);
-    box-shadow:
-      inset 0 1.5px 0 rgba(255, 255, 255, 0.55),
-      inset 0 -1px 0 rgba(255, 255, 255, 0.08),
-      0 10px 30px rgba(0, 0, 0, 0.32);
+    background: color-mix(in srgb, var(--color-electric) 4%, var(--color-paper));
     outline: none;
   }
 
-  .project-no {
+  .project-row:hover::before,
+  .project-row:focus-visible::before {
+    transform: scaleY(1);
+  }
+
+  .proof-no {
     font-family: var(--font-mono);
-    font-size: 0.85rem;
-    color: var(--color-amber);
+    font-size: 0.6875rem;
+    color: var(--color-muted);
     padding-top: 0.25rem;
-    letter-spacing: 0.05em;
+  }
+
+  .project-main {
+    min-width: 0;
   }
 
   .project-head {
@@ -104,79 +110,87 @@ import { projects } from '../data/site'
     flex-wrap: wrap;
     align-items: baseline;
     justify-content: space-between;
-    gap: 0.5rem 1rem;
+    gap: 0.25rem 1rem;
   }
 
   .project-name {
     font-family: var(--font-display);
-    font-size: 1.35rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
     margin: 0;
-    letter-spacing: -0.01em;
   }
 
   .project-role {
-    font-size: 0.88rem; /* 0.82rem = 13px, di bawah batas baca meta */
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    text-transform: lowercase;
     color: var(--color-muted);
+    text-align: right;
+    max-width: 12rem;
   }
 
   .project-desc {
-    margin: 0.6rem 0 1rem;
-    color: var(--color-muted);
+    margin: 0.4rem 0 0;
+    font-size: 0.9rem;
     line-height: 1.55;
-    font-size: 0.95rem;
+    color: var(--color-muted);
     max-width: 62ch;
   }
 
-  .project-meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
+  .project-side {
+    display: none;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.4rem;
+    padding-top: 0.15rem;
   }
 
   .project-stack {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--color-muted);
+    white-space: nowrap;
   }
 
   .project-link {
-    font-size: 0.88rem;
-    color: var(--color-amber);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
     font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: lowercase;
+    color: var(--color-electric);
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
   }
 
-  @media (max-width: 560px) {
+  .arrow {
+    margin-left: 0.15rem;
+  }
+
+  /* Tablet ke atas: kolom stack/live di kanan */
+  @media (min-width: 720px) {
     .project-row {
-      grid-template-columns: 1fr;
-      gap: 0.75rem;
-    }
-    .project-no {
-      padding-top: 0;
-    }
-
-    /* Judul dan kategori tidak berdampingan di layar sempit */
-    .project-head {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.2rem;
-    }
-
-    /* Footer kartu: tag di atas, link live di bawah */
-    .project-meta {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.75rem;
-    }
-
-    /* Seluruh kartu sudah berupa <a>, jadi ini cuma affordance;
-       padding dibuat cukup agar target sentuh ≥44px di tepi kartu */
-    .project-link {
-      display: inline-flex;
+      grid-template-columns: 2.5rem 1fr auto;
       align-items: center;
-      min-height: 44px;
-      padding: 0.5rem 0;
+    }
+    .project-side {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 1.25rem;
+    }
+  }
+
+  @media (min-width: 980px) {
+    .project-row {
+      grid-template-columns: 2.5rem 1fr 14rem auto;
+    }
+    .project-side {
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.4rem;
     }
   }
 </style>

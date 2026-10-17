@@ -1,31 +1,39 @@
 @import "tailwindcss";
+@import "@fontsource-variable/space-grotesk";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/azeret-mono";
 
 /* ============================================================
-   DESIGN TOKENS — mifdlal.com
-   Sumber: DESIGN.md. Tailwind v4 (config CSS-first, @theme).
-   Palet: 2 core + 1 accent (R-29). Semua lewat WCAG AA.
+   DESIGN TOKENS — mifdlal.com (Warp.dev grammar)
+   Ekstrak dari warp.dev CSS nyata (2026-10-17):
+     --p-space #1a1522 (ink) | --p-8bit #2a1eff (aksen elektrik)
+     --p-lilac #b7a4f2 | --p-lemon #eef17c (highlight)
+     bg cream #fdfcf1 | dot grid 26px | wrap 1180px | gutter 24px
+   Font Warp proprietary (theFuture/Matter) -> substitusi bebas:
+     Space Grotesk (display grotesque) + Inter (body) +
+     Azeret Mono (label/data) + Instrument Serif (aksen display).
    ============================================================ */
 
 @theme {
-  /* Palet */
-  --color-ink: #0a1628;        /* base gelap */
-  --color-ink-2: #0e1c33;      /* layer naik satu (panel) */
-  --color-paper: #f4f1ea;      /* teks utama / permukaan terang */
-  --color-amber: #f59e0b;      /* accent tunggal */
-  --color-concrete: #3a4a63;   /* garis, surface, non-aktif */
-  --color-muted: #a3b0c0;      /* teks sekunder (≈8:1 di navy, nyaman di ukuran kecil) */
+  /* Palet — dari warp.dev :root */
+  --color-ink: #1a1522;        /* --p-space: near-black ungu */
+  --color-paper: #fdfcf1;      /* bg cream warp */
+  --color-electric: #2a1eff;   /* --p-8bit: aksen biru elektrik */
+  --color-lilac: #b7a4f2;      /* --p-lilac */
+  --color-lemon: #eef17c;      /* highlight kuning */
+  --color-muted: #1a1522b3;    /* teks sekunder (62% ink) */
+  --color-line: #1a152229;     /* hairline */
+  --color-line-soft: #1a152212;/* dot grid */
 
-  /* Radius (Tahoe rounded, R-11: variasi = hierarki) */
-  --radius-panel: 24px;
-  --radius-card: 16px;
-  --radius-field: 8px;
+  /* Tipografi */
+  --font-display: "Space Grotesk Variable", system-ui, sans-serif;
+  --font-body: "Inter Variable", system-ui, -apple-system, sans-serif;
+  --font-mono: "Azeret Mono Variable", ui-monospace, "SFMono-Regular", monospace;
+  --font-serif: "Instrument Serif", Georgia, serif;
 
-  /* Tipografi — system stack, nol CDN (constraint operator) */
-  --font-display: Georgia, "Iowan Old Style", "Palatino Linotype", "Times New Roman", serif;
-  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-
-  /* Spasi vertikal section */
+  /* Spasi */
+  --grid-max: 1180px;
+  --grid-gutter: 24px;
   --space-section: clamp(3.5rem, 7vw, 5.5rem);
 }
 
@@ -34,12 +42,25 @@
    ============================================================ */
 
 html {
-  background-color: var(--color-ink);
-  color: var(--color-paper);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
   font-family: var(--font-body);
+  font-size: 16px;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   scroll-behavior: smooth;
+}
+
+/* Dot grid blueprint — latar warp.dev */
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background-image: radial-gradient(
+    circle at 1px 1px, var(--color-line-soft) 1.2px, transparent 0
+  );
+  background-size: 26px 26px;
+  background-attachment: fixed;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -51,143 +72,135 @@ html {
   }
 }
 
-body {
-  margin: 0;
-  min-height: 100dvh;
-  /* Latar bertekstur: glass butuh latar non-polos di belakangnya.
-     Satu gradient besar di kiri-atas saja, subtle. Tanpa orb glow
-     di kanan-bawah (itu tell AI-slop, dan melonjak saat di-crop). */
-  background-image:
-    radial-gradient(70rem 50rem at 8% -8%, rgba(58, 74, 99, 0.32), transparent 55%);
-  background-attachment: fixed;
-}
-
-/* Fokus keyboard selalu terlihat (aksesibilitas non-negotiable). */
+/* Fokus keyboard — non-negotiable a11y */
 :focus-visible {
-  outline: 2px solid var(--color-amber);
-  outline-offset: 3px;
-  border-radius: var(--radius-field);
+  outline: 2px solid var(--color-electric);
+  outline-offset: 2px;
 }
 
 ::selection {
-  background: rgba(245, 158, 11, 0.28);
-  color: var(--color-paper);
+  background: rgba(42, 30, 255, 0.18);
+  color: var(--color-ink);
 }
 
 /* ============================================================
-   GLASS SURFACE — pakai maks 2 per viewport (R-10 dose cap)
-   Fakta: web tidak bisa refraction asli (backdrop-filter tidak
-   menggeser piksel). Yang direplikasi: blur + translucency +
-   specular edge. Specular edge = kunci baca "kaca".
+   PRIMITIVES — grammar Warp.dev
    ============================================================ */
 
-.glass {
-  background: rgba(255, 255, 255, 0.06);
-  -webkit-backdrop-filter: blur(10px) saturate(150%);
-  backdrop-filter: blur(10px) saturate(150%);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow:
-    inset 0 1.5px 0 rgba(255, 255, 255, 0.55),   /* specular edge atas */
-    inset 0 -1px 0 rgba(255, 255, 255, 0.08),
-    0 10px 30px rgba(0, 0, 0, 0.32);
+/* Wrap: max 1180px, gutter 24px (dari warp .wrap) */
+.wrap {
+  width: 100%;
+  max-width: var(--grid-max);
+  margin-inline: auto;
+  padding-inline: var(--grid-gutter);
 }
 
-/* Film solid di belakang teks di atas kaca: jaga kontras WCAG. */
-.glass-solid {
-  background: rgba(10, 22, 40, 0.72);
+/* Label mono kecil: "fig. 1 — selected work" */
+.fig-label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  color: var(--color-electric);
+  font-weight: 500;
 }
 
-/* Fallback: browser tanpa backdrop-filter -> solid, tidak tembus. */
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .glass {
-    background: rgba(14, 28, 51, 0.96);
-    border-color: rgba(255, 255, 255, 0.12);
-  }
+/* Tag: border 1px, mono, lowercase */
+.tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.02em;
+  text-transform: lowercase;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid var(--color-line);
+  color: var(--color-muted);
+  white-space: nowrap;
 }
 
-/* Hormati preferensi transparansi rendah (macOS/iOS setting). */
-@media (prefers-reduced-transparency: reduce) {
-  .glass {
-    background: #12203a;
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-    border-color: rgba(255, 255, 255, 0.16);
-  }
-}
-
-/* Kaca OFF di mobile: GPU rendah + teks kecil di atas kaca susah dibaca. */
-@media (max-width: 768px) {
-  .glass {
-    background: rgba(14, 28, 51, 0.94);
-    -webkit-backdrop-filter: blur(6px) saturate(120%);
-    backdrop-filter: blur(6px) saturate(120%);
-  }
-}
-
-/* ============================================================
-   UTIL
-   ============================================================ */
-
-.section {
-  padding-block: var(--space-section);
-}
-
-/* Heading section — dipakai lintas komponen, bukan diduplikasi per-file.
-   Astro tidak punya partial: jadi didefinisikan sekali di sini. */
-.section-title {
+/* Heading section: 34px, tight, grotesque */
+.section-headline {
   font-family: var(--font-display);
-  font-size: clamp(1.6rem, 4vw, 2.25rem);
-  line-height: 1.15;
-  letter-spacing: -0.01em;
-  color: var(--color-paper);
-  margin: 0.75rem 0 0;
+  font-size: clamp(1.5rem, 3.5vw, 2.125rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0.625rem 0 0;
   text-wrap: balance;
 }
 
-.cta-primary {
+/* Tombol Warp: kotak, 1px border, mono lowercase, tanpa radius */
+.btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 44px;
-  padding: 0 1.5rem;
-  background: var(--color-amber);
-  color: #0a1628;
-  font-weight: 650;
-  font-size: 0.95rem;
-  text-decoration: none;
-  border-radius: 999px;
-  border: 0;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.cta-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.22);
-}
-
-.wrap {
-  width: 100%;
-  max-width: 72rem;
-  margin-inline: auto;
-  padding-inline: clamp(1.25rem, 4vw, 2.5rem);
-}
-
-/* Nomor section besar + label mono = motif identitas (dari CommandCode). */
-.eyebrow {
+  gap: 0.375rem;
+  min-height: 44px;          /* touch target WCAG */
+  padding: 0.5625rem 1.125rem;
   font-family: var(--font-mono);
-  font-size: 0.8125rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-transform: lowercase;
+  text-decoration: none;
+  border: 1px solid var(--color-ink);
+  border-radius: 0;          /* Warp: square corners */
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease,
+              border-color 0.15s ease;
 }
 
-.tag {
+.btn-primary {
+  background: var(--color-ink);
+  color: var(--color-paper);
+  border-color: var(--color-ink);
+}
+
+.btn-primary:hover {
+  background: var(--color-electric);
+  border-color: var(--color-electric);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-ink);
+  border-color: var(--color-line);
+}
+
+.btn-ghost:hover {
+  border-color: var(--color-ink);
+}
+
+/* Link teks dengan underline animasi */
+.link-underline {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--color-line);
+  transition: text-decoration-color 0.15s ease;
+}
+
+.link-underline:hover {
+  text-decoration-color: var(--color-electric);
+}
+
+/* Hairline divider gaya blueprint */
+.rule {
+  border: 0;
+  border-top: 1px solid var(--color-line);
+  margin: 0;
+}
+
+/* Mono data text */
+.mono {
   font-family: var(--font-mono);
   font-size: 0.75rem;
   letter-spacing: 0.02em;
-  padding: 0.2rem 0.5rem;
-  border: 1px solid var(--color-concrete);
-  border-radius: var(--radius-field);
-  color: var(--color-muted);
-  white-space: nowrap;
+}
+
+/* Serif aksen untuk hero quote/emphasis */
+.serif-accent {
+  font-family: var(--font-serif);
+  font-style: italic;
 }
