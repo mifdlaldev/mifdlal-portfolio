@@ -103,3 +103,84 @@ export const contact = {
   github: 'https://github.com/mifdlaldev',
   business: 'https://www.mtadevworks.web.id',
 } as const
+
+/* ---------------------------------------------------------------
+   DATA DUMMY. Isi ini template, bukan klaim. Ganti sebelum deploy.
+   Struktur sengaja dibuat ketat supaya pengisian data asli konsisten.
+   --------------------------------------------------------------- */
+
+export type Experience = {
+  no: string
+  role: string
+  org: string
+  kind: 'magang' | 'kontrak' | 'freelance' | 'organisasi'
+  location: string
+  period: string
+  points: readonly string[]
+  link?: string
+}
+
+export const experience: readonly Experience[] = [
+  {
+    no: '01',
+    role: 'Posisi magang',
+    org: 'Nama perusahaan',
+    kind: 'magang',
+    location: 'Kota',
+    period: '2026',
+    points: [
+      'Ringkasan pekerjaan: apa yang dikerjakan dan untuk siapa.',
+      'Hasil terukur: angka, cakupan, atau dampak yang bisa diperiksa.',
+      'Tools dan stack yang dipakai sehari-hari.',
+    ],
+  },
+  {
+    no: '02',
+    role: 'Peran lainnya',
+    org: 'Nama organisasi',
+    kind: 'organisasi',
+    location: 'Kota',
+    period: '2025 - 2026',
+    points: ['Ringkasan kontribusi dan hasil.'],
+  },
+]
+
+export type Education = {
+  no: string
+  institution: string
+  program: string
+  location: string
+  period: string
+  status: string
+  note?: string
+}
+
+export const education: readonly Education[] = [
+  {
+    no: '01',
+    institution: 'Nama institusi',
+    program: 'Program studi',
+    location: 'Kota',
+    period: '2027 - sekarang',
+    status: 'aktif',
+    note: 'Catatan opsional: fokus studi atau pencapaian.',
+  },
+]
+
+export type Certification = {
+  no: string
+  name: string
+  issuer: string
+  year: string
+  credential?: string
+}
+
+export const certifications: readonly Certification[] = [
+  {
+    no: '01',
+    name: 'Nama sertifikasi',
+    issuer: 'Penerbit',
+    year: '2026',
+    credential: '',
+  },
+]

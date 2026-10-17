@@ -61,7 +61,14 @@ wrangler.toml           konfigurasi deploy Workers Static Assets
 2. Tentang
 3. Proyek
 4. Layanan
-5. Kontak
+5. Pengalaman
+6. Pendidikan
+7. Sertifikasi
+8. Kontak
+
+Section pengalaman, pendidikan, dan sertifikasi memakai data bertipe di
+`src/data/site.ts` (`experience`, `education`, `certifications`). Isinya masih
+template dan wajib diganti data asli sebelum deploy.
 
 Navigasi utama mengikuti urutan yang sama untuk section setelah hero.
 

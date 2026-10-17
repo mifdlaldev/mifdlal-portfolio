@@ -1,0 +1,115 @@
+---
+import { education } from '../data/site'
+---
+
+<section id="pendidikan" class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="fig-label">fig. 06 · pendidikan</span>
+      <h2 class="section-headline">Pendidikan formal.</h2>
+    </div>
+
+    <ul class="edu-list">
+      {education.map((e) => (
+        <li class="edu-row">
+          <span class="edu-no">{e.no}</span>
+          <div class="edu-main">
+            <h3 class="edu-title">{e.institution}</h3>
+            <p class="edu-program">
+              {e.program}
+              <span class="edu-status">{e.status}</span>
+            </p>
+            {e.note && <p class="edu-note">{e.note}</p>}
+          </div>
+          <p class="edu-meta">
+            <span>{e.period}</span>
+            <span>{e.location}</span>
+          </p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .section-head {
+    margin-bottom: 2.5rem;
+    max-width: 56ch;
+  }
+
+  .edu-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .edu-row {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: 0.35rem 1.25rem;
+    padding: 1.75rem 0.5rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .edu-no {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--color-electric);
+    padding-top: 0.3rem;
+  }
+
+  .edu-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    margin: 0 0 0.3rem;
+  }
+
+  .edu-program {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.9375rem;
+  }
+
+  .edu-status {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    border: 1px solid var(--color-line);
+    padding: 0.1rem 0.4rem;
+    margin-left: 0.4rem;
+    white-space: nowrap;
+  }
+
+  .edu-note {
+    margin: 0.6rem 0 0;
+    color: var(--color-muted);
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    max-width: 62ch;
+  }
+
+  .edu-meta {
+    margin: 0.5rem 0 0;
+    display: flex;
+    gap: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--color-muted);
+    text-transform: lowercase;
+  }
+
+  @media (min-width: 860px) {
+    .edu-row {
+      grid-template-columns: 3rem 1fr auto;
+      align-items: baseline;
+    }
+    .edu-meta {
+      margin: 0;
+      flex-direction: column;
+      text-align: right;
+      gap: 0.25rem;
+    }
+  }
+</style>

@@ -1,0 +1,149 @@
+---
+import { experience } from '../data/site'
+---
+
+<section id="pengalaman" class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="fig-label">fig. 05 · pengalaman</span>
+      <h2 class="section-headline">Pengalaman kerja dan organisasi.</h2>
+    </div>
+
+    <ul class="entry-list">
+      {experience.map((e) => (
+        <li class="entry-row">
+          <span class="entry-no">{e.no}</span>
+          <div class="entry-main">
+            <h3 class="entry-title">{e.role}</h3>
+            <p class="entry-org">
+              {e.org} <span class="entry-kind">{e.kind}</span>
+            </p>
+          </div>
+          <p class="entry-meta">
+            <span>{e.period}</span>
+            <span>{e.location}</span>
+          </p>
+          <ul class="entry-points">
+            {e.points.map((pt) => <li>{pt}</li>)}
+          </ul>
+          {e.link && (
+            <a class="entry-link" href={e.link} target="_blank" rel="noopener noreferrer">bukti ↗</a>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .section-head {
+    margin-bottom: 2.5rem;
+    max-width: 56ch;
+  }
+
+  .entry-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .entry-row {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: 0.35rem 1.25rem;
+    padding: 1.75rem 0.5rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .entry-no {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--color-electric);
+    padding-top: 0.3rem;
+    grid-row: 1 / span 3;
+  }
+
+  .entry-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    margin: 0 0 0.3rem;
+  }
+
+  .entry-org {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.9375rem;
+  }
+
+  .entry-kind {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    border: 1px solid var(--color-line);
+    padding: 0.1rem 0.4rem;
+    margin-left: 0.4rem;
+    white-space: nowrap;
+  }
+
+  .entry-meta {
+    margin: 0.5rem 0 0;
+    display: flex;
+    gap: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--color-muted);
+    text-transform: lowercase;
+  }
+
+  .entry-points {
+    margin: 0.75rem 0 0;
+    padding-left: 1.1rem;
+    color: var(--color-muted);
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    max-width: 62ch;
+  }
+
+  .entry-points li + li {
+    margin-top: 0.25rem;
+  }
+
+  .entry-link {
+    margin-top: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--color-electric);
+  }
+
+  @media (min-width: 860px) {
+    .entry-row {
+      grid-template-columns: 3rem 24rem 1fr;
+      align-items: baseline;
+    }
+    .entry-no {
+      grid-row: 1 / span 3;
+    }
+    .entry-main {
+      grid-row: 1 / span 3;
+    }
+    .entry-meta {
+      margin: 0 0 0 auto;
+      text-align: right;
+      flex-direction: column;
+      gap: 0.25rem;
+      grid-column: 3;
+      grid-row: 1;
+    }
+    .entry-points {
+      grid-column: 3;
+      grid-row: 2 / span 2;
+      margin: 0.75rem 0 0;
+    }
+    .entry-link {
+      grid-column: 3;
+      grid-row: 4;
+    }
+  }
+</style>

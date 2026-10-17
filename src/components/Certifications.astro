@@ -1,0 +1,97 @@
+---
+import { certifications } from '../data/site'
+---
+
+<section id="sertifikasi" class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="fig-label">fig. 07 · sertifikasi</span>
+      <h2 class="section-headline">Sertifikasi.</h2>
+    </div>
+
+    <ul class="cert-list">
+      {certifications.map((c) => (
+        <li class="cert-row">
+          <span class="cert-no">{c.no}</span>
+          <div class="cert-main">
+            <h3 class="cert-title">{c.name}</h3>
+            <p class="cert-issuer">{c.issuer}</p>
+          </div>
+          <p class="cert-year">{c.year}</p>
+          {c.credential && (
+            <a class="cert-link" href={c.credential} target="_blank" rel="noopener noreferrer">verifikasi ↗</a>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .section-head {
+    margin-bottom: 2.5rem;
+    max-width: 56ch;
+  }
+
+  .cert-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .cert-row {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr auto;
+    gap: 0.35rem 1.25rem;
+    padding: 1.5rem 0.5rem;
+    border-bottom: 1px solid var(--color-line);
+    align-items: baseline;
+  }
+
+  .cert-no {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--color-electric);
+  }
+
+  .cert-title {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    margin: 0 0 0.25rem;
+  }
+
+  .cert-issuer {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.9375rem;
+  }
+
+  .cert-year {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--color-muted);
+  }
+
+  .cert-link {
+    grid-column: 2 / -1;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--color-electric);
+    margin-top: 0.5rem;
+  }
+
+  @media (min-width: 860px) {
+    .cert-row {
+      grid-template-columns: 3rem 22rem 1fr auto;
+    }
+    .cert-link {
+      grid-column: 4;
+      grid-row: 1;
+      margin: 0;
+    }
+  }
+</style>
