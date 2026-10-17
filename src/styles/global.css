@@ -52,6 +52,8 @@
    ============================================================ */
 .section {
   padding-block-start: var(--space-section);
+  /* Ruang bawah supaya konten terakhir tidak menempel garis section berikutnya. */
+  padding-block-end: clamp(2.5rem, 5vw, 4rem);
 }
 
 .section:last-of-type {
