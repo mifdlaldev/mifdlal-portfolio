@@ -64,51 +64,96 @@
    BLUEPRINT FRAME PER SECTION
    Garis solid (bukan putus-putus) mulai section 2 dan setelahnya.
    Hero (class .hero) tidak diberi garis.
-   - Horizontal: dua garis full-bleed, tepi atas section + awal konten
-   - Vertikal: rail di tepi container, menerus setinggi section
+   - Horizontal: dua garis full-bleed (tepi atas section + awal konten)
+   - Vertikal: dua rail di tepi container
+   - Node: kotak outline kecil di tiap perpotongan
    ============================================================ */
 .section {
   position: relative;
-  /* Garis horizontal full-bleed pada titik awal konten section.
-     Dipakai background agar tidak ada risiko overflow dari 100vw. */
+  /* Jarak rail dari tepi section = tepi container .wrap. */
+  --rail-offset: max(var(--grid-gutter), calc(50% - var(--grid-max) / 2));
+  --node-size: 7px;
+  /* Semua garis digambar sebagai background supaya pseudo-element
+     tetap bebas dipakai untuk node. */
   background-image:
+    linear-gradient(var(--color-line), var(--color-line)),
+    linear-gradient(var(--color-line), var(--color-line)),
     linear-gradient(var(--color-line), var(--color-line)),
     linear-gradient(var(--color-line), var(--color-line));
   background-repeat: no-repeat;
-  background-size: 100% 1px, 100% 1px;
-  /* Dua garis: tepi atas section (menutup rail) + awal konten section. */
-  background-position: 0 0, 0 var(--space-section);
+  background-size: 100% 1px, 100% 1px, 1px 100%, 1px 100%;
+  background-position:
+    0 0,
+    0 var(--space-section),
+    var(--rail-offset) 0,
+    calc(100% - var(--rail-offset)) 0;
 }
 
 .section > .wrap {
+  position: relative;
   /* Jarak label fig. dari garis section: jangan rapat. */
   padding-block-start: clamp(1.5rem, 3vw, 2rem);
 }
 
-/* Rail vertikal di tepi container, menerus melewati padding section. */
+/* Node kotak outline di setiap perpotongan garis. */
 .section::before,
-.section::after {
+.section::after,
+.section > .wrap::before,
+.section > .wrap::after {
   content: '';
   position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background: var(--color-line);
+  width: var(--node-size);
+  height: var(--node-size);
+  border: 1px solid var(--color-line);
+  background: transparent;
+  box-sizing: border-box;
   pointer-events: none;
+  z-index: 2;
 }
 
+/* Perpotongan garis atas section dengan rail. */
 .section::before {
-  left: max(var(--grid-gutter), calc(50% - var(--grid-max) / 2));
+  left: var(--rail-offset);
+  top: 0;
+  transform: translate(-50%, -50%);
 }
 
 .section::after {
-  right: max(var(--grid-gutter), calc(50% - var(--grid-max) / 2));
+  right: var(--rail-offset);
+  top: 0;
+  transform: translate(50%, -50%);
 }
 
-/* Layar kecil: cukup garis horizontal, rail vertikal disembunyikan. */
+/* Perpotongan garis awal konten dengan rail. */
+.section > .wrap::before {
+  left: 0;
+  top: 0;
+  transform: translate(-50%, -50%);
+}
+
+.section > .wrap::after {
+  right: 0;
+  top: 0;
+  transform: translate(50%, -50%);
+}
+
+/* Di bawah 1229px tepi .wrap tidak lagi sejajar rail (wrap full-bleed),
+   jadi node bisa keluar viewport. Sembunyikan node, garis tetap. */
+@media (max-width: 1228px) {
+  .section::before,
+  .section::after,
+  .section > .wrap::before,
+  .section > .wrap::after {
+    display: none;
+  }
+}
+
+/* Layar kecil: cukup garis horizontal, rail dan node disembunyikan. */
 @media (max-width: 719px) {
   .section::before,
-  .section::after {
+  .section::after,
+  .section > .wrap::before,
+  .section > .wrap::after {
     display: none;
   }
 }
