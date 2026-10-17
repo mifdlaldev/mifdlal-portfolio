@@ -33,19 +33,21 @@ const links = [
 
 <style>
   .nav {
-    position: sticky;
+    position: fixed;
+    inset-inline: 0;
     top: 0;
     z-index: 50;
-    background: var(--color-paper);
-    /* Garis pemisah hanya muncul saat navbar sudah bergeser dari atas.
-       Warna transparan (bukan border: none) supaya tinggi navbar tetap. */
+    /* Posisi atas: dark glass blur, ASCII tetap tampak sebagai warna dasar. */
+    background: color-mix(in srgb, var(--color-ink) 62%, transparent);
+    -webkit-backdrop-filter: blur(14px) saturate(1.2);
+    backdrop-filter: blur(14px) saturate(1.2);
+    /* Garis pemisah hanya muncul setelah bergeser dari paling atas. */
     border-bottom: 1px solid transparent;
     isolation: isolate;
   }
 
   /* Scroll-driven glass: berubah progresif saat melewati hero, tanpa JS. */
-  /* Glass state: ditoggle oleh /js/nav-scroll.js (same-origin, CSP-safe).
-     Tanpa JS / tanpa backdrop-filter: tetap solid seperti semula. */
+  /* Glass state setelah hero dilewati; base navbar transparan penuh. */
   .nav.is-scrolled {
     border-bottom-color: var(--color-line);
     background: color-mix(in srgb, var(--color-paper) 76%, transparent);
@@ -58,11 +60,50 @@ const links = [
     .nav.is-scrolled {
       background: var(--color-paper);
     }
+    .nav:not(.is-scrolled) {
+      background: var(--color-ink);
+    }
   }
 
   @media (prefers-reduced-motion: no-preference) {
     .nav {
       transition: background-color 200ms ease, box-shadow 200ms ease,
+        border-color 200ms ease, color 200ms ease;
+    }
+  }
+  /* Posisi fixed/top: teks putih + tombol putih dengan teks ink. */
+  .nav:not(.is-scrolled) .nav-link,
+  .nav:not(.is-scrolled) .brand-word {
+    color: var(--color-paper);
+  }
+
+  .nav:not(.is-scrolled) .nav-link:hover {
+    color: var(--color-lemon);
+  }
+
+  .nav:not(.is-scrolled) .brand-mark {
+    background: var(--color-paper);
+    color: var(--color-ink);
+  }
+
+  .nav:not(.is-scrolled) .btn-nav {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    border-color: var(--color-paper);
+  }
+
+  .nav:not(.is-scrolled) .btn-nav:hover {
+    background: var(--color-lemon);
+    color: var(--color-ink);
+    border-color: var(--color-lemon);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .nav-link,
+    .brand-word,
+    .brand-mark,
+    .btn-nav {
+      transition: color 200ms ease, background-color 200ms ease,
         border-color 200ms ease;
     }
   }

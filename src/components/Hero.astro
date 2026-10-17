@@ -84,8 +84,11 @@ const liveCount = projects.length
     isolation: isolate;
     display: flex;
     align-items: center;
-    min-height: calc(100svh - 64px);
-    padding-block: clamp(2.5rem, 6vh, 4.5rem);
+    /* Full satu layar termasuk area di belakang navbar fixed:
+       background ASCII terlihat sampai tepi atas. */
+    min-height: 100svh;
+    padding-block-start: calc(var(--nav-h) + clamp(2.5rem, 6vh, 4.5rem));
+    padding-block-end: clamp(2.5rem, 6vh, 4.5rem);
     background: var(--color-paper);
     overflow: hidden;
   }
