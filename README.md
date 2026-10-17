@@ -43,7 +43,7 @@ Warna menyesuaikan posisi scroll:
 | Paling atas | glass gelap (ink 62%) | teks putih, CTA putih + teks ink |
 | Setelah scroll | glass terang (paper 76%) | teks ink/muted, CTA ink + teks paper |
 
-- Threshold: `hero.offsetTop + hero.offsetHeight - nav.offsetHeight`.
+- Threshold: 4px — blur aktif begitu halaman digeser sedikit, bahkan masih di dalam hero.
 - Border bawah tersembunyi di posisi atas, muncul setelah scroll.
 - Transisi 200 ms (`prefers-reduced-motion` dihormati).
 - Tanpa `backdrop-filter`: fallback solid (ink di atas, paper saat scroll).
