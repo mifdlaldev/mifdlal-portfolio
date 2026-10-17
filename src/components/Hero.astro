@@ -12,20 +12,17 @@ const liveCount = projects.length
     <GradientASCII
       client:visible
       colors={['#2a1eff', '#6b7bff', '#1a1522']}
-      shape="rise"
-      characters=" .:-=+xX0S8#@"
-      cellSize={22}
-      density={0.68}
-      glyphOpacity={0.5}
-      glow={0}
-      gradientOpacity={0.3}
+      shape="horizon"
+      density={1}
+      glyphOpacity={1}
+      gradientOpacity={1}
+      glow={0.5}
       flicker={0.08}
       grain={0.03}
       speed={0.5}
       mouseInteraction={false}
       clickEffect="none"
-      lightMode={true}
-      dpr={1}
+      lightMode={false}
       fontFamily='"Azeret Mono Variable", ui-monospace, monospace'
     />
     <div class="hero-veil"></div>
@@ -111,12 +108,12 @@ const liveCount = projects.length
   .hero-veil {
     position: absolute;
     inset: 0;
-    /* Overlay rata: menurunkan seluruh ASCII supaya halus, tanpa lubang. */
-    background: linear-gradient(
-      to top,
-      color-mix(in srgb, var(--color-paper) 58%, transparent) 0%,
-      color-mix(in srgb, var(--color-paper) 50%, transparent) 52%,
-      color-mix(in srgb, var(--color-paper) 42%, transparent) 100%
+    /* Proteksi tipis di zona teks; tepi dibiarkan bersih seperti default. */
+    background: radial-gradient(
+      ellipse 58% 46% at 50% 46%,
+      color-mix(in srgb, var(--color-paper) 62%, transparent) 0%,
+      color-mix(in srgb, var(--color-paper) 28%, transparent) 62%,
+      transparent 100%
     );
   }
 
