@@ -131,12 +131,18 @@ const liveCount = projects.length
     width: 100%;
   }
 
-  /* Label fig. 01 di atas ASCII: lemon, lebih besar dan tebal. */
+  /* Label fig. 01 di atas ASCII: ukuran default, dibungkus badge
+     supaya terbaca tanpa menabrak pola glyph di belakangnya. */
   .hero-inner > .fig-label {
-    color: var(--color-lemon);
-    font-size: clamp(0.8125rem, 1.1vw, 0.9375rem);
-    font-weight: 700;
-    letter-spacing: 0.1em;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.7rem;
+    border: 1px solid color-mix(in srgb, var(--color-ink) 22%, transparent);
+    background: color-mix(in srgb, var(--color-paper) 34%, transparent);
+    -webkit-backdrop-filter: blur(4px) saturate(1.1);
+    backdrop-filter: blur(4px) saturate(1.1);
+    color: var(--color-electric);
   }
 
   .hero-title {
