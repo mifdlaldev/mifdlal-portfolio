@@ -192,8 +192,10 @@ vec3 pinch(vec2 p, float time, out float order) {
 
 vec3 rise(vec2 p, float time, out float order) {
   float wide = max(uAspect, 0.9);
-  vec2 center = vec2(0.05 * sin(time * 0.45) * wide, -0.7);
-  vec2 radius = vec2(0.82 * wide, 0.64 * (1.0 + 0.04 * sin(time * 0.8)));
+  /* Pusat gradasi dinaikkan: tekstur naik sampai ~tengah hero,
+     bukan terkonsentrasi di dasar saja. */
+  vec2 center = vec2(0.05 * sin(time * 0.45) * wide, -0.15);
+  vec2 radius = vec2(0.82 * wide, 0.72 * (1.0 + 0.04 * sin(time * 0.8)));
   float d = length((p - center) / radius);
   float soft = mix(0.6, 1.15, uSoftness);
   float t = clamp(pow(clamp(1.0 - d, 0.0, 1.0), soft) * 1.35, 0.0, 1.0);
