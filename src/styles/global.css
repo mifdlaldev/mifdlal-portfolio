@@ -62,17 +62,20 @@
    BLUEPRINT FRAME PER SECTION
    Garis solid (bukan putus-putus) mulai section 2 dan setelahnya.
    Hero (class .hero) tidak diberi garis.
-   - Horizontal: full-bleed, dari tepi kiri ke tepi kanan layar
+   - Horizontal: dua garis full-bleed, tepi atas section + awal konten
    - Vertikal: rail di tepi container, menerus setinggi section
    ============================================================ */
 .section {
   position: relative;
   /* Garis horizontal full-bleed pada titik awal konten section.
      Dipakai background agar tidak ada risiko overflow dari 100vw. */
-  background-image: linear-gradient(var(--color-line), var(--color-line));
+  background-image:
+    linear-gradient(var(--color-line), var(--color-line)),
+    linear-gradient(var(--color-line), var(--color-line));
   background-repeat: no-repeat;
-  background-size: 100% 1px;
-  background-position: 0 var(--space-section);
+  background-size: 100% 1px, 100% 1px;
+  /* Dua garis: tepi atas section (menutup rail) + awal konten section. */
+  background-position: 0 0, 0 var(--space-section);
 }
 
 .section > .wrap {
