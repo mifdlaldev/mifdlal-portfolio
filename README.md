@@ -198,6 +198,14 @@ aman terhadap CSP `img-src 'self'`. Ukuran per brand berbeda (github 19, linkedi
 fiverr 30) karena wordmark mendatar punya massa tinta jauh lebih ringan daripada mark
 padat; dengan ukuran seragam selisih tinta 3x, setelah penyesuaian 1,5x.
 
+## Footer
+
+Footer hanya berisi dua hal: navigasi ke seluruh section halaman dan baris hak cipta.
+Sosial, email, dan label stack sengaja TIDAK ada di footer karena sudah ada di section
+kontak (menghindari duplikasi). Urutan tautan mengikuti urutan section di halaman
+sehingga klik tidak pernah melompat ke belakang; `#stack` tidak dimasukkan karena itu
+pita logo tanpa judul. Di bawah 900px susunannya menumpuk.
+
 ## CSP dan inline script
 
 CSP memakai `script-src 'self'` tanpa `unsafe-inline`. Astro menghasilkan inline
