@@ -13,9 +13,20 @@ import CodeComment from './CodeComment.astro'
 
     <ul class="service-list">
       {services.map((s) => (
-        <li class="service-row">
-          <span class="service-no">{s.no}</span>
+        <li class="service-card">
+          <div class="service-media">
+            {/* Gambar dummy: ganti file di public/services/ saat asli siap. */}
+            <img
+              src={s.image}
+              alt={`Ilustrasi ${s.title}`}
+              width="800"
+              height="500"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
           <div class="service-body">
+            <span class="service-no">{s.no}</span>
             <h3 class="service-title">{s.title}</h3>
             <p class="service-text">{s.body}</p>
           </div>
@@ -31,27 +42,54 @@ import CodeComment from './CodeComment.astro'
     max-width: 56ch;
   }
 
-  /* Baris dengan hairline: bukan 3 kartu sama */
+  /* Kartu terpisah: tiap kartu punya border sendiri, jarak antar kartu
+     pakai gap. Tidak ada border luar bersama. */
   .service-list {
     list-style: none;
     margin: 0;
     padding: 0;
-    border-top: 1px solid var(--color-line);
+    display: grid;
+    gap: 1.5rem;
   }
 
-  .service-row {
-    display: grid;
-    grid-template-columns: 2.5rem 1fr;
-    gap: 1rem 1.25rem;
-    padding: 1.75rem 0.5rem;
+  .service-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--color-line);
+    background: var(--color-paper);
+    transition: border-color 160ms ease;
+  }
+
+  .service-card:hover {
+    border-color: color-mix(in srgb, var(--color-ink) 34%, transparent);
+  }
+
+  .service-media {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
     border-bottom: 1px solid var(--color-line);
+    background: var(--color-paper);
+  }
+
+  .service-media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .service-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    padding: 1.25rem 1.25rem 1.5rem;
   }
 
   .service-no {
     font-family: var(--font-mono);
     font-size: 0.6875rem;
+    letter-spacing: 0.08em;
     color: var(--color-electric);
-    padding-top: 0.3rem;
   }
 
   .service-title {
@@ -59,30 +97,28 @@ import CodeComment from './CodeComment.astro'
     font-size: 1.25rem;
     font-weight: 600;
     letter-spacing: -0.015em;
-    margin: 0 0 0.4rem;
+    line-height: 1.25;
+    margin: 0;
+    text-wrap: balance;
   }
 
   .service-text {
     margin: 0;
     color: var(--color-muted);
-    line-height: 1.65;
     font-size: 0.9375rem;
-    max-width: 58ch;
+    line-height: 1.6;
   }
 
+  /* Tiga kartu sejajar; di layar sempit menumpuk satu kolom. */
   @media (min-width: 860px) {
-    .service-row {
-      grid-template-columns: 3rem 22rem 1fr;
-      align-items: baseline;
+    .service-list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
-    .service-body {
-      display: contents;
-    }
-    .service-title {
-      margin: 0;
-    }
-    .service-text {
-      max-width: 52ch;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .service-card {
+      transition: none;
     }
   }
 </style>

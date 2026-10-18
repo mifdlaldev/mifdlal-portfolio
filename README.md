@@ -103,6 +103,17 @@ Keputusan implementasi:
 - `prefers-reduced-motion: reduce` melewati animasi sepenuhnya.
 - Nama aksesibel ada di `aria-label` elemen `h1`; isi visual animasi `aria-hidden`.
 
+## Section layanan
+
+Tiga kartu horizontal (`grid`, `gap: 1.5rem`, tiga kolom mulai 860px, satu kolom di
+bawahnya). Tiap kartu punya border sendiri, jadi tidak ada border luar bersama.
+Bagian atas kartu berisi gambar 16:10, bagian bawah nomor, judul, dan deskripsi.
+
+Gambar saat ini placeholder: `public/services/layanan-01.svg` sampai `-03.svg`,
+path-nya ada di field `image` pada `services` di `src/data/site.ts`. Ganti isi file
+atau arahkan field `image` ke gambar asli; `alt` dibentuk dari judul layanan.
+Gambar memakai `loading="lazy"` supaya tidak menahan render awal.
+
 ## Komentar kode per section
 
 Tiap section (kecuali hero dan strip logo) punya komentar gaya source code di pita

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500" role="img" aria-label="Placeholder gambar layanan 02">
+  <defs>
+    <pattern id="dots" width="26" height="26" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="1" fill="#1a152212"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="500" fill="#fdfcf1"/>
+  <rect width="800" height="500" fill="url(#dots)"/>
+  <rect x="0.5" y="0.5" width="799" height="499" fill="none" stroke="#1a152229"/>
+  <g font-family="ui-monospace, 'JetBrains Mono Variable', monospace" text-anchor="middle">
+    <text x="400" y="238" font-size="22" letter-spacing="2" fill="#1a1522b3">gambar layanan 02</text>
+    <text x="400" y="268" font-size="14" letter-spacing="1" fill="#1a152280">ganti dengan gambar asli</text>
+  </g>
+  <g stroke="#1a152229" stroke-width="1">
+    <path d="M40 40h20M40 40v20"/><path d="M760 40h-20M760 40v20"/>
+    <path d="M40 460h20M40 460v-20"/><path d="M760 460h-20M760 460v-20"/>
+  </g>
+</svg>
