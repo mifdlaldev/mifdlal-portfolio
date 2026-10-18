@@ -77,10 +77,20 @@ Section Stack memakai `stack` dari `src/data/site.ts` (nama + path logo) dan
 menampilkannya sebagai logo loop di dalam sel yang dibatasi garis vertikal sepanjang tinggi section. Isi `stack` dikurasi dari bukti repo: pertanyaan
 per area keahlian, yaitu website dan web app (Next.js, React, TypeScript,
 Astro, Tailwind CSS, Svelte, Hono, Cloudflare, Supabase), chatbot (Claude API,
-OpenAI API, Telegram Bot), dan otomasi AI serta workflow (n8n, Python, GitHub
-Actions). Tooltip tiap sel berselang-seling atas dan bawah. Logo disimpan lokal di `public/logos/` karena
+OpenAI API, Telegram Bot), otomasi AI serta workflow (n8n, Python, GitHub
+Actions), dan alat kerja sehari-hari (Cursor, VS Code, Git, GitHub, GitKraken,
+Obsidian, Hermes Agent, RAG, Node.js, Docker, Podman, Rust, Playwright, Vercel,
+WhatsApp). Tooltip tiap sel berselang-seling atas dan bawah. Logo disimpan lokal di `public/logos/` karena
 CSP hanya mengizinkan `img-src 'self' data:`. Foto potret di section Tentang
 masih placeholder dan perlu diganti file asli.
+
+Dua sel memakai wordmark teks, bukan ikon: `hermes.svg` dan `rag.svg`. Keduanya
+SVG lokal berisi `<text>` mono 600 dengan tinggi kapital yang sama, karena
+Hermes Agent tidak punya mark datar resmi (aset resminya berupa ilustrasi
+potret dan stempel detail yang jadi kabur di 34px) dan RAG adalah teknik, bukan
+produk. Logo brand diambil dari `cdn.simpleicons.org/<slug>` yang sudah membawa
+warna brand; CSS pita memaksa hitam saat diam (`filter: brightness(0)`) lalu
+menampilkan warna asli saat hover.
 
 ## Animasi teks hero (EncryptedText)
 

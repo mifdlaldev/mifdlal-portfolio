@@ -114,6 +114,22 @@ export const stack = [
   { name: 'n8n', logo: '/logos/n8n.svg' },
   { name: 'Python', logo: '/logos/python.svg' },
   { name: 'GitHub Actions', logo: '/logos/githubactions.svg' },
+  /* Alat kerja sehari-hari */
+  { name: 'Cursor', logo: '/logos/cursor.svg' },
+  { name: 'VS Code', logo: '/logos/visualstudiocode.svg' },
+  { name: 'Git', logo: '/logos/git.svg' },
+  { name: 'GitHub', logo: '/logos/github.svg' },
+  { name: 'GitKraken', logo: '/logos/gitkraken.svg' },
+  { name: 'Obsidian', logo: '/logos/obsidian.svg' },
+  { name: 'Hermes Agent', logo: '/logos/hermes.svg' },
+  { name: 'RAG', logo: '/logos/rag.svg' },
+  { name: 'Node.js', logo: '/logos/nodedotjs.svg' },
+  { name: 'Docker', logo: '/logos/docker.svg' },
+  { name: 'Podman', logo: '/logos/podman.svg' },
+  { name: 'Rust', logo: '/logos/rust.svg' },
+  { name: 'Playwright', logo: '/logos/playwright.svg' },
+  { name: 'Vercel', logo: '/logos/vercel.svg' },
+  { name: 'WhatsApp', logo: '/logos/whatsapp.svg' },
 ] as const
 
 /* Angka bukti untuk panel hero. Sumber: GitHub API user mifdlaldev,
