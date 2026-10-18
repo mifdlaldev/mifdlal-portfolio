@@ -74,15 +74,26 @@ Section pengalaman, pendidikan, dan sertifikasi memakai data bertipe di
 template dan wajib diganti data asli sebelum deploy.
 
 Section Stack memakai `stack` dari `src/data/site.ts` (nama + path logo) dan
-menampilkannya sebagai logo loop di dalam sel yang dibatasi garis vertikal sepanjang tinggi section. Isi `stack` dikurasi dari bukti repo: pertanyaan
-per area keahlian, yaitu website dan web app (Next.js, React, TypeScript,
-Astro, Tailwind CSS, Svelte, Hono, Cloudflare, Supabase), chatbot (Claude API,
-OpenAI API, Telegram Bot), otomasi AI serta workflow (n8n, Python, GitHub
-Actions), dan alat kerja sehari-hari (Cursor, VS Code, Git, GitHub, GitKraken,
-Obsidian, Hermes Agent, RAG, Node.js, Docker, Podman, Rust, Playwright, Vercel,
-WhatsApp). Tooltip tiap sel berselang-seling atas dan bawah. Logo disimpan lokal di `public/logos/` karena
+menampilkannya sebagai logo loop di dalam sel yang dibatasi garis vertikal sepanjang tinggi section. Isi `stack` dikelompokkan per peran, 74 entri dalam
+8 grup: website dan web app (Next.js, React, TypeScript, Astro, Tailwind CSS,
+Svelte, Hono, Cloudflare, Supabase), CMS dan platform (WordPress, WooCommerce,
+Shopify, Drupal, Joomla, Ghost, Strapi, Webflow, PrestaShop, Magento), framework
+dan bahasa (PHP, Laravel, Symfony, CodeIgniter, Django, Flask, FastAPI, Ruby on
+Rails, .NET, Spring Boot, Vue.js, Nuxt, Angular), database (MySQL, PostgreSQL,
+MongoDB, Redis, SQLite, MariaDB), cloud dan infrastruktur (AWS, Google Cloud,
+Microsoft Azure, DigitalOcean, Alibaba Cloud, Oracle Cloud, Vultr, Kubernetes,
+Terraform, Ansible, NGINX, Apache, Caddy, Firebase, Netlify, Railway), chatbot
+(Claude API, OpenAI API, Telegram Bot), otomasi AI serta workflow (n8n, Python,
+GitHub Actions), dan alat kerja sehari-hari (Cursor, VS Code, Git, GitHub,
+GitKraken, Obsidian, Hermes Agent, RAG, Node.js, Docker, Podman, Playwright,
+Vercel, WhatsApp). Tooltip tiap sel berselang-seling atas dan bawah. Logo disimpan lokal di `public/logos/` karena
 CSP hanya mengizinkan `img-src 'self' data:`. Foto potret di section Tentang
 masih placeholder dan perlu diganti file asli.
+
+Konsekuensi jumlah: satu salinan pita selebar 5930px, jadi pada `speed={55}`
+satu siklus penuh 108 detik dan tiap logo berada di layar sekitar 1,5 detik.
+Pengunjung hanya melihat sebagian daftar. Kalau seluruh 74 harus terbaca,
+naikkan `speed` di `StackLoop.astro` atau pecah pita jadi dua baris.
 
 Dua sel memakai wordmark teks, bukan ikon: `hermes.svg` dan `rag.svg`. Keduanya
 SVG lokal berisi `<text>` mono 600 dengan tinggi kapital yang sama, karena
@@ -91,6 +102,13 @@ potret dan stempel detail yang jadi kabur di 34px) dan RAG adalah teknik, bukan
 produk. Logo brand diambil dari `cdn.simpleicons.org/<slug>` yang sudah membawa
 warna brand; CSS pita memaksa hitam saat diam (`filter: brightness(0)`) lalu
 menampilkan warna asli saat hover.
+
+Empat logo tidak ada di simple-icons v11: `amazonwebservices`, `microsoftazure`,
+`oracle`, dan `magento`. Keempatnya diambil dari `simple-icons@latest` (SVG tanpa
+`fill`) lalu diisi hex brand resmi secara manual karena ikonnya sudah tidak
+terdaftar di `_data/simple-icons.json`: Azure `#0078D4`, Oracle `#F80000`,
+Magento `#EE672F`. Kalau salah satu brand meminta penghapusan, cukup hapus baris
+di `stack` dan file di `public/logos/`.
 
 ## Animasi teks hero (EncryptedText)
 
