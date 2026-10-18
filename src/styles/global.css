@@ -107,7 +107,9 @@
 }
 
 .section:last-of-type {
-  padding-block-end: var(--space-section);
+  /* Section terakhir tidak perlu pita besar: band media sosial + garis footer
+     sudah memisahkan konten dari bawah halaman. */
+  padding-block-end: clamp(1.75rem, 3vw, 2.5rem);
 }
 
 /* ============================================================
