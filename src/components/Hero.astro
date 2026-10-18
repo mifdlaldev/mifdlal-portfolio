@@ -10,6 +10,11 @@ const liveCount = projects.length
   <!-- Background ASCII bergerak (React Bits). Dekoratif: aria-hidden di dalam komponen.
        client:load -> hidrasi saat load karena hero selalu above the fold.
        intro={false} -> ASCII tampil penuh sejak frame pertama, tanpa animasi reveal. -->
+  <!-- Scrim atas: navbar state atas sengaja transparan supaya ASCII kelihatan
+       apa adanya, jadi teksnya perlu pelindung tipis. Fade ke transparan
+       supaya tidak ada garis batas yang terlihat. -->
+  <div class="hero-scrim" aria-hidden="true"></div>
+
   <div class="hero-bg" aria-hidden="true">
     <GradientASCII
       client:load
@@ -118,6 +123,19 @@ const liveCount = projects.length
   }
 
   /* Veil cream tipis: jaga kontras teks di atas karakter ASCII */
+  .hero-scrim {
+    position: absolute;
+    inset: 0 0 auto;
+    height: clamp(7rem, 14vw, 10rem);
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-ink) 52%, transparent),
+      transparent
+    );
+    pointer-events: none;
+    z-index: 2;
+  }
+
   .hero-veil {
     position: absolute;
     inset: 0;
@@ -141,6 +159,10 @@ const liveCount = projects.length
 
   /* Label fig. 01 di atas ASCII: ukuran default, dibungkus badge
      supaya terbaca tanpa menabrak pola glyph di belakangnya. */
+  .hero {
+    --accent: #2a1eff;
+  }
+
   .hero-inner > .fig-label {
     display: inline-flex;
     align-items: center;
@@ -148,7 +170,7 @@ const liveCount = projects.length
     padding: 0.35rem 0.7rem;
     border: 0;
     background: var(--color-paper);
-    color: var(--color-electric);
+    color: var(--accent, var(--color-electric));
   }
 
   .hero-title {
@@ -162,11 +184,15 @@ const liveCount = projects.length
     color: var(--color-paper);
   }
 
+  /* Sub-headline: weight 500 supaya tidak tenggelam di atas latar ASCII
+     bertekstur, ukuran 20px supaya sepadan dengan perannya (bukan caption). */
   .hero-sub {
     margin: 1.5rem auto 0;
-    max-width: 48ch;
-    font-size: clamp(1rem, 2vw, 1.125rem);
-    line-height: 1.55;
+    max-width: 46ch;
+    font-size: clamp(1.0625rem, 2.2vw, 1.25rem);
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    line-height: 1.5;
     color: var(--color-ink);
     text-wrap: pretty;
   }

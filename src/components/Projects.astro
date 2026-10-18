@@ -44,6 +44,10 @@ import CodeComment from './CodeComment.astro'
 </section>
 
 <style>
+  #proyek {
+    --accent: #12795a;
+  }
+
   .section-head {
     margin-bottom: 2.5rem;
     max-width: 56ch;
@@ -79,7 +83,7 @@ import CodeComment from './CodeComment.astro'
     top: 0;
     bottom: 0;
     width: 2px;
-    background: var(--color-electric);
+    background: var(--accent, var(--color-electric));
     transform: scaleY(0);
     transform-origin: center;
     transition: transform 0.18s ease;
@@ -87,7 +91,7 @@ import CodeComment from './CodeComment.astro'
 
   .project-row:hover,
   .project-row:focus-visible {
-    background: color-mix(in srgb, var(--color-electric) 4%, var(--color-paper));
+    background: color-mix(in srgb, var(--accent, var(--color-electric)) 5%, var(--color-paper));
     outline: none;
   }
 
@@ -99,7 +103,7 @@ import CodeComment from './CodeComment.astro'
   .proof-no {
     font-family: var(--font-mono);
     font-size: 0.6875rem;
-    color: var(--color-muted);
+    color: var(--accent, var(--color-muted));
     padding-top: 0.25rem;
   }
 
@@ -161,7 +165,7 @@ import CodeComment from './CodeComment.astro'
     font-weight: 600;
     letter-spacing: 0.04em;
     text-transform: lowercase;
-    color: var(--color-electric);
+    color: var(--accent, var(--color-electric));
     min-height: 44px;
     display: inline-flex;
     align-items: center;

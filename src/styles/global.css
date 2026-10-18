@@ -156,7 +156,7 @@
   position: absolute;
   width: var(--node-size);
   height: var(--node-size);
-  border: 1px solid var(--color-line);
+  border: 1px solid var(--accent, var(--color-line));
   background: transparent;
   box-sizing: border-box;
   pointer-events: none;
@@ -287,12 +287,17 @@ body {
 }
 
 /* Label mono kecil: "fig. 1: selected work" */
+/* ── Kode warna per section ───────────────────────────────────────────────
+   Tiap section menetapkan --accent-nya sendiri (blok <style> komponen).
+   Hanya penanda yang boleh memakai --accent: label fig., nomor urut, node di
+   rail, garis aksen, tautan kecil. Teks isi + judul tetap tinta, latar tetap
+   kertas. Satu section satu warna. Semua nilai diuji >= 4.5:1 di atas kertas. */
 .fig-label {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
   letter-spacing: 0.08em;
   text-transform: lowercase;
-  color: var(--color-electric);
+  color: var(--accent, var(--color-electric));
   font-weight: 500;
 }
 
