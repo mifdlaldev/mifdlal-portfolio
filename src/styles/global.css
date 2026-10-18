@@ -72,7 +72,7 @@
   position: relative;
   /* Jarak rail dari tepi section = tepi container .wrap. */
   --rail-offset: max(var(--grid-gutter), calc(50% - var(--grid-max) / 2));
-  --node-size: 7px;
+  --node-size: 12px;
   /* Semua garis digambar sebagai background supaya pseudo-element
      tetap bebas dipakai untuk node. */
   background-image:
