@@ -100,6 +100,18 @@ Keputusan implementasi:
 - `prefers-reduced-motion: reduce` melewati animasi sepenuhnya.
 - Nama aksesibel ada di `aria-label` elemen `h1`; isi visual animasi `aria-hidden`.
 
+## Komentar kode per section
+
+Tiap section (kecuali hero dan strip logo) punya komentar gaya source code di pita
+kosong antara garis atas section dan garis awal konten, misalnya `// proyek`.
+Komponennya `src/components/CodeComment.astro`, isinya `EncryptedText` dengan
+`client:visible` supaya animasi baru jalan saat section masuk viewport.
+
+Penempatan memakai `position: absolute` (`.section-comment` di `global.css`), jadi
+tinggi section tidak berubah sama sekali. Terukur: tinggi tiap section identik
+sebelum dan sesudah penambahan (755, 1059, 708, 687, 485, 439, 541 px di 1366px).
+Warna 60% ink di atas paper = 4.66:1, lolos AA untuk teks kecil.
+
 ## Font kode
 
 `--font-mono` memakai JetBrains Mono Variable (`@fontsource-variable/jetbrains-mono`,
