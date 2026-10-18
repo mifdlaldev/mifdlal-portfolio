@@ -72,16 +72,20 @@
 
 .section-comment {
   position: absolute;
-  left: var(--rail-offset);
-  top: calc(var(--space-section) - 2.75rem);
+  /* Tengah pita kosong antara garis atas section dan garis awal konten. */
+  top: calc(var(--space-section) / 2);
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  text-align: center;
   z-index: 1;
   margin: 0;
   pointer-events: none;
   user-select: none;
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: 0.875rem;
   line-height: 1.2;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   /* 60% = 4.66:1 di atas paper, lolos AA untuk teks kecil. */
   color: color-mix(in srgb, var(--color-ink) 60%, transparent);
 }
