@@ -97,6 +97,9 @@ Keputusan implementasi:
   sehingga lebar baris konstan selama animasi.
 - Reveal berbasis waktu, bukan per frame, plus jaring pengaman `setTimeout` supaya
   teks tetap terbuka penuh kalau `requestAnimationFrame` berhenti.
+- Tempo dibikin lambat supaya proses enkripsi terlihat: judul hero
+  `revealDelayMs 72` / `flipDelayMs 90` (47 karakter, sekitar 3,3 detik) dan
+  komentar section `revealDelayMs 110` / `flipDelayMs 85` (sekitar 1 detik).
 - `prefers-reduced-motion: reduce` melewati animasi sepenuhnya.
 - Nama aksesibel ada di `aria-label` elemen `h1`; isi visual animasi `aria-hidden`.
 
