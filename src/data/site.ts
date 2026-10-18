@@ -93,17 +93,24 @@ export const services = [
 ] as const
 
 export const stack = [
+  /* Website dan web app */
   { name: 'Next.js', logo: '/logos/nextdotjs.svg' },
-  { name: 'Svelte', logo: '/logos/svelte.svg' },
+  { name: 'React', logo: '/logos/react.svg' },
   { name: 'TypeScript', logo: '/logos/typescript.svg' },
-  { name: 'Rust', logo: '/logos/rust.svg' },
+  { name: 'Astro', logo: '/logos/astro.svg' },
+  { name: 'Tailwind CSS', logo: '/logos/tailwindcss.svg' },
+  { name: 'Svelte', logo: '/logos/svelte.svg' },
+  { name: 'Hono', logo: '/logos/hono.svg' },
+  { name: 'Cloudflare', logo: '/logos/cloudflare.svg' },
   { name: 'Supabase', logo: '/logos/supabase.svg' },
-  { name: 'Cloudflare D1', logo: '/logos/cloudflare.svg' },
-  { name: 'Playwright', logo: '/logos/playwright.svg' },
-  { name: 'Bun', logo: '/logos/bun.svg' },
-  { name: 'HTML5', logo: '/logos/html5.svg' },
-  { name: 'CSS', logo: '/logos/css.svg' },
-  { name: 'JavaScript', logo: '/logos/javascript.svg' },
+  /* Chatbot */
+  { name: 'Claude API', logo: '/logos/anthropic.svg' },
+  { name: 'OpenAI API', logo: '/logos/openai.svg' },
+  { name: 'Telegram Bot', logo: '/logos/telegram.svg' },
+  /* Otomasi AI dan workflow */
+  { name: 'n8n', logo: '/logos/n8n.svg' },
+  { name: 'Python', logo: '/logos/python.svg' },
+  { name: 'GitHub Actions', logo: '/logos/githubactions.svg' },
 ] as const
 
 export const contact = {

@@ -72,7 +72,11 @@ Section pengalaman, pendidikan, dan sertifikasi memakai data bertipe di
 template dan wajib diganti data asli sebelum deploy.
 
 Section Stack memakai `stack` dari `src/data/site.ts` (nama + path logo) dan
-menampilkannya sebagai logo loop di dalam sel yang dibatasi garis vertikal sepanjang tinggi section. Logo disimpan lokal di `public/logos/` karena
+menampilkannya sebagai logo loop di dalam sel yang dibatasi garis vertikal sepanjang tinggi section. Isi `stack` dikurasi dari bukti repo: pertanyaan
+per area keahlian, yaitu website dan web app (Next.js, React, TypeScript,
+Astro, Tailwind CSS, Svelte, Hono, Cloudflare, Supabase), chatbot (Claude API,
+OpenAI API, Telegram Bot), dan otomasi AI serta workflow (n8n, Python, GitHub
+Actions). Tooltip tiap sel berselang-seling atas dan bawah. Logo disimpan lokal di `public/logos/` karena
 CSP hanya mengizinkan `img-src 'self' data:`. Foto potret di section Tentang
 masih placeholder dan perlu diganti file asli.
 
