@@ -10,6 +10,11 @@ const liveCount = projects.length
   <!-- Background ASCII bergerak (React Bits). Dekoratif: aria-hidden di dalam komponen.
        client:load -> hidrasi saat load karena hero selalu above the fold.
        intro={false} -> ASCII tampil penuh sejak frame pertama, tanpa animasi reveal. -->
+  <!-- Scrim atas: navbar state atas sengaja transparan supaya ASCII kelihatan
+       apa adanya, jadi teksnya perlu pelindung tipis. Fade ke transparan
+       supaya tidak ada garis batas yang terlihat. -->
+  <div class="hero-scrim" aria-hidden="true"></div>
+
   <div class="hero-bg" aria-hidden="true">
     <GradientASCII
       client:load
@@ -118,6 +123,19 @@ const liveCount = projects.length
   }
 
   /* Veil cream tipis: jaga kontras teks di atas karakter ASCII */
+  .hero-scrim {
+    position: absolute;
+    inset: 0 0 auto;
+    height: clamp(7rem, 14vw, 10rem);
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-ink) 52%, transparent),
+      transparent
+    );
+    pointer-events: none;
+    z-index: 2;
+  }
+
   .hero-veil {
     position: absolute;
     inset: 0;
