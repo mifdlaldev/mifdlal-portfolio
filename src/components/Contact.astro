@@ -131,8 +131,10 @@ import SocialIcons from './SocialIcons.astro'
     gap: clamp(1.25rem, 2.5vw, 1.75rem);
     min-width: 0;
     padding: clamp(1.25rem, 3vw, 2.25rem);
-    border: 1px solid color-mix(in srgb, var(--color-ink) 20%, transparent);
-    background: color-mix(in srgb, #ffffff 70%, transparent);
+    /* Kartu email: permukaan biru website. Border disamakan dengan latar
+       supaya ukuran kotak tidak berubah, bukan dihapus. */
+    border: 1px solid var(--color-electric);
+    background: var(--color-electric);
   }
 
   .panel-block {
@@ -151,32 +153,38 @@ import SocialIcons from './SocialIcons.astro'
     color: var(--color-muted);
   }
 
+  /* Di dalam kartu biru, label dan isi pakai kertas, bukan tinta. */
+  .contact-panel .panel-label {
+    color: color-mix(in srgb, var(--color-paper) 82%, transparent);
+  }
+
   .contact-email {
     align-self: flex-start;
     font-family: var(--font-display);
     font-size: clamp(1.375rem, 3.2vw, 2rem);
     font-weight: 600;
     letter-spacing: -0.02em;
-    color: var(--color-ink);
+    color: var(--color-paper);
     text-decoration: none;
-    border-bottom: 2px solid var(--color-electric);
+    border-bottom: 2px solid color-mix(in srgb, var(--color-paper) 45%, transparent);
     padding-bottom: 0.25rem;
     min-height: 44px;
     display: inline-flex;
     align-items: center;
     overflow-wrap: anywhere;
-    transition: color 0.15s ease;
+    transition: color 0.15s ease, border-color 0.15s ease;
   }
 
   .contact-email:hover {
-    color: var(--color-electric);
+    color: var(--color-lemon);
+    border-bottom-color: var(--color-lemon);
   }
 
   .brief-list {
     margin: 0;
     padding: 0;
     list-style: none;
-    border-top: 1px solid var(--color-line);
+    border-top: 1px solid color-mix(in srgb, var(--color-paper) 30%, transparent);
   }
 
   .brief-list li {
@@ -185,17 +193,17 @@ import SocialIcons from './SocialIcons.astro'
     gap: 0.75rem;
     align-items: baseline;
     padding: 0.7rem 0;
-    border-bottom: 1px solid var(--color-line);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-paper) 30%, transparent);
     font-size: 0.875rem;
     line-height: 1.5;
-    color: var(--color-muted);
+    color: color-mix(in srgb, var(--color-paper) 90%, transparent);
   }
 
   .brief-no {
     font-family: var(--font-mono);
     font-size: 0.6875rem;
     letter-spacing: 0.04em;
-    color: var(--color-electric);
+    color: var(--color-lemon);
   }
 
   .contact-social {

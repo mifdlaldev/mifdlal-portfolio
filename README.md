@@ -192,6 +192,12 @@ checklist; kanal lain masuk tabel spec agar panel tetap satu tugas.
 Nomor `01`-`04` di checklist diberi `aria-hidden="true"` karena `<ol>` sudah memberi
 nomor sendiri ke pembaca layar.
 
+Kartu email memakai permukaan biru (`--color-electric`) dengan seluruh isinya berwarna
+kertas: label `paper 82%`, email `paper` penuh, item `paper 90%`, nomor `--color-lemon`.
+Rasio kontras terukur terhadap latar biru: 5.36 / 7.47 / 6.24 / 6.42 — semuanya lolos AA.
+Border kartu disamakan dengan warna latar (bukan dihapus) supaya ukuran kotak tidak
+berubah.
+
 Ikon media sosial ada di `src/components/SocialIcons.astro`: path brand simple-icons v11
 (CC0) di-inline sebagai SVG `fill="currentColor"`, jadi tidak ada request tambahan dan
 aman terhadap CSP `img-src 'self'`. Ukuran per brand berbeda (github 19, linkedin 15,
