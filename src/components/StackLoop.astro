@@ -1,0 +1,60 @@
+---
+import LogoLoop from './LogoLoop'
+import { stack } from '../data/site'
+
+const logos = stack.map((s) => ({ src: s.logo, alt: s.name }))
+---
+
+<section id="stack" class="section">
+  <div class="wrap">
+    <p class="stack-note">tools / stack</p>
+  </div>
+
+  <div class="loop-band">
+    <LogoLoop
+      client:visible
+      logos={logos}
+      speed={70}
+      logoHeight={30}
+      gap={64}
+      fadeOut={true}
+      fadeOutColor="#fdfcf1"
+      fadeOutWidth={0.1}
+      pauseOnHover={true}
+      scaleOnHover={true}
+      ariaLabel="Teknologi yang dipakai"
+    />
+  </div>
+</section>
+
+<style>
+  .stack-note {
+    margin: 0 0 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: lowercase;
+    color: var(--color-muted);
+  }
+
+  .loop-band {
+    margin-block: 0.5rem;
+    padding-block: 0.5rem;
+  }
+
+  /* Logo berwarna brand; sedikit diredam agar menyatu dengan palet situs. */
+  .loop-band :global(img) {
+    opacity: 0.86;
+    transition: opacity 180ms ease;
+  }
+
+  .loop-band :global(img:hover) {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .loop-band :global(img) {
+      transition: none;
+    }
+  }
+</style>

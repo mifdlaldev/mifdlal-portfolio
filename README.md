@@ -58,7 +58,8 @@ wrangler.toml           konfigurasi deploy Workers Static Assets
 ## Urutan section
 
 1. Hero
-2. Tentang
+2. Tentang (foto potret + teks)
+2b. Stack (logo loop, tanpa nomor fig.)
 3. Proyek
 4. Layanan
 5. Pengalaman
@@ -69,6 +70,11 @@ wrangler.toml           konfigurasi deploy Workers Static Assets
 Section pengalaman, pendidikan, dan sertifikasi memakai data bertipe di
 `src/data/site.ts` (`experience`, `education`, `certifications`). Isinya masih
 template dan wajib diganti data asli sebelum deploy.
+
+Section Stack memakai `stack` dari `src/data/site.ts` (nama + path logo) dan
+menampilkannya sebagai logo loop. Logo disimpan lokal di `public/logos/` karena
+CSP hanya mengizinkan `img-src 'self' data:`. Foto potret di section Tentang
+masih placeholder dan perlu diganti file asli.
 
 Navigasi utama mengikuti urutan yang sama untuk section setelah hero.
 

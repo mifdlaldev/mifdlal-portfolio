@@ -93,8 +93,17 @@ export const services = [
 ] as const
 
 export const stack = [
-  'Next.js', 'Svelte', 'TypeScript', 'Rust', 'Supabase',
-  'Cloudflare D1', 'Playwright', 'Bun', 'HTML/CSS/JS',
+  { name: 'Next.js', logo: '/logos/nextdotjs.svg' },
+  { name: 'Svelte', logo: '/logos/svelte.svg' },
+  { name: 'TypeScript', logo: '/logos/typescript.svg' },
+  { name: 'Rust', logo: '/logos/rust.svg' },
+  { name: 'Supabase', logo: '/logos/supabase.svg' },
+  { name: 'Cloudflare D1', logo: '/logos/cloudflare.svg' },
+  { name: 'Playwright', logo: '/logos/playwright.svg' },
+  { name: 'Bun', logo: '/logos/bun.svg' },
+  { name: 'HTML5', logo: '/logos/html5.svg' },
+  { name: 'CSS', logo: '/logos/css.svg' },
+  { name: 'JavaScript', logo: '/logos/javascript.svg' },
 ] as const
 
 export const contact = {

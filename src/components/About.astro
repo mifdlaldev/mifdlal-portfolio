@@ -1,16 +1,22 @@
 ---
-import { stack } from '../data/site'
 ---
 
 <section id="tentang" class="section">
   <div class="wrap">
-    <div class="section-head">
-      <span class="fig-label">fig. 02 · tentang</span>
-      <h2 class="section-headline">Developer di Bandung.</h2>
-    </div>
-
     <div class="about-grid">
+      <figure class="portrait">
+        <div class="portrait-placeholder" role="img" aria-label="Placeholder foto potret">
+          <span>foto potret</span>
+          <span>ganti dengan foto</span>
+        </div>
+        <figcaption>mifdlal · bandung, id</figcaption>
+      </figure>
+
       <div class="about-copy">
+        <div class="section-head">
+          <span class="fig-label">fig. 02 · tentang</span>
+          <h2 class="section-headline">Developer di Bandung.</h2>
+        </div>
         <p class="lede">
           Saya bangun aplikasi web dan otomasi AI untuk bisnis kecil dan menengah
           di Indonesia. Fokus: hasil yang jalan, bukan slide.
@@ -22,35 +28,62 @@ import { stack } from '../data/site'
         </p>
         <p class="learning">Sedang dipelajari: otomasi workflow dengan n8n.</p>
       </div>
-
-      <aside class="about-stack" aria-label="Teknologi yang digunakan">
-        <p class="stack-label">tools / stack</p>
-        <ul class="stack-list">
-          {stack.map((s, i) => (
-            <li class="stack-item">
-              <span class="stack-no">{String(i + 1).padStart(2, '0')}</span>
-              <span>{s}</span>
-            </li>
-          ))}
-        </ul>
-      </aside>
     </div>
   </div>
 </section>
 
 <style>
-  .section-head {
-    margin-bottom: 2rem;
-  }
-
   .about-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2.5rem;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .portrait {
+    margin: 0;
+    width: 100%;
+  }
+
+  .portrait-placeholder {
+    aspect-ratio: 4 / 5;
+    width: 100%;
+    max-height: 34rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    background: color-mix(in srgb, var(--color-ink) 8%, var(--color-paper));
+    border: 1px solid var(--color-line);
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: lowercase;
+  }
+
+  .portrait-placeholder span:first-child {
+    color: var(--color-ink);
+    font-size: 0.8125rem;
+  }
+
+  .portrait figcaption {
+    margin-top: 0.65rem;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.06em;
+    text-transform: lowercase;
+    color: var(--color-muted);
   }
 
   .about-copy {
-    max-width: 62ch;
+    min-width: 0;
+  }
+
+  .section-head {
+    margin-bottom: 2rem;
+    max-width: 56ch;
   }
 
   .lede {
@@ -64,7 +97,7 @@ import { stack } from '../data/site'
     text-wrap: pretty;
   }
 
-  .about-copy p:not(.lede) {
+  .about-copy p:not(.lede, .learning) {
     color: var(--color-muted);
     line-height: 1.7;
     margin: 0 0 1.25rem;
@@ -73,56 +106,15 @@ import { stack } from '../data/site'
 
   .about-copy .learning {
     font-family: var(--font-mono);
-    font-size: 0.6875rem !important;
-    color: var(--color-muted);
-    margin: 0 !important;
-  }
-
-  .about-stack {
-    border-top: 1px solid var(--color-line);
-  }
-
-  .stack-label {
-    font-family: var(--font-mono);
     font-size: 0.6875rem;
-    letter-spacing: 0.06em;
-    text-transform: lowercase;
     color: var(--color-muted);
     margin: 0;
-    padding: 0.625rem 0;
-    border-bottom: 1px solid var(--color-line);
   }
 
-  .stack-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 1.5rem;
-  }
-
-  .stack-item {
-    display: flex;
-    align-items: baseline;
-    gap: 0.75rem;
-    padding: 0.625rem 0;
-    border-bottom: 1px solid var(--color-line);
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--color-ink);
-  }
-
-  .stack-no {
-    color: var(--color-muted);
-    font-size: 0.625rem;
-  }
-
-  @media (min-width: 860px) {
+  @media (min-width: 800px) {
     .about-grid {
-      grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.8fr);
-      gap: clamp(3rem, 8vw, 7rem);
-      align-items: start;
+      grid-template-columns: minmax(15rem, 0.78fr) minmax(0, 1.22fr);
+      gap: clamp(3rem, 7vw, 7rem);
     }
   }
 </style>
