@@ -1,6 +1,7 @@
 ---
 import { projects } from '../data/site'
 import GradientASCII from '../components/GradientASCII'
+import EncryptedText from '../components/EncryptedText'
 
 const liveCount = projects.length
 ---
@@ -33,8 +34,15 @@ const liveCount = projects.length
   <div class="wrap hero-inner">
     <p class="fig-label">portfolio · fig. 01</p>
 
-    <h1 class="hero-title">
-      Web app dan otomasi AI,<br />dikerjakan sampai live.
+    <h1 class="hero-title" aria-label="Web app dan otomasi AI, dikerjakan sampai live.">
+      <!-- Teks hero dibuka dengan animasi decrypt (Aceternity EncryptedText).
+           Teks asli tetap ada di HTML awal supaya terbaca crawler dan tanpa JS. -->
+      <EncryptedText
+        client:load
+        lines={['Web app dan otomasi AI,', 'dikerjakan sampai live.']}
+        revealDelayMs={34}
+        flipDelayMs={46}
+      />
     </h1>
 
     <p class="hero-sub">

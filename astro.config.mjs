@@ -18,6 +18,9 @@ export default defineConfig({
       // Nol source map di produksi: jangan bocorkan struktur source.
       sourcemap: false,
       cssMinify: 'lightningcss',
+      // Jangan inline aset kecil sebagai data:. CSP produksi memakai
+      // font-src 'self', jadi font harus tetap berupa file (bukan data URI).
+      assetsInlineLimit: 0,
     },
   },
 })

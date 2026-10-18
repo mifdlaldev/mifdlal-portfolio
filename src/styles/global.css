@@ -2,6 +2,7 @@
 @import "@fontsource-variable/space-grotesk";
 @import "@fontsource-variable/inter";
 @import "@fontsource-variable/azeret-mono";
+@import "@fontsource-variable/jetbrains-mono";
 
 /* ============================================================
    DESIGN TOKENS: mifdlal.com (Warp.dev grammar)
@@ -28,7 +29,7 @@
   /* Tipografi */
   --font-display: "Space Grotesk Variable", system-ui, sans-serif;
   --font-body: "Inter Variable", system-ui, -apple-system, sans-serif;
-  --font-mono: "Azeret Mono Variable", ui-monospace, "SFMono-Regular", monospace;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", monospace;
   --font-serif: "Instrument Serif", Georgia, serif;
 
   /* Spasi */
@@ -38,6 +39,28 @@
   --nav-h: 64px;
 
 
+}
+
+/* ============================================================
+   ENCRYPTED TEXT (Aceternity, tanpa dependency motion)
+   Tiap baris dikunci lebar oleh ghost, karakter teracak digambar
+   absolut di atasnya. Kotak teks tidak bergerak saat animasi jalan.
+   ============================================================ */
+
+.enc-line {
+  position: relative;
+  display: block;
+  white-space: nowrap;
+}
+
+.enc-ghost {
+  visibility: hidden;
+}
+
+.enc-live {
+  position: absolute;
+  inset: 0;
+  text-align: inherit;
 }
 
 /* ============================================================

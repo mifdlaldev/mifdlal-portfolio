@@ -80,6 +80,37 @@ Actions). Tooltip tiap sel berselang-seling atas dan bawah. Logo disimpan lokal 
 CSP hanya mengizinkan `img-src 'self' data:`. Foto potret di section Tentang
 masih placeholder dan perlu diganti file asli.
 
+## Animasi teks hero (EncryptedText)
+
+Judul hero memakai komponen `EncryptedText` (`src/components/EncryptedText.tsx`),
+adaptasi dari Aceternity UI `ui.aceternity.com/components/encrypted-text`.
+Keputusan implementasi:
+
+- Tanpa dependency `motion`. Komponen aslinya menarik `motion/react` hanya untuk
+  `<motion.span>` tanpa properti animasi dan hook `useInView`. Keduanya diganti
+  `span` biasa dan `IntersectionObserver` native.
+- Teks asli ada di HTML hasil build. State awal komponen adalah teks penuh, jadi
+  crawler dan pengunjung tanpa JavaScript tetap membaca kalimat utuh; animasi baru
+  mulai setelah hidrasi.
+- Tidak ada pergeseran layout. Tiap baris dikunci oleh ghost tak terlihat
+  (`.enc-ghost`) dan karakter teracak digambar absolut di atasnya (`.enc-live`),
+  sehingga lebar baris konstan selama animasi.
+- Reveal berbasis waktu, bukan per frame, plus jaring pengaman `setTimeout` supaya
+  teks tetap terbuka penuh kalau `requestAnimationFrame` berhenti.
+- `prefers-reduced-motion: reduce` melewati animasi sepenuhnya.
+- Nama aksesibel ada di `aria-label` elemen `h1`; isi visual animasi `aria-hidden`.
+
+## Font kode
+
+`--font-mono` memakai JetBrains Mono Variable (`@fontsource-variable/jetbrains-mono`,
+lisensi OFL), self-hosted seperti font lain. Font ini dipakai untuk fig label, tag
+teknologi, tombol, tooltip logo, dan elemen data lain. Azeret Mono tetap dipakai
+khusus kanvas ASCII di hero.
+
+`vite.build.assetsInlineLimit` diset `0` supaya font tidak pernah di-inline sebagai
+`data:` URI. Subset font kecil (misalnya cyrillic-ext) sebelumnya di-inline Vite dan
+diblokir CSP `font-src 'self'`.
+
 Navigasi utama mengikuti urutan yang sama untuk section setelah hero.
 
 ## Navbar (frosted glass, dua state)
