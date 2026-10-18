@@ -123,6 +123,17 @@ export const publicRepoCount = 21
 export const contact = {
   email: 'hello@mifdlal.com',
   github: 'https://github.com/mifdlaldev',
+  socials: [
+    { id: 'github', label: 'GitHub', href: 'https://github.com/mifdlaldev' },
+    {
+      id: 'linkedin',
+      label: 'LinkedIn',
+      href: 'https://www.linkedin.com/in/mifdlal-tsaqib-alfarras/',
+    },
+    { id: 'fiverr', label: 'Fiverr', href: 'https://www.fiverr.com/mifdlal_afs' },
+    // Upwork: isi href dengan URL profil, ikon langsung muncul.
+    { id: 'upwork', label: 'Upwork', href: '' },
+  ],
 } as const
 
 /* ---------------------------------------------------------------

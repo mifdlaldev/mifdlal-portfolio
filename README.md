@@ -192,6 +192,12 @@ checklist; kanal lain masuk tabel spec agar panel tetap satu tugas.
 Nomor `01`-`04` di checklist diberi `aria-hidden="true"` karena `<ol>` sudah memberi
 nomor sendiri ke pembaca layar.
 
+Ikon media sosial ada di `src/components/SocialIcons.astro`: path brand simple-icons v11
+(CC0) di-inline sebagai SVG `fill="currentColor"`, jadi tidak ada request tambahan dan
+aman terhadap CSP `img-src 'self'`. Ukuran per brand berbeda (github 19, linkedin 15,
+fiverr 30) karena wordmark mendatar punya massa tinta jauh lebih ringan daripada mark
+padat; dengan ukuran seragam selisih tinta 3x, setelah penyesuaian 1,5x.
+
 ## CSP dan inline script
 
 CSP memakai `script-src 'self'` tanpa `unsafe-inline`. Astro menghasilkan inline
