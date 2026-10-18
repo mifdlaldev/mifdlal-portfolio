@@ -84,13 +84,13 @@ export const services = [
   {
     no: '02',
     title: 'Chatbot WhatsApp',
-    body: 'Balas pelanggan otomatis dan jawab pertanyaan dari data bisnis kamu, bukan template yang sama terus.',
+    body: 'Balas pelanggan otomatis dan jawab pertanyaan dari data bisnis Anda, bukan template yang sama terus.',
     image: '/services/layanan-02.svg',
   },
   {
     no: '03',
     title: 'Otomasi AI dan workflow',
-    body: 'Hapus kerja berulang, sambungkan tool yang sudah kamu pakai, biar tim kecil tidak kerja dua kali.',
+    body: 'Hapus kerja berulang, sambungkan tool yang sudah Anda pakai, biar tim kecil tidak kerja dua kali.',
     image: '/services/layanan-03.svg',
   },
 ] as const

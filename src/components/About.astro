@@ -20,15 +20,15 @@ import CodeComment from './CodeComment.astro'
           <h2 class="section-headline">Halo, saya Mifdlal.</h2>
         </div>
         <p class="lede">
-          Saya bikin web app dan otomasi untuk UMKM: katalog online, kasir, dan
+          Saya bangun web app dan otomasi untuk UMKM: katalog online, kasir, dan
           alur kerja yang masih manual.
         </p>
         <p>
-          Saya kerja sendiri, jadi setelah dipakai, kamu berurusan langsung
-          dengan orang yang menulis kodenya. Saya pakai AI cuma untuk kerja
-          berulang. Keputusan bisnis tetap kamu yang ambil.
+          Saya mengerjakan seluruh tahap sendiri, dari desain sampai deploy.
+          Setelah proyek diluncurkan, Anda berkomunikasi langsung dengan orang
+          yang menulis kodenya. Saya hanya menggunakan AI untuk pekerjaan yang
+          berulang, sedangkan keputusan bisnis tetap di tangan Anda.
         </p>
-        <p class="learning">Sekarang sedang belajar n8n.</p>
       </div>
     </div>
   </div>
@@ -99,18 +99,11 @@ import CodeComment from './CodeComment.astro'
     text-wrap: pretty;
   }
 
-  .about-copy p:not(.lede, .learning) {
+  .about-copy p:not(.lede) {
     color: var(--color-muted);
     line-height: 1.7;
     margin: 0 0 1.25rem;
     font-size: 0.9375rem;
-  }
-
-  .about-copy .learning {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    color: var(--color-muted);
-    margin: 0;
   }
 
   @media (min-width: 800px) {
