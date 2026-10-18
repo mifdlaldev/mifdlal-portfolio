@@ -1,11 +1,11 @@
 ---
-// Struktur jasa: yang dibutuhkan calon klien untuk memutuskan.
-// Pendidikan dan sertifikasi tetap ada di halaman, tapi tidak di nav
-// karena bukan bagian dari alur keputusan klien.
+// Urutan nav mengikuti urutan section di halaman, supaya arah scroll
+// klik selalu konsisten (tidak pernah melompat ke belakang).
+// Pendidikan dan sertifikasi tetap ada di halaman, tapi tidak di nav.
 const links = [
-  { href: '#layanan', label: 'Layanan' },
-  { href: '#proyek', label: 'Proyek' },
   { href: '#tentang', label: 'Tentang' },
+  { href: '#proyek', label: 'Proyek' },
+  { href: '#layanan', label: 'Layanan' },
   { href: '#pengalaman', label: 'Pengalaman' },
 ]
 ---
@@ -172,6 +172,18 @@ const links = [
 
   .nav-link:hover {
     color: var(--color-ink);
+  }
+
+  /* Section yang sedang dilihat: underline tipis + warna penuh. */
+  .nav-link.is-active {
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+
+  .nav:not(.is-scrolled) .nav-link.is-active {
+    color: var(--color-paper);
   }
 
   .nav-actions {

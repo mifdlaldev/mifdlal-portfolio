@@ -139,12 +139,17 @@ khusus kanvas ASCII di hero.
 `data:` URI. Subset font kecil (misalnya cyrillic-ext) sebelumnya di-inline Vite dan
 diblokir CSP `font-src 'self'`.
 
-Navigasi utama memakai struktur jasa: `Layanan · Proyek · Tentang · Pengalaman`,
-lalu tombol `Mulai proyek` ke section kontak. Pendidikan dan sertifikasi tetap ada di
+Navigasi utama berisi `Tentang · Proyek · Layanan · Pengalaman` — urutannya sama
+dengan urutan section di halaman, jadi klik tidak pernah melompat ke belakang. Lalu
+tombol `Mulai proyek` menuju section kontak. Pendidikan dan sertifikasi tetap ada di
 halaman tetapi tidak masuk nav karena bukan bagian dari alur keputusan klien. Link
 tengah dipusatkan terhadap viewport (`grid-template-columns: 1fr auto 1fr`), bukan
 terhadap ruang sisa setelah brand. Di bawah 860px link disembunyikan dan hanya brand
 + tombol CTA yang tampil.
+
+`public/js/nav-scroll.js` mengerjakan dua hal: menyalakan kelas `is-scrolled` (glass)
+dan scroll-spy yang menandai link sesuai section yang sedang terlihat, lengkap dengan
+`aria-current="true"`. Link aktif digaris-bawahi 1px.
 
 ## Navbar (frosted glass, dua state)
 
