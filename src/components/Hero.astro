@@ -141,6 +141,10 @@ const liveCount = projects.length
 
   /* Label fig. 01 di atas ASCII: ukuran default, dibungkus badge
      supaya terbaca tanpa menabrak pola glyph di belakangnya. */
+  .hero {
+    --accent: #2a1eff;
+  }
+
   .hero-inner > .fig-label {
     display: inline-flex;
     align-items: center;
@@ -148,7 +152,7 @@ const liveCount = projects.length
     padding: 0.35rem 0.7rem;
     border: 0;
     background: var(--color-paper);
-    color: var(--color-electric);
+    color: var(--accent, var(--color-electric));
   }
 
   .hero-title {

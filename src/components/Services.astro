@@ -37,6 +37,15 @@ import CodeComment from './CodeComment.astro'
 </section>
 
 <style>
+  #layanan {
+    --accent: #c8371a;
+  }
+
+  /* Tiga layanan = tiga warna, supaya terbaca sebagai tiga hal. */
+  .service-card:nth-child(1) { --card-accent: #2a1eff; }
+  .service-card:nth-child(2) { --card-accent: #12795a; }
+  .service-card:nth-child(3) { --card-accent: #c8371a; }
+
   /* Judul section di tengah: blok dibatasi 56ch lalu dipusatkan,
      isinya ikut center. */
   .section-head {
@@ -59,12 +68,14 @@ import CodeComment from './CodeComment.astro'
     display: flex;
     flex-direction: column;
     border: 1px solid var(--color-line);
+    border-top: 2px solid var(--card-accent, var(--color-line));
     background: var(--color-paper);
     transition: border-color 160ms ease;
   }
 
   .service-card:hover {
     border-color: color-mix(in srgb, var(--color-ink) 34%, transparent);
+    border-top-color: var(--card-accent, var(--color-line));
   }
 
   .service-media {
@@ -92,7 +103,7 @@ import CodeComment from './CodeComment.astro'
     font-family: var(--font-mono);
     font-size: 0.6875rem;
     letter-spacing: 0.08em;
-    color: var(--color-electric);
+    color: var(--card-accent, var(--accent, var(--color-electric)));
   }
 
   .service-title {

@@ -52,6 +52,10 @@ import CodeComment from './CodeComment.astro'
 </section>
 
 <style>
+  #pendidikan {
+    --accent: #5b2bd9;
+  }
+
   .section-head {
     margin-bottom: 2.5rem;
     max-width: 56ch;
@@ -75,7 +79,7 @@ import CodeComment from './CodeComment.astro'
   .edu-no {
     font-family: var(--font-mono);
     font-size: 0.6875rem;
-    color: var(--color-electric);
+    color: var(--accent, var(--color-electric));
     padding-top: 0.3rem;
   }
 

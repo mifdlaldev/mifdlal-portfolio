@@ -48,6 +48,10 @@ import CodeComment from './CodeComment.astro'
 </section>
 
 <style>
+  #sertifikasi {
+    --accent: #a81a6b;
+  }
+
   .section-head {
     margin-bottom: 2.5rem;
     max-width: 56ch;
@@ -72,7 +76,7 @@ import CodeComment from './CodeComment.astro'
   .cert-no {
     font-family: var(--font-mono);
     font-size: 0.6875rem;
-    color: var(--color-electric);
+    color: var(--accent, var(--color-electric));
   }
 
   .cert-title {
@@ -100,7 +104,7 @@ import CodeComment from './CodeComment.astro'
     grid-column: 2 / -1;
     font-family: var(--font-mono);
     font-size: 0.6875rem;
-    color: var(--color-electric);
+    color: var(--accent, var(--color-electric));
     margin-top: 0.5rem;
   }
 
