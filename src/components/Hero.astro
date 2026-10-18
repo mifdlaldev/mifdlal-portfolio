@@ -1,10 +1,9 @@
 ---
-import { projects, stack, publicRepoCount } from '../data/site'
+import { projects, publicRepoCount } from '../data/site'
 import GradientASCII from '../components/GradientASCII'
 import EncryptedText from '../components/EncryptedText'
 
 const liveCount = projects.length
-const stackCount = stack.length
 ---
 
 <section class="hero">
@@ -33,27 +32,27 @@ const stackCount = stack.length
   </div>
 
   <div class="wrap hero-inner">
-    <p class="fig-label">portfolio · fig. 01</p>
+    <p class="fig-label">Terbuka untuk proyek</p>
 
-    <h1 class="hero-title" aria-label="Saya bikin landing page, toko online, chatbot, dan otomasi kerja.">
+    <h1 class="hero-title" aria-label="Dari kerja manual jadi sistem yang dipakai.">
       <!-- Teks hero dibuka dengan animasi decrypt (Aceternity EncryptedText).
            Teks asli tetap ada di HTML awal supaya terbaca crawler dan tanpa JS. -->
       <EncryptedText
         client:load
-        lines={['Saya bikin landing page,', 'toko online, chatbot,', 'dan otomasi kerja.']}
+        lines={['Dari kerja manual', 'jadi sistem yang dipakai.']}
         revealDelayMs={72}
         flipDelayMs={90}
       />
     </h1>
 
     <p class="hero-sub">
-      Macem-macem: restoran, toko sayur, villa, sampai tool CLI. Semua ada
-      link-nya di bawah.
+      Web app, chatbot WhatsApp, dan otomasi alur kerja untuk bisnis yang
+      prosesnya masih pakai spreadsheet dan chat.
     </p>
 
     <div class="hero-actions">
-      <a href="#proyek" class="btn btn-primary">Lihat proyek</a>
-      <a href="#kontak" class="btn btn-ghost">Kirim email</a>
+      <a href="#kontak" class="btn btn-primary">Ceritakan masalahnya</a>
+      <a href="#proyek" class="btn btn-ghost">Lihat proyek</a>
     </div>
 
     <!-- Panel data gaya Warp: ringkasan bukti, bukan duplikat list proyek -->
@@ -62,7 +61,7 @@ const stackCount = stack.length
         <span class="proof-label">fig. 01</span>
         <span class="proof-status">
           <span class="live-dot" aria-hidden="true"></span>
-          {liveCount} proyek, semua masih jalan
+          semua proyek bisa dibuka
         </span>
       </div>
 
@@ -76,8 +75,8 @@ const stackCount = stack.length
           <span class="stat-value">{publicRepoCount}</span>
         </div>
         <div class="stat">
-          <span class="stat-label">tool</span>
-          <span class="stat-value">{stackCount}</span>
+          <span class="stat-label">zona waktu</span>
+          <span class="stat-value">gmt+7</span>
         </div>
         <div class="stat">
           <span class="stat-label">lokasi</span>
