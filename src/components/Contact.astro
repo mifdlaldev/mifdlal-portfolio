@@ -12,47 +12,53 @@ import CodeComment from './CodeComment.astro'
         <span class="fig-label">fig. 08 · kontak</span>
         <h2 class="section-headline">Ceritakan yang ingin Anda bangun.</h2>
         <p class="contact-note">
-          Saya balas dalam satu hari kerja. Kalau belum yakin harus mulai dari
-          mana, tulis saja masalahnya.
+          Kalau belum yakin harus mulai dari mana, tulis saja masalahnya.
         </p>
-      </div>
 
-      <div class="contact-actions">
-        <a
-          href={`mailto:${contact.email}?subject=${subject}`}
-          class="contact-email"
-        >
-          {contact.email}
-        </a>
-
-        <div class="brief-block">
-          <p class="brief-label">yang mempercepat balasan</p>
-          <ul class="brief-list">
-            <li>jenis usaha Anda</li>
-            <li>yang ingin dibangun atau diperbaiki</li>
-            <li>target waktu atau tenggat</li>
-            <li>perkiraan anggaran, kalau sudah ada</li>
-          </ul>
-        </div>
-
-        <dl class="contact-list">
-          <div class="contact-row">
-            <dt>github</dt>
-            <dd>
+        <ul class="spec-list">
+          <li>
+            <span class="spec-k">balasan</span>
+            <span class="spec-v">1 hari kerja</span>
+          </li>
+          <li>
+            <span class="spec-k">zona waktu</span>
+            <span class="spec-v">gmt+7 (wib)</span>
+          </li>
+          <li>
+            <span class="spec-k">lokasi</span>
+            <span class="spec-v">bandung, id</span>
+          </li>
+          <li>
+            <span class="spec-k">github</span>
+            <span class="spec-v">
               <a href={contact.github} target="_blank" rel="noopener noreferrer">
                 github.com/mifdlaldev <span aria-hidden="true">↗</span>
               </a>
-            </dd>
-          </div>
-          <div class="contact-row">
-            <dt>bisnis</dt>
-            <dd>
-              <a href={contact.business} target="_blank" rel="noopener noreferrer">
-                mtadevworks.web.id <span aria-hidden="true">↗</span>
-              </a>
-            </dd>
-          </div>
-        </dl>
+            </span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="contact-panel">
+        <div class="panel-block">
+          <p class="panel-label">email</p>
+          <a
+            href={`mailto:${contact.email}?subject=${subject}`}
+            class="contact-email"
+          >
+            {contact.email}
+          </a>
+        </div>
+
+        <div class="panel-block">
+          <p class="panel-label">yang mempercepat balasan</p>
+          <ol class="brief-list">
+            <li><span class="brief-no" aria-hidden="true">01</span><span>jenis usaha Anda</span></li>
+            <li><span class="brief-no" aria-hidden="true">02</span><span>yang ingin dibangun atau diperbaiki</span></li>
+            <li><span class="brief-no" aria-hidden="true">03</span><span>target waktu atau tenggat</span></li>
+            <li><span class="brief-no" aria-hidden="true">04</span><span>perkiraan anggaran, kalau sudah ada</span></li>
+          </ol>
+        </div>
       </div>
     </div>
   </div>
@@ -62,98 +68,110 @@ import CodeComment from './CodeComment.astro'
   .contact-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2.5rem;
+    gap: 2.25rem;
+  }
+
+  .contact-left {
+    min-width: 0;
   }
 
   .contact-note {
     color: var(--color-muted);
     margin: 1rem 0 0;
     line-height: 1.6;
-    max-width: 42ch;
+    max-width: 38ch;
     font-size: 0.9375rem;
   }
 
-  .contact-actions {
+  /* Datasheet mono */
+  .spec-list {
+    margin: 1.75rem 0 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .spec-list li {
+    display: grid;
+    grid-template-columns: 7.5rem 1fr;
+    gap: 1rem;
+    align-items: baseline;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .spec-k {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    text-transform: lowercase;
+    color: var(--color-muted);
+  }
+
+  .spec-v {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--color-ink);
+  }
+
+  .spec-v a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-line);
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .spec-v a:hover {
+    color: var(--color-electric);
+    border-bottom-color: var(--color-electric);
+  }
+
+  /* Panel kontak */
+  .contact-panel {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-    align-items: flex-start;
+    gap: clamp(1.25rem, 2.5vw, 1.75rem);
+    min-width: 0;
+    padding: clamp(1.25rem, 3vw, 2.25rem);
+    border: 1px solid color-mix(in srgb, var(--color-ink) 20%, transparent);
+    background: color-mix(in srgb, #ffffff 70%, transparent);
+  }
+
+  .panel-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-width: 0;
+  }
+
+  .panel-label {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    text-transform: lowercase;
+    color: var(--color-muted);
   }
 
   .contact-email {
+    align-self: flex-start;
     font-family: var(--font-display);
-    font-size: clamp(1.25rem, 3.5vw, 1.875rem);
+    font-size: clamp(1.375rem, 3.2vw, 2rem);
     font-weight: 600;
     letter-spacing: -0.02em;
     color: var(--color-ink);
     text-decoration: none;
     border-bottom: 2px solid var(--color-electric);
-    padding-bottom: 0.2rem;
+    padding-bottom: 0.25rem;
     min-height: 44px;
     display: inline-flex;
     align-items: center;
-    transition: color 0.15s ease, border-color 0.15s ease;
+    overflow-wrap: anywhere;
+    transition: color 0.15s ease;
   }
 
   .contact-email:hover {
     color: var(--color-electric);
-  }
-
-  /* Tabel data gaya blueprint */
-  .contact-list {
-    margin: 0;
-    padding: 0;
-    border-top: 1px solid var(--color-line);
-    width: 100%;
-  }
-
-  .contact-row {
-    display: grid;
-    grid-template-columns: 5rem 1fr;
-    gap: 1rem;
-    padding: 0.75rem 0;
-    border-bottom: 1px solid var(--color-line);
-    align-items: baseline;
-  }
-
-  .contact-row dt {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    text-transform: lowercase;
-    letter-spacing: 0.06em;
-    color: var(--color-muted);
-  }
-
-  .contact-row dd {
-    margin: 0;
-    font-family: var(--font-mono);
-    font-size: 0.8125rem;
-  }
-
-  .contact-row a {
-    color: var(--color-ink);
-    text-decoration: none;
-    border-bottom: 1px solid var(--color-line);
-    transition: color 0.15s ease, border-color 0.15s ease;
-  }
-
-  .contact-row a:hover {
-    color: var(--color-electric);
-    border-bottom-color: var(--color-electric);
-  }
-
-  .brief-block {
-    width: 100%;
-    max-width: 34rem;
-  }
-
-  .brief-label {
-    margin: 0 0 0.5rem;
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    letter-spacing: 0.06em;
-    text-transform: lowercase;
-    color: var(--color-muted);
   }
 
   .brief-list {
@@ -164,32 +182,39 @@ import CodeComment from './CodeComment.astro'
   }
 
   .brief-list li {
-    position: relative;
-    padding: 0.55rem 0 0.55rem 1.1rem;
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+    gap: 0.75rem;
+    align-items: baseline;
+    padding: 0.7rem 0;
     border-bottom: 1px solid var(--color-line);
     font-size: 0.875rem;
     line-height: 1.5;
     color: var(--color-muted);
   }
 
-  .brief-list li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 1rem;
-    width: 5px;
-    height: 5px;
-    background: var(--color-electric);
+  .brief-no {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.04em;
+    color: var(--color-electric);
   }
 
   @media (min-width: 860px) {
     .contact-grid {
-      grid-template-columns: 14rem 1fr;
-      gap: 3rem;
-      align-items: start;
+      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+      gap: clamp(2.5rem, 5vw, 5rem);
+      align-items: stretch;
     }
-    .contact-actions {
-      padding-top: 2rem;
+
+    /* tabel spec duduk rata dengan dasar panel kanan */
+    .contact-left {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .spec-list {
+      margin-top: auto;
     }
   }
 </style>

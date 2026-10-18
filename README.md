@@ -17,6 +17,7 @@ sendiri, bukan klaim.
 
 - [Stack](#stack)
 - [Struktur](#struktur)
+- [Section kontak](#section-kontak)
 - [Empty state section](#empty-state-section)
 - [Navbar (frosted glass, dua state)](#navbar-frosted-glass-dua-state)
 - [CSP dan inline script](#csp-dan-inline-script)
@@ -179,6 +180,17 @@ Warna menyesuaikan posisi scroll:
 - Transisi 200 ms (`prefers-reduced-motion` dihormati).
 - Tanpa `backdrop-filter`: fallback solid (ink di atas, paper saat scroll).
 - `/js/nav-scroll.js` same-origin, passive listener, dibatasi `requestAnimationFrame`.
+
+## Section kontak
+
+Dua kolom: kiri headline + tabel spec mono (`balasan`, `zona waktu`, `lokasi`, `github`),
+kanan panel berbingkai berisi email dan checklist 4 item. Di desktop kolom memakai
+`align-items: stretch` dan `.spec-list { margin-top: auto }` supaya dasar tabel spec rata
+dengan dasar panel (terukur 0px di 1024/1366/1600). Panel sengaja hanya berisi email +
+checklist; kanal lain masuk tabel spec agar panel tetap satu tugas.
+
+Nomor `01`-`04` di checklist diberi `aria-hidden="true"` karena `<ol>` sudah memberi
+nomor sendiri ke pembaca layar.
 
 ## CSP dan inline script
 

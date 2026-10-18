@@ -123,7 +123,6 @@ export const publicRepoCount = 21
 export const contact = {
   email: 'hello@mifdlal.com',
   github: 'https://github.com/mifdlaldev',
-  business: 'https://www.mtadevworks.web.id',
 } as const
 
 /* ---------------------------------------------------------------
