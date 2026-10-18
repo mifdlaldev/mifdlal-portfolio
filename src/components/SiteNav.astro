@@ -1,12 +1,12 @@
 ---
-// Urutan mengikuti urutan section di halaman.
+// Struktur jasa: yang dibutuhkan calon klien untuk memutuskan.
+// Pendidikan dan sertifikasi tetap ada di halaman, tapi tidak di nav
+// karena bukan bagian dari alur keputusan klien.
 const links = [
-  { href: '#tentang', label: 'Tentang' },
-  { href: '#proyek', label: 'Proyek' },
   { href: '#layanan', label: 'Layanan' },
+  { href: '#proyek', label: 'Proyek' },
+  { href: '#tentang', label: 'Tentang' },
   { href: '#pengalaman', label: 'Pengalaman' },
-  { href: '#pendidikan', label: 'Pendidikan' },
-  { href: '#sertifikasi', label: 'Sertifikasi' },
 ]
 ---
 
@@ -25,7 +25,6 @@ const links = [
     </nav>
 
     <div class="nav-actions">
-      <a href="mailto:hello@mifdlal.com" class="nav-link nav-signin">EMAIL</a>
       <a href="#kontak" class="btn btn-nav">Mulai proyek</a>
     </div>
   </div>
@@ -111,7 +110,9 @@ const links = [
 
   .nav-inner {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    /* 1fr auto 1fr: link tengah benar-benar di tengah viewport,
+       bukan di tengah ruang sisa setelah brand. */
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
     gap: 1.5rem;
     height: 64px; /* Warp nav height */
@@ -119,6 +120,7 @@ const links = [
 
   /* Wordmark */
   .brand {
+    justify-self: start;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -173,15 +175,10 @@ const links = [
   }
 
   .nav-actions {
-    display: none;
+    display: flex;
     align-items: center;
-    gap: 1.25rem;
+    gap: 1rem;
     justify-self: end;
-  }
-
-  .nav-signin {
-    padding: 0;
-    min-height: 44px;
   }
 
   .btn-nav {
@@ -199,20 +196,14 @@ const links = [
 
   @media (min-width: 860px) {
     .nav-links { display: flex; }
-    .nav-actions { display: flex; }
   }
 
-  /* Mobile: brand tetap, actions tetap, links jadi menu sederhana */
+  /* Mobile: brand + tombol CTA. Link section disembunyikan supaya
+     tidak berdesakan, tapi aksi utama tetap bisa dijangkau. */
   @media (max-width: 859px) {
     .nav-inner {
       grid-template-columns: auto 1fr;
       gap: 0.75rem;
-    }
-    .nav-actions {
-      justify-self: end;
-    }
-    .nav-signin {
-      display: none; /* di mobile cukup tombol CTA */
     }
   }
 </style>

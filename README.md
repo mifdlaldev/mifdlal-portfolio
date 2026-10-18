@@ -139,7 +139,12 @@ khusus kanvas ASCII di hero.
 `data:` URI. Subset font kecil (misalnya cyrillic-ext) sebelumnya di-inline Vite dan
 diblokir CSP `font-src 'self'`.
 
-Navigasi utama mengikuti urutan yang sama untuk section setelah hero.
+Navigasi utama memakai struktur jasa: `Layanan · Proyek · Tentang · Pengalaman`,
+lalu tombol `Mulai proyek` ke section kontak. Pendidikan dan sertifikasi tetap ada di
+halaman tetapi tidak masuk nav karena bukan bagian dari alur keputusan klien. Link
+tengah dipusatkan terhadap viewport (`grid-template-columns: 1fr auto 1fr`), bukan
+terhadap ruang sisa setelah brand. Di bawah 860px link disembunyikan dan hanya brand
++ tombol CTA yang tampil.
 
 ## Navbar (frosted glass, dua state)
 
