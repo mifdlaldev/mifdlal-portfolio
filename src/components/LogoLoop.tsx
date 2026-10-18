@@ -1254,6 +1254,7 @@ export const LogoLoop = memo<LogoLoopProps>(
                   className={itemClass}
                   key={key}
                   role="listitem"
+                  data-tip={(copyIndex * logos.length + itemIndex) % 2 === 0 ? 'up' : 'down'}
                   data-color={item.hoverColor ? '' : undefined}
                   style={
                     item.hoverColor ? ({ '--logoloop-item-color': item.hoverColor } as React.CSSProperties) : undefined

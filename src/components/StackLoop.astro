@@ -121,6 +121,15 @@ const logos = stack.map((s) => ({ src: s.logo, alt: s.name, title: s.name }))
     top: 0.3rem;
     bottom: auto;
     margin: 0;
+    /* Tailwind komponen menambah translate Y +4px; itu yang mendorong
+       chip keluar tepi band. Kunci ke 0, sisakan centering X. */
+    translate: -50% 0;
+  }
+
+  /* Selang-seling: sel ganjil tooltip di atas, sel genap di bawah. */
+  .loop-band :global(li[data-tip='down'] > span) {
+    top: auto;
+    bottom: 0.3rem;
   }
 
   /* Logo hitam dulu, warna asli saat hover. */
