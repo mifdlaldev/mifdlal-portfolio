@@ -91,22 +91,27 @@ import CodeComment from './CodeComment.astro'
     object-fit: cover;
   }
 
+  /* Blok teks kartu: permukaan biru, sama seperti kartu email di kontak.
+     Area gambar tetap kertas supaya gambar tidak tenggelam. */
   .service-body {
     display: flex;
     flex-direction: column;
     gap: 0.55rem;
     padding: 1.25rem 1.25rem 1.5rem;
+    background: var(--accent, transparent);
   }
 
+  /* Di atas biru: nomor pakai lemon, judul dan isi pakai kertas. */
   .service-no {
     font-family: var(--font-mono);
     font-size: 0.6875rem;
     letter-spacing: 0.08em;
-    color: var(--accent, var(--color-electric));
+    color: var(--color-lemon);
   }
 
   .service-title {
     font-family: var(--font-display);
+    color: var(--color-paper);
     font-size: 1.25rem;
     font-weight: 600;
     letter-spacing: -0.015em;
@@ -117,7 +122,7 @@ import CodeComment from './CodeComment.astro'
 
   .service-text {
     margin: 0;
-    color: var(--color-muted);
+    color: color-mix(in srgb, var(--color-paper) 90%, transparent);
     font-size: 0.9375rem;
     line-height: 1.6;
   }
