@@ -7,48 +7,49 @@ const logos = stack.map((s) => ({ src: s.logo, alt: s.name }))
 
 <section id="stack" class="section">
   <div class="wrap">
-    <p class="stack-note">tools / stack</p>
-  </div>
-
-  <div class="loop-band">
-    <LogoLoop
-      client:visible
-      logos={logos}
-      speed={70}
-      logoHeight={30}
-      gap={64}
-      fadeOut={true}
-      fadeOutColor="#fdfcf1"
-      fadeOutWidth={0.1}
-      pauseOnHover={true}
-      scaleOnHover={true}
-      ariaLabel="Teknologi yang dipakai"
-    />
+    <div class="loop-band">
+      <LogoLoop
+        client:visible
+        logos={logos}
+        speed={55}
+        logoHeight={26}
+        gap={0}
+        fadeOut={false}
+        pauseOnHover={true}
+        scaleOnHover={false}
+        ariaLabel="Teknologi yang dipakai"
+      />
+    </div>
   </div>
 </section>
 
 <style>
-  .stack-note {
-    margin: 0 0 1.5rem;
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    letter-spacing: 0.08em;
-    text-transform: lowercase;
-    color: var(--color-muted);
-  }
-
+  /* Strip logo: dikurung di dalam container, sel rapat bergaris. */
   .loop-band {
-    margin-block: 0.5rem;
-    padding-block: 0.5rem;
+    position: relative;
+    border-block: 1px solid var(--color-line);
+    overflow: hidden;
+    background: var(--color-paper);
   }
 
-  /* Logo berwarna brand; sedikit diredam agar menyatu dengan palet situs. */
+  .loop-band :global(li) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 4.5rem;
+    padding-inline: clamp(1.1rem, 2.4vw, 1.9rem);
+    border-right: 1px solid var(--color-line);
+  }
+
+  /* Logo hitam dulu, warna asli saat hover. */
   .loop-band :global(img) {
-    opacity: 0.86;
-    transition: opacity 180ms ease;
+    filter: brightness(0) saturate(100%);
+    opacity: 0.72;
+    transition: filter 180ms ease, opacity 180ms ease;
   }
 
-  .loop-band :global(img:hover) {
+  .loop-band :global(li:hover img) {
+    filter: none;
     opacity: 1;
   }
 
