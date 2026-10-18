@@ -5,14 +5,14 @@ import { stack } from '../data/site'
 const logos = stack.map((s) => ({ src: s.logo, alt: s.name }))
 ---
 
-<section id="stack" class="section">
+<section id="stack" class="section section--band">
   <div class="wrap">
     <div class="loop-band">
       <LogoLoop
         client:visible
         logos={logos}
         speed={55}
-        logoHeight={26}
+        logoHeight={34}
         gap={0}
         fadeOut={false}
         pauseOnHover={true}
@@ -27,17 +27,21 @@ const logos = stack.map((s) => ({ src: s.logo, alt: s.name }))
   /* Strip logo: dikurung di dalam container, sel rapat bergaris. */
   .loop-band {
     position: relative;
-    border-block: 1px solid var(--color-line);
     overflow: hidden;
-    background: var(--color-paper);
+    /* Transparan: garis rail vertikal section tetap terlihat menembus pita. */
+    background: transparent;
+    /* Keluar dari padding .wrap supaya tepi loop pas di garis kiri/kanan. */
+    margin-inline: calc(-1 * var(--grid-gutter));
   }
 
   .loop-band :global(li) {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 4.5rem;
-    padding-inline: clamp(1.1rem, 2.4vw, 1.9rem);
+    /* Padding vertikal di sel, bukan di section: garis pemisah sel
+       jadi setinggi section penuh. */
+    padding-block: clamp(1.5rem, 3vw, 2.25rem);
+    padding-inline: clamp(1.25rem, 2.6vw, 2.1rem);
     border-right: 1px solid var(--color-line);
   }
 

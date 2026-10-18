@@ -148,6 +148,27 @@
   }
 }
 
+/* Section pita (mis. strip logo): tanpa padding section, isi pita
+   membentang penuh dari garis atas sampai garis section berikutnya. */
+.section--band {
+  padding-block-start: 0;
+  padding-block-end: 0;
+  /* Satu garis saja di tepi atas; gradient kedua dari .section dimatikan. */
+  background-image: linear-gradient(var(--color-line), var(--color-line));
+  background-size: 100% 1px;
+  background-position: 0 0;
+}
+
+.section--band > .wrap {
+  padding-block-start: 0;
+}
+
+/* Node di tepi .wrap tidak perlu: sudah ada node di tepi section. */
+.section--band > .wrap::before,
+.section--band > .wrap::after {
+  display: none;
+}
+
 /* Layar kecil: cukup garis horizontal, rail dan node disembunyikan. */
 @media (max-width: 719px) {
   .section::before,
