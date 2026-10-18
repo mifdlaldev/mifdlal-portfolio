@@ -58,6 +58,13 @@ const logos = stack.map((s) => ({ src: s.logo, alt: s.name, title: s.name }))
     height: var(--band-h);
   }
 
+  /* Engine menulis --logoloop-pad inline (>=22px) untuk ruang tooltip.
+     Kalau dibiarkan, konten terdorong keluar band dan logo terpotong.
+     Tooltip kita tempatkan sendiri lewat CSS, jadi padding-nya nol. */
+  .loop-band :global(astro-island > div) {
+    --logoloop-pad: 0px !important;
+  }
+
   .loop-band :global(li) {
     display: flex;
     align-items: center;
