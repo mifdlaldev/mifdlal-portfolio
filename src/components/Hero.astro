@@ -1,9 +1,10 @@
 ---
-import { projects } from '../data/site'
+import { projects, stack, publicRepoCount } from '../data/site'
 import GradientASCII from '../components/GradientASCII'
 import EncryptedText from '../components/EncryptedText'
 
 const liveCount = projects.length
+const stackCount = stack.length
 ---
 
 <section class="hero">
@@ -34,25 +35,25 @@ const liveCount = projects.length
   <div class="wrap hero-inner">
     <p class="fig-label">portfolio · fig. 01</p>
 
-    <h1 class="hero-title" aria-label="Web app dan otomasi AI, dikerjakan sampai live.">
+    <h1 class="hero-title" aria-label="Saya bikin landing page, toko online, chatbot, dan otomasi kerja.">
       <!-- Teks hero dibuka dengan animasi decrypt (Aceternity EncryptedText).
            Teks asli tetap ada di HTML awal supaya terbaca crawler dan tanpa JS. -->
       <EncryptedText
         client:load
-        lines={['Web app dan otomasi AI,', 'dikerjakan sampai live.']}
+        lines={['Saya bikin landing page,', 'toko online, chatbot,', 'dan otomasi kerja.']}
         revealDelayMs={72}
         flipDelayMs={90}
       />
     </h1>
 
     <p class="hero-sub">
-      Freelance developer di Bandung. {liveCount} proyek live, kode terbuka di
-      GitHub, dikerjakan sendiri dari desain sampai deploy, bukan handover file.
+      Macem-macem: restoran, toko sayur, villa, sampai tool CLI. Semua ada
+      link-nya di bawah.
     </p>
 
     <div class="hero-actions">
       <a href="#proyek" class="btn btn-primary">Lihat proyek</a>
-      <a href="#kontak" class="btn btn-ghost">Email saya</a>
+      <a href="#kontak" class="btn btn-ghost">Kirim email</a>
     </div>
 
     <!-- Panel data gaya Warp: ringkasan bukti, bukan duplikat list proyek -->
@@ -61,7 +62,7 @@ const liveCount = projects.length
         <span class="proof-label">fig. 01</span>
         <span class="proof-status">
           <span class="live-dot" aria-hidden="true"></span>
-          {liveCount} proyek live &amp; terverifikasi
+          {liveCount} proyek, semua masih jalan
         </span>
       </div>
 
@@ -72,15 +73,15 @@ const liveCount = projects.length
         </div>
         <div class="stat">
           <span class="stat-label">repo publik</span>
-          <span class="stat-value">{String(liveCount).padStart(2, '0')}</span>
+          <span class="stat-value">{publicRepoCount}</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">tool</span>
+          <span class="stat-value">{stackCount}</span>
         </div>
         <div class="stat">
           <span class="stat-label">lokasi</span>
           <span class="stat-value">bandung, id</span>
-        </div>
-        <div class="stat">
-          <span class="stat-label">status</span>
-          <span class="stat-value">tersedia</span>
         </div>
       </div>
     </section>
