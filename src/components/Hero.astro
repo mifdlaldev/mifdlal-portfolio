@@ -138,10 +138,8 @@ const liveCount = projects.length
     align-items: center;
     gap: 0.4rem;
     padding: 0.35rem 0.7rem;
-    border: 1px solid color-mix(in srgb, var(--color-ink) 22%, transparent);
-    background: color-mix(in srgb, var(--color-paper) 34%, transparent);
-    -webkit-backdrop-filter: blur(4px) saturate(1.1);
-    backdrop-filter: blur(4px) saturate(1.1);
+    border: 0;
+    background: var(--color-paper);
     color: var(--color-electric);
   }
 
@@ -153,6 +151,7 @@ const liveCount = projects.length
     font-weight: 600;
     margin: 1rem 0 0;
     text-wrap: balance;
+    color: var(--color-paper);
   }
 
   .hero-sub {
