@@ -131,8 +131,7 @@ export const contact = {
       href: 'https://www.linkedin.com/in/mifdlal-tsaqib-alfarras/',
     },
     { id: 'fiverr', label: 'Fiverr', href: 'https://www.fiverr.com/mifdlal_afs' },
-    // Upwork: isi href dengan URL profil, ikon langsung muncul.
-    { id: 'upwork', label: 'Upwork', href: '' },
+    { id: 'upwork', label: 'Upwork', href: 'https://www.upwork.com/freelancers/~01d0da0382e9693426' },
   ],
 } as const
 
