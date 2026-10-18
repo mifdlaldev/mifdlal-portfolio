@@ -144,28 +144,10 @@ export type Experience = {
 }
 
 export const experience: readonly Experience[] = [
-  {
-    no: '01',
-    role: 'Posisi magang',
-    org: 'Nama perusahaan',
-    kind: 'magang',
-    location: 'Kota',
-    period: '2026',
-    points: [
-      'Ringkasan pekerjaan: apa yang dikerjakan dan untuk siapa.',
-      'Hasil terukur: angka, cakupan, atau dampak yang bisa diperiksa.',
-      'Tools dan stack yang dipakai sehari-hari.',
-    ],
-  },
-  {
-    no: '02',
-    role: 'Peran lainnya',
-    org: 'Nama organisasi',
-    kind: 'organisasi',
-    location: 'Kota',
-    period: '2025 - 2026',
-    points: ['Ringkasan kontribusi dan hasil.'],
-  },
+  // Isi dengan data nyata. Selama array kosong, section Pengalaman
+  // menampilkan empty state. Bentuk satu entri:
+  // { no: '01', role: 'Frontend Developer', org: 'Nama perusahaan', kind: 'magang',
+  //   location: 'Bandung', period: 'Jun - Agu 2026', points: ['...'], link: 'https://...' },
 ]
 
 export type Education = {
@@ -179,15 +161,10 @@ export type Education = {
 }
 
 export const education: readonly Education[] = [
-  {
-    no: '01',
-    institution: 'Nama institusi',
-    program: 'Program studi',
-    location: 'Kota',
-    period: '2027 - sekarang',
-    status: 'aktif',
-    note: 'Catatan opsional: fokus studi atau pencapaian.',
-  },
+  // Isi dengan data nyata. Selama array kosong, section Pendidikan
+  // menampilkan empty state. Bentuk satu entri:
+  // { no: '01', institution: 'Telkom University', program: 'S1 Informatika',
+  //   location: 'Bandung', period: '2027 - sekarang', status: 'aktif', note: '...' },
 ]
 
 export type Certification = {
@@ -199,11 +176,8 @@ export type Certification = {
 }
 
 export const certifications: readonly Certification[] = [
-  {
-    no: '01',
-    name: 'Nama sertifikasi',
-    issuer: 'Penerbit',
-    year: '2026',
-    credential: '',
-  },
+  // Isi dengan data nyata. Selama array kosong, section Sertifikasi
+  // menampilkan empty state. Bentuk satu entri:
+  // { no: '01', name: 'Nama sertifikasi', issuer: 'Penerbit', year: '2026',
+  //   credential: 'https://tautan-verifikasi' },
 ]

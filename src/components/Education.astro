@@ -11,25 +11,43 @@ import CodeComment from './CodeComment.astro'
       <h2 class="section-headline">Pendidikan formal.</h2>
     </div>
 
-    <ul class="edu-list">
-      {education.map((e) => (
+    <ul class="edu-list" aria-hidden={education.length === 0 ? 'true' : undefined}>
+      {education.length === 0 ? (
         <li class="edu-row">
-          <span class="edu-no">{e.no}</span>
+          <span class="edu-no">01</span>
           <div class="edu-main">
-            <h3 class="edu-title">{e.institution}</h3>
-            <p class="edu-program">
-              {e.program}
-              <span class="edu-status">{e.status}</span>
-            </p>
-            {e.note && <p class="edu-note">{e.note}</p>}
+            <span class="edu-title ph ph--title"></span>
+            <p class="edu-program"><span class="ph ph--sub"></span></p>
           </div>
-          <p class="edu-meta">
-            <span>{e.period}</span>
-            <span>{e.location}</span>
-          </p>
+          <p class="edu-meta"><span class="ph ph--meta"></span></p>
         </li>
-      ))}
+      ) : (
+        education.map((e) => (
+          <li class="edu-row">
+            <span class="edu-no">{e.no}</span>
+            <div class="edu-main">
+              <h3 class="edu-title">{e.institution}</h3>
+              <p class="edu-program">
+                {e.program}
+                <span class="edu-status">{e.status}</span>
+              </p>
+              {e.note && <p class="edu-note">{e.note}</p>}
+            </div>
+            <p class="edu-meta">
+              <span>{e.period}</span>
+              <span>{e.location}</span>
+            </p>
+          </li>
+        ))
+      )}
     </ul>
+
+    {education.length === 0 && (
+      <>
+        <p class="empty-note">belum diisi</p>
+        <p class="sr-only">Bagian pendidikan belum diisi.</p>
+      </>
+    )}
   </div>
 </section>
 

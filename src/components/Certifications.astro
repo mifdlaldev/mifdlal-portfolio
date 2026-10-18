@@ -11,21 +11,39 @@ import CodeComment from './CodeComment.astro'
       <h2 class="section-headline">Sertifikasi.</h2>
     </div>
 
-    <ul class="cert-list">
-      {certifications.map((c) => (
+    <ul class="cert-list" aria-hidden={certifications.length === 0 ? 'true' : undefined}>
+      {certifications.length === 0 ? (
         <li class="cert-row">
-          <span class="cert-no">{c.no}</span>
+          <span class="cert-no">01</span>
           <div class="cert-main">
-            <h3 class="cert-title">{c.name}</h3>
-            <p class="cert-issuer">{c.issuer}</p>
+            <span class="cert-title ph ph--title"></span>
+            <p class="cert-issuer"><span class="ph ph--sub"></span></p>
           </div>
-          <p class="cert-year">{c.year}</p>
-          {c.credential && (
-            <a class="cert-link" href={c.credential} target="_blank" rel="noopener noreferrer">verifikasi ↗</a>
-          )}
+          <p class="cert-year"><span class="ph ph--meta"></span></p>
         </li>
-      ))}
+      ) : (
+        certifications.map((c) => (
+          <li class="cert-row">
+            <span class="cert-no">{c.no}</span>
+            <div class="cert-main">
+              <h3 class="cert-title">{c.name}</h3>
+              <p class="cert-issuer">{c.issuer}</p>
+            </div>
+            <p class="cert-year">{c.year}</p>
+            {c.credential && (
+              <a class="cert-link" href={c.credential} target="_blank" rel="noopener noreferrer">verifikasi ↗</a>
+            )}
+          </li>
+        ))
+      )}
     </ul>
+
+    {certifications.length === 0 && (
+      <>
+        <p class="empty-note">belum diisi</p>
+        <p class="sr-only">Bagian sertifikasi belum diisi.</p>
+      </>
+    )}
   </div>
 </section>
 

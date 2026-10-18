@@ -11,29 +11,65 @@ import CodeComment from './CodeComment.astro'
       <h2 class="section-headline">Pengalaman kerja dan organisasi.</h2>
     </div>
 
-    <ul class="entry-list">
-      {experience.map((e) => (
-        <li class="entry-row">
-          <span class="entry-no">{e.no}</span>
-          <div class="entry-main">
-            <h3 class="entry-title">{e.role}</h3>
-            <p class="entry-org">
-              {e.org} <span class="entry-kind">{e.kind}</span>
+    <ul class="entry-list" aria-hidden={experience.length === 0 ? 'true' : undefined}>
+      {experience.length === 0 ? (
+        <>
+          <li class="entry-row">
+            <span class="entry-no">01</span>
+            <div class="entry-main">
+              <span class="entry-title ph ph--title"></span>
+              <p class="entry-org"><span class="ph ph--sub"></span></p>
+            </div>
+            <p class="entry-meta"><span class="ph ph--meta"></span></p>
+            <ul class="entry-points">
+              <li><span class="ph ph--line"></span></li>
+              <li><span class="ph ph--line ph--short"></span></li>
+            </ul>
+          </li>
+          <li class="entry-row">
+            <span class="entry-no">02</span>
+            <div class="entry-main">
+              <span class="entry-title ph ph--title"></span>
+              <p class="entry-org"><span class="ph ph--sub"></span></p>
+            </div>
+            <p class="entry-meta"><span class="ph ph--meta"></span></p>
+            <ul class="entry-points">
+              <li><span class="ph ph--line"></span></li>
+              <li><span class="ph ph--line ph--short"></span></li>
+            </ul>
+          </li>
+        </>
+      ) : (
+        experience.map((e) => (
+          <li class="entry-row">
+            <span class="entry-no">{e.no}</span>
+            <div class="entry-main">
+              <h3 class="entry-title">{e.role}</h3>
+              <p class="entry-org">
+                {e.org} <span class="entry-kind">{e.kind}</span>
+              </p>
+            </div>
+            <p class="entry-meta">
+              <span>{e.period}</span>
+              <span>{e.location}</span>
             </p>
-          </div>
-          <p class="entry-meta">
-            <span>{e.period}</span>
-            <span>{e.location}</span>
-          </p>
-          <ul class="entry-points">
-            {e.points.map((pt) => <li>{pt}</li>)}
-          </ul>
-          {e.link && (
-            <a class="entry-link" href={e.link} target="_blank" rel="noopener noreferrer">bukti ↗</a>
-          )}
-        </li>
-      ))}
+            <ul class="entry-points">
+              {e.points.map((pt) => <li>{pt}</li>)}
+            </ul>
+            {e.link && (
+              <a class="entry-link" href={e.link} target="_blank" rel="noopener noreferrer">bukti ↗</a>
+            )}
+          </li>
+        ))
+      )}
     </ul>
+
+    {experience.length === 0 && (
+      <>
+        <p class="empty-note">belum diisi</p>
+        <p class="sr-only">Bagian pengalaman belum diisi.</p>
+      </>
+    )}
   </div>
 </section>
 

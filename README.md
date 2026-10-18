@@ -17,6 +17,7 @@ sendiri, bukan klaim.
 
 - [Stack](#stack)
 - [Struktur](#struktur)
+- [Empty state section](#empty-state-section)
 - [Navbar (frosted glass, dua state)](#navbar-frosted-glass-dua-state)
 - [CSP dan inline script](#csp-dan-inline-script)
 - [Perintah](#perintah)
@@ -127,6 +128,18 @@ sekali. Terukur: tinggi tiap section identik sebelum dan sesudah penambahan
 (755, 1059, 708, 687, 485, 439, 541 px di 1366px), selisih titik tengah teks vs
 titik tengah section 0 px. Ukuran 14px mono (fig label 11px). Warna 60% ink di atas
 paper = 4.66:1, lolos AA untuk teks kecil.
+
+## Empty state section
+
+Section Pengalaman, Pendidikan, dan Sertifikasi membaca data dari `src/data/site.ts`.
+Selama array-nya kosong, section menampilkan empty state, bukan teks template. Baris
+tetap memakai grid row asli (`.entry-row` / `.edu-row` / `.cert-row`) sehingga layout
+tidak bergeser saat data nyata masuk; isi teks diganti bar dekoratif `.ph`, dan di
+bawah daftar ada catatan mono `belum diisi`.
+
+- Bar dekoratif: `.ph`, `.ph--title`, `.ph--sub`, `.ph--meta`, `.ph--line`, `.ph--short` di `src/styles/global.css`.
+- Disembunyikan dari pembaca layar: `aria-hidden="true"` pada `<ul>` saat kosong, diganti teks `.sr-only` ("Bagian ... belum diisi").
+- Mengisi data: tambahkan entri ke array di `src/data/site.ts`; empty state hilang otomatis.
 
 ## Font kode
 
