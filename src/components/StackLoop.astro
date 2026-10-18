@@ -18,6 +18,7 @@ const logos = stack.map((s) => ({ src: s.logo, alt: s.name, title: s.name }))
         pauseOnHover={true}
         scaleOnHover={false}
         labels="hover"
+        intro={false}
         ariaLabel="Teknologi yang dipakai"
       />
     </div>
@@ -35,13 +36,34 @@ const logos = stack.map((s) => ({ src: s.logo, alt: s.name, title: s.name }))
     margin-inline: calc(-1 * var(--grid-gutter));
   }
 
+  /* Tinggi band dikunci: garis pemisah sel membentang penuh
+     dari garis section atas sampai garis section berikutnya. */
+  .loop-band {
+    height: 5.75rem;
+  }
+
+  /* LogoLoop dirender di dalam <astro-island>, jadi root React bukan
+     anak langsung .loop-band. Tinggi dipatok eksplisit (bukan 100%)
+     supaya tidak ada dependensi sirkular tinggi yang bikin layout
+     bergetar tiap frame. */
+  .loop-band {
+    --logoloop-pad: 0px;
+    --band-h: 5.75rem;
+  }
+
+  .loop-band :global(astro-island),
+  .loop-band :global(astro-island > div),
+  .loop-band :global(astro-island > div > div),
+  .loop-band :global(ul) {
+    height: var(--band-h);
+  }
+
   .loop-band :global(li) {
     display: flex;
     align-items: center;
     justify-content: center;
-    /* Padding vertikal di sel, bukan di section: garis pemisah sel
-       jadi setinggi section penuh. */
-    padding-block: clamp(1.5rem, 3vw, 2.25rem);
+    height: var(--band-h);
+    padding-block: 0;
     padding-inline: clamp(1.25rem, 2.6vw, 2.1rem);
     border-right: 1px solid var(--color-line);
   }
@@ -87,6 +109,11 @@ const logos = stack.map((s) => ({ src: s.logo, alt: s.name, title: s.name }))
     background: var(--color-paper);
     border: 1px solid var(--color-line);
     padding: 0.15rem 0.4rem;
+    /* Anchor ke tepi atas sel, bukan tinggi li: engine mengukur ulang
+       tinggi li tiap frame dan itu membuat tooltip ikut bergetar. */
+    top: 0.3rem;
+    bottom: auto;
+    margin: 0;
   }
 
   /* Logo hitam dulu, warna asli saat hover. */
