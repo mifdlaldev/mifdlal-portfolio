@@ -308,6 +308,22 @@ sesudahnya. Dengan garis baca, begitu section berikutnya mengisi garis itu dan t
 ada link yang cocok, semua link padam. Section yang tidak ada di nav (pendidikan,
 sertifikasi, kontak) dan footer karenanya tidak pernah menyalakan link mana pun.
 
+## Tombol kembali ke atas
+
+`src/components/ToTop.astro` + `public/js/to-top.js`. Kotak 44px di pojok kanan bawah,
+muncul begitu `#proyek` menyentuh viewport dan tetap tampil selama halaman digulir lebih
+jauh.
+
+- Posisi `right: var(--grid-gutter)` (pojok jendela, bukan tepi konten), jadi di layar
+  lebar tombol duduk di gutter luar dan terukur 0 tabrakan glyph pada 25 posisi gulir.
+- Tersembunyi memakai `visibility: hidden`, bukan hanya `opacity: 0`, supaya tidak ikut
+  kena Tab saat belum tampil.
+- `--to-top-lift` dinaikkan sebesar bagian footer yang masuk viewport, tapi hanya kalau
+  isi footer benar-benar menabrak kolom tombol. Di desktop lift tetap 0.
+- Tanpa JavaScript tombol tetap tersembunyi: tidak ada kontrol mati.
+- `href="#main"` tetap berfungsi tanpa JS; dengan JS klik memakai smooth scroll dan
+  menghormati `prefers-reduced-motion`.
+
 ## Navbar (frosted glass, dua state)
 
 Navbar `position: fixed`, selalu kaca buram (`backdrop-filter: blur(14px) saturate(1.2)`).
