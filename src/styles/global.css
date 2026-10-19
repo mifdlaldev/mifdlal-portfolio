@@ -211,6 +211,9 @@ html {
   color: var(--color-ink);
   font-family: var(--font-body);
   font-size: var(--text-root);
+  /* Jarak baris dasar dulu datang dari Preflight Tailwind, bukan dari kode
+     kita. Dideklarasikan di sini supaya ritme vertikal jadi milik sendiri. */
+  line-height: var(--leading-base);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
