@@ -8,7 +8,7 @@ import CodeComment from './CodeComment.astro'
   <div class="wrap">
     <div class="section-head">
       <span class="fig-label">fig. 05 · pengalaman</span>
-      <h2 class="section-headline">Pengalaman kerja dan organisasi.</h2>
+      <h2 class="section-headline">Pengalaman.</h2>
     </div>
 
     <ul class="entry-list" aria-hidden={experience.length === 0 ? 'true' : undefined}>
@@ -46,7 +46,7 @@ import CodeComment from './CodeComment.astro'
             <div class="entry-main">
               <h3 class="entry-title">{e.role}</h3>
               <p class="entry-org">
-                {e.org} <span class="entry-kind">{e.kind}</span>
+                {e.org} <span class="entry-kind badge">{e.kind}</span>
               </p>
             </div>
             <p class="entry-meta">
@@ -117,13 +117,9 @@ import CodeComment from './CodeComment.astro'
     font-size: var(--text-body);
   }
 
+  /* Warna dan bentuk dari .badge di global.css; di sini hanya jarak. */
   .entry-kind {
-    font-family: var(--font-mono);
-    font-size: var(--text-label);
-    border: 1px solid var(--color-line);
-    padding: 0.1rem 0.4rem;
     margin-left: 0.4rem;
-    white-space: nowrap;
   }
 
   .entry-meta {
@@ -138,11 +134,33 @@ import CodeComment from './CodeComment.astro'
 
   .entry-points {
     margin: 0.75rem 0 0;
-    padding-left: 1.1rem;
+    /* Tanpa padding: baris pertama tiap poin mulai tepat di garis kiri judul
+       entri. Penanda kotak digantung ke kiri (-0.75rem) supaya tidak menggeser
+       teks. Preflight Tailwind menghapus marker list, jadi penanda dibuat
+       sendiri. */
+    padding-left: 0;
+    list-style: none;
     color: var(--color-muted);
     font-size: var(--text-body);
     line-height: var(--leading-relaxed);
-    max-width: 62ch;
+    /* Tanpa batas lebar: poin memakai lebar kolom yang sama dengan judul,
+       sehingga tepi kanannya berhenti tepat sebelum kolom periode di kanan
+       (sebelum "jun - okt 2025"), bukan menyisakan ruang kosong. */
+    max-width: none;
+  }
+
+  .entry-points li {
+    position: relative;
+  }
+
+  .entry-points li::before {
+    content: "";
+    position: absolute;
+    left: -0.75rem;
+    top: 0.62em;
+    width: 5px;
+    height: 5px;
+    background: var(--accent);
   }
 
   .entry-points li + li {
@@ -157,15 +175,19 @@ import CodeComment from './CodeComment.astro'
   }
 
   @media (min-width: 860px) {
+    /* Satu kolom baca: judul, instansi, dan poin mulai di garis kiri yang
+       sama; periode dan lokasi menempel di kanan baris pertama. Sebelumnya
+       poin ditaruh di kolom ketiga sehingga mulai ~400px di kanan judul dan
+       entri terbaca sebagai dua blok terpisah. */
     .entry-row {
-      grid-template-columns: 3rem 24rem 1fr;
+      grid-template-columns: 3rem minmax(0, 1fr) auto;
       align-items: baseline;
     }
     .entry-no {
-      grid-row: 1 / span 3;
+      grid-row: 1 / span 2;
     }
     .entry-main {
-      grid-row: 1 / span 3;
+      grid-row: 1 / span 2;
     }
     .entry-meta {
       margin: 0 0 0 auto;
@@ -176,12 +198,14 @@ import CodeComment from './CodeComment.astro'
       grid-row: 1;
     }
     .entry-points {
-      grid-column: 3;
-      grid-row: 2 / span 2;
-      margin: 0.75rem 0 0;
+      /* Kolom 2 saja, bukan 2 / -1: tepi kanan teks jadi sejajar dengan kolom
+         periode dan lokasi di kanan atas. */
+      grid-column: 2;
+      grid-row: 3;
+      margin: 0.9rem 0 0;
     }
     .entry-link {
-      grid-column: 3;
+      grid-column: 2 / -1;
       grid-row: 4;
     }
   }

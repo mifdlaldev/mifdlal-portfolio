@@ -279,6 +279,22 @@ body {
 }
 
 /* Tag: border 1px, mono, lowercase */
+/* Badge status (magang, lulus, dan sejenisnya): latar warna aksen section,
+   teks warna kertas. Warna ikut section lewat --accent, jadi badge otomatis
+   sewarna penanda section tanpa perlu daftar kelas per warna. */
+.badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  letter-spacing: var(--tracking-caps-tight);
+  text-transform: lowercase;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--color-paper);
+  white-space: nowrap;
+}
+
 .tag {
   display: inline-block;
   font-family: var(--font-mono);

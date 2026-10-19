@@ -29,7 +29,7 @@ import CodeComment from './CodeComment.astro'
               <h3 class="edu-title">{e.institution}</h3>
               <p class="edu-program">
                 {e.program}
-                <span class="edu-status">{e.status}</span>
+                <span class="edu-status badge">{e.status}</span>
               </p>
               {e.note && <p class="edu-note">{e.note}</p>}
             </div>
@@ -94,13 +94,9 @@ import CodeComment from './CodeComment.astro'
     font-size: var(--text-body);
   }
 
+  /* Warna dan bentuk dari .badge di global.css; di sini hanya jarak. */
   .edu-status {
-    font-family: var(--font-mono);
-    font-size: var(--text-label);
-    border: 1px solid var(--color-line);
-    padding: 0.1rem 0.4rem;
     margin-left: 0.4rem;
-    white-space: nowrap;
   }
 
   .edu-note {

@@ -216,10 +216,19 @@ export type Experience = {
 }
 
 export const experience: readonly Experience[] = [
-  // Isi dengan data nyata. Selama array kosong, section Pengalaman
-  // menampilkan empty state. Bentuk satu entri:
-  // { no: '01', role: 'Frontend Developer', org: 'Nama perusahaan', kind: 'magang',
-  //   location: 'Bandung', period: 'Jun - Agu 2026', points: ['...'], link: 'https://...' },
+  {
+    no: '01',
+    role: 'Pengembang Aplikasi PE-SMKK',
+    org: 'Dinas Pekerjaan Umum dan Penataan Ruang Kabupaten Sumedang',
+    kind: 'magang',
+    location: 'Sumedang',
+    period: 'Jun - Okt 2025',
+    points: [
+      'Membangun aplikasi PE-SMKK (Pemantauan dan Evaluasi Sistem Manajemen Keselamatan Konstruksi) untuk mendata hasil pemeriksaan keselamatan pada proyek konstruksi yang sedang berjalan.',
+      'Isinya mengikuti elemen evaluasi kinerja SMKK pada Permen PUPR 10/2021: menilai penerapan keselamatan oleh penyedia jasa per proyek, bukan mencatat insiden setelah kejadian.',
+      'Dipakai petugas lapangan Bidang Bina Konstruksi saat pemeriksaan, sehingga hasil penilaian tiap proyek terkumpul di satu tempat.',
+    ],
+  },
 ]
 
 export type Education = {
@@ -233,8 +242,13 @@ export type Education = {
 }
 
 export const education: readonly Education[] = [
-  // Isi dengan data nyata. Selama array kosong, section Pendidikan
-  // menampilkan empty state. Bentuk satu entri:
-  // { no: '01', institution: 'Telkom University', program: 'S1 Informatika',
-  //   location: 'Bandung', period: '2027 - sekarang', status: 'aktif', note: '...' },
+  {
+    no: '01',
+    institution: 'SMKN 1 Sumedang',
+    program: 'Rekayasa Perangkat Lunak',
+    location: 'Sumedang',
+    period: '2023 - 2026',
+    status: 'lulus',
+    note: 'Praktik kerja lapangan lima bulan di Dinas PUPR Kabupaten Sumedang: membangun aplikasi PE-SMKK untuk pemantauan keselamatan proyek.',
+  },
 ]
