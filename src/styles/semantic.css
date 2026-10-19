@@ -29,6 +29,12 @@
   /* seleksi teks: elektrik 18% di atas permukaan */
   --selection-bg: color-mix(in srgb, var(--electric) 18%, transparent);
 
+  /* Hook runtime: diisi skrip tombol-ke-atas (public/js/to-top.js) sebesar
+     bagian footer yang sudah masuk viewport, supaya tombol naik dan tidak
+     menimpa hak cipta. Dideklarasikan di sini supaya penjaga token bisa
+     memverifikasi bahwa var(--to-top-lift) memang punya sumber. */
+  --to-top-lift: 0px;
+
   /* aksen aktif. Default di akar, ditimpa per section di bawah.
      Section baru otomatis dapat warna default, tidak lagi jatuh
      ke warna garis seperti kejadian pada pita stack. */

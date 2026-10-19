@@ -1,0 +1,81 @@
+---
+// Tombol kembali ke atas. Muncul begitu section pemicu menyentuh viewport,
+// lalu tetap tampil selama halaman digulir lebih jauh. Tanpa JavaScript
+// tombol tetap tersembunyi, jadi tidak ada kontrol mati di halaman.
+---
+
+<a class="to-top" href="#main" aria-label="Kembali ke atas" data-trigger="#proyek">
+  <svg
+    class="to-top-icon"
+    viewBox="0 0 16 16"
+    width="16"
+    height="16"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path
+      d="M8 13.5V3M3.25 7.75 8 3l4.75 4.75"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linecap="square"></path>
+  </svg>
+</a>
+
+<script is:inline src="/js/to-top.js" defer></script>
+
+<style>
+  .to-top {
+    position: fixed;
+    /* Pojok jendela, bukan tepi konten. Di layar lebar tombol duduk di
+       gutter luar yang kosong, jadi tidak menimpa baris teks mana pun. */
+    right: var(--grid-gutter);
+    /* --to-top-lift diisi skrip saat footer mulai terlihat, supaya tombol
+       naik dan tidak menimpa baris hak cipta. */
+    bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px) + var(--to-top-lift, 0px));
+    z-index: var(--z-raise);
+
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+
+    background: var(--color-ink);
+    color: var(--color-paper);
+    border: 1px solid var(--color-ink);
+
+    /* visibility ikut disembunyikan, bukan hanya opacity: kontrol yang tak
+       terlihat tidak boleh ikut kena Tab. */
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  .to-top[data-visible='true'],
+  .to-top:focus-visible {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+  }
+
+  .to-top:hover {
+    background: var(--color-electric);
+    border-color: var(--color-electric);
+  }
+
+  .to-top:focus-visible {
+    outline: 2px solid var(--color-electric);
+    outline-offset: 2px;
+  }
+
+  .to-top-icon {
+    display: block;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .to-top {
+      transition: opacity var(--dur-base) var(--ease), transform var(--dur-base) var(--ease),
+        background-color var(--dur-slow) var(--ease), border-color var(--dur-slow) var(--ease);
+    }
+  }
+</style>

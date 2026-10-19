@@ -308,6 +308,46 @@ sesudahnya. Dengan garis baca, begitu section berikutnya mengisi garis itu dan t
 ada link yang cocok, semua link padam. Section yang tidak ada di nav (pendidikan,
 sertifikasi, kontak) dan footer karenanya tidak pernah menyalakan link mana pun.
 
+## Scrollbar
+
+Scrollbar disesuaikan di `global.css`: tipis, biru elektrik, track transparan dengan
+satu garis rambut di tengah.
+
+| Bagian | Nilai |
+|---|---|
+| Slot | 10px |
+| Thumb | biru `var(--color-electric)`, inset 3px kiri-kanan (pil 4px), radius 999px |
+| Track | transparan + garis rambut `var(--color-line)` 1px di tengah |
+| Hover | `color-mix` 72% elektrik + 28% ink, jadi biru lebih pekat |
+| Aktif (drag) | ink penuh |
+
+Dua jalur, bukan satu:
+
+- `::-webkit-scrollbar-*` untuk Chromium dan Safari.
+- `scrollbar-width`/`scrollbar-color` untuk Firefox, dibungkus
+  `@supports not selector(::-webkit-scrollbar)`.
+
+Pembungkus itu wajib. Kalau properti standar dibiarkan aktif di Chromium, ia menang atas
+`::-webkit-scrollbar` dan memakai pelukis bawaan yang menggambar tombol panah 3px di ujung
+atas-bawah dengan warna thumb, sehingga muncul dua bintik biru menggantung di luar pil.
+Sudah diuji: tanpa `scrollbar-color`, bintik itu hilang.
+
+## Tombol kembali ke atas
+
+`src/components/ToTop.astro` + `public/js/to-top.js`. Kotak 44px di pojok kanan bawah,
+muncul begitu `#proyek` menyentuh viewport dan tetap tampil selama halaman digulir lebih
+jauh.
+
+- Posisi `right: var(--grid-gutter)` (pojok jendela, bukan tepi konten), jadi di layar
+  lebar tombol duduk di gutter luar dan terukur 0 tabrakan glyph pada 25 posisi gulir.
+- Tersembunyi memakai `visibility: hidden`, bukan hanya `opacity: 0`, supaya tidak ikut
+  kena Tab saat belum tampil.
+- `--to-top-lift` dinaikkan sebesar bagian footer yang masuk viewport, tapi hanya kalau
+  isi footer benar-benar menabrak kolom tombol. Di desktop lift tetap 0.
+- Tanpa JavaScript tombol tetap tersembunyi: tidak ada kontrol mati.
+- `href="#main"` tetap berfungsi tanpa JS; dengan JS klik memakai smooth scroll dan
+  menghormati `prefers-reduced-motion`.
+
 ## Navbar (frosted glass, dua state)
 
 Navbar `position: fixed`, selalu kaca buram (`backdrop-filter: blur(14px) saturate(1.2)`).
