@@ -249,6 +249,6 @@ export const education: readonly Education[] = [
     location: 'Sumedang',
     period: '2023 - 2026',
     status: 'lulus',
-    note: 'Praktik kerja lapangan lima bulan di Dinas PUPR Kabupaten Sumedang: membangun aplikasi PE-SMKK untuk pemantauan keselamatan proyek.',
+    note: 'Materi kejuruan mencakup basis data relasional dan SQL, pemrograman web statis dan dinamis, aplikasi mobile dan desktop, IoT, dan cloud computing. Framework yang dipelajari: Laravel dan CodeIgniter untuk backend, React dan Next.js untuk frontend, Flutter untuk aplikasi mobile, serta Bootstrap dan Tailwind CSS untuk antarmuka.',
   },
 ]
