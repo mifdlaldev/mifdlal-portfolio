@@ -375,7 +375,18 @@ const link = gl => {
     }
     if (right > left) draw(startX + (w - (right - left + 1)) / 2 - left);
 
-    return c;
+    /* Bbox tinta dalam px CSS. Kotak, node, dan garis dimensi plat gambar
+       memakai angka ini, jadi ukurannya selalu ikut huruf — bukan container. */
+    const inkW = right > left ? right - left + 1 : w - padX * 2;
+    const inkLeft = right > left ? (w - inkW) / 2 : padX;
+    return {
+      canvas: c,
+      inkLeft: inkLeft / scale,
+      inkRight: (inkLeft + inkW) / scale,
+      inkWidth: inkW / scale,
+      inkTop: (baseline - cap) / scale,
+      inkBottom: baseline / scale,
+    };
   };
 
   const render = () => {
@@ -405,13 +416,78 @@ const link = gl => {
     gl.drawArrays(gl.TRIANGLES, 0, 3);
   };
 
+  /* Bbox tinta yang benar-benar tergambar, dibaca dari framebuffer. Bukan dari
+     kanvas mask: shader menyampel mask dengan skala sendiri, jadi bbox mask
+     tidak sama dengan huruf di layar. Dibaca sekali tiap ukuran berubah. */
+  const measureInk = (scale) => {
+    const prev = state.reveal;
+    state.reveal = 1;
+    render();
+    const w = canvas.width;
+    const h = canvas.height;
+    const buf = new Uint8Array(w * h * 4);
+    gl.readPixels(0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, buf);
+    state.reveal = prev;
+    let left = w;
+    let right = -1;
+    let top = h;
+    let bottom = -1;
+    for (let y = 0; y < h; y += 1) {
+      const row = y * w * 4;
+      for (let x = 0; x < w; x += 1) {
+        if (buf[row + x * 4 + 3] > 8) {
+          if (x < left) left = x;
+          if (x > right) right = x;
+          if (y < top) top = y;
+          if (y > bottom) bottom = y;
+        }
+      }
+    }
+    if (right < 0) return null;
+    /* readPixels: origin kiri-bawah. Kembalikan koordinat CSS dari atas. */
+    return {
+      left: left / scale,
+      right: (right + 1) / scale,
+      width: (right - left + 1) / scale,
+      top: (h - (bottom + 1)) / scale,
+      bottom: (h - top) / scale,
+    };
+  };
+
   const paint = () => {
     const scale = Math.min(window.devicePixelRatio || 1, 2);
     const mask = drawMask(scale);
     if (!mask) return;
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, maskTexture);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, mask);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, mask.canvas);
+    const ink = measureInk(scale) || {
+      left: mask.inkLeft,
+      right: mask.inkRight,
+      width: mask.inkWidth,
+      top: mask.inkTop,
+      bottom: mask.inkBottom,
+    };
+    /* Kotak plat gambar: bbox tinta + jarak seragam, dibulatkan supaya garis
+       1px jatuh tepat di piksel. Huruf tidak pernah tersentuh garis. */
+    const gap = Math.round(Math.min(24, Math.max(12, view.width * 0.015)));
+    const fLeft = Math.round(ink.left - gap);
+    const fTop = Math.round(ink.top - gap);
+    const fW = Math.round(ink.width + gap * 2);
+    const fH = Math.round(ink.bottom - ink.top + gap * 2);
+    const dimY = Math.round(ink.bottom + gap + 15);
+    band.style.setProperty('--wm-f-left', `${fLeft}px`);
+    band.style.setProperty('--wm-f-top', `${fTop}px`);
+    band.style.setProperty('--wm-f-w', `${fW}px`);
+    band.style.setProperty('--wm-f-h', `${fH}px`);
+    band.style.setProperty('--wm-dim-left', `${Math.round(ink.left)}px`);
+    band.style.setProperty('--wm-dim-w', `${Math.round(ink.width)}px`);
+    band.style.setProperty('--wm-dim-y', `${dimY}px`);
+    /* Garis dimensi hanya digambar kalau muat di dalam pita. */
+    band.dataset.dim = dimY + 12 <= view.height ? 'true' : 'false';
+    const dimLabel = band.querySelector('.wm-anno--dim');
+    if (dimLabel) dimLabel.textContent = String(Math.round(ink.width));
+    band.dataset.plate = 'true';
     band.dataset.ready = 'true';
     render();
     wake();

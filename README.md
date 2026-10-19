@@ -348,6 +348,54 @@ jauh.
 - `href="#main"` tetap berfungsi tanpa JS; dengan JS klik memakai smooth scroll dan
   menghormati `prefers-reduced-motion`.
 
+## Plat gambar pita wordmark
+
+Pita MIFDLAL digambar seperti plat arsitek: satu kotak yang mengurung huruf
+dengan jarak seragam di keempat sisi, node di empat sudutnya, dan garis dimensi
+selebar huruf di bawahnya. Semua garis adalah `background-image` statis — nol
+elemen tambahan, nol biaya per frame.
+
+| Lapis | Digambar di | Isi |
+|---|---|---|
+| dasar | `.wordmark` background | dot grid 26px |
+| kotak | `[data-plate]::before` | 4 sisi kotak, posisi dari bbox tinta |
+| dimensi | `[data-plate][data-dim]::after` | garis + tick 9px di kedua ujung |
+| node | `.wm-node` | 4 kotak 12px di sudut kotak |
+| anotasi | `.wm-anno` | `fig. 09 · wordmark`, `grid 1180 · dot 26 · 7 glyph`, lebar huruf |
+
+### Ukuran diambil dari huruf, bukan dari container
+
+`paint()` di `public/js/wordmark.js` membaca bbox tinta langsung dari
+framebuffer (`gl.readPixels`) setelah satu frame digambar, lalu menulis
+`--wm-f-left/-top/-w/-h` dan `--wm-dim-*`. Kotak jadi selalu selebar dan
+setinggi huruf yang benar-benar tampil.
+
+Ini bukan kemewahan: bbox kanvas mask **tidak** sama dengan huruf di layar.
+Shader menyampel mask 1:1, tapi tepi glyph yang tipis bisa jatuh di bawah
+ambang alpha, dan aurora bisa membuat sebagian huruf kembali ke warna tinta.
+Mengukur dari output nyata menghapus seluruh selisih itu — terukur, jarak kotak
+ke huruf 20/20/19/20 px di 1366, 12/12/13/11 px di 768.
+
+Jarak kotak `clamp(12px, 1.5vw, 24px)`, jadi huruf tidak pernah tersentuh garis,
+di lebar layar mana pun.
+
+### Angka di layar tidak boleh bohong
+
+- `data-plate` baru dipasang setelah kanvas berhasil mengukur huruf. Tanpa
+  WebGL, tanpa JS, atau font belum siap: pita tampil sebagai kertas + dot grid.
+- `data-dim` hanya `true` kalau garis dimensi muat di dalam pita. Di layar
+  sempit garis dan angkanya hilang, bukan dipaksa tampil terpotong.
+- Label dimensi berisi lebar tinta terukur (mis. `1218`), bukan angka karangan.
+
+Di bawah 1229px label disembunyikan, di bawah 900px node disembunyikan; kotak
+dan garis dimensi tetap karena posisinya dihitung dari huruf.
+
+### Garis bawah footer
+
+`border-top` pita memakai `--color-line` dan tidak lagi dibuat transparan saat
+`.is-fixed`. Selama reveal garis itu masih tertutup footer; begitu scroll mentok
+di dasar, garis muncul tepat di sambungan footer dan pita, selebar layar.
+
 ## Wordmark reveal
 
 `public/js/reveal.js` + `.page-track` / `.page-layer` di `Layout.astro`. Pita MIFDLAL
