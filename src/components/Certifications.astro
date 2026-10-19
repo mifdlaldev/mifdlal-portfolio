@@ -1,6 +1,17 @@
 ---
-import { certifications } from '../data/site'
+import { featured, more, certTotals } from '../data/certificates'
 import CodeComment from './CodeComment.astro'
+
+const certAttrs = (c: (typeof featured)[number]) => ({
+  'data-cert': '',
+  'data-src': `/certs/${c.slug}.webp`,
+  'data-title': c.title,
+  'data-issuer': c.issuer,
+  'data-meta': `${c.dateLabel} · ID ${c.credentialId}`,
+  'data-verify': c.verifyUrl ?? '',
+  'data-w': String(c.width),
+  'data-h': String(c.height),
+})
 ---
 
 <section id="sertifikasi" class="section">
@@ -9,110 +20,507 @@ import CodeComment from './CodeComment.astro'
     <div class="section-head">
       <span class="fig-label">fig. 07 · sertifikasi</span>
       <h2 class="section-headline">Sertifikasi.</h2>
+      <p class="section-sub">
+        {certTotals.total} sertifikat dari {certTotals.issuers} penerbit. Setiap ID bisa dicek
+        sendiri di halaman verifikasi penerbitnya. Klik gambar untuk membuka sertifikat penuh.
+      </p>
     </div>
 
-    <ul class="cert-list" aria-hidden={certifications.length === 0 ? 'true' : undefined}>
-      {certifications.length === 0 ? (
-        <li class="cert-row">
-          <span class="cert-no">01</span>
-          <div class="cert-main">
-            <span class="cert-title ph ph--title"></span>
-            <p class="cert-issuer"><span class="ph ph--sub"></span></p>
-          </div>
-          <p class="cert-year"><span class="ph ph--meta"></span></p>
+    <ul class="cert-grid">
+      {featured.map((c) => (
+        <li class="cert-card">
+          <a
+            class="cert-trigger"
+            href={`/certs/${c.slug}.webp`}
+            {...certAttrs(c)}
+            aria-label={`Buka sertifikat ${c.title} dari ${c.issuer}`}
+          >
+            <span class="cert-shot">
+              <img
+                src={`/certs/${c.slug}-thumb.webp`}
+                width={c.thumbWidth}
+                height={c.thumbHeight}
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
+              <span class="cert-zoom" aria-hidden="true">buka</span>
+            </span>
+            <span class="cert-body">
+              <span class="cert-issuer">{c.issuer}</span>
+              <span class="cert-name">{c.title}</span>
+              {c.note && <span class="cert-note">{c.note}</span>}
+              <span class="cert-meta">{c.dateLabel} · ID {c.credentialId}</span>
+            </span>
+          </a>
         </li>
-      ) : (
-        certifications.map((c) => (
-          <li class="cert-row">
-            <span class="cert-no">{c.no}</span>
-            <div class="cert-main">
-              <h3 class="cert-title">{c.name}</h3>
-              <p class="cert-issuer">{c.issuer}</p>
-            </div>
-            <p class="cert-year">{c.year}</p>
-            {c.credential && (
-              <a class="cert-link" href={c.credential} target="_blank" rel="noopener noreferrer">verifikasi ↗</a>
-            )}
-          </li>
-        ))
-      )}
+      ))}
     </ul>
 
-    {certifications.length === 0 && (
-      <>
-        <p class="empty-note">belum diisi</p>
-        <p class="sr-only">Bagian sertifikasi belum diisi.</p>
-      </>
+    {more.length > 0 && (
+      <div class="cert-more">
+        <div class="cert-more-head">
+          <h3 class="cert-more-title">Sertifikat keahlian lainnya</h3>
+          <p class="cert-more-sub">
+            {certTotals.moreHackerrank} sertifikat keahlian HackerRank dan {certTotals.moreOther} kelas
+            dasar Dicoding. Semua tetap bisa dibuka dan diverifikasi.
+          </p>
+        </div>
+        <ul class="cert-rows">
+          {more.map((c) => (
+            <li>
+              <a
+                class="cert-row"
+                href={`/certs/${c.slug}.webp`}
+                {...certAttrs(c)}
+                aria-label={`Buka sertifikat ${c.title} dari ${c.issuer}`}
+              >
+                <span class="cert-row-name">{c.title}</span>
+                <span class="cert-row-date">{c.dateLabel}</span>
+                <span class="cert-row-issuer">{c.issuer} · ID {c.credentialId}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
     )}
   </div>
+
+  <dialog class="cert-dialog" id="cert-dialog" aria-labelledby="cert-dialog-title">
+    <div class="cert-dialog-box">
+      <div class="cert-dialog-head">
+        <p class="cert-dialog-issuer" data-dialog-issuer></p>
+        <h3 class="cert-dialog-title" id="cert-dialog-title" tabindex="-1" data-dialog-title></h3>
+      </div>
+      <div class="cert-dialog-figure">
+        <img class="cert-dialog-img" alt="" data-dialog-img />
+      </div>
+      <div class="cert-dialog-foot">
+        <p class="cert-dialog-meta" data-dialog-meta></p>
+        <a class="cert-dialog-verify" data-dialog-verify target="_blank" rel="noopener noreferrer">
+          verifikasi di situs penerbit ↗
+        </a>
+        <button class="cert-dialog-close" type="button" data-dialog-close>tutup</button>
+      </div>
+    </div>
+  </dialog>
 </section>
 
 <style>
-
   .section-head {
     margin-bottom: 2.5rem;
-    max-width: 56ch;
+    max-width: 60ch;
   }
 
-  .cert-list {
+  .section-sub {
+    margin: 0.9rem 0 0;
+    color: var(--color-muted);
+    font-size: var(--text-body);
+    line-height: var(--leading-relaxed);
+    max-width: 58ch;
+    text-wrap: pretty;
+  }
+
+  /* --- kartu unggulan ------------------------------------- */
+
+  .cert-grid {
+    list-style: none;
+    margin: 0 0 3.5rem;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .cert-card {
+    display: flex;
+  }
+
+  .cert-trigger {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    color: inherit;
+    text-decoration: none;
+    border: 1px solid var(--color-line);
+    background: var(--color-paper);
+    transition:
+      border-color var(--dur-fast) var(--ease),
+      transform var(--dur-fast) var(--ease);
+  }
+
+  .cert-trigger:hover,
+  .cert-trigger:focus-visible {
+    border-color: var(--color-ink);
+    transform: translateY(-2px);
+  }
+
+  .cert-shot {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-bottom: 1px solid var(--color-line);
+    background: var(--color-line-soft);
+  }
+
+  .cert-shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    object-position: top center;
+  }
+
+  /* Label "buka" hanya muncul saat hover/fokus. Sub-judul section sudah
+     memberi instruksi, jadi label yang selalu tampil cuma menambah bising
+     dan menutupi pojok sertifikat. */
+  .cert-zoom {
+    position: absolute;
+    right: 0.6rem;
+    bottom: 0.6rem;
+    padding: 0.25rem 0.5rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-cap);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+    color: var(--color-paper);
+    background: color-mix(in srgb, var(--ink-900) 78%, transparent);
+    opacity: 0;
+    transition: opacity var(--dur-fast) var(--ease);
+  }
+
+  .cert-trigger:hover .cert-zoom,
+  .cert-trigger:focus-visible .cert-zoom {
+    opacity: 1;
+  }
+
+  .cert-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 1rem 1.1rem 1.15rem;
+    flex: 1 1 auto;
+  }
+
+  .cert-issuer {
+    font-family: var(--font-mono);
+    font-size: var(--text-cap);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .cert-name {
+    font-family: var(--font-display);
+    font-size: var(--text-title-sm);
+    font-weight: 600;
+    line-height: var(--leading-title);
+    letter-spacing: var(--tracking-title);
+    text-wrap: balance;
+  }
+
+  .cert-note {
+    font-size: var(--text-sm);
+    line-height: var(--leading-snug);
+    color: var(--color-muted);
+    text-wrap: pretty;
+  }
+
+  .cert-meta {
+    margin-top: auto;
+    padding-top: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-cap);
+    letter-spacing: var(--tracking-caps-tight);
+    color: var(--color-muted);
+  }
+
+  /* --- daftar ringkas ------------------------------------- */
+
+  .cert-more {
+    border-top: 1px solid var(--color-line);
+    padding-top: 2rem;
+  }
+
+  .cert-more-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .cert-more-title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-title);
+    font-weight: 600;
+    letter-spacing: var(--tracking-title);
+  }
+
+  .cert-more-sub {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+    line-height: var(--leading-snug);
+    max-width: 52ch;
+  }
+
+  .cert-rows {
     list-style: none;
     margin: 0;
     padding: 0;
-    border-top: 1px solid var(--color-line);
   }
 
   .cert-row {
     display: grid;
-    grid-template-columns: 2.5rem 1fr auto;
-    gap: 0.35rem 1.25rem;
-    padding: 1.5rem 0.5rem;
-    border-bottom: 1px solid var(--color-line);
-    align-items: baseline;
+    grid-template-columns: 1fr auto;
+    gap: 0.15rem 1rem;
+    padding: 0.65rem 0.25rem;
+    border-bottom: 1px solid var(--color-line-soft);
+    color: inherit;
+    text-decoration: none;
+    transition: background-color var(--dur-fast) var(--ease);
   }
 
-  .cert-no {
+  .cert-row:hover,
+  .cert-row:focus-visible {
+    background: var(--color-line-soft);
+  }
+
+  .cert-row-name {
+    font-size: var(--text-body);
+    font-weight: 500;
+    line-height: var(--leading-ui);
+  }
+
+  .cert-row:hover .cert-row-name,
+  .cert-row:focus-visible .cert-row-name {
+    color: var(--accent);
+  }
+
+  .cert-row-date {
     font-family: var(--font-mono);
-    font-size: var(--text-label);
-    color: var(--accent, var(--color-electric));
+    font-size: var(--text-cap);
+    color: var(--color-muted);
+    white-space: nowrap;
   }
 
-  .cert-title {
+  .cert-row-issuer {
+    grid-column: 1 / -1;
+    font-family: var(--font-mono);
+    font-size: var(--text-cap);
+    letter-spacing: var(--tracking-caps-tight);
+    color: var(--color-muted);
+  }
+
+  /* --- dialog --------------------------------------------- */
+
+  .cert-dialog {
+    margin: auto;
+    padding: 0;
+    width: min(1100px, calc(100vw - 2rem));
+    max-width: none;
+    max-height: calc(100dvh - 2rem);
+    border: 1px solid var(--color-line);
+    background: var(--color-paper);
+    color: var(--color-ink);
+    overflow: hidden;
+  }
+
+  .cert-dialog::backdrop {
+    background: color-mix(in srgb, var(--ink-900) 82%, transparent);
+  }
+
+  .cert-dialog-box {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100dvh - 2rem);
+  }
+
+  .cert-dialog-head {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1rem 1.25rem 0.75rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .cert-dialog-issuer {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-cap);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .cert-dialog-title {
+    margin: 0;
     font-family: var(--font-display);
-    font-size: var(--text-title-sm);
+    font-size: var(--text-title);
     font-weight: 600;
     letter-spacing: var(--tracking-title);
-    margin: 0 0 0.25rem;
+    line-height: var(--leading-title);
   }
 
-  .cert-issuer {
-    margin: 0;
-    color: var(--color-muted);
-    font-size: var(--text-body);
+  .cert-dialog-title:focus {
+    outline: none;
   }
 
-  .cert-year {
+  .cert-dialog-figure {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem;
+    background: var(--color-line-soft);
+  }
+
+  .cert-dialog-img {
+    display: block;
+    max-width: 100%;
+    max-height: calc(100dvh - 14rem);
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border: 1px solid var(--color-line);
+    background: var(--color-white);
+  }
+
+  .cert-dialog-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.25rem;
+    padding: 0.85rem 1.25rem 1rem;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .cert-dialog-meta {
     margin: 0;
     font-family: var(--font-mono);
-    font-size: var(--text-label);
+    font-size: var(--text-cap);
+    letter-spacing: var(--tracking-caps-tight);
     color: var(--color-muted);
   }
 
-  .cert-link {
-    grid-column: 2 / -1;
+  .cert-dialog-verify {
     font-family: var(--font-mono);
-    font-size: var(--text-label);
-    color: var(--accent, var(--color-electric));
-    margin-top: 0.5rem;
+    font-size: var(--text-cap);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
   }
 
-  @media (min-width: 860px) {
-    .cert-row {
-      grid-template-columns: 3rem 22rem 1fr auto;
+  .cert-dialog-verify[hidden] {
+    display: none;
+  }
+
+  .cert-dialog-close {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: var(--text-cap);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+    padding: 0.45rem 0.8rem;
+    border: 1px solid var(--color-line);
+    background: transparent;
+    color: var(--color-ink);
+    cursor: pointer;
+    transition: border-color var(--dur-fast) var(--ease);
+  }
+
+  .cert-dialog-close:hover {
+    border-color: var(--color-ink);
+  }
+
+  @media (min-width: 620px) {
+    .cert-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.5rem;
     }
-    .cert-link {
-      grid-column: 4;
-      grid-row: 1;
-      margin: 0;
+  }
+
+  @media (min-width: 980px) {
+    .cert-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
+
+    .cert-rows {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 2.5rem;
+    }
+  }
+</style>
+
+<script>
+  const dialog = document.getElementById('cert-dialog') as HTMLDialogElement | null
+
+  if (dialog) {
+    const img = dialog.querySelector<HTMLImageElement>('[data-dialog-img]')
+    const titleEl = dialog.querySelector<HTMLElement>('[data-dialog-title]')
+    const issuerEl = dialog.querySelector<HTMLElement>('[data-dialog-issuer]')
+    const metaEl = dialog.querySelector<HTMLElement>('[data-dialog-meta]')
+    const verifyEl = dialog.querySelector<HTMLAnchorElement>('[data-dialog-verify]')
+    const closeEl = dialog.querySelector<HTMLButtonElement>('[data-dialog-close]')
+
+    const open = (trigger: HTMLElement) => {
+      const d = trigger.dataset
+      if (img) {
+        img.src = d.src ?? ''
+        img.width = Number(d.w ?? 0)
+        img.height = Number(d.h ?? 0)
+        img.alt = `Sertifikat ${d.title ?? ''} dari ${d.issuer ?? ''}`
+      }
+      if (titleEl) titleEl.textContent = d.title ?? ''
+      if (issuerEl) issuerEl.textContent = d.issuer ?? ''
+      if (metaEl) metaEl.textContent = d.meta ?? ''
+      if (verifyEl) {
+        if (d.verify) {
+          verifyEl.href = d.verify
+          verifyEl.hidden = false
+        } else {
+          verifyEl.hidden = true
+          verifyEl.removeAttribute('href')
+        }
+      }
+      document.documentElement.classList.add('cert-locked')
+      dialog.showModal()
+      titleEl?.focus()
+    }
+
+    document.querySelectorAll<HTMLElement>('[data-cert]').forEach((trigger) => {
+      trigger.addEventListener('click', (event) => {
+        const e = event as MouseEvent
+        // Klik dengan modifier tetap membuka gambar di tab baru.
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return
+        event.preventDefault()
+        open(trigger)
+      })
+    })
+
+    closeEl?.addEventListener('click', () => dialog.close())
+
+    // Klik di luar kotak menutup dialog; klik di dalam kotak tidak.
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close()
+    })
+
+    dialog.addEventListener('close', () => {
+      document.documentElement.classList.remove('cert-locked')
+      if (img) img.removeAttribute('src')
+    })
+  }
+</script>
+
+<style is:global>
+  html.cert-locked {
+    overflow: hidden;
   }
 </style>

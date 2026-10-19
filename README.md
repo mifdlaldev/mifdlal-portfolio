@@ -41,6 +41,54 @@ sendiri, bukan klaim.
 | Bahasa | TypeScript (strict) | Kontrak tipe di source data |
 | Hosting | Cloudflare Workers Static Assets | Edge, cepat, tanpa server Node |
 
+## Section Sertifikasi
+
+27 sertifikat, dikurasi dari 31 file di folder SERTIFIKAT operator.
+
+- **9 kartu unggulan** (`src/data/certificates.ts` → `featured`): empat sertifikat
+  peran/level atas HackerRank, freeCodeCamp x Microsoft, tiga kelas Dicoding,
+  satu pelatihan Hactiv8. Masing-masing punya gambar, satu baris konteks, tanggal,
+  ID, dan tautan verifikasi.
+- **18 baris ringkas** (`more`): 17 sertifikat keahlian HackerRank + 1 kelas dasar
+  Dicoding. Tanpa gambar di daftar supaya tidak jadi badge wall; gambar tetap
+  tersedia di modal.
+
+**Tidak ditampilkan:** empat sertifikat pelatihan guru (AI untuk Tenaga Pendidik
+bagian 1-2, Desain pembelajaran abad ke-21, Eksplorasi AI, Persiapan MCE). Isinya
+pedagogi, bukan rekayasa perangkat lunak, jadi tidak sejalan dengan positioning
+situs. Datanya masih ada di folder sumber kalau nanti mau dimasukkan.
+
+### Gambar
+
+`public/certs/<slug>.webp` = versi penuh 1400px (dipakai modal).
+`public/certs/<slug>-thumb.webp` = 640px (dipakai kartu, hanya untuk `featured`).
+
+Dihasilkan dari PDF/PNG asli: render 150 dpi halaman 1, lalu WebP q82 (thumb q80).
+36 file, total 1,46 MB. Untuk menambah sertifikat:
+
+```bash
+pdftoppm -png -r 150 -f 1 -l 1 -singlefile "sertifikat.pdf" /tmp/x
+# lalu konversi ke WebP 1400px (dan 640px kalau masuk featured) ke public/certs/
+```
+
+### Modal
+
+Native `<dialog>` + `showModal()`, jadi browser yang menangani pindah fokus,
+kembalinya fokus ke kartu, latar `inert`, dan tombol Escape (WCAG 2.4.3, teknik
+H102). Yang ditambahkan manual hanya: klik latar untuk menutup, kunci scroll
+`html.cert-locked`, dan pengisian `src` gambar saat dibuka (tidak ada 27 gambar
+penuh yang diunduh di awal).
+
+Tanpa JavaScript, setiap kartu tetap berfungsi: `<a href="/certs/<slug>.webp">`
+membuka gambar penuh di tab baru.
+
+### Verifikasi
+
+Semua ID HackerRank diuji ke `https://www.hackerrank.com/certificates/<ID>`:
+21 balas 200, ID palsu balas 404. Dicoding memakai
+`https://www.dicoding.com/certificates/<ID>`, freeCodeCamp memakai URL
+sertifikasi publik, Hactiv8 hanya nomor sertifikat (tidak ada halaman publik).
+
 ## Struktur
 
 ```
