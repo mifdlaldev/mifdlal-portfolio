@@ -47,8 +47,16 @@ const { title, description } = Astro.props
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
 
-    <!-- Favicon: kotak ink + M elektrik (grammar Warp) -->
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231a1522'/%3E%3Ctext x='16' y='23' font-family='monospace' font-size='19' font-weight='600' fill='%23eef17c' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E" />
+    <!-- Favicon: monogram, dua versi warna mengikuti tema sistem.
+         Latar transparan supaya menyatu dengan tab bar terang maupun gelap.
+         Urutan: versi gelap dulu, versi terang terakhir, supaya peramban yang
+         mengabaikan atribut media tetap memakai glyph hitam (default aman di
+         tab bar terang). -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32-dark.png" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon-64-dark.png" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32-light.png" media="(prefers-color-scheme: light)" />
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon-64-light.png" media="(prefers-color-scheme: light)" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   </head>
   <body>
     <a href="#main" class="skip-link">Lewati ke konten</a>
