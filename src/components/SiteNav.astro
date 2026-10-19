@@ -1,4 +1,7 @@
 ---
+import { Image } from 'astro:assets'
+import logoMark from '../assets/logo-mark.png'
+
 // Urutan nav mengikuti urutan section di halaman, supaya arah scroll
 // klik selalu konsisten (tidak pernah melompat ke belakang).
 // Pendidikan dan sertifikasi tetap ada di halaman, tapi tidak di nav.
@@ -12,9 +15,19 @@ const links = [
 
 <header class="nav">
   <div class="wrap nav-inner">
-    <!-- Wordmark: kotak ink + glyph, lowercase, grammar Warp -->
+    <!-- Brand: logo monogram (tanpa kotak latar) + wordmark lowercase -->
     <a href="#main" class="brand">
-      <span class="brand-mark" aria-hidden="true">M</span>
+      <Image
+        class="brand-logo"
+        src={logoMark}
+        alt=""
+        widths={[64, 96, 128]}
+        sizes="46px"
+        format="webp"
+        quality={92}
+        loading="eager"
+        decoding="async"
+      />
       <span class="brand-word">mifdlal</span>
     </a>
 
@@ -81,9 +94,11 @@ const links = [
     color: var(--color-lemon);
   }
 
-  .nav:not(.is-scrolled) .brand-mark {
-    background: var(--color-paper);
-    color: var(--color-ink);
+  /* Logo monokrom: sumbernya hitam, jadi state terang tidak perlu filter.
+     State gelap memaksa putih lewat brightness(0) lalu invert, supaya hasilnya
+     putih bersih berapa pun nilai hitam aslinya. Alpha tidak tersentuh. */
+  .nav:not(.is-scrolled) .brand-logo {
+    filter: brightness(0) invert(1);
   }
 
   .nav:not(.is-scrolled) .btn-nav {
@@ -101,10 +116,11 @@ const links = [
   @media (prefers-reduced-motion: no-preference) {
     .nav-link,
     .brand-word,
-    .brand-mark,
+    .brand-logo,
     .btn-nav {
       transition: color var(--dur-slow) var(--ease), background-color var(--dur-slow) var(--ease),
         border-color var(--dur-slow) var(--ease);
+      /* filter tidak ikut shorthand di atas; beri transisinya sendiri. */
     }
   }
 
@@ -128,16 +144,13 @@ const links = [
     color: var(--color-ink);
   }
 
-  .brand-mark {
-    display: grid;
-    place-items: center;
-    width: 28px;
-    height: 28px;
-    background: var(--color-ink);
-    color: var(--color-lemon);
-    font-family: var(--font-mono);
-    font-size: var(--text-body);
-    font-weight: 600;
+  /* Logo tanpa kotak latar: hanya bentuknya sendiri di atas kertas.
+     Tinggi 30px dipilih dari uji keterbacaan: dua celah diagonal sempit di
+     monogram mulai menutup di bawah 24px, dan 30px masih muat di nav 64px. */
+  .brand-logo {
+    display: block;
+    height: 30px;
+    width: auto;
     flex-shrink: 0;
   }
 
