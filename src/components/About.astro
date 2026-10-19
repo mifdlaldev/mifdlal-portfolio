@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets'
+import portrait from '../assets/portrait.png'
 import CodeComment from './CodeComment.astro'
 ---
 
@@ -7,10 +9,17 @@ import CodeComment from './CodeComment.astro'
   <div class="wrap">
     <div class="about-grid">
       <figure class="portrait">
-        <div class="portrait-placeholder" role="img" aria-label="Placeholder foto potret">
-          <span>foto potret</span>
-          <span>ganti dengan foto</span>
-        </div>
+        <Image
+          class="portrait-img"
+          src={portrait}
+          alt="Mifdlal Tsaqib Alfarras"
+          widths={[400, 560, 720, 900]}
+          sizes="(min-width: 800px) 34vw, 92vw"
+          format="webp"
+          quality={82}
+          loading="lazy"
+          decoding="async"
+        />
         <figcaption>mifdlal · bandung, id</figcaption>
       </figure>
 
@@ -20,8 +29,8 @@ import CodeComment from './CodeComment.astro'
           <h2 class="section-headline">Halo, saya Mifdlal.</h2>
         </div>
         <p class="lede">
-          Saya bangun web app dan otomasi untuk UMKM: katalog online, kasir, dan
-          alur kerja yang masih manual.
+          Saya bangun web app dan otomasi untuk UMKM seperti contoh katalog
+          online, kasir, dan alur kerja yang masih manual.
         </p>
         <p>
           Saya mengerjakan seluruh tahap sendiri, dari desain sampai deploy.
@@ -35,7 +44,6 @@ import CodeComment from './CodeComment.astro'
 </section>
 
 <style>
-
   .about-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -48,27 +56,21 @@ import CodeComment from './CodeComment.astro'
     width: 100%;
   }
 
-  .portrait-placeholder {
-    aspect-ratio: 4 / 5;
+  /* Foto potret. Rasio 4:5 dipakai selama kolom masih menumpuk; di dua kolom
+     tingginya mengikuti kolom teks (lihat media query di bawah). object-fit
+     menjaga subjek tidak gepeng saat rasionya berubah. */
+  .portrait-img {
+    display: block;
     width: 100%;
-    max-height: 34rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.55rem;
-    background: color-mix(in srgb, var(--color-ink) 8%, var(--color-paper));
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    /* Rambut mulai di 11% tinggi frame, dagu di 68%. Di kotak landscape
+       (1,32) hanya 76% tinggi yang tampak, jadi anchor 26% memotong 6,3% atas
+       dan menyisakan ~4,7% ruang di atas rambut. Anchor lebih tinggi dari ini
+       mulai memakan ubun-ubun. */
+    object-position: 50% 26%;
+    background: var(--color-line-soft);
     border: 1px solid var(--color-line);
-    color: var(--color-muted);
-    font-family: var(--font-mono);
-    font-size: var(--text-label);
-    letter-spacing: var(--tracking-caps-loose);
-    text-transform: lowercase;
-  }
-
-  .portrait-placeholder span:first-child {
-    color: var(--color-ink);
-    font-size: var(--text-data);
   }
 
   .portrait figcaption {
@@ -116,20 +118,25 @@ import CodeComment from './CodeComment.astro'
     }
 
     /* Rasio 4:5 dilepas hanya di dua kolom. Foto mengambil sisa tinggi baris,
-       jadi tingginya mengikuti kolom teks, bukan lebar kolom. Di bawah 800px
-       placeholder tetap 4:5 karena kolomnya menumpuk. */
+       jadi tingginya mengikuti kolom teks, bukan lebar kolom. */
     .portrait {
       display: flex;
       flex-direction: column;
       height: 100%;
     }
 
-    .portrait-placeholder {
-      flex: 1 1 auto;
+    .portrait-img {
+      /* flex-basis 0, bukan auto: dengan basis auto foto membawa tinggi
+         intrinsiknya (persegi) dan baris jadi setinggi foto, bukan setinggi
+         teks. Basis 0 membuat tinggi foto mengikuti kolom teks. */
+      flex: 1 1 0;
       aspect-ratio: auto;
-      max-height: none;
-      /* Jaring pengaman: kalau copy suatu saat memendek, foto tidak ikut gepeng. */
-      min-height: 18rem;
+      /* Lantai tinggi. Tanpa ini foto hanya setinggi kolom teks (305px di 1366,
+         rasio 1,32 = kotak melebar dan badan terpotong di dada), dan caption
+         berhenti tepat di garis yang sama dengan baris terakhir paragraf.
+         Lantai 22rem membuat foto 352px di semua lebar >=800: rasio turun ke
+         1,15, caption turun ~46px di bawah baris terakhir paragraf. */
+      min-height: 22rem;
     }
 
     /* Margin bawah paragraf terakhir adalah sisa ritme, bukan jarak yang
