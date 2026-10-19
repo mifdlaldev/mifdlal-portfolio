@@ -3,43 +3,19 @@
 @import "@fontsource-variable/inter";
 @import "@fontsource-variable/azeret-mono";
 @import "@fontsource-variable/jetbrains-mono";
+@import "./tokens.css";
+@import "./semantic.css";
 
 /* ============================================================
-   DESIGN TOKENS: mifdlal.com (Warp.dev grammar)
-   Ekstrak dari warp.dev CSS nyata (2026-10-17):
-     --p-space #1a1522 (ink) | --p-8bit #2a1eff (aksen elektrik)
-     --p-lilac #b7a4f2 | --p-lemon #eef17c (highlight)
-     bg cream #fdfcf1 | dot grid 26px | wrap 1180px | gutter 24px
-   Font Warp proprietary (theFuture/Matter) -> substitusi bebas:
-     Space Grotesk (display grotesque) + Inter (body) +
-     Azeret Mono (label/data) + Instrument Serif (aksen display).
+   GLOBAL — dasar halaman.
+   Palet dan skala ada di tokens.css (primitif) dan semantic.css
+   (peran). File ini tidak mendeklarasikan nilai warna/ukuran
+   baru; semua memakai var().
    ============================================================ */
 
-@theme {
-  /* Palet: dari warp.dev :root */
-  --color-ink: #1a1522;        /* --p-space: near-black ungu */
-  --color-paper: #fdfcf1;      /* bg cream warp */
-  --color-electric: #2a1eff;   /* --p-8bit: aksen biru elektrik */
-  --color-lilac: #b7a4f2;      /* --p-lilac */
-  --color-lemon: #eef17c;      /* highlight kuning */
-  --color-muted: #1a1522b3;    /* teks sekunder (62% ink) */
-  --color-line: #1a152229;     /* hairline */
-  --color-line-soft: #1a152212;/* dot grid */
+/* Token warna, tipografi, layout, lapisan, dan gerak ada di
+   tokens.css (primitif) dan semantic.css (peran). */
 
-  /* Tipografi */
-  --font-display: "Space Grotesk Variable", system-ui, sans-serif;
-  --font-body: "Inter Variable", system-ui, -apple-system, sans-serif;
-  --font-mono: "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", monospace;
-  --font-serif: "Instrument Serif", Georgia, serif;
-
-  /* Spasi */
-  --grid-max: 1180px;
-  --grid-gutter: 24px;
-  --space-section: clamp(5rem, 10vw, 8rem);
-  --nav-h: 64px;
-
-
-}
 
 /* ============================================================
    ENCRYPTED TEXT (Aceternity, tanpa dependency motion)
@@ -78,14 +54,14 @@
   right: 0;
   transform: translateY(-50%);
   text-align: center;
-  z-index: 1;
+  z-index: var(--z-content);
   margin: 0;
   pointer-events: none;
   user-select: none;
   font-family: var(--font-mono);
-  font-size: 0.875rem;
-  line-height: 1.2;
-  letter-spacing: 0.06em;
+  font-size: var(--text-sm);
+  line-height: var(--leading-ui);
+  letter-spacing: var(--tracking-caps);
   /* 60% = 4.66:1 di atas paper, lolos AA untuk teks kecil. */
   color: color-mix(in srgb, var(--color-ink) 60%, transparent);
 }
@@ -122,9 +98,7 @@
    ============================================================ */
 .section {
   position: relative;
-  /* Jarak rail dari tepi section = tepi container .wrap. */
-  --rail-offset: max(var(--grid-gutter), calc(50% - var(--grid-max) / 2));
-  --node-size: 12px;
+  /* --rail-offset dan --node-size berasal dari tokens.css. */
   /* Semua garis digambar sebagai background supaya pseudo-element
      tetap bebas dipakai untuk node. */
   background-image:
@@ -160,7 +134,7 @@
   background: transparent;
   box-sizing: border-box;
   pointer-events: none;
-  z-index: 2;
+  z-index: var(--z-raise);
 }
 
 /* Perpotongan garis atas section dengan rail. */
@@ -236,7 +210,10 @@ html {
   background-color: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: var(--text-root);
+  /* Jarak baris dasar dulu datang dari Preflight Tailwind, bukan dari kode
+     kita. Dideklarasikan di sini supaya ritme vertikal jadi milik sendiri. */
+  line-height: var(--leading-base);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -270,7 +247,7 @@ body {
 }
 
 ::selection {
-  background: rgba(42, 30, 255, 0.18);
+  background: var(--selection-bg);
   color: var(--color-ink);
 }
 
@@ -294,8 +271,8 @@ body {
    kertas. Satu section satu warna. Semua nilai diuji >= 4.5:1 di atas kertas. */
 .fig-label {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  letter-spacing: 0.08em;
+  font-size: var(--text-label);
+  letter-spacing: var(--tracking-caps-loose);
   text-transform: lowercase;
   color: var(--accent, var(--color-electric));
   font-weight: 500;
@@ -305,8 +282,8 @@ body {
 .tag {
   display: inline-block;
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  letter-spacing: 0.02em;
+  font-size: var(--text-label);
+  letter-spacing: var(--tracking-caps-tight);
   text-transform: lowercase;
   padding: 0.15rem 0.5rem;
   border: 1px solid var(--color-line);
@@ -317,10 +294,10 @@ body {
 /* Heading section: 34px, tight, grotesque */
 .section-headline {
   font-family: var(--font-display);
-  font-size: clamp(1.5rem, 3.5vw, 2.125rem);
+  font-size: var(--text-h2);
   font-weight: 600;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+  line-height: var(--leading-heading);
+  letter-spacing: var(--tracking-heading);
   margin: 0.625rem 0 0;
   text-wrap: balance;
 }
@@ -334,16 +311,16 @@ body {
   min-height: 44px;          /* touch target WCAG */
   padding: 0.5625rem 1.125rem;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--text-nav);
   font-weight: 600;
-  line-height: 1.2;
+  line-height: var(--leading-ui);
   text-transform: lowercase;
   text-decoration: none;
   border: 1px solid var(--color-ink);
   border-radius: 0;          /* Warp: square corners */
   cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease,
-              border-color 0.15s ease;
+  transition: background-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease),
+              border-color var(--dur-fast) var(--ease);
 }
 
 .btn-primary {
@@ -374,7 +351,7 @@ body {
   text-underline-offset: 3px;
   text-decoration-thickness: 1px;
   text-decoration-color: var(--color-line);
-  transition: text-decoration-color 0.15s ease;
+  transition: text-decoration-color var(--dur-fast) var(--ease);
 }
 
 .link-underline:hover {
@@ -391,8 +368,8 @@ body {
 /* Mono data text */
 .mono {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.02em;
+  font-size: var(--text-nav);
+  letter-spacing: var(--tracking-caps-tight);
 }
 
 /* Serif aksen untuk hero quote/emphasis */
@@ -423,8 +400,8 @@ body {
 .empty-note {
   margin: 0.9rem 0 0;
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  letter-spacing: 0.06em;
+  font-size: var(--text-label);
+  letter-spacing: var(--tracking-caps);
   color: color-mix(in srgb, var(--color-ink) 60%, transparent);
 }
 

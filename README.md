@@ -50,12 +50,43 @@ src/
   components/           SiteNav, Hero, Projects, About, Services, Contact, Footer
   pages/index.astro     halaman utama
   pages/404.astro       halaman 404
-  styles/global.css     token desain (warp.dev grammar), primitive .btn/.fig-label/.section-headline
+  styles/tokens.css     primitif: palet, skala teks, leading, tracking, layout, z-index, gerak
+  styles/semantic.css   peran: --color-*, --accent per section, --selection-bg
+  styles/global.css     dasar halaman + primitive .btn/.fig-label/.section-headline
+scripts/
+  check-tokens.mjs      penjaga token (dipakai CI)
 public/
   _headers              security headers (CSP, HSTS, X-Frame-Options, ...)
   robots.txt            crawler rules + URL sitemap
 wrangler.toml           konfigurasi deploy Workers Static Assets
 ```
+
+## Token desain
+
+Tiga lapis, satu arah: komponen tidak pernah menulis nilai mentah.
+
+```
+tokens.css     primitif   hex, rem, em, angka  -> satu-satunya tempat nilai mentah
+semantic.css   peran      --color-ink, --accent, --selection-bg
+komponen       konsumsi   var(--text-label), var(--space-section), var(--accent)
+```
+
+Aturan yang dijaga otomatis oleh `npm run check:tokens` (jalan di CI):
+
+- tidak ada warna literal (`#hex`, `rgba()`) di luar `tokens.css`;
+- `font-size`, `line-height`, `letter-spacing`, `z-index` wajib `var()`;
+- breakpoint hanya boleh dari daftar: 560, 620, 720, 800, 860, 900, 980, 1228
+  (`max-width: N` sah kalau `N+1` ada di daftar, itu pasangan komplementer);
+- setiap `var(--x)` harus punya definisi, kecuali `--logoloop-*` yang diset
+  runtime oleh engine pita logo.
+
+Aksen per section dideklarasikan sekali di `semantic.css`, bukan di komponen.
+Section baru otomatis mewarisi aksen default, tidak lagi jatuh ke warna garis.
+
+Skala teks (13 langkah, dense 1px di rentang UI karena 11px dipakai 25 kali):
+`--text-hero`, `--text-h2`, `--text-h3`, `--text-lede`, `--text-sub`,
+`--text-title`, `--text-title-sm`, `--text-brand`, `--text-body`, `--text-sm`,
+`--text-data`, `--text-nav`, `--text-label`, `--text-cap`.
 
 ## Urutan section
 

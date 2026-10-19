@@ -11,9 +11,10 @@
     "check": "astro check",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lh": "lighthouse http://localhost:4321/ --only-categories=performance,accessibility,best-practices,seo --output=html --chrome-flags=--headless=new --no-sandbox",
-    "lint:css": "echo 'no stylelint configured'",
+    "lint:css": "node scripts/check-tokens.mjs",
     "audit": "npm audit --omit=dev",
-    "postbuild": "node scripts/csp-hash.mjs"
+    "postbuild": "node scripts/csp-hash.mjs",
+    "check:tokens": "node scripts/check-tokens.mjs"
   },
   "devDependencies": {
     "@astrojs/react": "^7.1.0",

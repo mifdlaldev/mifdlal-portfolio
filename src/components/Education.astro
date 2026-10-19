@@ -52,9 +52,6 @@ import CodeComment from './CodeComment.astro'
 </section>
 
 <style>
-  #pendidikan {
-    --accent: #5b2bd9;
-  }
 
   .section-head {
     margin-bottom: 2.5rem;
@@ -78,28 +75,28 @@ import CodeComment from './CodeComment.astro'
 
   .edu-no {
     font-family: var(--font-mono);
-    font-size: 0.6875rem;
+    font-size: var(--text-label);
     color: var(--accent, var(--color-electric));
     padding-top: 0.3rem;
   }
 
   .edu-title {
     font-family: var(--font-display);
-    font-size: 1.25rem;
+    font-size: var(--text-title);
     font-weight: 600;
-    letter-spacing: -0.015em;
+    letter-spacing: var(--tracking-title);
     margin: 0 0 0.3rem;
   }
 
   .edu-program {
     margin: 0;
     color: var(--color-muted);
-    font-size: 0.9375rem;
+    font-size: var(--text-body);
   }
 
   .edu-status {
     font-family: var(--font-mono);
-    font-size: 0.6875rem;
+    font-size: var(--text-label);
     border: 1px solid var(--color-line);
     padding: 0.1rem 0.4rem;
     margin-left: 0.4rem;
@@ -109,8 +106,8 @@ import CodeComment from './CodeComment.astro'
   .edu-note {
     margin: 0.6rem 0 0;
     color: var(--color-muted);
-    font-size: 0.9375rem;
-    line-height: 1.65;
+    font-size: var(--text-body);
+    line-height: var(--leading-relaxed);
     max-width: 62ch;
   }
 
@@ -119,7 +116,7 @@ import CodeComment from './CodeComment.astro'
     display: flex;
     gap: 1rem;
     font-family: var(--font-mono);
-    font-size: 0.6875rem;
+    font-size: var(--text-label);
     color: var(--color-muted);
     text-transform: lowercase;
   }
