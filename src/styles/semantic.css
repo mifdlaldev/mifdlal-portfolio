@@ -24,6 +24,8 @@
   /* aksen dasar */
   --color-electric: var(--electric);
   --color-lemon: var(--lemon);
+  --color-violet: var(--violet);
+  --color-magenta: var(--magenta);
   --color-white: var(--white);
 
   /* seleksi teks: elektrik 18% di atas permukaan */

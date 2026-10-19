@@ -348,6 +348,41 @@ jauh.
 - `href="#main"` tetap berfungsi tanpa JS; dengan JS klik memakai smooth scroll dan
   menghormati `prefers-reduced-motion`.
 
+## Wordmark setelah footer
+
+`src/components/Wordmark.astro` + `public/js/wordmark.js`. Pita penuh selebar halaman di
+bawah footer berisi `MIFDLAL` raksasa, diisi Aurora (React Bits) yang bergerak dan
+mengikuti kursor.
+
+Cara kerjanya: huruf tidak ditulis sebagai teks, tapi digambar ke kanvas 2D sebagai mask,
+lalu shader Aurora memotong cahayanya dengan alpha mask itu. Jadi warna hanya hidup di
+dalam huruf, latar tetap kertas.
+
+| Bagian | Nilai |
+|---|---|
+| Tinggi pita | `clamp(5rem, 22vw, 32rem)` |
+| Padding | `clamp(0.75rem, 2.4vw, 1.75rem)` vertikal, `clamp(1rem, 4vw, 3.5rem)` horizontal |
+| Dasar huruf | `--color-ink` |
+| Stop Aurora | `--color-electric` → `--color-violet` → `--color-magenta` |
+| Huruf | Space Grotesk 700, tracking `-0.035em`, `ctx.letterSpacing` supaya kerning utuh |
+| Reveal | `.is-armed` → `.is-in` (IntersectionObserver 18%), geser 18% + fade 1100ms |
+
+Kenapa mask Canvas2D, bukan `clip-path` atau SVG `<text>`: SVG yang dimuat sebagai mask
+tidak mewarisi webfont halaman, dan `clip-path` userSpaceOnUse tidak ikut skala viewBox.
+Canvas2D memakai font yang sudah dimuat dokumen, dan ukuran huruf dihitung ulang setiap
+resize dari lebar pita dikurangi padding — jadi huruf selalu pas, tidak pernah menempel
+tepi.
+
+Kontras terukur di dalam huruf: 5,20 (tengah) sampai 6,61 (ujung kanan) terhadap kertas —
+di atas ambang 4,5 untuk teks besar.
+
+Tanpa JavaScript atau tanpa WebGL2, `<span class="wordmark-fallback">` tampil sebagai huruf
+tinta biasa dengan padding yang sama. Tanpa JS pita tidak pernah kosong, dan tidak ada
+kontrol mati. `prefers-reduced-motion`: waktu shader berhenti, intro langsung selesai.
+
+Shader berjalan hanya saat pita terlihat (`IntersectionObserver`) dan tab aktif
+(`document.hidden`), dpr dibatasi 2.
+
 ## Navbar (frosted glass, dua state)
 
 Navbar `position: fixed`, selalu kaca buram (`backdrop-filter: blur(14px) saturate(1.2)`).

@@ -61,6 +61,7 @@
   --leading-base: 1.5;
   --leading-relaxed: 1.6;
   --leading-loose: 1.7;
+  --leading-wordmark: 0.74; /* wordmark raksasa: huruf menempel ke tepi pita */
 
   /* --- tipografi: tracking --------------------------------
      Positif untuk huruf kapital mono, negatif untuk display.   */
