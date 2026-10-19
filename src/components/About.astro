@@ -131,8 +131,12 @@ import CodeComment from './CodeComment.astro'
          teks. Basis 0 membuat tinggi foto mengikuti kolom teks. */
       flex: 1 1 0;
       aspect-ratio: auto;
-      /* Jaring pengaman: kalau copy suatu saat memendek, foto tidak ikut gepeng. */
-      min-height: 18rem;
+      /* Lantai tinggi. Tanpa ini foto hanya setinggi kolom teks (305px di 1366,
+         rasio 1,32 = kotak melebar dan badan terpotong di dada), dan caption
+         berhenti tepat di garis yang sama dengan baris terakhir paragraf.
+         Lantai 22rem membuat foto 352px di semua lebar >=800: rasio turun ke
+         1,15, caption turun ~46px di bawah baris terakhir paragraf. */
+      min-height: 22rem;
     }
 
     /* Margin bawah paragraf terakhir adalah sisa ritme, bukan jarak yang
