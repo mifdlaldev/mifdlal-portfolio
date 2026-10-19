@@ -352,8 +352,9 @@ Sudah diuji: tanpa `scrollbar-color`, bintik itu hilang.
 ## Tombol kembali ke atas
 
 `src/components/ToTop.astro` + `public/js/to-top.js`. Kotak 44px di pojok kanan bawah,
-muncul begitu `#proyek` menyentuh viewport dan tetap tampil selama halaman digulir lebih
-jauh.
+muncul begitu `#kontak` menyentuh viewport dan tetap tampil selama halaman digulir lebih
+jauh. Pemicunya section kontak, bukan section ketiga: sebelum pembaca sampai di ujung
+halaman tombol hanya menutupi konten, dan yang dibutuhkan di sana bukan jalan pulang.
 
 - Posisi `right: var(--grid-gutter)` (pojok jendela, bukan tepi konten), jadi di layar
   lebar tombol duduk di gutter luar dan terukur 0 tabrakan glyph pada 25 posisi gulir.
@@ -364,6 +365,18 @@ jauh.
 - Tanpa JavaScript tombol tetap tersembunyi: tidak ada kontrol mati.
 - `href="#main"` tetap berfungsi tanpa JS; dengan JS klik memakai smooth scroll dan
   menghormati `prefers-reduced-motion`.
+- Masuk dan keluar dianimasikan, bukan langsung muncul-hilang: `opacity` 0→1 dan
+  `translateY(10px)` → `none`, 260ms `--ease-out` saat masuk, 160ms `--ease-in` saat keluar.
+- Tanpa `scale()`. Versi pertama memakai `scale(0.96)` dan panah di dalamnya terlihat
+  bergeser 0.5px sendiri selama animasi: ikon 16px dipaksa rasterisasi di 15.36px,
+  sehingga tepi stroke 1.5px mendarat di batas subpiksel yang berbeda tiap frame.
+  Geser murni + `will-change: opacity, transform` (satu lapisan kompositor) membuat
+  panah bergerak sebagai bitmap utuh, tanpa digambar ulang per frame. `visibility` ikut ditransisikan dengan delay sepanjang durasi
+  keluar — tanpa delay itu `visibility: hidden` memotong animasinya dan tombolnya lenyap
+  seketika, persis keluhan "langsung menghilang".
+- `pointer-events: none` saat tersembunyi supaya sisa 160ms animasi keluar tidak menangkap
+  klik. Saat `prefers-reduced-motion: reduce`, blok transisi tidak dipasang dan tombol
+  muncul-hilang tanpa animasi.
 
 ## Plat gambar pita wordmark
 

@@ -1,10 +1,12 @@
 ---
 // Tombol kembali ke atas. Muncul begitu section pemicu menyentuh viewport,
-// lalu tetap tampil selama halaman digulir lebih jauh. Tanpa JavaScript
-// tombol tetap tersembunyi, jadi tidak ada kontrol mati di halaman.
+// lalu tetap tampil selama halaman digulir lebih jauh. Pemicunya section
+// kontak: tombol baru berguna setelah pembaca sampai di ujung halaman, dan
+// sebelum itu ia hanya menutupi konten. Tanpa JavaScript tombol tetap
+// tersembunyi, jadi tidak ada kontrol mati di halaman.
 ---
 
-<a class="to-top" href="#main" aria-label="Kembali ke atas" data-trigger="#proyek">
+<a class="to-top" href="#main" aria-label="Kembali ke atas" data-trigger="#kontak">
   <svg
     class="to-top-icon"
     viewBox="0 0 16 16"
@@ -48,7 +50,15 @@
        terlihat tidak boleh ikut kena Tab. */
     visibility: hidden;
     opacity: 0;
-    transform: translateY(8px);
+    /* Hanya geser, tanpa skala. Skala 0.96 memaksa ikon 16px dirasterisasi
+       di 15.36px, jadi tepi stroke 1.5px jatuh di batas subpiksel berbeda
+       tiap frame dan panahnya terlihat bergeser sendiri. Geser murni
+       membuat ikon bergerak sebagai satu bitmap utuh. */
+    transform: translateY(10px);
+    pointer-events: none;
+    /* Satu lapisan kompositor: transform dijalankan GPU, bukan digambar
+       ulang tiap frame. */
+    will-change: opacity, transform;
   }
 
   .to-top[data-visible='true'],
@@ -56,6 +66,7 @@
     visibility: visible;
     opacity: 1;
     transform: none;
+    pointer-events: auto;
   }
 
   .to-top:hover {
@@ -72,9 +83,22 @@
     display: block;
   }
 
+  /* Keluar: opacity dan transform dianimasikan, visibility ditahan sampai
+     animasinya selesai (delay = durasi keluar). Tanpa delay itu, visibility
+     langsung hidden dan tombolnya lenyap seketika. */
   @media (prefers-reduced-motion: no-preference) {
     .to-top {
-      transition: opacity var(--dur-base) var(--ease), transform var(--dur-base) var(--ease),
+      transition: opacity var(--dur-exit) var(--ease-in),
+        transform var(--dur-exit) var(--ease-in),
+        visibility 0s linear var(--dur-exit),
+        background-color var(--dur-slow) var(--ease), border-color var(--dur-slow) var(--ease);
+    }
+
+    .to-top[data-visible='true'],
+    .to-top:focus-visible {
+      transition: opacity var(--dur-enter) var(--ease-out),
+        transform var(--dur-enter) var(--ease-out),
+        visibility 0s linear 0s,
         background-color var(--dur-slow) var(--ease), border-color var(--dur-slow) var(--ease);
     }
   }
