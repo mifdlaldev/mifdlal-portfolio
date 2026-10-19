@@ -287,6 +287,11 @@ tengah dipusatkan terhadap viewport (`grid-template-columns: 1fr auto 1fr`), buk
 terhadap ruang sisa setelah brand. Di bawah 860px link disembunyikan dan hanya brand
 + tombol CTA yang tampil.
 
+Brand navbar memakai `src/assets/logo-mark.png` (monogram, dipotong ke kotak isinya,
+tanpa padding bawaan) lewat `astro:assets`, tinggi 30px, tanpa kotak latar. Sumbernya
+hitam, jadi state terang tidak diberi filter; state gelap memakai
+`filter: brightness(0) invert(1)` untuk memaksa putih bersih tanpa menyentuh alpha.
+
 `public/js/nav-scroll.js` mengerjakan dua hal: menyalakan kelas `is-scrolled` (glass)
 dan scroll-spy yang menandai link sesuai section yang sedang terlihat, lengkap dengan
 `aria-current="true"`. Link aktif digaris-bawahi 1px.
