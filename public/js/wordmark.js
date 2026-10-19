@@ -294,6 +294,7 @@ const link = gl => {
   const state = { clock: 0, px: 0, py: 0.5, reach: 0, reveal: reduce ? 1 : 0 };
   const palette = new Float32Array(MAX_STOPS * 3);
   let raf = 0;
+  let parity = 0;
   let last = 0;
   let visible = false;
   let painted = { w: 0, h: 0 };
@@ -418,7 +419,13 @@ const link = gl => {
 
   const frame = (now) => {
     raf = 0;
-    if (!visible || document.hidden) return;
+    if (!visible || document.hidden || band.dataset.awake === 'false') return;
+    /* Selama reveal, separuh frame dilewati: animasi aurora lambat, dan GPU
+       sedang dipakai menggeser seluruh halaman. */
+    if (band.dataset.revealing === 'true' && (parity = 1 - parity) === 1) {
+      raf = requestAnimationFrame(frame);
+      return;
+    }
     const dt = last ? clamp((now - last) / 1000, 0.0005, 0.05) : 1 / 60;
     last = now;
     const motion = reduce ? 0 : 1;
@@ -441,8 +448,13 @@ const link = gl => {
   };
 
   const wake = () => {
-    if (!raf && visible && !document.hidden) raf = requestAnimationFrame(frame);
+    if (!raf && visible && !document.hidden && band.dataset.awake !== 'false') {
+      raf = requestAnimationFrame(frame);
+    }
   };
+
+  /* Dipakai /js/reveal.js untuk membangunkan kanvas saat pita mulai terbuka. */
+  band.__wake = wake;
 
   const resize = () => {
     const ratio = Math.min(window.devicePixelRatio || 1, 2);

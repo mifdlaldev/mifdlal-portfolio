@@ -89,4 +89,27 @@
       transform: none;
     }
   }
+
+  /* Mode reveal (dipasang /js/reveal.js): pita keluar dari alur dan menempel
+     di dasar viewport. Posisi naik dan pudarnya diatur variabel dari skrip,
+     bukan kelas .is-armed/.is-in yang dipakai mode alur biasa. */
+  .wordmark.is-fixed {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: var(--z-below);
+    /* transform + opacity ditulis inline oleh /js/reveal.js tiap frame. */
+    will-change: transform, opacity;
+  }
+
+  /* Saat menyatu dengan footer, garis batas atas dibuang: yang tersisa hanya
+     sambungan kertas tanpa jahitan. */
+  .wordmark.is-fixed {
+    border-top-color: transparent;
+  }
+
+  .wordmark.is-fixed .wordmark-stage {
+    transform: none;
+    opacity: 1;
+    transition: none;
+  }
 </style>

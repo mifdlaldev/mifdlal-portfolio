@@ -280,6 +280,61 @@ html {
   scroll-behavior: smooth;
 }
 
+/* ============================================================
+   LAPIS HALAMAN
+   Seluruh isi (main + footer) dibungkus satu lapis berlatarbelakang
+   opak. Lapis ini menutup pita wordmark yang dipasang fixed di dasar
+   viewport, dan yang diangkat saat reveal di ujung halaman.
+   ============================================================ */
+html {
+  /* Diisi /js/reveal.js saat mode reveal aktif; nilai nol = reveal tidak jalan. */
+  --reveal-distance: 0px;
+  --reveal-lift: 0px;
+  --wm-band-h: 0px;
+}
+
+.page-track {
+  /* Ruang kosong di bawah footer yang dipakai reveal. Sengaja transparan dan
+     di luar .page-layer: latar kertas lapis harus berhenti tepat di tepi bawah
+     footer, kalau tidak pita wordmark di belakangnya tidak akan pernah kelihatan. */
+  position: relative;
+}
+
+.page-layer {
+  position: relative;
+  z-index: var(--z-content);
+  background-color: var(--color-paper);
+  /* Dot grid ikut lapis, bukan cuma body: lapis ini opak, jadi grid di body
+     tidak akan pernah terlihat. Attachment scroll (bukan fixed) supaya grid
+     tidak melompat saat lapis kena transform. */
+  background-image: radial-gradient(
+    circle at 1px 1px, var(--color-line-soft) 1.2px, transparent 0
+  );
+  background-size: 26px 26px;
+}
+
+/* Bayangan tepi bawah lapis. Bukan box-shadow: box-shadow pada elemen setinggi
+   seluruh halaman harus digambar ulang setiap frame saat kekuatannya berubah.
+   Strip kecil dengan opacity yang dianimasikan cuma disentuh compositor. */
+.page-shadow {
+  position: absolute;
+  inset: 100% 0 auto 0;
+  height: 64px;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--color-ink) 22%, transparent),
+    transparent
+  );
+  opacity: 1;
+}
+
+/* Promosi compositor hanya selama reveal berlangsung: tanpa ini transform pada
+   elemen setinggi dokumen memaksa raster ulang tiap frame. */
+.page-layer.is-lifting {
+  will-change: transform;
+}
+
 /* Dot grid blueprint: latar warp.dev */
 body {
   margin: 0;
@@ -491,4 +546,59 @@ body {
   clip-path: inset(50%);
   white-space: nowrap;
   border: 0;
+}
+/* Reveal berbasis scroll-timeline: transform, opacity, dan bayangan digerakkan
+   compositor, bukan main thread. Tanpa ini, menulis transform tiap frame dari
+   rAF membuat isi halaman tertinggal satu frame di belakang scroll dan terasa
+   patah-patah saat scroll cepat. */
+@supports (animation-timeline: scroll()) {
+  .has-reveal .page-layer,
+  .has-reveal .page-shadow,
+  .has-reveal .wordmark.is-fixed {
+    animation-timeline: scroll(root block);
+    animation-range: calc(100% - var(--reveal-distance, 0px)) 100%;
+    animation-fill-mode: both;
+    animation-timing-function: linear;
+  }
+
+  .has-reveal .page-layer {
+    animation-name: reveal-lift;
+  }
+
+  .has-reveal .page-shadow {
+    animation-name: reveal-shadow;
+  }
+
+  .has-reveal .wordmark.is-fixed {
+    animation-name: reveal-rise;
+  }
+}
+
+@keyframes reveal-lift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, var(--reveal-lift, 0px), 0);
+  }
+}
+
+@keyframes reveal-shadow {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes reveal-rise {
+  from {
+    transform: translateY(calc(var(--wm-band-h, 0px) * 0.3));
+    opacity: 0.7;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }

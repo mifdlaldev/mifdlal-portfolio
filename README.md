@@ -348,6 +348,69 @@ jauh.
 - `href="#main"` tetap berfungsi tanpa JS; dengan JS klik memakai smooth scroll dan
   menghormati `prefers-reduced-motion`.
 
+## Wordmark reveal
+
+`public/js/reveal.js` + `.page-track` / `.page-layer` di `Layout.astro`. Pita MIFDLAL
+dipasang `position: fixed` di dasar viewport, isi halaman (main + footer) menutupinya
+sepenuhnya. Di jarak scroll terakhir, halaman bergerak lebih lambat daripada scroll
+sementara pita naik — seperti tutup peti yang diangkat, dan di ujungnya keduanya
+bersambung tanpa celah.
+
+Dua lapis:
+
+| Lapis | Elemen | Posisi | z-index |
+|---|---|---|---|
+| bawah | `.wordmark` | `fixed; inset: auto 0 0 0` | `--z-below` |
+| atas | `.page-layer` | normal flow, latar kertas opak | `--z-content` |
+
+Angkanya diturunkan, bukan dikira-kira. `REVEAL = max(2 x tinggi pita, 260px)` jadi
+`padding-bottom` di `.page-track`; dorongan maksimum `REVEAL - tinggi pita` diterapkan
+sebagai `translateY(+…)` pada `.page-layer`. Karena isi terdorong ke bawah selama
+reveal, tepi bawah footer bergerak naik lebih lambat daripada scroll, dan saat
+`progress = 1` posisinya jatuh persis di tepi atas pita:
+
+```
+tepi bawah footer = tinggi viewport - REVEAL - dorongan = tinggi viewport - tinggi pita
+```
+
+`padding-bottom` sengaja dipasang di `.page-track` (di luar lapis), bukan di
+`.page-layer`: kalau padding ada di dalam lapis, latar kertasnya ikut memanjang ke bawah
+dan pita di belakangnya tidak akan pernah kelihatan.
+
+Detail lain:
+
+- Bayangan tepi turun dari 1 ke 0 menjelang akhir: hilang tepat saat menyatu.
+- Pita naik dari `0.3 x tinggi pita` ke 0, opacity 0.7 ke 1.
+- `border-top` pita dibuat transparan dalam mode fixed supaya tidak ada jahitan.
+- Kanvas aurora turun ke separuh frame selama reveal (`data-revealing`), karena GPU
+  saat itu sedang dipakai menggeser seluruh halaman.
+
+### Kenapa scroll-timeline, bukan rAF
+
+Versi pertama menulis `transform` tiap frame dari `requestAnimationFrame` di handler
+`scroll`. Hasilnya terasa patah-patah di area reveal: scroll di Chrome berjalan di
+compositor, sedangkan tulisan kita terjadi di main thread sesudahnya, jadi isi halaman
+tertinggal satu frame di belakang posisi scroll. Selama reveal, isi bergerak 0,5x
+kecepatan scroll, jadi selisih satu frame itu terasa.
+
+Sekarang `animation-timeline: scroll(root block)` + `animation-range: calc(100% -
+var(--reveal-distance)) 100%` menggerakkan `transform` dan `opacity` langsung di
+compositor. Skrip hanya menyiapkan tiga variabel (`--reveal-distance`,
+`--reveal-lift`, `--wm-band-h`) sekali saat ukur, lalu menyalakan/mematikan kanvas.
+Tidak ada lagi tulis gaya per frame.
+
+Browser tanpa `animation-timeline` (dan tanpa `@supports` itu) jatuh ke jalur lama:
+`transform` inline dari rAF. Kedua jalur diuji dan menghasilkan geometri identik
+(`seam = 0` di ujung), jalur lama hanya kurang halus.
+
+Bayangan juga bukan `box-shadow` lagi: `box-shadow` pada elemen setinggi dokumen harus
+digambar ulang setiap kali kekuatannya berubah. Sekarang strip gradien 64px dengan
+`opacity` yang dianimasikan — cuma disentuh compositor.
+- Kanvas berhenti menggambar selama pita masih tertutup (`data-awake="false"`), dibangunkan
+  lewat `band.__wake()` saat mulai terbuka.
+- Tanpa JS atau `prefers-reduced-motion: reduce`: mode reveal tidak dipasang, pita tetap
+  di alur normal setelah footer seperti sebelumnya.
+
 ## Wordmark setelah footer
 
 `src/components/Wordmark.astro` + `public/js/wordmark.js`. Pita penuh selebar halaman di
