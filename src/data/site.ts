@@ -216,10 +216,18 @@ export type Experience = {
 }
 
 export const experience: readonly Experience[] = [
-  // Isi dengan data nyata. Selama array kosong, section Pengalaman
-  // menampilkan empty state. Bentuk satu entri:
-  // { no: '01', role: 'Frontend Developer', org: 'Nama perusahaan', kind: 'magang',
-  //   location: 'Bandung', period: 'Jun - Agu 2026', points: ['...'], link: 'https://...' },
+  {
+    no: '01',
+    role: 'Pengembang Aplikasi PE-SMKK',
+    org: 'Dinas Pekerjaan Umum dan Penataan Ruang Kabupaten Sumedang',
+    kind: 'magang',
+    location: 'Sumedang',
+    period: '2025 - 2026',
+    points: [
+      'Membangun aplikasi PE-SMKK untuk mendata hasil penilaian keselamatan konstruksi pada proyek yang sedang berjalan.',
+      'Dipakai tenaga lapangan Bidang Bina Konstruksi sebagai alat pendataan saat pemeriksaan di lapangan.',
+    ],
+  },
 ]
 
 export type Education = {
@@ -233,8 +241,13 @@ export type Education = {
 }
 
 export const education: readonly Education[] = [
-  // Isi dengan data nyata. Selama array kosong, section Pendidikan
-  // menampilkan empty state. Bentuk satu entri:
-  // { no: '01', institution: 'Telkom University', program: 'S1 Informatika',
-  //   location: 'Bandung', period: '2027 - sekarang', status: 'aktif', note: '...' },
+  {
+    no: '01',
+    institution: 'SMKN 1 Sumedang',
+    program: 'Rekayasa Perangkat Lunak',
+    location: 'Sumedang',
+    period: '2023 - 2026',
+    status: 'lulus',
+    note: 'Praktik kerja lapangan di Dinas PUPR Kabupaten Sumedang: membangun aplikasi PE-SMKK.',
+  },
 ]
