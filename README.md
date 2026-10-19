@@ -291,6 +291,13 @@ terhadap ruang sisa setelah brand. Di bawah 860px link disembunyikan dan hanya b
 dan scroll-spy yang menandai link sesuai section yang sedang terlihat, lengkap dengan
 `aria-current="true"`. Link aktif digaris-bawahi 1px.
 
+Scroll-spy memakai satu garis baca di `navHeight + 24px`, bukan aturan "section
+terakhir yang sudah lewat". Bedanya penting: dengan aturan terakhir-yang-lewat, link
+`PENGALAMAN` tetap menyala sampai dasar halaman karena tidak ada section nav lagi
+sesudahnya. Dengan garis baca, begitu section berikutnya mengisi garis itu dan tidak
+ada link yang cocok, semua link padam. Section yang tidak ada di nav (pendidikan,
+sertifikasi, kontak) dan footer karenanya tidak pernah menyalakan link mana pun.
+
 ## Navbar (frosted glass, dua state)
 
 Navbar `position: fixed`, selalu kaca buram (`backdrop-filter: blur(14px) saturate(1.2)`).

@@ -7,9 +7,13 @@
   // Ambang kecil: blur aktif walau masih di dalam hero.
   const THRESHOLD = 4;
 
-  /* Scroll-spy: tandai link yang sectionnya sedang terlihat. Urutan link
-     sudah sama dengan urutan section, jadi cukup ambil yang terakhir
-     melewati ambang navbar. */
+  /* Scroll-spy: link aktif hanya selama section-nya berada di bawah navbar.
+     Patokannya satu garis baca tepat di bawah navbar (navbar + 24px), bukan
+     "section terakhir yang sudah lewat". Bedanya penting: kalau memakai
+     section terakhir yang lewat, link terakhir (#pengalaman) tetap menyala
+     sampai bawah halaman karena tidak ada section nav lagi sesudahnya.
+     Dengan garis baca, begitu section berikutnya (pendidikan) mengisi garis
+     itu, tidak ada link yang cocok dan semua link padam. */
   const links = Array.from(nav.querySelectorAll('.nav-links a[href^="#"]'));
   const sections = links
     .map((a) => document.querySelector(a.getAttribute('href')))
@@ -22,11 +26,17 @@
     nav.classList.toggle('is-scrolled', window.scrollY > THRESHOLD);
 
     if (!sections.length) return;
-    const offset = nav.offsetHeight + 8;
+
+    const line = nav.offsetHeight + 24;
     let current = null;
     for (const section of sections) {
-      if (section.getBoundingClientRect().top - offset <= 0) current = section;
+      const rect = section.getBoundingClientRect();
+      if (rect.top <= line && rect.bottom > line) {
+        current = section;
+        break;
+      }
     }
+
     for (const link of links) {
       const on = !!current && link.getAttribute('href') === '#' + current.id;
       link.classList.toggle('is-active', on);
