@@ -50,7 +50,11 @@
        terlihat tidak boleh ikut kena Tab. */
     visibility: hidden;
     opacity: 0;
-    transform: translateY(8px);
+    /* Muncul dari bawah sambil membesar sedikit, hilang dengan arah
+       sebaliknya. Skala 0.96 cukup untuk terasa hidup tanpa terlihat
+       sebagai animasi mainan. */
+    transform: translateY(10px) scale(0.96);
+    pointer-events: none;
   }
 
   .to-top[data-visible='true'],
@@ -58,6 +62,7 @@
     visibility: visible;
     opacity: 1;
     transform: none;
+    pointer-events: auto;
   }
 
   .to-top:hover {
@@ -74,9 +79,22 @@
     display: block;
   }
 
+  /* Keluar: opacity dan transform dianimasikan, visibility ditahan sampai
+     animasinya selesai (delay = durasi keluar). Tanpa delay itu, visibility
+     langsung hidden dan tombolnya lenyap seketika. */
   @media (prefers-reduced-motion: no-preference) {
     .to-top {
-      transition: opacity var(--dur-base) var(--ease), transform var(--dur-base) var(--ease),
+      transition: opacity var(--dur-exit) var(--ease-in),
+        transform var(--dur-exit) var(--ease-in),
+        visibility 0s linear var(--dur-exit),
+        background-color var(--dur-slow) var(--ease), border-color var(--dur-slow) var(--ease);
+    }
+
+    .to-top[data-visible='true'],
+    .to-top:focus-visible {
+      transition: opacity var(--dur-enter) var(--ease-out),
+        transform var(--dur-enter) var(--ease-out),
+        visibility 0s linear 0s,
         background-color var(--dur-slow) var(--ease), border-color var(--dur-slow) var(--ease);
     }
   }

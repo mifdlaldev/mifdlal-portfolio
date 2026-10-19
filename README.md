@@ -365,6 +365,14 @@ halaman tombol hanya menutupi konten, dan yang dibutuhkan di sana bukan jalan pu
 - Tanpa JavaScript tombol tetap tersembunyi: tidak ada kontrol mati.
 - `href="#main"` tetap berfungsi tanpa JS; dengan JS klik memakai smooth scroll dan
   menghormati `prefers-reduced-motion`.
+- Masuk dan keluar dianimasikan, bukan langsung muncul-hilang: `opacity` 0→1 dan
+  `translateY(10px) scale(0.96)` → `none`, 260ms `--ease-out` saat masuk, 160ms
+  `--ease-in` saat keluar. `visibility` ikut ditransisikan dengan delay sepanjang durasi
+  keluar — tanpa delay itu `visibility: hidden` memotong animasinya dan tombolnya lenyap
+  seketika, persis keluhan "langsung menghilang".
+- `pointer-events: none` saat tersembunyi supaya sisa 160ms animasi keluar tidak menangkap
+  klik. Saat `prefers-reduced-motion: reduce`, blok transisi tidak dipasang dan tombol
+  muncul-hilang tanpa animasi.
 
 ## Plat gambar pita wordmark
 
