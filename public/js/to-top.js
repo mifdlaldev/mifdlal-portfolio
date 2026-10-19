@@ -9,9 +9,12 @@
   const trigger = document.querySelector(btn.dataset.trigger || '#proyek');
   if (!trigger) return;
 
-  // Footer: tombol naik sebesar bagian footer yang sudah masuk viewport,
-  // supaya tidak pernah menimpa hak cipta di dasar halaman.
+  /* Footer: tombol tidak boleh masuk area footer. Posisi dasarnya dibaca
+     sekali di awal (sebelum ada lift), lalu lift dihitung supaya tepi bawah
+     tombol berhenti FOOTER_GAP px di atas tepi atas footer. */
   const footer = document.querySelector('footer');
+  const FOOTER_GAP = 16;
+  const baseBottom = parseFloat(getComputedStyle(btn).bottom);
 
   let ticking = false;
 
@@ -21,20 +24,11 @@
     btn.dataset.visible = show ? 'true' : 'false';
 
     if (footer) {
-      /* Hanya naik kalau isi footer benar-benar menabrak kolom tombol.
-         Di layar lebar tombol duduk di gutter luar dan isi footer berhenti
-         di tepi konten, jadi lift tetap 0 dan tombol tidak melompat. */
-      const style = getComputedStyle(btn);
-      const btnLeft = window.innerWidth - parseFloat(style.right) - btn.offsetWidth;
-      let footerRight = 0;
-      for (const el of footer.querySelectorAll('a, p, span')) {
-        const right = el.getBoundingClientRect().right;
-        if (right > footerRight) footerRight = right;
-      }
-      const lift =
-        footerRight > btnLeft
-          ? Math.max(0, window.innerHeight - footer.getBoundingClientRect().top)
-          : 0;
+      const footerTop = footer.getBoundingClientRect().top;
+      const lift = Math.max(
+        0,
+        window.innerHeight - footerTop + FOOTER_GAP - baseBottom
+      );
       btn.style.setProperty('--to-top-lift', lift + 'px');
     }
   };

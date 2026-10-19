@@ -342,8 +342,8 @@ jauh.
   lebar tombol duduk di gutter luar dan terukur 0 tabrakan glyph pada 25 posisi gulir.
 - Tersembunyi memakai `visibility: hidden`, bukan hanya `opacity: 0`, supaya tidak ikut
   kena Tab saat belum tampil.
-- `--to-top-lift` dinaikkan sebesar bagian footer yang masuk viewport, tapi hanya kalau
-  isi footer benar-benar menabrak kolom tombol. Di desktop lift tetap 0.
+- `--to-top-lift` dihitung supaya tepi bawah tombol selalu berhenti 16px di atas tepi atas
+  footer, berapa pun lebar layar. Di tengah halaman lift 0 karena footer belum terlihat.
 - Tanpa JavaScript tombol tetap tersembunyi: tidak ada kontrol mati.
 - `href="#main"` tetap berfungsi tanpa JS; dengan JS klik memakai smooth scroll dan
   menghormati `prefers-reduced-motion`.
