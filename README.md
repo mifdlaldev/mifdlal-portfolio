@@ -131,8 +131,10 @@ Layout Tentang: di bawah 800px kolom menumpuk dan foto dipotong 4:5. Mulai
 (`flex: 1 1 0`), jadi tinggi foto mengikuti tinggi kolom teks, bukan lebar
 kolom. `flex-basis` harus 0, bukan `auto`: dengan `auto` foto membawa tinggi
 intrinsiknya (persegi) dan baris jadi setinggi foto, bukan setinggi teks.
-`object-fit: cover` dengan `object-position: 50% 30%` menjaga kepala tidak
-terpotong saat kotaknya melebar. Dasar kedua kolom berhenti di garis yang sama (terukur 0px selisih
+`object-fit: cover` dengan `object-position: 50% 26%` menjaga kepala tidak
+terpotong saat kotaknya melebar (rambut mulai di 11% tinggi sumber; kotak
+landscape hanya menampakkan 76% tinggi, jadi anchor 26% menyisakan ~19px biru
+di atas rambut pada lebar 404px). Dasar kedua kolom berhenti di garis yang sama (terukur 0px selisih
 di 800/1024/1366/1600/1920). Efek sampingnya rasio foto ikut lebar layar: 0,83
 di 800px, 1,16 di 1024px, 1,32 di 1366px ke atas. `p:last-child` di kolom teks dibuat
 `margin-bottom: 0` karena margin itu membuat dasar kolom menggantung 20px di

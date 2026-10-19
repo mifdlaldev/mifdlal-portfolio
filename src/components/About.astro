@@ -64,9 +64,11 @@ import CodeComment from './CodeComment.astro'
     width: 100%;
     aspect-ratio: 4 / 5;
     object-fit: cover;
-    /* Subjek berada di 22%-60% tinggi frame: anchor atas supaya kepala tidak
-       terpotong saat kotaknya melebar (landscape) di layar besar. */
-    object-position: 50% 30%;
+    /* Rambut mulai di 11% tinggi frame, dagu di 68%. Di kotak landscape
+       (1,32) hanya 76% tinggi yang tampak, jadi anchor 26% memotong 6,3% atas
+       dan menyisakan ~4,7% ruang di atas rambut. Anchor lebih tinggi dari ini
+       mulai memakan ubun-ubun. */
+    object-position: 50% 26%;
     background: var(--color-line-soft);
     border: 1px solid var(--color-line);
   }
