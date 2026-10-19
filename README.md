@@ -18,6 +18,7 @@ sendiri, bukan klaim.
 - [Stack](#stack)
 - [Struktur](#struktur)
 - [Section kontak](#section-kontak)
+- [Ikon mikro animasi](#ikon-mikro-animasi)
 - [Empty state section](#empty-state-section)
 - [Navbar (frosted glass, dua state)](#navbar-frosted-glass-dua-state)
 - [CSP dan inline script](#csp-dan-inline-script)
@@ -562,6 +563,49 @@ Ikon media sosial ada di `src/components/SocialIcons.astro`: path brand simple-i
 aman terhadap CSP `img-src 'self'`. Ukuran per brand berbeda (github 19, linkedin 15,
 fiverr 30) karena wordmark mendatar punya massa tinta jauh lebih ringan daripada mark
 padat; dengan ukuran seragam selisih tinta 3x, setelah penyesuaian 1,5x.
+
+## Ikon mikro animasi
+
+Tombol salin email di panel kontak memakai `react-useanimations` 3.1.1 (MIT, nol
+runtime dependency, peer `react >= 18`). Ikon dikirim sebagai Lottie JSON di dalam
+paket — `copy` 1,6 kB — jadi tidak ada request ke useanimations.com. Player-nya
+JavaScript murni: tanpa WASM dan tanpa `eval`, sehingga tetap lolos CSP
+`script-src 'self'` (dotLottie dan Rive gugur di sini karena menuntut
+`wasm-unsafe-eval`).
+
+Island memakai `client:visible`, jadi chunk `CopyEmail` (24.034 B, 9.630 B gzip)
+baru diunduh saat section kontak masuk viewport.
+
+Tiga keputusan yang menentukan hasilnya:
+
+1. **Animasi dipasang pada `<button>`, bukan pada `<span>` ikon.** Prop `render`
+   dipakai untuk memindahkan handler ke tombol. Kalau handler menempel di span
+   18px, klik pada area padding tombol tidak memicu apa pun — terukur: hanya klik
+   tepat di ikon yang beranimasi. Dengan `render`, seluruh kotak 44px jadi pemicu.
+2. **Ukuran ikon tidak mengikuti kotak sentuh.** Tombol 44×44 dengan `padding:
+   12px` + border 1px menyisakan kotak isi 18px, dan SVG player digambar 100%
+   dari kotak isi. Tanpa padding, ikon ikut membesar ke 44px.
+3. **Ada glyph statis sebelum hidrasi.** Player baru ada setelah mount; tanpa
+   fallback, tombol tampil sebagai kotak kosong di HTML awal dan saat JS mati.
+
+Warna tidak ditulis di komponen: player menulis `--ua-stroke: currentColor`, jadi
+ikon mengikuti `color` tombol dan otomatis jadi lemon saat hover.
+
+Animasi ikon `copy` hanya 5 frame @30fps. Dengan `speed={0.65}` terukur 14 state
+DOM dalam 282 ms — cukup terlihat, tidak mengganggu. Saat
+`prefers-reduced-motion: reduce`, hook paket menghentikan animasi (terukur 1 state)
+tetapi penyalinan tetap berjalan.
+
+Umpan balik teks memakai `role="status" aria-live="polite"`: "tersalin" muncul
+2,2 detik lalu hilang. Posisinya `position: absolute` di atas tombol supaya
+kemunculannya tidak menggeser baris email.
+
+Verifikasi terakhir: 0 error konsol dan 0 pelanggaran CSP (Chromium, CSP diambil
+dari `dist/_headers`), clipboard terisi di desktop, mobile 390px, dan mode
+reduced-motion, fokus keyboard memakai outline lemon 2px offset 2px.
+
+Menambah ikon lain: `import nama from 'react-useanimations/lib/<nama>'`, lalu
+pakai pola `render` yang sama kalau target klik lebih besar dari ikonnya.
 
 ## Footer
 
