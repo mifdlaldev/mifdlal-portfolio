@@ -205,6 +205,66 @@
   }
 }
 
+/* ============================================================
+   SCROLLBAR — tipis, biru elektrik, thumb mengambang di atas
+   track transparan. Dipasang di html supaya seluruh halaman
+   ikut, dan aturan ::-webkit-scrollbar tanpa selektor juga
+   mengenai area gulir di dalam (mis. dialog sertifikat).
+   ============================================================ */
+
+/* Standar (Firefox): tipis + thumb biru, track transparan.
+   Dibatasi @supports karena di Chromium properti standar ini MENANG atas
+   ::-webkit-scrollbar dan memakai pelukis scrollbar bawaan, yang menggambar
+   tombol panah 3px di ujung atas-bawah dengan warna thumb. Hasilnya dua
+   bintik biru menggantung di luar pil. Peramban yang paham
+   ::-webkit-scrollbar dilewati, jadi hanya Firefox yang memakai jalur ini. */
+@supports not selector(::-webkit-scrollbar) {
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-electric) transparent;
+  }
+}
+
+/* Blink/WebKit: slot 10px, thumb 4px mengambang (border transparan
+   3px di kiri-kanan) supaya terlihat seperti pil, bukan balok penuh. */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* Track transparan dengan satu garis rambut di tengah, sebahasa
+   garis tipis yang dipakai section. */
+::-webkit-scrollbar-track {
+  background-image: linear-gradient(
+    to right,
+    transparent calc(50% - 0.5px),
+    var(--color-line) calc(50% - 0.5px),
+    var(--color-line) calc(50% + 0.5px),
+    transparent calc(50% + 0.5px)
+  );
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-electric);
+  background-clip: content-box;
+  border: 3px solid transparent;
+  border-radius: 999px;
+  min-height: 3rem;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in srgb, var(--color-electric) 72%, var(--color-ink));
+}
+
+::-webkit-scrollbar-thumb:active {
+  background-color: var(--color-ink);
+}
+
+/* Sudut pertemuan dua scrollbar tidak perlu kotak putih. */
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
 html {
   scroll-padding-top: var(--nav-h);
   background-color: var(--color-paper);

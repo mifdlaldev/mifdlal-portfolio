@@ -308,6 +308,30 @@ sesudahnya. Dengan garis baca, begitu section berikutnya mengisi garis itu dan t
 ada link yang cocok, semua link padam. Section yang tidak ada di nav (pendidikan,
 sertifikasi, kontak) dan footer karenanya tidak pernah menyalakan link mana pun.
 
+## Scrollbar
+
+Scrollbar disesuaikan di `global.css`: tipis, biru elektrik, track transparan dengan
+satu garis rambut di tengah.
+
+| Bagian | Nilai |
+|---|---|
+| Slot | 10px |
+| Thumb | biru `var(--color-electric)`, inset 3px kiri-kanan (pil 4px), radius 999px |
+| Track | transparan + garis rambut `var(--color-line)` 1px di tengah |
+| Hover | `color-mix` 72% elektrik + 28% ink, jadi biru lebih pekat |
+| Aktif (drag) | ink penuh |
+
+Dua jalur, bukan satu:
+
+- `::-webkit-scrollbar-*` untuk Chromium dan Safari.
+- `scrollbar-width`/`scrollbar-color` untuk Firefox, dibungkus
+  `@supports not selector(::-webkit-scrollbar)`.
+
+Pembungkus itu wajib. Kalau properti standar dibiarkan aktif di Chromium, ia menang atas
+`::-webkit-scrollbar` dan memakai pelukis bawaan yang menggambar tombol panah 3px di ujung
+atas-bawah dengan warna thumb, sehingga muncul dua bintik biru menggantung di luar pil.
+Sudah diuji: tanpa `scrollbar-color`, bintik itu hilang.
+
 ## Navbar (frosted glass, dua state)
 
 Navbar `position: fixed`, selalu kaca buram (`backdrop-filter: blur(14px) saturate(1.2)`).
