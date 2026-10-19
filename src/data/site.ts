@@ -238,18 +238,3 @@ export const education: readonly Education[] = [
   // { no: '01', institution: 'Telkom University', program: 'S1 Informatika',
   //   location: 'Bandung', period: '2027 - sekarang', status: 'aktif', note: '...' },
 ]
-
-export type Certification = {
-  no: string
-  name: string
-  issuer: string
-  year: string
-  credential?: string
-}
-
-export const certifications: readonly Certification[] = [
-  // Isi dengan data nyata. Selama array kosong, section Sertifikasi
-  // menampilkan empty state. Bentuk satu entri:
-  // { no: '01', name: 'Nama sertifikasi', issuer: 'Penerbit', year: '2026',
-  //   credential: 'https://tautan-verifikasi' },
-]
