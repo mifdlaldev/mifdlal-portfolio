@@ -379,10 +379,33 @@ dan pita di belakangnya tidak akan pernah kelihatan.
 
 Detail lain:
 
-- `--sheet-shadow` turun 30% ke 0% menjelang akhir: bayangan tepi hilang tepat saat menyatu.
-- `--wm-rise` mengangkat pita dari `0.3 x tinggi pita` ke 0.
-- `--wm-fade` 0.7 ke 1.
+- Bayangan tepi turun dari 1 ke 0 menjelang akhir: hilang tepat saat menyatu.
+- Pita naik dari `0.3 x tinggi pita` ke 0, opacity 0.7 ke 1.
 - `border-top` pita dibuat transparan dalam mode fixed supaya tidak ada jahitan.
+- Kanvas aurora turun ke separuh frame selama reveal (`data-revealing`), karena GPU
+  saat itu sedang dipakai menggeser seluruh halaman.
+
+### Kenapa scroll-timeline, bukan rAF
+
+Versi pertama menulis `transform` tiap frame dari `requestAnimationFrame` di handler
+`scroll`. Hasilnya terasa patah-patah di area reveal: scroll di Chrome berjalan di
+compositor, sedangkan tulisan kita terjadi di main thread sesudahnya, jadi isi halaman
+tertinggal satu frame di belakang posisi scroll. Selama reveal, isi bergerak 0,5x
+kecepatan scroll, jadi selisih satu frame itu terasa.
+
+Sekarang `animation-timeline: scroll(root block)` + `animation-range: calc(100% -
+var(--reveal-distance)) 100%` menggerakkan `transform` dan `opacity` langsung di
+compositor. Skrip hanya menyiapkan tiga variabel (`--reveal-distance`,
+`--reveal-lift`, `--wm-band-h`) sekali saat ukur, lalu menyalakan/mematikan kanvas.
+Tidak ada lagi tulis gaya per frame.
+
+Browser tanpa `animation-timeline` (dan tanpa `@supports` itu) jatuh ke jalur lama:
+`transform` inline dari rAF. Kedua jalur diuji dan menghasilkan geometri identik
+(`seam = 0` di ujung), jalur lama hanya kurang halus.
+
+Bayangan juga bukan `box-shadow` lagi: `box-shadow` pada elemen setinggi dokumen harus
+digambar ulang setiap kali kekuatannya berubah. Sekarang strip gradien 64px dengan
+`opacity` yang dianimasikan — cuma disentuh compositor.
 - Kanvas berhenti menggambar selama pita masih tertutup (`data-awake="false"`), dibangunkan
   lewat `band.__wake()` saat mulai terbuka.
 - Tanpa JS atau `prefers-reduced-motion: reduce`: mode reveal tidak dipasang, pita tetap
