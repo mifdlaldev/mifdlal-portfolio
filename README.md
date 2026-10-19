@@ -90,6 +90,16 @@ Vercel, WhatsApp). Tooltip tiap sel berselang-seling atas dan bawah. Logo disimp
 CSP hanya mengizinkan `img-src 'self' data:`. Foto potret di section Tentang
 masih placeholder dan perlu diganti file asli.
 
+Layout Tentang: di bawah 800px kolom menumpuk dan placeholder tetap 4:5. Mulai
+800px grid memakai `align-items: stretch` dan placeholder kehilangan
+`aspect-ratio` (`flex: 1`), jadi tinggi foto mengikuti tinggi kolom teks, bukan
+lebar kolom. Dasar kedua kolom berhenti di garis yang sama (terukur 0px selisih
+di 800/1024/1366/1600/1920). Efek sampingnya rasio foto ikut lebar layar: 0,83
+di 800px, 1,16 di 1024px, 1,32 di 1366px ke atas. Saat foto asli masuk, pakai
+`object-fit: cover` supaya tidak gepeng. `p:last-child` di kolom teks dibuat
+`margin-bottom: 0` karena margin itu membuat dasar kolom menggantung 20px di
+atas caption.
+
 Konsekuensi jumlah: satu salinan pita selebar 5930px, jadi pada `speed={55}`
 satu siklus penuh 108 detik dan tiap logo berada di layar sekitar 1,5 detik.
 Pengunjung hanya melihat sebagian daftar. Kalau seluruh 74 harus terbaca,

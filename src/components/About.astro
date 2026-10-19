@@ -114,6 +114,32 @@ import CodeComment from './CodeComment.astro'
     .about-grid {
       grid-template-columns: minmax(15rem, 0.78fr) minmax(0, 1.22fr);
       gap: clamp(3rem, 7vw, 7rem);
+      /* Kolom kiri ikut tinggi baris supaya dasar foto dan dasar teks sejajar. */
+      align-items: stretch;
+    }
+
+    /* Rasio 4:5 dilepas hanya di dua kolom. Foto mengambil sisa tinggi baris,
+       jadi tingginya mengikuti kolom teks, bukan lebar kolom. Di bawah 800px
+       placeholder tetap 4:5 karena kolomnya menumpuk. */
+    .portrait {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .portrait-placeholder {
+      flex: 1 1 auto;
+      aspect-ratio: auto;
+      max-height: none;
+      /* Jaring pengaman: kalau copy suatu saat memendek, foto tidak ikut gepeng. */
+      min-height: 18rem;
+    }
+
+    /* Margin bawah paragraf terakhir adalah sisa ritme, bukan jarak yang
+       disengaja. Kalau dibiarkan, dasar kolom teks menggantung ~20px di atas
+       caption dan kedua kolom tidak benar-benar berhenti di garis yang sama. */
+    .about-copy p:last-child {
+      margin-bottom: 0;
     }
   }
 </style>
