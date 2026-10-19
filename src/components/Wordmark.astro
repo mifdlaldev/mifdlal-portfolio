@@ -3,14 +3,28 @@
 
    Huruf MIFDLAL digambar sebagai mask, lalu diisi Aurora (React Bits):
    gelombang cahaya yang bergerak dan mengikuti kursor. Warna stop diambil
-   dari palet situs (electric, violet, magenta, lemon) di atas dasar tinta,
+   dari palet situs (electric, violet, magenta) di atas dasar tinta,
    jadi wordmark tetap terbaca tegas sementara isinya berwarna.
 
+   Pita ini sekaligus plat gambar: dot grid, dua rail di tepi container,
+   garis panduan cap dan baseline, penggaris tick, dan satu garis dimensi
+   dengan label lebar. Semua garis digambar sebagai background, jadi tidak
+   ada elemen yang perlu dirender ulang tiap frame.
+
    Tanpa JavaScript atau tanpa WebGL2, <span> cadangan tampil sebagai huruf
-   tinta biasa — pita tidak pernah kosong. */
+   tinta biasa — pita tidak pernah kosong, dan garis panduan (yang butuh
+   ukuran huruf hasil ukur kanvas) tidak dipasang. */
 ---
 
 <section class="wordmark" data-word="MIFDLAL" aria-hidden="true">
+  <span class="wm-anno wm-anno--fig">fig. 09 · wordmark</span>
+  <span class="wm-anno wm-anno--spec">grid 1180 · dot 26 · 7 glyph</span>
+  <span class="wm-anno wm-anno--dim">1180</span>
+  <span class="wm-node wm-node--tl"></span>
+  <span class="wm-node wm-node--tr"></span>
+  <span class="wm-node wm-node--bl"></span>
+  <span class="wm-node wm-node--br"></span>
+
   <div class="wordmark-stage" data-wordmark>
     <canvas class="wordmark-canvas"></canvas>
     <span class="wordmark-fallback">MIFDLAL</span>
@@ -23,18 +37,189 @@
   .wordmark {
     --wm-pad-y: clamp(0.75rem, 2.4vw, 1.75rem);
     --wm-pad-x: clamp(1rem, 4vw, 3.5rem);
+    /* Diisi /js/wordmark.js dari ukuran huruf hasil ukur kanvas. */
+    --wm-ink-top: 0px;
+    --wm-ink-bottom: 0px;
+    /* Garis dimensi duduk di bawah baseline. */
+    --wm-dim: calc(var(--wm-ink-bottom) + 1rem);
 
     position: relative;
     overflow: hidden;
     height: clamp(5rem, 22vw, 32rem);
     padding: var(--wm-pad-y) var(--wm-pad-x);
     border-top: 1px solid var(--color-line);
-    background: var(--color-paper);
+
+    /* Plat gambar: dot grid + dua rail di tepi container, sama seperti section
+       lain. Rail digambar di sini, bukan di ::before, supaya tetap ada walau
+       skrip kanvas tidak jalan. */
+    background-color: var(--color-paper);
+    background-image:
+      linear-gradient(var(--color-line), var(--color-line)),
+      linear-gradient(var(--color-line), var(--color-line)),
+      radial-gradient(circle at 1px 1px, var(--color-line-soft) 1.2px, transparent 0);
+    background-repeat: no-repeat;
+    background-size:
+      1px 100%,
+      1px 100%,
+      26px 26px;
+    background-position:
+      var(--rail-offset) 0,
+      calc(100% - var(--rail-offset)) 0,
+      0 0;
   }
+
+  /* Garis panduan tipografi + penggaris tick. Hanya dipasang kalau kanvas
+     berhasil mengukur huruf, karena posisinya bergantung pada ukuran tinta. */
+  .wordmark[data-plate='true']::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: var(--z-content);
+    pointer-events: none;
+    background-image:
+      /* garis cap */
+      linear-gradient(var(--color-line), var(--color-line)),
+      /* garis baseline */
+      linear-gradient(var(--color-line), var(--color-line)),
+      /* penggaris tick di rail kiri, satu tick tiap 26px */
+      repeating-linear-gradient(
+        to bottom,
+        var(--color-line) 0 1px,
+        transparent 1px 26px
+      );
+    background-repeat: no-repeat, no-repeat, no-repeat;
+    background-size:
+      calc(100% - var(--rail-offset) * 2) 1px,
+      calc(100% - var(--rail-offset) * 2) 1px,
+      5px 100%;
+    background-position:
+      var(--rail-offset) var(--wm-ink-top),
+      var(--rail-offset) var(--wm-ink-bottom),
+      var(--rail-offset) 0;
+  }
+
+  /* Garis dimensi selebar container, dengan tick di kedua ujung. Hanya
+     dipasang kalau jarak antar rail benar-benar selebar grid (1180px);
+     di bawah itu angkanya akan bohong, jadi garisnya tidak digambar.
+     data-dim diisi /js/wordmark.js dari lebar pita sebenarnya. */
+  .wordmark[data-plate='true'][data-dim='true']::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: var(--z-content);
+    pointer-events: none;
+    background-image:
+      linear-gradient(var(--color-line), var(--color-line)),
+      linear-gradient(var(--color-line), var(--color-line)),
+      linear-gradient(var(--color-line), var(--color-line));
+    background-repeat: no-repeat;
+    background-size:
+      calc(100% - var(--rail-offset) * 2) 1px,
+      1px 7px,
+      1px 7px;
+    background-position:
+      var(--rail-offset) var(--wm-dim),
+      var(--rail-offset) calc(var(--wm-dim) - 3px),
+      calc(100% - var(--rail-offset)) calc(var(--wm-dim) - 3px);
+  }
+
+  /* Label mono plat gambar. Tersembunyi sampai kanvas berhasil mengukur
+     huruf: tanpa ukuran tinta, posisi label dan node tidak punya acuan. */
+  .wm-anno {
+    display: none;
+    position: absolute;
+    z-index: var(--z-band);
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-caps);
+    line-height: var(--leading-ui);
+    color: color-mix(in srgb, var(--color-ink) 58%, transparent);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+.wordmark[data-plate='true'] .wm-anno,
+  .wordmark[data-plate='true'] .wm-node {
+    display: block;
+  }
+
+  .wm-anno--fig {
+    left: calc(var(--rail-offset) + 0.75rem);
+    top: 0.6875rem;
+    color: var(--color-electric);
+  }
+
+  .wm-anno--spec {
+    right: calc(var(--rail-offset) + 0.75rem);
+    top: 0.6875rem;
+  }
+
+  /* Label dimensi duduk tepat di tengah garis, dengan latar kertas supaya
+     garis terputus di belakang angka — konvensi gambar teknik. */
+  .wordmark[data-dim='true'] .wm-anno--dim {
+    display: block;
+  }
+
+  .wm-anno--dim {
+    display: none;
+    left: 50%;
+    top: var(--wm-dim);
+    transform: translate(-50%, -50%);
+    padding: 0.25rem 0.5rem;
+    background: var(--color-paper);
+    color: color-mix(in srgb, var(--color-ink) 72%, transparent);
+  }
+
+  /* Node di perpotongan rail dengan garis cap dan baseline. */
+  .wm-node {
+    display: none;
+    position: absolute;
+    z-index: var(--z-band);
+    width: var(--node-size);
+    height: var(--node-size);
+    border: 1px solid var(--color-electric);
+    box-sizing: border-box;
+    pointer-events: none;
+  }
+
+  .wm-node--tl {
+    left: var(--rail-offset);
+    top: var(--wm-ink-top);
+    transform: translate(-50%, -50%);
+  }
+
+  .wm-node--tr {
+    right: var(--rail-offset);
+    top: var(--wm-ink-top);
+    transform: translate(50%, -50%);
+  }
+
+  .wm-node--bl {
+    left: var(--rail-offset);
+    top: var(--wm-ink-bottom);
+    transform: translate(-50%, -50%);
+  }
+
+  .wm-node--br {
+    right: var(--rail-offset);
+    top: var(--wm-ink-bottom);
+    transform: translate(50%, -50%);
+  }
+
+  /* Di bawah 1229px rail tidak lagi sejajar container, jadi label dan node
+     bisa menabrak huruf. Garis panduan tetap, anotasi disembunyikan. */
+  @media (max-width: 1228px) {
+    .wordmark[data-plate='true'] .wm-anno,
+    .wordmark[data-plate='true'] .wm-node {
+      display: none;
+    }
+  }
+
 
   .wordmark-stage {
     position: absolute;
     inset: 0;
+    z-index: var(--z-raise);
     /* Huruf naik dari tepi bawah halaman saat pita masuk viewport. */
     transition:
       transform 1100ms cubic-bezier(0.16, 0.84, 0.24, 1),
@@ -99,11 +284,8 @@
     z-index: var(--z-below);
     /* transform + opacity ditulis inline oleh /js/reveal.js tiap frame. */
     will-change: transform, opacity;
-  }
-
-  /* Saat menyatu dengan footer, garis batas atas dibuang: yang tersisa hanya
-     sambungan kertas tanpa jahitan. */
-  .wordmark.is-fixed {
+    /* Saat menyatu dengan footer, garis batas atas dibuang: yang tersisa hanya
+       sambungan kertas tanpa jahitan. */
     border-top-color: transparent;
   }
 

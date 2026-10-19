@@ -375,7 +375,8 @@ const link = gl => {
     }
     if (right > left) draw(startX + (w - (right - left + 1)) / 2 - left);
 
-    return c;
+    /* Posisi tinta dalam px CSS, dipakai garis panduan plat gambar. */
+    return { canvas: c, inkTop: (baseline - cap) / scale, inkBottom: baseline / scale };
   };
 
   const render = () => {
@@ -411,7 +412,15 @@ const link = gl => {
     if (!mask) return;
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, maskTexture);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, mask);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, mask.canvas);
+    /* Garis dimensi cuma jujur kalau jarak antar rail sama dengan lebar grid. */
+    const gridMax = parseFloat(getComputedStyle(root).getPropertyValue('--grid-max')) || 1180;
+    const gutter = parseFloat(getComputedStyle(root).getPropertyValue('--grid-gutter')) || 24;
+    const rail = Math.max(gutter, view.width / 2 - gridMax / 2);
+    band.dataset.dim = view.width - rail * 2 >= gridMax - 1 ? 'true' : 'false';
+    band.style.setProperty('--wm-ink-top', `${mask.inkTop.toFixed(1)}px`);
+    band.style.setProperty('--wm-ink-bottom', `${mask.inkBottom.toFixed(1)}px`);
+    band.dataset.plate = 'true';
     band.dataset.ready = 'true';
     render();
     wake();

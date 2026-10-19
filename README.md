@@ -348,6 +348,39 @@ jauh.
 - `href="#main"` tetap berfungsi tanpa JS; dengan JS klik memakai smooth scroll dan
   menghormati `prefers-reduced-motion`.
 
+## Plat gambar pita wordmark
+
+Pita MIFDLAL ikut grammar blueprint section lain: dot grid 26px, dua rail di
+`--rail-offset`, node 12px di perpotongan, label mono, dan satu garis dimensi.
+Semua garis digambar sebagai `background-image`, bukan elemen — jadi tidak ada
+node tambahan yang perlu dirender ulang, dan tidak ada biaya per frame.
+
+| Lapis | Digambar di | Isi |
+|---|---|---|
+| dasar | `.wordmark` background | dot grid + dua rail |
+| panduan | `[data-plate]::before` | garis cap, garis baseline, penggaris tick di rail kiri |
+| dimensi | `[data-plate][data-dim]::after` | garis 1180px + tick di kedua ujung |
+| anotasi | `.wm-anno` | `fig. 09 · wordmark`, `grid 1180 · dot 26 · 7 glyph`, `1180` |
+| node | `.wm-node` | 4 kotak 12px di rail x (cap, baseline) |
+
+Posisi garis panduan tidak dikarang: `drawMask()` di `public/js/wordmark.js` sudah
+menghitung cap dan baseline untuk menempatkan huruf, dan nilainya dipublikasikan
+sebagai `--wm-ink-top` / `--wm-ink-bottom`. Garis dimensi duduk di
+`calc(--wm-ink-bottom + 1rem)`.
+
+Dua penjagaan supaya angka di layar tidak pernah bohong:
+
+- `data-plate` baru dipasang setelah kanvas berhasil mengukur huruf. Tanpa WebGL,
+  tanpa JS, atau kalau font belum siap, pita tampil sebagai kertas + rail saja.
+- `data-dim` dihitung dari lebar pita sebenarnya: garis dimensi hanya muncul kalau
+  jarak antar rail benar-benar `--grid-max` (1180px). Di layar lebih sempit rail
+  menempel gutter, jadi garis dan label `1180` disembunyikan, bukan ditampilkan
+  dengan angka palsu.
+
+Di bawah 1229px label dan node disembunyikan (rail tidak lagi sejajar container,
+sama seperti aturan node di `.section`). Huruf, dot grid, rail, dan garis panduan
+tetap tampil.
+
 ## Wordmark reveal
 
 `public/js/reveal.js` + `.page-track` / `.page-layer` di `Layout.astro`. Pita MIFDLAL
