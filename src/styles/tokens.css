@@ -45,12 +45,18 @@
   --text-title: 1.25rem;
   --text-title-sm: 1.125rem;
   --text-brand: 1.0625rem; /* wordmark nav, off-scale by design */
+  --text-email: clamp(1.5rem, 3.8vw, 2.25rem); /* alamat email di kartu kontak */
   --text-body: 0.9375rem;
   --text-sm: 0.875rem;
   --text-data: 0.8125rem;
   --text-nav: 0.75rem;
   --text-label: 0.6875rem;
   --text-cap: 0.625rem;
+
+  /* --- tipografi: bobot ----------------------------------- */
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
 
   /* --- tipografi: jarak baris ----------------------------- */
   --leading-display: 1.05;
