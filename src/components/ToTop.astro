@@ -50,11 +50,15 @@
        terlihat tidak boleh ikut kena Tab. */
     visibility: hidden;
     opacity: 0;
-    /* Muncul dari bawah sambil membesar sedikit, hilang dengan arah
-       sebaliknya. Skala 0.96 cukup untuk terasa hidup tanpa terlihat
-       sebagai animasi mainan. */
-    transform: translateY(10px) scale(0.96);
+    /* Hanya geser, tanpa skala. Skala 0.96 memaksa ikon 16px dirasterisasi
+       di 15.36px, jadi tepi stroke 1.5px jatuh di batas subpiksel berbeda
+       tiap frame dan panahnya terlihat bergeser sendiri. Geser murni
+       membuat ikon bergerak sebagai satu bitmap utuh. */
+    transform: translateY(10px);
     pointer-events: none;
+    /* Satu lapisan kompositor: transform dijalankan GPU, bukan digambar
+       ulang tiap frame. */
+    will-change: opacity, transform;
   }
 
   .to-top[data-visible='true'],

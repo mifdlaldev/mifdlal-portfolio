@@ -366,8 +366,12 @@ halaman tombol hanya menutupi konten, dan yang dibutuhkan di sana bukan jalan pu
 - `href="#main"` tetap berfungsi tanpa JS; dengan JS klik memakai smooth scroll dan
   menghormati `prefers-reduced-motion`.
 - Masuk dan keluar dianimasikan, bukan langsung muncul-hilang: `opacity` 0→1 dan
-  `translateY(10px) scale(0.96)` → `none`, 260ms `--ease-out` saat masuk, 160ms
-  `--ease-in` saat keluar. `visibility` ikut ditransisikan dengan delay sepanjang durasi
+  `translateY(10px)` → `none`, 260ms `--ease-out` saat masuk, 160ms `--ease-in` saat keluar.
+- Tanpa `scale()`. Versi pertama memakai `scale(0.96)` dan panah di dalamnya terlihat
+  bergeser 0.5px sendiri selama animasi: ikon 16px dipaksa rasterisasi di 15.36px,
+  sehingga tepi stroke 1.5px mendarat di batas subpiksel yang berbeda tiap frame.
+  Geser murni + `will-change: opacity, transform` (satu lapisan kompositor) membuat
+  panah bergerak sebagai bitmap utuh, tanpa digambar ulang per frame. `visibility` ikut ditransisikan dengan delay sepanjang durasi
   keluar — tanpa delay itu `visibility: hidden` memotong animasinya dan tombolnya lenyap
   seketika, persis keluhan "langsung menghilang".
 - `pointer-events: none` saat tersembunyi supaya sisa 160ms animasi keluar tidak menangkap
