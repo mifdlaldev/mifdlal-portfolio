@@ -418,7 +418,7 @@ const link = gl => {
 
   const frame = (now) => {
     raf = 0;
-    if (!visible || document.hidden) return;
+    if (!visible || document.hidden || band.dataset.awake === 'false') return;
     const dt = last ? clamp((now - last) / 1000, 0.0005, 0.05) : 1 / 60;
     last = now;
     const motion = reduce ? 0 : 1;
@@ -441,8 +441,13 @@ const link = gl => {
   };
 
   const wake = () => {
-    if (!raf && visible && !document.hidden) raf = requestAnimationFrame(frame);
+    if (!raf && visible && !document.hidden && band.dataset.awake !== 'false') {
+      raf = requestAnimationFrame(frame);
+    }
   };
+
+  /* Dipakai /js/reveal.js untuk membangunkan kanvas saat pita mulai terbuka. */
+  band.__wake = wake;
 
   const resize = () => {
     const ratio = Math.min(window.devicePixelRatio || 1, 2);

@@ -348,6 +348,46 @@ jauh.
 - `href="#main"` tetap berfungsi tanpa JS; dengan JS klik memakai smooth scroll dan
   menghormati `prefers-reduced-motion`.
 
+## Wordmark reveal
+
+`public/js/reveal.js` + `.page-track` / `.page-layer` di `Layout.astro`. Pita MIFDLAL
+dipasang `position: fixed` di dasar viewport, isi halaman (main + footer) menutupinya
+sepenuhnya. Di jarak scroll terakhir, halaman bergerak lebih lambat daripada scroll
+sementara pita naik — seperti tutup peti yang diangkat, dan di ujungnya keduanya
+bersambung tanpa celah.
+
+Dua lapis:
+
+| Lapis | Elemen | Posisi | z-index |
+|---|---|---|---|
+| bawah | `.wordmark` | `fixed; inset: auto 0 0 0` | `--z-below` |
+| atas | `.page-layer` | normal flow, latar kertas opak | `--z-content` |
+
+Angkanya diturunkan, bukan dikira-kira. `REVEAL = max(2 x tinggi pita, 260px)` jadi
+`padding-bottom` di `.page-track`; dorongan maksimum `REVEAL - tinggi pita` diterapkan
+sebagai `translateY(+…)` pada `.page-layer`. Karena isi terdorong ke bawah selama
+reveal, tepi bawah footer bergerak naik lebih lambat daripada scroll, dan saat
+`progress = 1` posisinya jatuh persis di tepi atas pita:
+
+```
+tepi bawah footer = tinggi viewport - REVEAL - dorongan = tinggi viewport - tinggi pita
+```
+
+`padding-bottom` sengaja dipasang di `.page-track` (di luar lapis), bukan di
+`.page-layer`: kalau padding ada di dalam lapis, latar kertasnya ikut memanjang ke bawah
+dan pita di belakangnya tidak akan pernah kelihatan.
+
+Detail lain:
+
+- `--sheet-shadow` turun 30% ke 0% menjelang akhir: bayangan tepi hilang tepat saat menyatu.
+- `--wm-rise` mengangkat pita dari `0.3 x tinggi pita` ke 0.
+- `--wm-fade` 0.7 ke 1.
+- `border-top` pita dibuat transparan dalam mode fixed supaya tidak ada jahitan.
+- Kanvas berhenti menggambar selama pita masih tertutup (`data-awake="false"`), dibangunkan
+  lewat `band.__wake()` saat mulai terbuka.
+- Tanpa JS atau `prefers-reduced-motion: reduce`: mode reveal tidak dipasang, pita tetap
+  di alur normal setelah footer seperti sebelumnya.
+
 ## Wordmark setelah footer
 
 `src/components/Wordmark.astro` + `public/js/wordmark.js`. Pita penuh selebar halaman di

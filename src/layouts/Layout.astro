@@ -63,6 +63,8 @@ const { title, description } = Astro.props
   <body>
     <a href="#main" class="skip-link">Lewati ke konten</a>
     <SiteNav />
+    <div class="page-track" data-track>
+    <div class="page-layer" data-page>
     <main id="main">
       <Hero />
       <About />
@@ -74,9 +76,12 @@ const { title, description } = Astro.props
       <Certifications />
       <Contact />
     </main>
-    <ToTop />
     <Footer />
+    </div>
+    </div>
+    <ToTop />
     <Wordmark />
+    <script is:inline src="/js/reveal.js" defer></script>
   </body>
 </html>
 

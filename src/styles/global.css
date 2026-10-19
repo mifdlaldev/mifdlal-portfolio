@@ -280,6 +280,39 @@ html {
   scroll-behavior: smooth;
 }
 
+/* ============================================================
+   LAPIS HALAMAN
+   Seluruh isi (main + footer) dibungkus satu lapis berlatarbelakang
+   opak. Lapis ini menutup pita wordmark yang dipasang fixed di dasar
+   viewport, dan yang diangkat saat reveal di ujung halaman.
+   ============================================================ */
+.page-track {
+  /* Ruang kosong di bawah footer yang dipakai reveal. Sengaja transparan dan
+     di luar .page-layer: latar kertas lapis harus berhenti tepat di tepi bawah
+     footer, kalau tidak pita wordmark di belakangnya tidak akan pernah kelihatan. */
+  position: relative;
+}
+
+.page-layer {
+  position: relative;
+  z-index: var(--z-content);
+  background-color: var(--color-paper);
+  /* Dot grid ikut lapis, bukan cuma body: lapis ini opak, jadi grid di body
+     tidak akan pernah terlihat. Attachment scroll (bukan fixed) supaya grid
+     tidak melompat saat lapis kena transform. */
+  background-image: radial-gradient(
+    circle at 1px 1px, var(--color-line-soft) 1.2px, transparent 0
+  );
+  background-size: 26px 26px;
+  /* Bayangan hanya terlihat setelah lapis terangkat: di posisi normal tepi
+     bawahnya persis di tepi viewport, jadi bayangan jatuh di luar layar.
+     Kekuatannya ditarik ke nol menjelang akhir reveal supaya saat menyatu
+     dengan pita tidak ada lagi kesan melayang. */
+  --sheet-shadow: 30;
+  box-shadow: 0 32px 64px -32px
+    color-mix(in srgb, var(--color-ink) calc(var(--sheet-shadow) * 1%), transparent);
+}
+
 /* Dot grid blueprint: latar warp.dev */
 body {
   margin: 0;
