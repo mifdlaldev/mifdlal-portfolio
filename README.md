@@ -118,16 +118,23 @@ Terraform, Ansible, NGINX, Apache, Caddy, Firebase, Netlify, Railway), chatbot
 GitHub Actions), dan alat kerja sehari-hari (Cursor, VS Code, Git, GitHub,
 GitKraken, Obsidian, Hermes Agent, RAG, Node.js, Docker, Podman, Playwright,
 Vercel, WhatsApp). Tooltip tiap sel berselang-seling atas dan bawah. Logo disimpan lokal di `public/logos/` karena
-CSP hanya mengizinkan `img-src 'self' data:`. Foto potret di section Tentang
-masih placeholder dan perlu diganti file asli.
+CSP hanya mengizinkan `img-src 'self' data:`.
 
-Layout Tentang: di bawah 800px kolom menumpuk dan placeholder tetap 4:5. Mulai
-800px grid memakai `align-items: stretch` dan placeholder kehilangan
-`aspect-ratio` (`flex: 1`), jadi tinggi foto mengikuti tinggi kolom teks, bukan
-lebar kolom. Dasar kedua kolom berhenti di garis yang sama (terukur 0px selisih
+Foto potret section Tentang ada di `src/assets/portrait.png` (sumber, 1254x1254)
+dan diproses `astro:assets`: build menghasilkan 5 turunan WebP (8-33 KB) dengan
+`srcset` 400/560/720/900w, `width`/`height` intrinsik untuk mencegah layout
+shift, serta `loading="lazy"`. Ganti foto = timpa file itu, tidak ada kode yang
+perlu disentuh.
+
+Layout Tentang: di bawah 800px kolom menumpuk dan foto dipotong 4:5. Mulai
+800px grid memakai `align-items: stretch` dan foto kehilangan `aspect-ratio`
+(`flex: 1 1 0`), jadi tinggi foto mengikuti tinggi kolom teks, bukan lebar
+kolom. `flex-basis` harus 0, bukan `auto`: dengan `auto` foto membawa tinggi
+intrinsiknya (persegi) dan baris jadi setinggi foto, bukan setinggi teks.
+`object-fit: cover` dengan `object-position: 50% 30%` menjaga kepala tidak
+terpotong saat kotaknya melebar. Dasar kedua kolom berhenti di garis yang sama (terukur 0px selisih
 di 800/1024/1366/1600/1920). Efek sampingnya rasio foto ikut lebar layar: 0,83
-di 800px, 1,16 di 1024px, 1,32 di 1366px ke atas. Saat foto asli masuk, pakai
-`object-fit: cover` supaya tidak gepeng. `p:last-child` di kolom teks dibuat
+di 800px, 1,16 di 1024px, 1,32 di 1366px ke atas. `p:last-child` di kolom teks dibuat
 `margin-bottom: 0` karena margin itu membuat dasar kolom menggantung 20px di
 atas caption.
 
