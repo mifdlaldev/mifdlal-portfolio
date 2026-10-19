@@ -46,7 +46,7 @@ import CodeComment from './CodeComment.astro'
             <div class="entry-main">
               <h3 class="entry-title">{e.role}</h3>
               <p class="entry-org">
-                {e.org} <span class="entry-kind">{e.kind}</span>
+                {e.org} <span class="entry-kind badge">{e.kind}</span>
               </p>
             </div>
             <p class="entry-meta">
@@ -117,13 +117,9 @@ import CodeComment from './CodeComment.astro'
     font-size: var(--text-body);
   }
 
+  /* Warna dan bentuk dari .badge di global.css; di sini hanya jarak. */
   .entry-kind {
-    font-family: var(--font-mono);
-    font-size: var(--text-label);
-    border: 1px solid var(--color-line);
-    padding: 0.1rem 0.4rem;
     margin-left: 0.4rem;
-    white-space: nowrap;
   }
 
   .entry-meta {
