@@ -352,8 +352,9 @@ Sudah diuji: tanpa `scrollbar-color`, bintik itu hilang.
 ## Tombol kembali ke atas
 
 `src/components/ToTop.astro` + `public/js/to-top.js`. Kotak 44px di pojok kanan bawah,
-muncul begitu `#proyek` menyentuh viewport dan tetap tampil selama halaman digulir lebih
-jauh.
+muncul begitu `#kontak` menyentuh viewport dan tetap tampil selama halaman digulir lebih
+jauh. Pemicunya section kontak, bukan section ketiga: sebelum pembaca sampai di ujung
+halaman tombol hanya menutupi konten, dan yang dibutuhkan di sana bukan jalan pulang.
 
 - Posisi `right: var(--grid-gutter)` (pojok jendela, bukan tepi konten), jadi di layar
   lebar tombol duduk di gutter luar dan terukur 0 tabrakan glyph pada 25 posisi gulir.

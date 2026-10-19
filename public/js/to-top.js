@@ -1,12 +1,12 @@
 /* Tombol kembali ke atas.
-   Tampil begitu section pemicu (default #proyek) menyentuh viewport, dan
+   Tampil begitu section pemicu (default #kontak) menyentuh viewport, dan
    tetap tampil selama halaman digulir lebih jauh. Same-origin (CSP
    script-src 'self'), passive listener, rAF-throttled. */
 (() => {
   const btn = document.querySelector('.to-top');
   if (!btn) return;
 
-  const trigger = document.querySelector(btn.dataset.trigger || '#proyek');
+  const trigger = document.querySelector(btn.dataset.trigger || '#kontak');
   if (!trigger) return;
 
   /* Footer: tombol tidak boleh masuk area footer. Posisi dasarnya dibaca
