@@ -58,30 +58,33 @@ const certAttrs = (c: (typeof featured)[number]) => ({
     </ul>
 
     {more.length > 0 && (
-      <div class="cert-more">
-        <div class="cert-more-head">
-          <h3 class="cert-more-title">Sertifikat keahlian lainnya</h3>
-          <p class="cert-more-sub">
-            {certTotals.moreHackerrank} sertifikat keahlian HackerRank dan {certTotals.moreOther} kelas
-            dasar Dicoding. Semua tetap bisa dibuka dan diverifikasi.
-          </p>
-        </div>
-        <ul class="cert-rows">
-          {more.map((c) => (
-            <li>
-              <a
-                class="cert-row"
-                href={`/certs/${c.slug}.webp`}
-                {...certAttrs(c)}
-                aria-label={`Buka sertifikat ${c.title} dari ${c.issuer}`}
-              >
-                <span class="cert-row-name">{c.title}</span>
-                <span class="cert-row-date">{c.dateLabel}</span>
-                <span class="cert-row-issuer">{c.issuer} · ID {c.credentialId}</span>
-              </a>
-            </li>
-          ))}
-        </ul>
+      <div class="cert-cta">
+        <button
+          class="cert-more-btn"
+          type="button"
+          data-cert-list-open
+          aria-haspopup="dialog"
+          aria-controls="cert-list"
+        >
+          <span class="cert-more-btn-label">Lihat Lainnya</span>
+          <span class="cert-more-btn-count" aria-hidden="true">{more.length}</span>
+        </button>
+        <p class="cert-more-btn-note">
+          {certTotals.moreHackerrank} sertifikat keahlian HackerRank dan {certTotals.moreOther} kelas
+          dasar Dicoding.
+        </p>
+
+        <noscript>
+          <ul class="cert-fallback">
+            {more.map((c) => (
+              <li>
+                <a href={`/certs/${c.slug}.webp`}>
+                  {c.title} · {c.issuer} · {c.dateLabel} · ID {c.credentialId}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </noscript>
       </div>
     )}
   </div>
@@ -102,6 +105,51 @@ const certAttrs = (c: (typeof featured)[number]) => ({
         </a>
         <button class="cert-dialog-close" type="button" data-dialog-close>tutup</button>
       </div>
+    </div>
+  </dialog>
+
+  <dialog class="cert-list" id="cert-list" aria-labelledby="cert-list-title">
+    <div class="cert-list-box">
+      <div class="cert-list-head">
+        <p class="cert-list-fig fig-label">fig. 07b · daftar lengkap</p>
+        <h3 class="cert-list-title" id="cert-list-title" tabindex="-1">
+          Sertifikat keahlian lainnya
+        </h3>
+        <p class="cert-list-meta">
+          {more.length} sertifikat · {certTotals.moreHackerrank} HackerRank · {certTotals.moreOther} Dicoding
+        </p>
+        <button class="cert-list-close" type="button" data-cert-list-close>tutup</button>
+      </div>
+
+      <ul class="cert-grid cert-grid--list">
+        {more.map((c) => (
+          <li class="cert-card">
+            <a
+              class="cert-trigger"
+              href={`/certs/${c.slug}.webp`}
+              {...certAttrs(c)}
+              aria-label={`Buka sertifikat ${c.title} dari ${c.issuer}`}
+            >
+              <span class="cert-shot">
+                <img
+                  src={`/certs/${c.slug}-thumb.webp`}
+                  width={c.thumbWidth}
+                  height={c.thumbHeight}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span class="cert-zoom" aria-hidden="true">buka</span>
+              </span>
+              <span class="cert-body">
+                <span class="cert-issuer">{c.issuer}</span>
+                <span class="cert-name">{c.title}</span>
+                <span class="cert-meta">{c.dateLabel} · ID {c.credentialId}</span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
     </div>
   </dialog>
 </section>
@@ -125,7 +173,7 @@ const certAttrs = (c: (typeof featured)[number]) => ({
 
   .cert-grid {
     list-style: none;
-    margin: 0 0 3.5rem;
+    margin: 0 0 2.5rem;
     padding: 0;
     display: grid;
     grid-template-columns: 1fr;
@@ -190,7 +238,14 @@ const certAttrs = (c: (typeof featured)[number]) => ({
     transition: opacity var(--dur-fast) var(--ease);
   }
 
-  .cert-trigger:hover .cert-zoom,
+  /* Label "buka" hanya di perangkat berpointer. Di layar sentuh hover bisa
+     menempel setelah tap, dan labelnya menutupi pojok sertifikat. */
+  @media (hover: hover) {
+    .cert-trigger:hover .cert-zoom {
+      opacity: 1;
+    }
+  }
+
   .cert-trigger:focus-visible .cert-zoom {
     opacity: 1;
   }
@@ -236,83 +291,84 @@ const certAttrs = (c: (typeof featured)[number]) => ({
     color: var(--color-muted);
   }
 
-  /* --- daftar ringkas ------------------------------------- */
+  /* --- tombol daftar lengkap ------------------------------ */
 
-  .cert-more {
-    border-top: 1px solid var(--color-line);
-    padding-top: 2rem;
-  }
-
-  .cert-more-head {
+  .cert-cta {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .cert-more-btn {
+    display: inline-flex;
     align-items: baseline;
-    gap: 0.5rem 1.5rem;
-    margin-bottom: 1.25rem;
+    gap: 0.55rem;
+    padding: 0.8rem 1.5rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-nav);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+    color: var(--color-ink);
+    background: var(--color-paper);
+    border: 1px solid var(--color-line);
+    cursor: pointer;
+    transition:
+      color var(--dur-fast) var(--ease),
+      background-color var(--dur-fast) var(--ease),
+      border-color var(--dur-fast) var(--ease);
   }
 
-  .cert-more-title {
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: var(--text-title);
-    font-weight: 600;
-    letter-spacing: var(--tracking-title);
+  .cert-more-btn:hover,
+  .cert-more-btn:focus-visible {
+    color: var(--color-paper);
+    background: var(--color-ink);
+    border-color: var(--color-ink);
   }
 
-  .cert-more-sub {
-    margin: 0;
-    color: var(--color-muted);
-    font-size: var(--text-sm);
-    line-height: var(--leading-snug);
-    max-width: 52ch;
+  /* Angka di dalam tombol: penanda, bukan isi. */
+  .cert-more-btn-count {
+    font-size: var(--text-cap);
+    color: var(--color-electric);
+    transition: color var(--dur-fast) var(--ease);
   }
 
-  .cert-rows {
+  .cert-more-btn:hover .cert-more-btn-count,
+  .cert-more-btn:focus-visible .cert-more-btn-count {
+    color: var(--color-lemon);
+  }
+
+  /* Tanpa JavaScript tombol tidak bisa membuka dialog, jadi 18 tautan
+     ditulis apa adanya. Disembunyikan lagi begitu skrip jalan. */
+  .cert-fallback {
     list-style: none;
     margin: 0;
     padding: 0;
-  }
-
-  .cert-row {
     display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 0.15rem 1rem;
-    padding: 0.65rem 0.25rem;
-    border-bottom: 1px solid var(--color-line-soft);
-    color: inherit;
-    text-decoration: none;
-    transition: background-color var(--dur-fast) var(--ease);
+    gap: 0.35rem;
+    max-width: 100%;
   }
 
-  .cert-row:hover,
-  .cert-row:focus-visible {
-    background: var(--color-line-soft);
-  }
-
-  .cert-row-name {
-    font-size: var(--text-body);
-    font-weight: 500;
-    line-height: var(--leading-ui);
-  }
-
-  .cert-row:hover .cert-row-name,
-  .cert-row:focus-visible .cert-row-name {
-    color: var(--accent);
-  }
-
-  .cert-row-date {
-    font-family: var(--font-mono);
-    font-size: var(--text-cap);
-    color: var(--color-muted);
-    white-space: nowrap;
-  }
-
-  .cert-row-issuer {
-    grid-column: 1 / -1;
+  .cert-fallback a {
     font-family: var(--font-mono);
     font-size: var(--text-cap);
     letter-spacing: var(--tracking-caps-tight);
+    color: var(--color-ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .cert-more-btn-note {
+    margin: 0;
+    max-width: 54ch;
+    text-wrap: balance;
+    font-family: var(--font-mono);
+    font-size: var(--text-cap);
+    letter-spacing: var(--tracking-caps-tight);
+    line-height: var(--leading-ui);
     color: var(--color-muted);
+    text-align: center;
   }
 
   /* --- dialog --------------------------------------------- */
@@ -439,6 +495,100 @@ const certAttrs = (c: (typeof featured)[number]) => ({
     border-color: var(--color-ink);
   }
 
+  /* --- dialog daftar lengkap ------------------------------ */
+
+  .cert-list {
+    margin: auto;
+    padding: 0;
+    width: min(1180px, calc(100vw - 2rem));
+    max-width: none;
+    max-height: calc(100dvh - 2rem);
+    border: 1px solid var(--color-line);
+    background: var(--color-paper);
+    color: var(--color-ink);
+    overflow: hidden;
+  }
+
+  .cert-list::backdrop {
+    background: color-mix(in srgb, var(--ink-900) 82%, transparent);
+  }
+
+  .cert-list-box {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100dvh - 2rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  /* Kepala lengket: judul tetap terlihat saat daftar digulir. */
+  .cert-list-head {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-content);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 0.3rem 1.5rem;
+    padding: 1.1rem clamp(1rem, 3vw, 2rem) 0.9rem;
+    border-bottom: 1px solid var(--color-line);
+    background: var(--color-paper);
+  }
+
+  .cert-list-fig {
+    grid-column: 1;
+    margin: 0;
+  }
+
+  .cert-list-title {
+    grid-column: 1;
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-title);
+    font-weight: 600;
+    letter-spacing: var(--tracking-title);
+    line-height: var(--leading-title);
+  }
+
+  .cert-list-title:focus {
+    outline: none;
+  }
+
+  .cert-list-meta {
+    grid-column: 1;
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-cap);
+    letter-spacing: var(--tracking-caps-tight);
+    color: var(--color-muted);
+  }
+
+  .cert-list-close {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    align-self: start;
+    font-family: var(--font-mono);
+    font-size: var(--text-cap);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+    padding: 0.45rem 0.8rem;
+    border: 1px solid var(--color-line);
+    background: transparent;
+    color: var(--color-ink);
+    cursor: pointer;
+    transition: border-color var(--dur-fast) var(--ease);
+  }
+
+  .cert-list-close:hover,
+  .cert-list-close:focus-visible {
+    border-color: var(--color-ink);
+  }
+
+  .cert-grid--list {
+    margin: 0;
+    padding: clamp(1rem, 2.5vw, 2rem);
+  }
+
   @media (min-width: 620px) {
     .cert-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -449,12 +599,6 @@ const certAttrs = (c: (typeof featured)[number]) => ({
   @media (min-width: 980px) {
     .cert-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .cert-rows {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      column-gap: 2.5rem;
     }
   }
 </style>
@@ -513,8 +657,38 @@ const certAttrs = (c: (typeof featured)[number]) => ({
     })
 
     dialog.addEventListener('close', () => {
-      document.documentElement.classList.remove('cert-locked')
+      // Dialog daftar bisa masih terbuka di bawah; jangan buka kunci scroll.
+      if (!document.querySelector('dialog[open]')) {
+        document.documentElement.classList.remove('cert-locked')
+      }
       if (img) img.removeAttribute('src')
+    })
+  }
+
+  const listDialog = document.getElementById('cert-list') as HTMLDialogElement | null
+
+  if (listDialog) {
+    const openBtn = document.querySelector<HTMLButtonElement>('[data-cert-list-open]')
+    const closeBtn = listDialog.querySelector<HTMLButtonElement>('[data-cert-list-close]')
+    const listTitle = listDialog.querySelector<HTMLElement>('#cert-list-title')
+
+    openBtn?.addEventListener('click', () => {
+      document.documentElement.classList.add('cert-locked')
+      listDialog.showModal()
+      listTitle?.focus()
+    })
+
+    closeBtn?.addEventListener('click', () => listDialog.close())
+
+    // Klik di luar kotak menutup daftar; klik kartu di dalam tidak.
+    listDialog.addEventListener('click', (event) => {
+      if (event.target === listDialog) listDialog.close()
+    })
+
+    listDialog.addEventListener('close', () => {
+      if (!document.querySelector('dialog[open]')) {
+        document.documentElement.classList.remove('cert-locked')
+      }
     })
   }
 </script>

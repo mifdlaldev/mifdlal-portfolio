@@ -49,9 +49,10 @@ sendiri, bukan klaim.
   peran/level atas HackerRank, freeCodeCamp x Microsoft, tiga kelas Dicoding,
   satu pelatihan Hactiv8. Masing-masing punya gambar, satu baris konteks, tanggal,
   ID, dan tautan verifikasi.
-- **18 baris ringkas** (`more`): 17 sertifikat keahlian HackerRank + 1 kelas dasar
-  Dicoding. Tanpa gambar di daftar supaya tidak jadi badge wall; gambar tetap
-  tersedia di modal.
+- **18 kartu di modal** (`more`): 17 sertifikat keahlian HackerRank + 1 kelas
+  dasar Dicoding. Tidak memenuhi halaman sebagai grid kedua; dibuka lewat tombol
+  **Lihat Lainnya** di tengah bawah grid unggulan, dan di dalam modal semuanya
+  tampil sebagai kartu yang sama persis dengan kartu unggulan.
 
 **Tidak ditampilkan:** empat sertifikat pelatihan guru (AI untuk Tenaga Pendidik
 bagian 1-2, Desain pembelajaran abad ke-21, Eksplorasi AI, Persiapan MCE). Isinya
@@ -60,27 +61,43 @@ situs. Datanya masih ada di folder sumber kalau nanti mau dimasukkan.
 
 ### Gambar
 
-`public/certs/<slug>.webp` = versi penuh 1400px (dipakai modal).
-`public/certs/<slug>-thumb.webp` = 640px (dipakai kartu, hanya untuk `featured`).
+`public/certs/<slug>.webp` = versi penuh 1400px (dipakai lightbox).
+`public/certs/<slug>-thumb.webp` = 640px (dipakai kartu di grid dan di modal).
 
-Dihasilkan dari PDF/PNG asli: render 150 dpi halaman 1, lalu WebP q82 (thumb q80).
-36 file, total 1,46 MB. Untuk menambah sertifikat:
+Dihasilkan dari PDF/PNG asli: render 150 dpi halaman 1, lalu WebP q82 (thumb q72).
+54 file, total 1,73 MB. Thumbnail 18 entri `more` baru ditambahkan saat entri itu
+pindah ke modal: 266 KB untuk 18 file, dan tidak diunduh sebelum modal dibuka.
+Untuk menambah sertifikat:
 
 ```bash
 pdftoppm -png -r 150 -f 1 -l 1 -singlefile "sertifikat.pdf" /tmp/x
 # lalu konversi ke WebP 1400px (dan 640px kalau masuk featured) ke public/certs/
 ```
 
-### Modal
+### Dua dialog, bertumpuk
 
-Native `<dialog>` + `showModal()`, jadi browser yang menangani pindah fokus,
-kembalinya fokus ke kartu, latar `inert`, dan tombol Escape (WCAG 2.4.3, teknik
-H102). Yang ditambahkan manual hanya: klik latar untuk menutup, kunci scroll
-`html.cert-locked`, dan pengisian `src` gambar saat dibuka (tidak ada 27 gambar
-penuh yang diunduh di awal).
+Ada dua `<dialog>` native: `#cert-dialog` (lightbox satu sertifikat) dan
+`#cert-list` (daftar lengkap 18 kartu). Keduanya `showModal()`, jadi browser yang
+menangani pindah fokus, kembalinya fokus, latar `inert`, dan Escape (WCAG 2.4.3,
+H102).
 
-Tanpa JavaScript, setiap kartu tetap berfungsi: `<a href="/certs/<slug>.webp">`
-membuka gambar penuh di tab baru.
+Kartu di dalam daftar memakai atribut `data-cert` yang sama dengan kartu unggulan,
+jadi klik kartu membuka lightbox **di atas** modal daftar — dialog kedua masuk top
+layer, Escape menutup yang paling atas dan fokus balik ke daftar. Tidak ada state
+tambahan untuk itu.
+
+Yang ditambahkan manual: klik latar untuk menutup, kunci scroll `html.cert-locked`,
+dan pengisian `src` gambar lightbox saat dibuka. Kunci scroll hanya dilepas kalau
+tidak ada dialog lain yang masih terbuka — tanpa itu, menutup lightbox membuka
+scroll padahal daftar masih tampil.
+
+Gambar kartu memakai `loading="lazy"`. Karena dialog tertutup tidak punya layout,
+18 thumbnail tidak diunduh sampai daftar dibuka; terverifikasi 18 permintaan HTTP
+200 setelah tombol ditekan, nol sebelumnya.
+
+Tanpa JavaScript: tombol tidak berfungsi, jadi `<noscript>` menulis 18 tautan
+sertifikat apa adanya di bawah tombol. Setiap kartu juga tetap `<a href>` biasa ke
+gambar penuh.
 
 ### Verifikasi
 
