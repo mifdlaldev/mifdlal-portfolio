@@ -63,9 +63,6 @@ import SocialIcons from './SocialIcons.astro'
 </section>
 
 <style>
-  #kontak {
-    --accent: #2a1eff;
-  }
 
   .contact-grid {
     display: grid;
@@ -80,9 +77,9 @@ import SocialIcons from './SocialIcons.astro'
   .contact-note {
     color: var(--color-muted);
     margin: 1rem 0 0;
-    line-height: 1.6;
+    line-height: var(--leading-relaxed);
     max-width: 38ch;
-    font-size: 0.9375rem;
+    font-size: var(--text-body);
   }
 
   /* Datasheet mono */
@@ -104,15 +101,15 @@ import SocialIcons from './SocialIcons.astro'
 
   .spec-k {
     font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    letter-spacing: 0.06em;
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-caps);
     text-transform: lowercase;
     color: var(--color-muted);
   }
 
   .spec-v {
     font-family: var(--font-mono);
-    font-size: 0.8125rem;
+    font-size: var(--text-data);
     color: var(--color-ink);
   }
 
@@ -120,7 +117,7 @@ import SocialIcons from './SocialIcons.astro'
     color: inherit;
     text-decoration: none;
     border-bottom: 1px solid var(--color-line);
-    transition: color 0.15s ease, border-color 0.15s ease;
+    transition: color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
   }
 
   .spec-v a:hover {
@@ -151,8 +148,8 @@ import SocialIcons from './SocialIcons.astro'
   .panel-label {
     margin: 0;
     font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    letter-spacing: 0.06em;
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-caps);
     text-transform: lowercase;
     color: var(--color-muted);
   }
@@ -165,9 +162,9 @@ import SocialIcons from './SocialIcons.astro'
   .contact-email {
     align-self: flex-start;
     font-family: var(--font-display);
-    font-size: clamp(1.375rem, 3.2vw, 2rem);
+    font-size: var(--text-h3);
     font-weight: 600;
-    letter-spacing: -0.02em;
+    letter-spacing: var(--tracking-heading);
     color: var(--color-paper);
     text-decoration: none;
     border-bottom: 2px solid color-mix(in srgb, var(--color-paper) 45%, transparent);
@@ -176,7 +173,7 @@ import SocialIcons from './SocialIcons.astro'
     display: inline-flex;
     align-items: center;
     overflow-wrap: anywhere;
-    transition: color 0.15s ease, border-color 0.15s ease;
+    transition: color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
   }
 
   .contact-email:hover {
@@ -198,15 +195,15 @@ import SocialIcons from './SocialIcons.astro'
     align-items: baseline;
     padding: 0.7rem 0;
     border-bottom: 1px solid color-mix(in srgb, var(--color-paper) 30%, transparent);
-    font-size: 0.875rem;
-    line-height: 1.5;
+    font-size: var(--text-sm);
+    line-height: var(--leading-base);
     color: color-mix(in srgb, var(--color-paper) 90%, transparent);
   }
 
   .brief-no {
     font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    letter-spacing: 0.04em;
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-caps-tight);
     color: var(--color-lemon);
   }
 

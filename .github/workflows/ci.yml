@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   quality:
-    name: Build, typecheck, dependency audit
+    name: Build, typecheck, token check, dependency audit
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -28,5 +28,7 @@ jobs:
         run: npm run build
       - name: Typecheck
         run: npm run typecheck
+      - name: Token check
+        run: npm run check:tokens
       - name: Dependency audit
         run: npm run audit

@@ -35,9 +35,6 @@ import CodeComment from './CodeComment.astro'
 </section>
 
 <style>
-  #tentang {
-    --accent: #2a1eff;
-  }
 
   .about-grid {
     display: grid;
@@ -64,21 +61,21 @@ import CodeComment from './CodeComment.astro'
     border: 1px solid var(--color-line);
     color: var(--color-muted);
     font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    letter-spacing: 0.08em;
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-caps-loose);
     text-transform: lowercase;
   }
 
   .portrait-placeholder span:first-child {
     color: var(--color-ink);
-    font-size: 0.8125rem;
+    font-size: var(--text-data);
   }
 
   .portrait figcaption {
     margin-top: 0.65rem;
     font-family: var(--font-mono);
-    font-size: 0.625rem;
-    letter-spacing: 0.06em;
+    font-size: var(--text-cap);
+    letter-spacing: var(--tracking-caps);
     text-transform: lowercase;
     color: var(--color-muted);
   }
@@ -94,10 +91,10 @@ import CodeComment from './CodeComment.astro'
 
   .lede {
     font-family: var(--font-display);
-    font-size: clamp(1.25rem, 2.5vw, 1.625rem);
-    line-height: 1.35;
+    font-size: var(--text-lede);
+    line-height: var(--leading-snug);
     font-weight: 500;
-    letter-spacing: -0.02em;
+    letter-spacing: var(--tracking-heading);
     margin: 0 0 1.25rem;
     color: var(--color-ink);
     text-wrap: pretty;
@@ -105,9 +102,9 @@ import CodeComment from './CodeComment.astro'
 
   .about-copy p:not(.lede) {
     color: var(--color-muted);
-    line-height: 1.7;
+    line-height: var(--leading-loose);
     margin: 0 0 1.25rem;
-    font-size: 0.9375rem;
+    font-size: var(--text-body);
   }
 
   @media (min-width: 800px) {

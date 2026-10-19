@@ -1,0 +1,111 @@
+/* ============================================================
+   TOKENS — lapisan primitif.
+   Satu-satunya tempat nilai mentah (hex, px, rem, em, angka)
+   boleh ditulis. Komponen tidak boleh mendeklarasikan nilai
+   sendiri; mereka memakai nama semantik dari semantic.css.
+
+   Aturan: kalau sebuah nilai dipakai di lebih dari satu
+   komponen, ia naik ke sini. Nilai yang hanya dipakai sekali
+   dan memang spesifik satu komponen tetap di komponennya,
+   dan diberi komentar "lokal" supaya jelas bukan kelalaian.
+   ============================================================ */
+
+:root {
+  /* --- palet primitif ------------------------------------- */
+  --ink-900: #1a1522;
+  --ink-70: #1a1522b3;
+  --ink-16: #1a152229;
+  --ink-07: #1a152212;
+  --paper: #fdfcf1;
+  --electric: #2a1eff;
+  --lemon: #eef17c;
+  --green: #12795a;
+  --amber: #8f5900;
+  --violet: #5b2bd9;
+  --magenta: #a81a6b;
+  --hero-ramp-mid: #6b7bff; /* nada tengah ramp ASCII di hero */
+  --white: #ffffff;
+
+  /* --- tipografi: keluarga -------------------------------- */
+  --font-display: "Space Grotesk Variable", system-ui, sans-serif;
+  --font-body: "Inter Variable", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", monospace;
+  --font-serif: "Instrument Serif", Georgia, serif;
+
+  /* --- tipografi: ukuran ---------------------------------
+     Dense 1px steps di rentang UI (10-15px) itu disengaja:
+     11px dipakai 25 kali untuk label mono. Tier display
+     memakai clamp() supaya fluid.                              */
+  --text-root: 16px;
+  --text-hero: clamp(2rem, 5.5vw, 3.75rem);
+  --text-h2: clamp(1.5rem, 3.5vw, 2.125rem);
+  --text-h3: clamp(1.375rem, 3.2vw, 2rem);
+  --text-lede: clamp(1.25rem, 2.5vw, 1.625rem);
+  --text-sub: clamp(1.0625rem, 2.2vw, 1.25rem);
+  --text-title: 1.25rem;
+  --text-title-sm: 1.125rem;
+  --text-brand: 1.0625rem; /* wordmark nav, off-scale by design */
+  --text-body: 0.9375rem;
+  --text-sm: 0.875rem;
+  --text-data: 0.8125rem;
+  --text-nav: 0.75rem;
+  --text-label: 0.6875rem;
+  --text-cap: 0.625rem;
+
+  /* --- tipografi: jarak baris ----------------------------- */
+  --leading-display: 1.05;
+  --leading-heading: 1.1;
+  --leading-ui: 1.2;
+  --leading-title: 1.25;
+  --leading-snug: 1.35;
+  --leading-base: 1.5;
+  --leading-relaxed: 1.6;
+  --leading-loose: 1.7;
+
+  /* --- tipografi: tracking --------------------------------
+     Positif untuk huruf kapital mono, negatif untuk display.   */
+  --tracking-display: -0.03em;
+  --tracking-heading: -0.02em;
+  --tracking-title: -0.015em;
+  --tracking-caps: 0.06em;
+  --tracking-caps-tight: 0.04em;
+  --tracking-caps-loose: 0.08em;
+
+  /* --- layout --------------------------------------------- */
+  --grid-max: 1180px;
+  --grid-gutter: 24px;
+  --space-section: clamp(5rem, 10vw, 8rem);
+  --nav-h: 64px;
+  --node-size: 12px;
+  --rail-offset: max(var(--grid-gutter), calc(50% - var(--grid-max) / 2));
+  --band-h: 5.75rem;
+
+  /* --- lapisan (z-index) ---------------------------------- */
+  --z-below: -1;
+  --z-content: 1;
+  --z-raise: 2;
+  --z-band: 3;
+  --z-tooltip: 4;
+  --z-nav: 50;
+  --z-skip: 100;
+
+  /* --- gerak ---------------------------------------------- */
+  --dur-fast: 150ms;
+  --dur-base: 180ms;
+  --dur-slow: 200ms;
+  --ease: ease;
+
+  /* --- breakpoint -----------------------------------------
+     Media query TIDAK bisa memakai var() di CSS, jadi nilai
+     ini ditulis literal di @media dan dijaga oleh
+     scripts/check-tokens.mjs (CI gagal kalau ada nilai lain).
+
+       560px   pita logo & grid kartu sempit
+       620px   dua kolom kartu layanan
+       720px   navbar mulai memuat link
+       800px   grid dua kolom (tentang, kontak)
+       860px   navbar penuh + CTA
+       900px   footer satu baris
+       980px   grid proyek
+       1228px  batas lebar konten maksimum                          */
+}

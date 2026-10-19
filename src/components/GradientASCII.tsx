@@ -84,7 +84,6 @@ const ATLAS_CELL_W = 60;
 const ATLAS_CELL_H = 100;
 const ATLAS_COLUMNS = 16;
 const FONT_SCALE = 0.78;
-const DEFAULT_COLORS = ['#1e3fd8', '#f6f8ff', '#a5d8ff', '#38bdf8'];
 const DEFAULT_CHARACTERS = ' =+xX0S8#@';
 const DEFAULT_FONT = '"Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
 const SHAPES: Record<string, number> = { horizon: 0, pinch: 1, rise: 2, eclipse: 3 };
@@ -473,7 +472,7 @@ const buildAtlas = (gl: WebGL2RenderingContext, characters: string, fontFamily: 
     context.font = font;
     context.textAlign = 'center';
     context.textBaseline = 'middle';
-    context.fillStyle = '#fff';
+    context.fillStyle = '#fff'; // literal teknis: tekstur glyph, bukan warna palet
     list.forEach((char, index) => {
       const column = index % columns;
       const row = Math.floor(index / columns);
@@ -493,10 +492,10 @@ const buildAtlas = (gl: WebGL2RenderingContext, characters: string, fontFamily: 
 };
 
 const GradientASCII = ({
-  colors = DEFAULT_COLORS,
   shape = 'horizon',
   characters = DEFAULT_CHARACTERS,
   cellSize = 18,
+  colors,
   density = 0.8,
   glyphOpacity = 0.85,
   glow = 0.2,
@@ -523,7 +522,20 @@ const GradientASCII = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wakeRef = useRef<(() => void) | null>(null);
-  const palette = (Array.isArray(colors) && colors.length ? colors : DEFAULT_COLORS).slice(0, MAX_COLORS);
+  /* Warna boleh datang sebagai var(--token) supaya palet hanya hidup di CSS.
+     Saat SSR belum ada document, nilai dibiarkan apa adanya; resolve terjadi
+     di render klien sebelum kanvas dipasang. */
+  const resolve = (c: string) => {
+    if (typeof document === 'undefined') return c;
+    const m = c.match(/^var\((--[\w-]+)\)$/);
+    if (!m) return c;
+    const v = getComputedStyle(document.documentElement).getPropertyValue(m[1]).trim();
+    return v || c;
+  };
+  const palette = (Array.isArray(colors) && colors.length
+    ? colors
+    : ['var(--electric)', 'var(--ink-900)']
+  ).map(resolve).slice(0, MAX_COLORS);
   const settings: Settings = {
     colors: palette.length > 1 ? palette : [palette[0], palette[0]],
     shape: SHAPES[shape] ?? 0,
@@ -583,7 +595,7 @@ const GradientASCII = ({
       let rgb: number[] = [0, 0, 0];
       if (probe) {
         probe.clearRect(0, 0, 1, 1);
-        probe.fillStyle = '#000000';
+        probe.fillStyle = '#000000'; // literal teknis: kanvas probe 1x1, tidak terlihat
         probe.fillStyle = key;
         probe.fillRect(0, 0, 1, 1);
         const [r, g, b] = probe.getImageData(0, 0, 1, 1).data;
