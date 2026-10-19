@@ -193,6 +193,12 @@ import SocialIcons from './SocialIcons.astro'
   }
 
   .brief-list li {
+    --brief-bleed: 0.6rem; /* lokal: lebar sorot kiri-kanan tiap butir */
+
+    position: relative;
+    /* Stacking context sendiri: pseudo berlatar lemon pakai z-index negatif,
+       dan tanpa ini ia jatuh ke belakang latar biru panel. */
+    isolation: isolate;
     display: grid;
     grid-template-columns: 2rem 1fr;
     gap: 0.75rem;
@@ -202,6 +208,22 @@ import SocialIcons from './SocialIcons.astro'
     font-size: var(--text-sm);
     line-height: var(--leading-base);
     color: color-mix(in srgb, var(--color-paper) 90%, transparent);
+    transition:
+      color var(--dur-fast) var(--ease),
+      border-color var(--dur-fast) var(--ease);
+  }
+
+  /* Sorot per butir: latar lemon di belakang nomor dan teksnya. Digambar
+     sebagai pseudo-element supaya teks tidak bergeser satu piksel pun —
+     padding baris tidak berubah saat hover. */
+  .brief-list li::before {
+    content: '';
+    position: absolute;
+    inset: 0 calc(var(--brief-bleed) * -1);
+    z-index: var(--z-below);
+    background: var(--color-lemon);
+    opacity: 0;
+    transition: opacity var(--dur-fast) var(--ease);
   }
 
   .brief-no {
@@ -210,6 +232,23 @@ import SocialIcons from './SocialIcons.astro'
     font-weight: var(--weight-bold);
     letter-spacing: var(--tracking-caps-tight);
     color: var(--color-lemon);
+    transition: color var(--dur-fast) var(--ease);
+  }
+
+  /* Hanya di perangkat berpointer: di layar sentuh hover menempel. */
+  @media (hover: hover) {
+    .brief-list li:hover {
+      color: var(--color-ink);
+      border-bottom-color: transparent;
+    }
+
+    .brief-list li:hover::before {
+      opacity: 1;
+    }
+
+    .brief-list li:hover .brief-no {
+      color: var(--color-ink);
+    }
   }
 
   .contact-social {
