@@ -505,7 +505,7 @@ dalam huruf, latar tetap kertas.
 | Tinggi pita | `clamp(5rem, 22vw, 32rem)` |
 | Padding | `clamp(0.75rem, 2.4vw, 1.75rem)` vertikal, `clamp(1rem, 4vw, 3.5rem)` horizontal |
 | Dasar huruf | `--color-ink` |
-| Stop Aurora | `--color-electric` → `--color-violet` → `--color-magenta` |
+| Stop Aurora | `--color-lemon` → `--color-electric` (kiri ke kanan) |
 | Huruf | Space Grotesk 700, tracking `-0.035em`, `ctx.letterSpacing` supaya kerning utuh |
 | Reveal | `.is-armed` → `.is-in` (IntersectionObserver 18%), geser 18% + fade 1100ms |
 
