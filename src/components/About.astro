@@ -211,34 +211,38 @@ import CodeComment from './CodeComment.astro'
     height: 0.92em;
     flex: none;
     align-self: center;
-    color: inherit;
+    color: var(--color-electric);
     margin-inline-end: 0.08em;
     transform-origin: 50% 87.5%;
     transform-box: fill-box;
   }
 
-  .hello:hover .hello-mark,
-  .hello:focus-visible .hello-mark {
-    animation: hello-wave 1s ease-in-out;
+  /* Lambaian berjalan sendiri: satu detik gerak, empat detik diam, diulang.
+     Bukan dipicu kursor, jadi tetap terlihat oleh pengunjung yang tidak
+     menyentuh ikon sama sekali. */
+  .hello-mark {
+    animation: hello-wave 5s ease-in-out infinite;
   }
 
+  /* Gerak menempati 20% pertama dari 5 detik, sisanya diam. */
   @keyframes hello-wave {
     0% {
       transform: rotate(0deg);
     }
 
-    18% {
+    3.6% {
       transform: rotate(-14deg);
     }
 
-    45% {
+    9% {
       transform: rotate(4deg);
     }
 
-    72% {
+    14.4% {
       transform: rotate(-10deg);
     }
 
+    20%,
     100% {
       transform: rotate(0deg);
     }
@@ -246,8 +250,7 @@ import CodeComment from './CodeComment.astro'
   /* Saat gerak dikurangi, lambaian dimatikan sepenuhnya. Aturan ini diletakkan
      setelah aturan animasi supaya menang urutan, bukan mengandalkan !important. */
   @media (prefers-reduced-motion: reduce) {
-    .hello:hover .hello-mark,
-    .hello:focus-visible .hello-mark {
+    .hello-mark {
       animation: none;
     }
 
