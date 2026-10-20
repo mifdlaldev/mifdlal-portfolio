@@ -78,19 +78,19 @@ export const services = [
   {
     no: '01',
     title: 'Website dan web app',
-    body: 'Landing page, company profile, e-commerce, sampai POS. Dari desain sampai deploy, bukan handover file.',
+    body: 'Landing page, profil perusahaan, e-commerce, sampai POS. Dari desain sampai rilis, bukan sekadar serah terima berkas.',
     image: '/services/layanan-01.svg',
   },
   {
     no: '02',
-    title: 'Chatbot WhatsApp',
-    body: 'Balas pelanggan otomatis dan jawab pertanyaan dari data bisnis Anda, bukan template yang sama terus.',
+    title: 'Chatbot',
+    body: 'Balas pelanggan secara otomatis dan jawab pertanyaan berdasarkan data bisnis Anda, bukan templat yang selalu sama.',
     image: '/services/layanan-02.svg',
   },
   {
     no: '03',
     title: 'Otomasi AI dan workflow',
-    body: 'Hapus kerja berulang, sambungkan tool yang sudah Anda pakai, biar tim kecil tidak kerja dua kali.',
+    body: 'Kurangi pekerjaan berulang, hubungkan perkakas yang sudah Anda gunakan, agar tim kecil tidak mengerjakan hal yang sama dua kali.',
     image: '/services/layanan-03.svg',
   },
 ] as const
