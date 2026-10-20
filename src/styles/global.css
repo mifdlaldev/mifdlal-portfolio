@@ -66,6 +66,17 @@
   color: color-mix(in srgb, var(--color-ink) 60%, transparent);
 }
 
+/* Label pita jadi badge solid berwarna aksen section, supaya garis hatch
+   tidak menembus huruf. Kontras teks paper di atas aksen: 5.21:1 (green,
+   amber 5.66, magenta 6.73, violet 7.3, electric 7.47) — semua lolos AA. */
+.section-comment span[data-state] {
+  display: inline-block;
+  padding-block: 0.22rem;
+  padding-inline: 0.7rem;
+  background: var(--accent, var(--color-electric));
+  color: var(--color-paper);
+}
+
 /* ============================================================
    BASE
    ============================================================ */
@@ -118,14 +129,31 @@ picture {
     linear-gradient(var(--color-line), var(--color-line)),
     linear-gradient(var(--color-line), var(--color-line)),
     linear-gradient(var(--color-line), var(--color-line)),
-    linear-gradient(var(--color-line), var(--color-line));
+    linear-gradient(var(--color-line), var(--color-line)),
+    /* Hatch pita label: garis miring naik ke kanan (/), 2px, jarak 10px.
+       135deg supaya arah garis dari kiri-bawah ke kanan-atas. Ukuran dan
+       posisi lapis ini identik di semua section, jadi ketebalan garis
+       tidak pernah beda antar section. Hanya setinggi pita antara garis
+       atas section dan garis awal konten. Lapis paling bawah, jadi
+       keempat garis section tetap tergambar di atasnya. */
+      repeating-linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--color-ink) 16%, transparent) 0 2px,
+        transparent 2px 10px
+      );
   background-repeat: no-repeat;
-  background-size: 100% 1px, 100% 1px, 1px 100%, 1px 100%;
+  background-size:
+    100% 1px,
+    100% 1px,
+    1px 100%,
+    1px 100%,
+    100% var(--space-section);
   background-position:
     0 0,
     0 var(--space-section),
     var(--rail-offset) 0,
-    calc(100% - var(--rail-offset)) 0;
+    calc(100% - var(--rail-offset)) 0,
+    0 0;
 }
 
 .section > .wrap {
