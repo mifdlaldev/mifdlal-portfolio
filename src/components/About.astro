@@ -8,18 +8,23 @@ import CodeComment from './CodeComment.astro'
   <CodeComment text="// tentang" />
   <div class="wrap">
     <div class="about-grid">
-      <figure class="portrait">
-        <Image
-          class="portrait-img"
-          src={portrait}
-          alt="Mifdlal Tsaqib Alfarras"
-          widths={[400, 560, 720, 900]}
-          sizes="(min-width: 800px) 34vw, 92vw"
-          format="webp"
-          quality={82}
-          loading="lazy"
-          decoding="async"
-        />
+      <figure class="portrait" data-reflect>
+        <div class="portrait-frame">
+          <Image
+            class="portrait-img"
+            src={portrait}
+            alt="Mifdlal Tsaqib Alfarras"
+            widths={[400, 560, 720, 900]}
+            sizes="(min-width: 800px) 34vw, 92vw"
+            format="webp"
+            quality={82}
+            loading="lazy"
+            decoding="async"
+          />
+          <span class="reflect-sheen" aria-hidden="true"></span>
+          <span class="reflect-glint" aria-hidden="true"></span>
+          <span class="reflect-edge" aria-hidden="true"></span>
+        </div>
         <figcaption>mifdlal · bandung, id</figcaption>
       </figure>
 
@@ -46,6 +51,8 @@ import CodeComment from './CodeComment.astro'
   </div>
 </section>
 
+<script is:inline src="/js/portrait-reflect.js" defer></script>
+
 <style>
   .about-grid {
     display: grid;
@@ -57,6 +64,21 @@ import CodeComment from './CodeComment.astro'
   .portrait {
     margin: 0;
     width: 100%;
+  }
+
+  /* Bingkai potret. Semua lapisan refleksi berdiam di dalam kotak ini, jadi
+     tepi foto tetap satu garis tipis dan kilau tidak melimpah keluar. */
+  .portrait-frame {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--color-line-soft);
+    border: 1px solid var(--color-line);
+    /* Sumbu miring tipis: foto menoleh sedikit mengikuti penunjuk. Nilai
+       --reflect-* diisi skrip; tanpa penunjuk nilainya nol dan bingkai tegak. */
+    transform: perspective(900px) rotateX(calc(var(--reflect-y) * -2.4deg))
+      rotateY(calc(var(--reflect-x) * 2.8deg));
+    transform-style: preserve-3d;
   }
 
   /* Foto potret. Rasio 4:5 dipakai selama kolom masih menumpuk; di dua kolom
@@ -72,8 +94,103 @@ import CodeComment from './CodeComment.astro'
        dan menyisakan ~4,7% ruang di atas rambut. Anchor lebih tinggi dari ini
        mulai memakan ubun-ubun. */
     object-position: 50% 26%;
-    background: var(--color-line-soft);
-    border: 1px solid var(--color-line);
+  }
+
+  /* Lapisan 1: pita cahaya. Tiga warna tema ikut terbawa sapuan, yaitu putih
+     sebagai kilau, lemon sebagai pantulan hangat, dan elektrik sebagai tepi
+     dingin. Pita jauh lebih besar dari bingkai lalu digeser, sehingga geraknya
+     hanya menyentuh transform dan tidak memicu perhitungan ulang tata letak. */
+  .reflect-sheen {
+    position: absolute;
+    inset: -40%;
+    z-index: var(--z-content);
+    pointer-events: none;
+    mix-blend-mode: soft-light;
+    opacity: calc(0.3 + var(--reflect-glow) * 0.5);
+    background-image: linear-gradient(
+      var(--reflect-angle),
+      transparent 30%,
+      color-mix(in srgb, var(--color-white) 40%, transparent) 42%,
+      color-mix(in srgb, var(--color-white) 90%, transparent) 47%,
+      color-mix(in srgb, var(--color-lemon) 72%, transparent) 50%,
+      color-mix(in srgb, var(--color-electric) 42%, transparent) 54%,
+      color-mix(in srgb, var(--color-white) 26%, transparent) 58%,
+      transparent 70%
+    );
+    transform: translate3d(
+      calc(var(--reflect-x) * 16%),
+      calc(var(--reflect-y) * 16%),
+      0
+    );
+    will-change: transform;
+  }
+
+  /* Lapisan 2: kilau sempit yang menempel di posisi penunjuk. Hanya muncul
+     saat penunjuk berada di atas foto, jadi keadaan diam tetap bersih. */
+  .reflect-glint {
+    position: absolute;
+    inset: 0;
+    z-index: var(--z-raise);
+    pointer-events: none;
+    mix-blend-mode: screen;
+    opacity: calc(var(--reflect-glow) * 0.5);
+    background-image: radial-gradient(
+      40% 40% at calc(50% + var(--reflect-x) * 46%)
+        calc(50% + var(--reflect-y) * 46%),
+      color-mix(in srgb, var(--color-white) 88%, transparent) 0%,
+      color-mix(in srgb, var(--color-lemon) 38%, transparent) 34%,
+      transparent 68%
+    );
+  }
+
+  /* Lapisan 3: tepi logam. Garis 1px di dalam bingkai yang menyala di sisi
+     datangnya cahaya, dibentuk lewat mask supaya tetap setipis garis section. */
+  .reflect-edge {
+    position: absolute;
+    inset: 0;
+    z-index: var(--z-band);
+    padding: 1px;
+    pointer-events: none;
+    background-image: linear-gradient(
+      calc(var(--reflect-angle) + 180deg),
+      color-mix(in srgb, var(--color-white) 92%, transparent),
+      color-mix(in srgb, var(--color-lemon) 52%, transparent) 24%,
+      transparent 54%
+    );
+    -webkit-mask-image: linear-gradient(var(--color-ink) 0 0),
+      linear-gradient(var(--color-ink) 0 0);
+    -webkit-mask-clip: content-box, border-box;
+    -webkit-mask-composite: xor;
+    mask-image: linear-gradient(var(--color-ink) 0 0),
+      linear-gradient(var(--color-ink) 0 0);
+    mask-clip: content-box, border-box;
+    mask-composite: exclude;
+  }
+
+  /* Tanpa penunjuk presisi (sentuh) tidak ada yang menggerakkan lapisan, jadi
+     pita dibiarkan diam pada sudut tetap dan kilau dimatikan. */
+  @media (hover: none) {
+    .reflect-sheen {
+      opacity: 0.34;
+    }
+
+    .reflect-glint {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .portrait-frame {
+      transform: none;
+    }
+
+    .reflect-sheen {
+      opacity: 0.34;
+    }
+
+    .reflect-glint {
+      opacity: 0;
+    }
   }
 
   .portrait figcaption {
@@ -128,18 +245,22 @@ import CodeComment from './CodeComment.astro'
       height: 100%;
     }
 
-    .portrait-img {
-      /* flex-basis 0, bukan auto: dengan basis auto foto membawa tinggi
-         intrinsiknya (persegi) dan baris jadi setinggi foto, bukan setinggi
+    .portrait-frame {
+      /* flex-basis 0, bukan auto: dengan basis auto bingkai membawa tinggi
+         intrinsik fotonya (persegi) dan baris jadi setinggi foto, bukan setinggi
          teks. Basis 0 membuat tinggi foto mengikuti kolom teks. */
       flex: 1 1 0;
-      aspect-ratio: auto;
       /* Lantai tinggi. Tanpa ini foto hanya setinggi kolom teks (305px di 1366,
          rasio 1,32 = kotak melebar dan badan terpotong di dada), dan caption
          berhenti tepat di garis yang sama dengan baris terakhir paragraf.
          Lantai 22rem membuat foto 352px di semua lebar >=800: rasio turun ke
          1,15, caption turun ~46px di bawah baris terakhir paragraf. */
       min-height: 22rem;
+    }
+
+    .portrait-img {
+      height: 100%;
+      aspect-ratio: auto;
     }
 
     /* Margin bawah paragraf terakhir adalah sisa ritme, bukan jarak yang

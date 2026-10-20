@@ -37,6 +37,15 @@
      memverifikasi bahwa var(--to-top-lift) memang punya sumber. */
   --to-top-lift: 0px;
 
+  /* Hook runtime: diisi skrip refleksi potret
+     (public/js/portrait-reflect.js). Nol berarti bingkai tegak dan pita
+     cahaya diam pada sudut bawaannya; skrip hanya menimpa saat penunjuk
+     bergerak di atas foto. */
+  --reflect-x: 0;
+  --reflect-y: 0;
+  --reflect-glow: 0;
+  --reflect-angle: 118deg;
+
   /* aksen aktif. Default di akar, ditimpa per section di bawah.
      Section baru otomatis dapat warna default, tidak lagi jatuh
      ke warna garis seperti kejadian pada pita stack. */
