@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" role="img" aria-label="Diagram tata letak gmrh-kitchen">
+  <defs>
+    <pattern id="dots" width="32" height="32" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="#1a152210"/></pattern>
+  </defs>
+  <rect width="1600" height="1000" fill="#fdfcf1"/>
+  <rect width="1600" height="1000" fill="url(#dots)"/>
+
+  <g>
+    <rect x="80.5" y="80.5" width="1439" height="759" fill="#fdfcf1" stroke="#1a152233"/>
+    <line x1="80" y1="132" x2="1520" y2="132" stroke="#1a152233"/>
+    <circle cx="112" cy="106" r="4.5" fill="none" stroke="#1a152233"/>
+    <circle cx="134" cy="106" r="4.5" fill="none" stroke="#1a152233"/>
+    <circle cx="156" cy="106" r="4.5" fill="none" stroke="#1a152233"/>
+    <rect x="186" y="96" width="240" height="20" fill="none" stroke="#1a152233"/>
+  </g>
+
+  <rect x="120" y="180" width="1360" height="300" fill="none" stroke="#1a152233" stroke-width="1"/>
+  <rect x="160" y="220" width="520" height="110" fill="none" stroke="#1a152233" stroke-width="1" stroke-dasharray="12 9"/>
+  <text x="160" y="208" font-family="ui-monospace, 'JetBrains Mono Variable', monospace" font-size="46" letter-spacing="1" fill="#1a1522c7" text-anchor="start">hero</text>
+  <rect x="160" y="372" width="240" height="56" fill="#12795a" stroke="#1a152233" stroke-width="1"/>
+  <text x="430" y="410" font-family="ui-monospace, 'JetBrains Mono Variable', monospace" font-size="46" letter-spacing="1" fill="#1a1522c7" text-anchor="start">aksi utama</text>
+  <rect x="940" y="220" width="500" height="212" fill="none" stroke="#1a152233" stroke-width="1" stroke-dasharray="12 9"/>
+  <text x="940" y="208" font-family="ui-monospace, 'JetBrains Mono Variable', monospace" font-size="46" letter-spacing="1" fill="#1a1522c7" text-anchor="start">foto</text>
+  <rect x="120" y="540" width="1360" height="1" fill="none" stroke="#1a152233" stroke-width="1"/>
+  <text x="120" y="596" font-family="ui-monospace, 'JetBrains Mono Variable', monospace" font-size="46" letter-spacing="1" fill="#1a1522c7" text-anchor="start">katalog menu</text>
+  <rect x="120" y="620" width="420" height="150" fill="none" stroke="#1a152233" stroke-width="1"/>
+  <rect x="570" y="620" width="420" height="150" fill="none" stroke="#1a152233" stroke-width="1"/>
+  <rect x="1020" y="620" width="420" height="150" fill="none" stroke="#1a152233" stroke-width="1"/>
+  <text x="142" y="668" font-family="ui-monospace, 'JetBrains Mono Variable', monospace" font-size="46" letter-spacing="1" fill="#1a1522c7" text-anchor="start">menu 01</text>
+  <text x="592" y="668" font-family="ui-monospace, 'JetBrains Mono Variable', monospace" font-size="46" letter-spacing="1" fill="#1a1522c7" text-anchor="start">menu 02</text>
+  <text x="1042" y="668" font-family="ui-monospace, 'JetBrains Mono Variable', monospace" font-size="46" letter-spacing="1" fill="#1a1522c7" text-anchor="start">menu 03</text>
+  <rect x="142" y="700" width="220" height="10" fill="#1a152210" stroke="#1a152233" stroke-width="1"/>
+  <rect x="592" y="700" width="220" height="10" fill="#1a152210" stroke="#1a152233" stroke-width="1"/>
+  <rect x="1042" y="700" width="220" height="10" fill="#1a152210" stroke="#1a152233" stroke-width="1"/>
+  <g stroke="#1a15227a" stroke-width="2" fill="none">
+    <path d="M120 754v92M1480 754v92"/>
+    <path d="M120 800h1360"/>
+    <path d="M120 786l16 28M1480 786l-16 28"/>
+  </g>
+  <text x="800" y="844" font-family="ui-monospace, 'JetBrains Mono Variable', monospace" font-size="44" letter-spacing="3" fill="#1a1522c7" text-anchor="middle">1440</text>
+
+  <g font-family="ui-monospace, 'JetBrains Mono Variable', monospace" font-size="40" letter-spacing="2">
+    <circle cx="88" cy="922" r="6" fill="#12795a"/>
+    <text x="112" y="933" fill="#1a1522b3">fig. 03.1 · gmrh-kitchen</text>
+  </g>
+  <g stroke="#1a152233" stroke-width="1" fill="none">
+    <path d="M80 56h30M80 56v30"/><path d="M1520 56h-30M1520 56v30"/>
+    <path d="M80 868h30M80 868v-30"/><path d="M1520 868h-30M1520 868v-30"/>
+  </g>
+</svg>
