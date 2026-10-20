@@ -43,7 +43,6 @@
      bergerak di atas foto. */
   --reflect-x: 0;
   --reflect-y: 0;
-  --reflect-glow: 0;
   --reflect-angle: 118deg;
 
   /* aksen aktif. Default di akar, ditimpa per section di bawah.

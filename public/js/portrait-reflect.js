@@ -1,11 +1,11 @@
 /* Refleksi foto potret.
  *
- * Skrip ini hanya mengisi empat variabel di bingkai: arah penunjuk (x, y),
- * kekuatan kilau, dan sudut pita cahaya. Semua gambar lapisan ada di CSS,
+ * Skrip ini hanya mengisi tiga variabel di bingkai: arah penunjuk (x, y) dan
+ * sudut pita cahaya. Semua gambar lapisan ada di CSS,
  * jadi tidak ada elemen baru, tidak ada pustaka, dan tidak ada permintaan
  * jaringan.
  *
- * Keadaan diam: x = y = 0, kilau 0, sudut 118deg. Nilai itu juga menjadi
+ * Keadaan diam: x = y = 0, sudut 118deg. Nilai itu juga menjadi
  * bawaan di semantic.css, sehingga foto tetap tampak selesai walau skrip
  * tidak pernah jalan (JavaScript mati, atau perangkat sentuh, atau pengguna
  * meminta gerak dikurangi).
@@ -27,7 +27,6 @@
   /* Sudut pita saat diam. Sama dengan bawaan di semantic.css. */
   const REST_ANGLE = 118;
   const EASE_POINTER = 0.16;
-  const EASE_GLOW = 0.12;
   const EPSILON = 0.002;
 
   /* Selisih sudut terpendek, supaya pita tidak berputar satu lingkaran penuh
@@ -46,30 +45,25 @@
     let raf = 0;
     let targetX = 0;
     let targetY = 0;
-    let targetGlow = 0;
     let targetAngle = REST_ANGLE;
     let curX = 0;
     let curY = 0;
-    let curGlow = 0;
     let curAngle = REST_ANGLE;
 
     const paint = () => {
       frame.style.setProperty('--reflect-x', curX.toFixed(4));
       frame.style.setProperty('--reflect-y', curY.toFixed(4));
-      frame.style.setProperty('--reflect-glow', curGlow.toFixed(4));
       frame.style.setProperty('--reflect-angle', `${curAngle.toFixed(1)}deg`);
     };
 
     const settled = () =>
       Math.abs(targetX - curX) < EPSILON &&
       Math.abs(targetY - curY) < EPSILON &&
-      Math.abs(targetGlow - curGlow) < EPSILON &&
       Math.abs(shortestTurn(curAngle, targetAngle)) < 0.2;
 
     const step = () => {
       curX += (targetX - curX) * EASE_POINTER;
       curY += (targetY - curY) * EASE_POINTER;
-      curGlow += (targetGlow - curGlow) * EASE_GLOW;
       curAngle += shortestTurn(curAngle, targetAngle) * EASE_POINTER;
       paint();
 
@@ -95,7 +89,6 @@
 
         targetX = Math.max(-1, Math.min(1, (nx - 0.5) * 2));
         targetY = Math.max(-1, Math.min(1, (ny - 0.5) * 2));
-        targetGlow = 1;
         targetAngle = (Math.atan2(targetY, targetX) * 180) / Math.PI + 90;
         kick();
       },
@@ -105,7 +98,6 @@
     const rest = () => {
       targetX = 0;
       targetY = 0;
-      targetGlow = 0;
       targetAngle = REST_ANGLE;
       kick();
     };

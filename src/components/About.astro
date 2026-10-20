@@ -23,7 +23,6 @@ import CodeComment from './CodeComment.astro'
             decoding="async"
           />
           <span class="reflect-sheen" aria-hidden="true"></span>
-          <span class="reflect-glint" aria-hidden="true"></span>
           <span class="reflect-edge" aria-hidden="true"></span>
         </div>
         <figcaption>mifdlal · bandung, id</figcaption>
@@ -110,7 +109,7 @@ import CodeComment from './CodeComment.astro'
     z-index: var(--z-content);
     pointer-events: none;
     mix-blend-mode: soft-light;
-    opacity: calc(0.3 + var(--reflect-glow) * 0.5);
+    opacity: 0.34;
     background-image: linear-gradient(
       var(--reflect-angle),
       transparent 30%,
@@ -131,22 +130,6 @@ import CodeComment from './CodeComment.astro'
 
   /* Lapisan 2: kilau sempit yang menempel di posisi penunjuk. Hanya muncul
      saat penunjuk berada di atas foto, jadi keadaan diam tetap bersih. */
-  .reflect-glint {
-    position: absolute;
-    inset: 0;
-    z-index: var(--z-raise);
-    pointer-events: none;
-    mix-blend-mode: screen;
-    opacity: calc(var(--reflect-glow) * 0.5);
-    background-image: radial-gradient(
-      40% 40% at calc(50% + var(--reflect-x) * 46%)
-        calc(50% + var(--reflect-y) * 46%),
-      color-mix(in srgb, var(--color-white) 88%, transparent) 0%,
-      color-mix(in srgb, var(--color-lemon) 38%, transparent) 34%,
-      transparent 68%
-    );
-  }
-
   /* Lapisan 3: tepi logam. Garis 1px di dalam bingkai yang menyala di sisi
      datangnya cahaya, dibentuk lewat mask supaya tetap setipis garis section. */
   .reflect-edge {
@@ -178,9 +161,6 @@ import CodeComment from './CodeComment.astro'
       opacity: 0.34;
     }
 
-    .reflect-glint {
-      opacity: 0;
-    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -192,9 +172,6 @@ import CodeComment from './CodeComment.astro'
       opacity: 0.34;
     }
 
-    .reflect-glint {
-      opacity: 0;
-    }
   }
 
   .portrait figcaption {
