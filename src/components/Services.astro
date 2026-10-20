@@ -93,8 +93,12 @@ import CodeComment from './CodeComment.astro'
 
   /* Blok teks kartu: permukaan biru, sama seperti kartu email di kontak.
      Area gambar tetap kertas supaya gambar tidak tenggelam. */
+  /* Body mengisi sisa tinggi kartu. Tanpa ini, kartu yang teksnya lebih pendek
+     menyisakan kertas kosong di bawah blok biru, sehingga tiga blok biru
+     berhenti di ketinggian berbeda meski kotaknya sama tinggi. */
   .service-body {
     display: flex;
+    flex: 1 1 auto;
     flex-direction: column;
     gap: 0.55rem;
     padding: 1.25rem 1.25rem 1.5rem;
