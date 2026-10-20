@@ -14,6 +14,7 @@ import CodeComment from './CodeComment.astro'
             class="portrait-img"
             src={portrait}
             alt="Mifdlal Tsaqib Alfarras"
+            draggable="false"
             widths={[400, 560, 720, 900]}
             sizes="(min-width: 800px) 34vw, 92vw"
             format="webp"
@@ -86,6 +87,9 @@ import CodeComment from './CodeComment.astro'
      menjaga subjek tidak gepeng saat rasionya berubah. */
   .portrait-img {
     display: block;
+    /* Klik jatuh ke bingkai, bukan ke gambar: tidak ada menu konteks gambar
+       dan tidak ada klik tengah yang membuka tab baru. */
+    pointer-events: none;
     width: 100%;
     aspect-ratio: 4 / 5;
     object-fit: cover;

@@ -70,6 +70,19 @@
    BASE
    ============================================================ */
 
+/* Gambar diperlakukan sebagai bagian antarmuka, bukan berkas.
+   Tidak bisa ditarik, tidak bisa masuk seleksi teks, dan di iOS tidak
+   memunculkan menu simpan saat ditekan lama. Penjaga klik ada di
+   public/js/image-guard.js. */
+img,
+picture {
+  -webkit-user-drag: none;
+  -moz-user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
 
 /* ============================================================
    SECTION SPACING

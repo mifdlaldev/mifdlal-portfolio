@@ -31,7 +31,7 @@ const certAttrs = (c: (typeof featured)[number]) => ({
         <li class="cert-card">
           <a
             class="cert-trigger"
-            href={`/certs/${c.slug}.webp`}
+            href="#cert-dialog"
             {...certAttrs(c)}
             aria-label={`Buka sertifikat ${c.title} dari ${c.issuer}`}
           >
@@ -41,6 +41,7 @@ const certAttrs = (c: (typeof featured)[number]) => ({
                 width={c.thumbWidth}
                 height={c.thumbHeight}
                 alt=""
+                draggable="false"
                 loading="lazy"
                 decoding="async"
               />
@@ -78,7 +79,7 @@ const certAttrs = (c: (typeof featured)[number]) => ({
           <ul class="cert-fallback">
             {more.map((c) => (
               <li>
-                <a href={`/certs/${c.slug}.webp`}>
+                <a href="#cert-dialog">
                   {c.title} · {c.issuer} · {c.dateLabel} · ID {c.credentialId}
                 </a>
               </li>
@@ -96,7 +97,7 @@ const certAttrs = (c: (typeof featured)[number]) => ({
         <h3 class="cert-dialog-title" id="cert-dialog-title" tabindex="-1" data-dialog-title></h3>
       </div>
       <div class="cert-dialog-figure">
-        <img class="cert-dialog-img" alt="" data-dialog-img />
+        <img class="cert-dialog-img" alt="" draggable="false" data-dialog-img />
       </div>
       <div class="cert-dialog-foot">
         <p class="cert-dialog-meta" data-dialog-meta></p>
@@ -126,7 +127,7 @@ const certAttrs = (c: (typeof featured)[number]) => ({
           <li class="cert-card">
             <a
               class="cert-trigger"
-              href={`/certs/${c.slug}.webp`}
+              href="#cert-dialog"
               {...certAttrs(c)}
               aria-label={`Buka sertifikat ${c.title} dari ${c.issuer}`}
             >
@@ -138,7 +139,7 @@ const certAttrs = (c: (typeof featured)[number]) => ({
                   alt=""
                   loading="lazy"
                   decoding="async"
-                />
+                 draggable="false" />
                 <span class="cert-zoom" aria-hidden="true">buka</span>
               </span>
               <span class="cert-body">
@@ -642,8 +643,9 @@ const certAttrs = (c: (typeof featured)[number]) => ({
     document.querySelectorAll<HTMLElement>('[data-cert]').forEach((trigger) => {
       trigger.addEventListener('click', (event) => {
         const e = event as MouseEvent
-        // Klik dengan modifier tetap membuka gambar di tab baru.
-        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return
+        // Semua klik membuka dialog, termasuk klik dengan modifier:
+        // gambar sertifikat tidak lagi bisa dibuka sebagai berkas.
+        if (e.button !== 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey) return
         event.preventDefault()
         open(trigger)
       })
