@@ -19,18 +19,15 @@
   --paper: #fdfcf1;
   --electric: #2a1eff;
   --lemon: #eef17c;
-  --green: #12795a;
-  --amber: #8f5900;
-  --violet: #5b2bd9;
-  --magenta: #a81a6b;
-  --hero-ramp-mid: #6b7bff; /* nada tengah ramp ASCII di hero */
+  --hero-ramp-mid: #8982f9; /* electric 55% di atas kertas: nada tengah ramp ASCII */
   --white: #ffffff;
 
-  /* Tiga titik jendela: warna sistem macOS, dipakai apa adanya supaya
-     terbaca sebagai kontrol jendela, bukan hiasan. */
-  --dot-close: #ff5f57;
-  --dot-min: #febc2e;
-  --dot-max: #28c840;
+  /* Tiga titik jendela di panel gelap. Monokrom: kertas dengan tiga tingkat
+     opasitas, bukan merah/kuning/hijau. Panelnya bertinta penuh, jadi titik
+     harus terang supaya terbaca. */
+  --dot-close: #fdfcf1;
+  --dot-min: #fdfcf1a6;
+  --dot-max: #fdfcf147;
 
   /* --- tipografi: keluarga -------------------------------- */
   --font-display: "Space Grotesk Variable", system-ui, sans-serif;

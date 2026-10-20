@@ -32,7 +32,7 @@
   <rect x="1190" y="396" width="260" height="34" fill="none" stroke="#1a152233" stroke-width="1" stroke-dasharray="12 9"/>
   <rect x="1190" y="452" width="260" height="34" fill="none" stroke="#1a152233" stroke-width="1" stroke-dasharray="12 9"/>
   <rect x="1190" y="508" width="260" height="34" fill="none" stroke="#1a152233" stroke-width="1" stroke-dasharray="12 9"/>
-  <rect x="1190" y="690" width="260" height="56" fill="#12795a" stroke="#1a152233" stroke-width="1"/>
+  <rect x="1190" y="690" width="260" height="56" fill="#2a1eff" stroke="#1a152233" stroke-width="1"/>
   <g stroke="#1a15227a" stroke-width="2" fill="none">
     <path d="M120 750v96M1480 750v96"/>
     <path d="M120 798h1360"/>
@@ -41,7 +41,7 @@
   <text x="800" y="864" font-family="ui-monospace, 'JetBrains Mono Variable', monospace" font-size="44" letter-spacing="3" fill="#1a1522c7" text-anchor="middle">1440</text>
 
   <g font-family="ui-monospace, 'JetBrains Mono Variable', monospace" font-size="40" letter-spacing="2">
-    <circle cx="88" cy="922" r="6" fill="#12795a"/>
+    <circle cx="88" cy="922" r="6" fill="#2a1eff"/>
     <text x="112" y="933" fill="#1a1522b3">fig. 03.5 · e-baso-ikan</text>
   </g>
   <g stroke="#1a152233" stroke-width="1" fill="none">

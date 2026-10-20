@@ -16,7 +16,7 @@
 
   <rect x="120" y="180" width="420" height="600" fill="none" stroke="#1a152233" stroke-width="1"/>
   <text x="140" y="222" font-family="ui-monospace, 'JetBrains Mono Variable', monospace" font-size="46" letter-spacing="1" fill="#1a1522c7" text-anchor="start">berkas</text>
-  <rect x="150" y="244" width="14" height="26" fill="#12795a" stroke="#1a152233" stroke-width="1"/>
+  <rect x="150" y="244" width="14" height="26" fill="#2a1eff" stroke="#1a152233" stroke-width="1"/>
   <text x="226" y="268" font-family="ui-monospace, 'JetBrains Mono Variable', monospace" font-size="46" letter-spacing="1" fill="#1a1522c7" text-anchor="start">src</text>
   <text x="232" y="326" font-family="ui-monospace, 'JetBrains Mono Variable', monospace" font-size="46" letter-spacing="1" fill="#1a1522c7" text-anchor="start">index.ts</text>
   <text x="226" y="384" font-family="ui-monospace, 'JetBrains Mono Variable', monospace" font-size="46" letter-spacing="1" fill="#1a1522c7" text-anchor="start">templates</text>
@@ -33,7 +33,7 @@
   <rect x="620" y="404" width="840" height="320" fill="none" stroke="#1a152233" stroke-width="1" stroke-dasharray="12 9"/>
   <rect x="640" y="444" width="240" height="30" fill="none" stroke="#1a152233" stroke-width="1" stroke-dasharray="12 9"/>
   <rect x="640" y="490" width="360" height="30" fill="none" stroke="#1a152233" stroke-width="1" stroke-dasharray="12 9"/>
-  <rect x="640" y="566" width="160" height="44" fill="#12795a" stroke="#1a152233" stroke-width="1"/>
+  <rect x="640" y="566" width="160" height="44" fill="#2a1eff" stroke="#1a152233" stroke-width="1"/>
   <g stroke="#1a15227a" stroke-width="2" fill="none">
     <path d="M120 750v96M1480 750v96"/>
     <path d="M120 798h1360"/>
@@ -42,7 +42,7 @@
   <text x="800" y="864" font-family="ui-monospace, 'JetBrains Mono Variable', monospace" font-size="44" letter-spacing="3" fill="#1a1522c7" text-anchor="middle">1440</text>
 
   <g font-family="ui-monospace, 'JetBrains Mono Variable', monospace" font-size="40" letter-spacing="2">
-    <circle cx="88" cy="922" r="6" fill="#12795a"/>
+    <circle cx="88" cy="922" r="6" fill="#2a1eff"/>
     <text x="112" y="933" fill="#1a1522b3">fig. 03.6 · orbit-cli</text>
   </g>
   <g stroke="#1a152233" stroke-width="1" fill="none">

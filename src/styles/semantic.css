@@ -24,8 +24,6 @@
   /* aksen dasar */
   --color-electric: var(--electric);
   --color-lemon: var(--lemon);
-  --color-violet: var(--violet);
-  --color-magenta: var(--magenta);
   --color-white: var(--white);
   --color-dot-close: var(--dot-close);
   --color-dot-min: var(--dot-min);
@@ -54,28 +52,17 @@
   --accent: var(--electric);
 }
 
-/* Satu section satu warna. Dideklarasikan SEKALI di sini, bukan
-   di dalam komponen masing-masing. */
+/* Satu aksen untuk seluruh situs. Palet dikunci empat warna: kertas,
+   tinta, biru elektrik, lemon. Tidak ada aksen per section lagi, jadi
+   semua garis, node, dan badge memakai biru yang sama. */
 .hero,
 #tentang,
 #stack,
+#proyek,
 #layanan,
+#pengalaman,
+#pendidikan,
+#sertifikasi,
 #kontak {
   --accent: var(--electric);
-}
-
-#proyek {
-  --accent: var(--green);
-}
-
-#pengalaman {
-  --accent: var(--amber);
-}
-
-#pendidikan {
-  --accent: var(--violet);
-}
-
-#sertifikasi {
-  --accent: var(--magenta);
 }

@@ -67,8 +67,8 @@
 }
 
 /* Label pita jadi badge solid berwarna aksen section, supaya garis hatch
-   tidak menembus huruf. Kontras teks paper di atas aksen: 5.21:1 (green,
-   amber 5.66, magenta 6.73, violet 7.3, electric 7.47) — semua lolos AA. */
+   tidak menembus huruf. Kontras teks kertas di atas electric 7.47:1 — lolos
+   AA untuk teks normal maupun besar. */
 .section-comment span[data-state] {
   display: inline-block;
   padding-block: 0.22rem;

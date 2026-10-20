@@ -110,15 +110,16 @@ const logos = stack.map((s) => ({ src: s.logo, alt: s.name, title: s.name }))
     bottom: 0.3rem;
   }
 
-  /* Logo hitam dulu, warna asli saat hover. */
+  /* Logo selalu monokrom: sidik asli dimatikan, hanya tinta yang tersisa.
+     Hover menaikkan opasitas, bukan mengembalikan warna merek — palet
+     dikunci empat warna. */
   .loop-band :global(img) {
     filter: brightness(0) saturate(100%);
-    opacity: 0.72;
-    transition: filter var(--dur-base) var(--ease), opacity var(--dur-base) var(--ease);
+    opacity: 0.62;
+    transition: opacity var(--dur-base) var(--ease);
   }
 
   .loop-band :global(li:hover img) {
-    filter: none;
     opacity: 1;
   }
 
