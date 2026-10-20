@@ -273,8 +273,8 @@ const link = gl => {
   const read = name => style.getPropertyValue(name).trim();
 
   const settings = {
-    /* Urutan = posisi kiri ke kanan. Lemon di kiri, electric di kanan. */
-    stops: [read('--color-lemon'), read('--color-electric')]
+    /* Urutan = posisi kiri ke kanan. Electric di kiri, lemon di kanan. */
+    stops: [read('--color-electric'), read('--color-lemon')]
       .filter(Boolean)
       .slice(0, MAX_STOPS),
     amplitude: 0.6,
