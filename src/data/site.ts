@@ -116,6 +116,8 @@ export const stack = [
   { name: 'PHP', logo: '/logos/php.svg' },
   { name: 'Laravel', logo: '/logos/laravel.svg' },
   { name: 'CodeIgniter', logo: '/logos/codeigniter.svg' },
+  { name: 'Flutter', logo: '/logos/flutter.svg' },
+  { name: 'Dart', logo: '/logos/dart.svg' },
   { name: 'Vue.js', logo: '/logos/vuedotjs.svg' },
   { name: 'Nuxt', logo: '/logos/nuxt.svg' },
   { name: 'Angular', logo: '/logos/angular.svg' },
