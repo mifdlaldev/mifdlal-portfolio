@@ -9,138 +9,197 @@ import CodeComment from './CodeComment.astro'
     <div class="section-head">
       <span class="fig-label">fig. 04 · layanan</span>
       <h2 class="section-headline">Yang dapat saya kerjakan untuk bisnis Anda.</h2>
+      <p class="service-intro">
+        Tiap layanan punya panelnya sendiri. Panel itu tempat alur kerjanya
+        digambarkan, supaya Anda melihat mekanismenya, bukan hanya membaca
+        daftar kemampuan.
+      </p>
     </div>
 
-    <ul class="service-list">
+    <ol class="service-list">
       {services.map((s) => (
-        <li class="service-card">
-          <div class="service-media">
-            {/* Gambar dummy: ganti file di public/services/ saat asli siap. */}
-            <img
-              src={s.image}
-              alt={`Ilustrasi ${s.title}`}
-              draggable="false"
-              width="800"
-              height="500"
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
-          <div class="service-body">
+        <li class="service-row">
+          <div class="service-text">
             <span class="service-no">{s.no}</span>
             <h3 class="service-title">{s.title}</h3>
-            <p class="service-text">{s.body}</p>
+            <p class="service-desc">{s.body}</p>
+          </div>
+
+          <div class="service-panel">
+            <div class="service-bar">
+              <span class="service-dots" aria-hidden="true">
+                <span></span><span></span><span></span>
+              </span>
+              <span class="service-bar-label">fig. 05.{s.no}</span>
+            </div>
+            <div class="service-frame">
+              {/* Kanvas kosong: digambar oleh public/js/service-canvas.js.
+                  Ganti isi skrip itu dengan animasi asli saat asetnya siap. */}
+              <canvas
+                class="service-canvas"
+                data-service-canvas
+                data-index={s.no}
+                role="img"
+                aria-label={`Kanvas alur kerja layanan ${s.no}: ${s.title}`}
+              ></canvas>
+            </div>
           </div>
         </li>
       ))}
-    </ul>
+    </ol>
   </div>
 </section>
 
 <style>
-  #layanan {
-    /* Biru yang sama dengan kartu email di section kontak. */
-  }
-
-  /* Satu warna per section: tiga kartu memakai aksen section yang sama.
-     Pembeda antar kartu = nomor dan judul, bukan warna. */
-
-  /* Judul section di tengah: blok dibatasi 56ch lalu dipusatkan,
-     isinya ikut center. */
   .section-head {
-    margin: 0 auto 2.5rem;
-    max-width: 56ch;
-    text-align: center;
+    max-width: 62ch;
+    margin-bottom: clamp(2rem, 4vw, 2.75rem);
   }
 
-  /* Kartu terpisah: tiap kartu punya border sendiri, jarak antar kartu
-     pakai gap. Tidak ada border luar bersama. */
+  /* Kalimat pembuka dibatasi 58ch: satu tarikan mata, bukan satu baris
+     selebar section. */
+  .service-intro {
+    margin: 0.85rem 0 0;
+    max-width: 58ch;
+    font-size: var(--text-body);
+    line-height: var(--leading-relaxed);
+    color: var(--color-muted);
+  }
+
+  /* Satu baris = satu layanan. Baris dipisah garis rambut, bukan kotak:
+     daftar, bukan tiga kartu berdampingan. */
   .service-list {
     list-style: none;
     margin: 0;
     padding: 0;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .service-row {
     display: grid;
-    gap: 1.5rem;
-  }
-
-  .service-card {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid var(--color-line);
-    border-top: 2px solid var(--accent, var(--color-line));
-    background: var(--color-paper);
-    transition: border-color var(--dur-fast) var(--ease);
-  }
-
-  .service-card:hover {
-    border-color: color-mix(in srgb, var(--color-ink) 34%, transparent);
-    border-top-color: var(--accent, var(--color-line));
-  }
-
-  .service-media {
-    aspect-ratio: 16 / 10;
-    overflow: hidden;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.75rem;
+    padding-block: clamp(2rem, 5vw, 3.25rem);
     border-bottom: 1px solid var(--color-line);
-    background: var(--color-paper);
+    align-items: center;
   }
 
-  .service-media img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  /* Blok teks kartu: permukaan biru, sama seperti kartu email di kontak.
-     Area gambar tetap kertas supaya gambar tidak tenggelam. */
-  /* Body mengisi sisa tinggi kartu. Tanpa ini, kartu yang teksnya lebih pendek
-     menyisakan kertas kosong di bawah blok biru, sehingga tiga blok biru
-     berhenti di ketinggian berbeda meski kotaknya sama tinggi. */
-  .service-body {
+  .service-text {
     display: flex;
-    flex: 1 1 auto;
     flex-direction: column;
-    gap: 0.55rem;
-    padding: 1.25rem 1.25rem 1.5rem;
-    background: var(--accent, transparent);
+    gap: 0.6rem;
   }
 
-  /* Di atas biru: nomor pakai lemon, judul dan isi pakai kertas. */
   .service-no {
     font-family: var(--font-mono);
     font-size: var(--text-label);
     letter-spacing: var(--tracking-caps-loose);
-    color: var(--color-lemon);
+    color: var(--color-muted);
+    text-transform: uppercase;
   }
 
   .service-title {
+    margin: 0.1rem 0 0;
     font-family: var(--font-display);
-    color: var(--color-paper);
-    font-size: var(--text-title);
-    font-weight: 600;
-    letter-spacing: var(--tracking-title);
-    line-height: var(--leading-title);
-    margin: 0;
+    font-size: var(--text-h3);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-heading);
+    line-height: var(--leading-heading);
+    color: var(--color-ink);
     text-wrap: balance;
   }
 
-  .service-text {
-    margin: 0;
-    color: color-mix(in srgb, var(--color-paper) 90%, transparent);
+  .service-desc {
+    margin: 0.15rem 0 0;
     font-size: var(--text-body);
     line-height: var(--leading-relaxed);
+    color: var(--color-muted);
   }
 
-  /* Tiga kartu sejajar; di layar sempit menumpuk satu kolom. */
-  @media (min-width: 860px) {
-    .service-list {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* Panel: jendela gelap di atas kertas. Satu-satunya bidang gelap besar
+     di section ini, jadi mata langsung jatuh ke sana. */
+  .service-panel {
+    border: 1px solid var(--color-ink);
+    background: var(--color-ink);
+    overflow: hidden;
+  }
+
+  .service-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.55rem 0.85rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-paper) 14%, transparent);
+  }
+
+  .service-dots {
+    display: flex;
+    align-items: center;
+    align-self: center;
+    gap: 0.5625rem;
+  }
+
+  /* Tiga titik jendela. 14px, rasio 0.41 dari tinggi bar seperti kontrol
+     jendela macOS. Ukuran ini penting: pada zoom peramban pecahan (80%, 90%)
+     titik kecil dibulatkan raster jadi 7x6 dan terbaca lonjong; 14px turun ke
+     11x11 tetap bulat. flex 0 0 auto mencegahnya dipencet flexbox. */
+  .service-dots span {
+    inline-size: 0.875rem;
+    block-size: 0.875rem;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: var(--color-dot-close);
+  }
+
+  .service-dots span:nth-child(2) {
+    background: var(--color-dot-min);
+  }
+
+  .service-dots span:nth-child(3) {
+    background: var(--color-dot-max);
+  }
+
+  .service-bar-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-cap);
+    letter-spacing: var(--tracking-caps-loose);
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--color-paper) 62%, transparent);
+  }
+
+  .service-frame {
+    position: relative;
+    aspect-ratio: 16 / 10;
+  }
+
+  .service-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Zigzag: baris ganjil teks di kiri, baris genap panel di kiri. */
+  @media (min-width: 800px) {
+    .service-row {
+      grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+      gap: clamp(2rem, 5vw, 4.5rem);
     }
-  }
 
-  @media (prefers-reduced-motion: reduce) {
-    .service-card {
-      transition: none;
+    /* Kolom dibalik, bukan hanya urutannya. Tanpa ini panel pada baris
+       genap masuk ke kolom sempit dan tampak lebih kecil dari baris lain. */
+    .service-row:nth-child(even) {
+      grid-template-columns: minmax(0, 1.18fr) minmax(0, 0.82fr);
+    }
+
+    .service-row:nth-child(even) .service-text {
+      order: 2;
+    }
+
+    .service-row:nth-child(even) .service-panel {
+      order: 1;
     }
   }
 </style>
+
+<script is:inline src="/js/service-canvas.js" defer></script>

@@ -27,6 +27,9 @@
   --color-violet: var(--violet);
   --color-magenta: var(--magenta);
   --color-white: var(--white);
+  --color-dot-close: var(--dot-close);
+  --color-dot-min: var(--dot-min);
+  --color-dot-max: var(--dot-max);
 
   /* seleksi teks: elektrik 18% di atas permukaan */
   --selection-bg: color-mix(in srgb, var(--electric) 18%, transparent);

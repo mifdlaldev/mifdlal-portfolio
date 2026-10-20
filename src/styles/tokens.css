@@ -26,6 +26,12 @@
   --hero-ramp-mid: #6b7bff; /* nada tengah ramp ASCII di hero */
   --white: #ffffff;
 
+  /* Tiga titik jendela: warna sistem macOS, dipakai apa adanya supaya
+     terbaca sebagai kontrol jendela, bukan hiasan. */
+  --dot-close: #ff5f57;
+  --dot-min: #febc2e;
+  --dot-max: #28c840;
+
   /* --- tipografi: keluarga -------------------------------- */
   --font-display: "Space Grotesk Variable", system-ui, sans-serif;
   --font-body: "Inter Variable", system-ui, -apple-system, sans-serif;
