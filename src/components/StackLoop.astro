@@ -6,22 +6,20 @@ const logos = stack.map((s) => ({ src: s.logo, alt: s.name, title: s.name }))
 ---
 
 <section id="stack" class="section section--band">
-  <div class="wrap">
-    <div class="loop-band">
-      <LogoLoop
-        client:visible
-        logos={logos}
-        speed={55}
-        logoHeight={34}
-        gap={0}
-        fadeOut={false}
-        pauseOnHover={true}
-        scaleOnHover={false}
-        labels="hover"
-        intro={false}
-        ariaLabel="Teknologi yang dipakai"
-      />
-    </div>
+  <div class="loop-band">
+    <LogoLoop
+      client:visible
+      logos={logos}
+      speed={55}
+      logoHeight={34}
+      gap={0}
+      fadeOut={false}
+      pauseOnHover={true}
+      scaleOnHover={false}
+      labels="hover"
+      intro={false}
+      ariaLabel="Teknologi yang dipakai"
+    />
   </div>
 </section>
 
@@ -29,14 +27,18 @@ const logos = stack.map((s) => ({ src: s.logo, alt: s.name, title: s.name }))
   /* Pita logo tidak punya identitas warna sendiri; node di rail memakai
      aksen utama situs supaya tidak tertinggal abu. */
 
-  /* Strip logo: dikurung di dalam container, sel rapat bergaris. */
+  /* Strip logo: selebar rail section, bukan selebar viewport. */
   .loop-band {
     position: relative;
     overflow: hidden;
     /* Transparan: garis rail vertikal section tetap terlihat menembus pita. */
     background: transparent;
-    /* Keluar dari padding .wrap supaya tepi loop pas di garis kiri/kanan. */
-    margin-inline: calc(-1 * var(--grid-gutter));
+    /* Tepi pita jatuh tepat di kolom rail: rail kiri digambar pada
+       var(--rail-offset) dan rail kanan pada calc(100% - var(--rail-offset)),
+       yang untuk garis 1px berakhir satu kolom sebelum tepi itu. Dengan
+       margin rail-offset di kedua sisi, kolom 1px di tepi pita menempati
+       kolom yang sama dengan rail section di atas dan di bawahnya. */
+    margin-inline: var(--rail-offset);
   }
 
   /* Tinggi band dikunci: garis pemisah sel membentang penuh
@@ -77,35 +79,9 @@ const logos = stack.map((s) => ({ src: s.logo, alt: s.name, title: s.name }))
     border-right: 1px solid var(--color-line);
   }
 
-  /* Ujung strip: garis putus-putus, menutup rail solid di segmen ini
-     supaya batas masuk/keluarnya logo terbaca. */
-  .loop-band::before,
-  .loop-band::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 5px;
-    background-color: var(--color-paper);
-    background-image: repeating-linear-gradient(
-      to bottom,
-      var(--color-line) 0 4px,
-      transparent 4px 9px
-    );
-    background-size: 1px 100%;
-    background-repeat: no-repeat;
-    background-position: center;
-    z-index: var(--z-band);
-    pointer-events: none;
-  }
-
-  .loop-band::before {
-    left: -2px;
-  }
-
-  .loop-band::after {
-    right: -2px;
-  }
+  /* Ujung strip: garis putus-putus digambar oleh .section--band memakai
+     posisi rail yang sama dengan section lain, jadi tidak perlu pseudo
+     di sini. */
 
   /* Tooltip nama tools: chip mono kecil di bawah logo. */
   .loop-band :global(li > span) {

@@ -179,10 +179,29 @@
 .section--band {
   padding-block-start: 0;
   padding-block-end: 0;
-  /* Satu garis saja di tepi atas; gradient kedua dari .section dimatikan. */
-  background-image: linear-gradient(var(--color-line), var(--color-line));
-  background-size: 100% 1px;
-  background-position: 0 0;
+  /* Tiga lapis: garis tepi atas, lalu rail kiri dan kanan berbentuk garis
+     putus-putus. Posisi rail memakai ekspresi yang sama persis dengan rail
+     solid .section, jadi garis putus-putus pita selalu jatuh di kolom yang
+     sama dengan rail section di atas dan di bawahnya, pada lebar apa pun.
+     Gradient kedua (garis konten) dari .section dimatikan. */
+  background-image:
+    linear-gradient(var(--color-line), var(--color-line)),
+    repeating-linear-gradient(
+      to bottom,
+      var(--color-line) 0 4px,
+      transparent 4px 9px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      var(--color-line) 0 4px,
+      transparent 4px 9px
+    );
+  background-size: 100% 1px, 1px 100%, 1px 100%;
+  background-repeat: no-repeat;
+  background-position:
+    0 0,
+    var(--rail-offset) 0,
+    calc(100% - var(--rail-offset)) 0;
 }
 
 .section--band > .wrap {
