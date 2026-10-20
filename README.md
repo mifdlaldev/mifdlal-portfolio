@@ -688,9 +688,11 @@ di dashboard Cloudflare. Security headers diserve dari `public/_headers`.
 `hello@mifdlal.com` (tujuan utama). Fallback sementara sampai email domain aktif
 tercatat di `src/data/site.ts`.
 
-## Kontribusi
+## Kepemilikan
 
-Lihat [CONTRIBUTING.md](CONTRIBUTING.md) dan [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+Repositori ini proyek pribadi dan tidak menerima kontribusi luar. Tidak ada alur
+pull request, tidak ada panduan kontributor, dan tidak ada kode etik komunitas
+karena tidak ada komunitas yang dilayani. Perubahan hanya dikerjakan pemilik.
 
 ## Keamanan
 
