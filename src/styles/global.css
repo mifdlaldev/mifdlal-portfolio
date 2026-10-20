@@ -134,7 +134,9 @@ picture {
   padding-block-start: clamp(1.5rem, 3vw, 2rem);
 }
 
-/* Node kotak outline di setiap perpotongan garis. */
+/* Node kotak padat di setiap perpotongan garis: isi sama dengan garis
+   tepinya, bukan bingkai kosong. Satu kotak 12px di tiap ujung garis,
+   jadi mata membaca titik simpul, bukan hiasan. */
 .section::before,
 .section::after,
 .section > .wrap::before,
@@ -144,7 +146,7 @@ picture {
   width: var(--node-size);
   height: var(--node-size);
   border: 1px solid var(--accent, var(--color-line));
-  background: transparent;
+  background: var(--accent, var(--color-line));
   box-sizing: border-box;
   pointer-events: none;
   z-index: var(--z-raise);
