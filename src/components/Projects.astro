@@ -11,189 +11,190 @@ import CodeComment from './CodeComment.astro'
       <h2 class="section-headline">Hasil kerja yang dapat Anda periksa sendiri.</h2>
     </div>
 
-    <ol class="project-list">
+    <ul class="project-list">
       {projects.map((p) => (
-        <li class="project-row-li">
+        <li class="project-card">
           <a
             href={p.live}
             target="_blank"
             rel="noopener noreferrer"
-            class="project-row"
+            class="project-link"
           >
-            <span class="proof-no">{p.no}</span>
-
-            <div class="project-main">
-              <div class="project-head">
-                <h3 class="project-name">{p.name}</h3>
+            <div class="project-body">
+              <div class="project-top">
+                <span class="project-no">{p.no}</span>
                 <span class="project-role">{p.role}</span>
               </div>
-              <p class="project-desc">{p.description}</p>
-            </div>
 
-            <div class="project-side">
-              <span class="project-stack">{p.stack.join(' · ')}</span>
-              <span class="project-link">
-                live<span class="arrow" aria-hidden="true">↗</span>
-              </span>
+              <h3 class="project-name">{p.name}</h3>
+              <p class="project-desc">{p.description}</p>
+
+              <div class="project-foot">
+                <span class="project-stack">{p.stack.join(' · ')}</span>
+                <span class="project-cta">
+                  live<span class="arrow" aria-hidden="true">↗</span>
+                </span>
+              </div>
             </div>
           </a>
         </li>
       ))}
-    </ol>
+    </ul>
   </div>
 </section>
 
 <style>
-
   .section-head {
     margin-bottom: 2.5rem;
     max-width: 56ch;
   }
 
-  /* Baris lebar bernomor: bukan grid kartu identik */
+  /* Bentuk kartu mengikuti section layanan: kotak bergaris, pita aksen di tepi
+     atas, dan blok warna yang mengisi seluruh badan kartu. Bedanya, kartu
+     proyek tidak punya area gambar karena setiap entri di sini adalah tautan
+     hidup, bukan ilustrasi. */
   .project-list {
     list-style: none;
     margin: 0;
     padding: 0;
-    border-top: 1px solid var(--color-line);
-  }
-
-  .project-row-li {
-    border-bottom: 1px solid var(--color-line);
-  }
-
-  .project-row {
     display: grid;
-    grid-template-columns: 2rem 1fr;
-    gap: 1rem 1.25rem;
-    padding: 1.375rem 0.5rem;
+    gap: 1.5rem;
+  }
+
+  .project-card {
+    display: flex;
+    border: 1px solid var(--color-line);
+    border-top: 2px solid var(--accent, var(--color-line));
+    background: var(--color-paper);
+    transition: border-color var(--dur-fast) var(--ease);
+  }
+
+  .project-card:hover {
+    border-color: color-mix(in srgb, var(--color-ink) 34%, transparent);
+    border-top-color: var(--accent, var(--color-line));
+  }
+
+  /* Tautan mengisi kartu, jadi seluruh bidang warna dapat diklik. */
+  .project-link {
+    display: flex;
+    flex: 1 1 auto;
     text-decoration: none;
     color: inherit;
-    position: relative;
-    transition: background-color var(--dur-fast) var(--ease);
   }
 
-  .project-row::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: var(--accent, var(--color-electric));
-    transform: scaleY(0);
-    transform-origin: center;
-    transition: transform var(--dur-base) var(--ease);
-  }
-
-  .project-row:hover,
-  .project-row:focus-visible {
-    background: color-mix(in srgb, var(--accent, var(--color-electric)) 5%, var(--color-paper));
-    outline: none;
-  }
-
-  .project-row:hover::before,
-  .project-row:focus-visible::before {
-    transform: scaleY(1);
-  }
-
-  .proof-no {
-    font-family: var(--font-mono);
-    font-size: var(--text-label);
-    color: var(--accent, var(--color-muted));
-    padding-top: 0.25rem;
-  }
-
-  .project-main {
-    min-width: 0;
-  }
-
-  .project-head {
+  /* Nomor, peran, nama, keterangan, lalu kaki kartu yang menempel di dasar
+     supaya kartu sebaris tetap rata bawah meski panjang teksnya berbeda. */
+  .project-body {
     display: flex;
-    flex-wrap: wrap;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.25rem 1.25rem 1.5rem;
+    background: var(--accent, transparent);
+  }
+
+  .project-link:focus-visible {
+    outline: 2px solid var(--color-paper);
+    outline-offset: calc(-1 * 0.5rem);
+  }
+
+  .project-top {
+    display: flex;
     align-items: baseline;
     justify-content: space-between;
-    gap: 0.25rem 1rem;
+    gap: 0.75rem;
   }
 
-  .project-name {
-    font-family: var(--font-display);
-    font-size: var(--text-title);
-    font-weight: 600;
-    letter-spacing: var(--tracking-title);
-    margin: 0;
+  /* Nomor memakai lemon yang dicampur putih: pada hijau tua lemon murni hanya
+     mencapai kontras 4,48, campuran 82 persen menaikkannya ke 4,63. */
+  .project-no {
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-caps-loose);
+    color: color-mix(in srgb, var(--color-lemon) 82%, var(--color-white));
   }
 
   .project-role {
     font-family: var(--font-mono);
     font-size: var(--text-label);
     text-transform: lowercase;
-    color: var(--color-muted);
     text-align: right;
-    max-width: 12rem;
+    color: color-mix(in srgb, var(--color-paper) 90%, transparent);
+  }
+
+  .project-name {
+    font-family: var(--font-display);
+    font-size: var(--text-title);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-title);
+    line-height: var(--leading-title);
+    color: var(--color-paper);
+    margin: 0;
+    overflow-wrap: anywhere;
   }
 
   .project-desc {
-    margin: 0.4rem 0 0;
-    font-size: var(--text-sm);
+    margin: 0;
+    font-size: var(--text-body);
     line-height: var(--leading-relaxed);
-    color: var(--color-muted);
-    max-width: 62ch;
+    color: color-mix(in srgb, var(--color-paper) 90%, transparent);
   }
 
-  .project-side {
-    display: none;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.4rem;
-    padding-top: 0.15rem;
+  /* Kaki kartu didorong ke dasar; kartu dengan teks pendek tetap rata. */
+  .project-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: auto;
+    padding-top: 0.75rem;
   }
 
   .project-stack {
     font-family: var(--font-mono);
     font-size: var(--text-label);
-    color: var(--color-muted);
+    color: color-mix(in srgb, var(--color-paper) 90%, transparent);
+  }
+
+  .project-cta {
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-caps-tight);
+    text-transform: lowercase;
+    color: var(--color-paper);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.15rem;
     white-space: nowrap;
   }
 
-  .project-link {
-    font-family: var(--font-mono);
-    font-size: var(--text-label);
-    font-weight: 600;
-    letter-spacing: var(--tracking-caps-tight);
-    text-transform: lowercase;
-    color: var(--accent, var(--color-electric));
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-  }
-
   .arrow {
-    margin-left: 0.15rem;
+    display: inline-block;
+    transition: transform var(--dur-fast) var(--ease);
   }
 
-  /* Tablet ke atas: kolom stack/live di kanan */
+  .project-link:hover .arrow,
+  .project-link:focus-visible .arrow {
+    transform: translate(0.1rem, -0.1rem);
+  }
+
   @media (min-width: 720px) {
-    .project-row {
-      grid-template-columns: 2.5rem 1fr auto;
-      align-items: center;
-    }
-    .project-side {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 1.25rem;
+    .project-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
   @media (min-width: 980px) {
-    .project-row {
-      grid-template-columns: 2.5rem 1fr 14rem auto;
+    .project-list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
-    .project-side {
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 0.4rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .project-card,
+    .arrow {
+      transition: none;
     }
   }
 </style>
