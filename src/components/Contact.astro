@@ -3,6 +3,7 @@ import { contact } from '../data/site'
 const subject = encodeURIComponent('Diskusi proyek web atau otomasi AI')
 import CodeComment from './CodeComment.astro'
 import SocialIcons from './SocialIcons.astro'
+import CopyEmail from './CopyEmail'
 ---
 
 <section id="kontak" class="section">
@@ -35,12 +36,15 @@ import SocialIcons from './SocialIcons.astro'
       <div class="contact-panel">
         <div class="panel-block">
           <p class="panel-label">email</p>
-          <a
-            href={`mailto:${contact.email}?subject=${subject}`}
-            class="contact-email"
-          >
-            {contact.email}
-          </a>
+          <div class="email-row">
+            <a
+              href={`mailto:${contact.email}?subject=${subject}`}
+              class="contact-email"
+            >
+              {contact.email}
+            </a>
+            <CopyEmail email={contact.email} client:visible />
+          </div>
         </div>
 
         <div class="panel-block">
@@ -183,6 +187,81 @@ import SocialIcons from './SocialIcons.astro'
   .contact-email:hover {
     color: var(--color-lemon);
     border-bottom-color: var(--color-lemon);
+  }
+
+  /* Baris email: tautan mailto + tombol salin. Tombol dirender oleh island
+     React, jadi selektornya memakai :global — atribut scope Astro tidak
+     menempel ke elemen yang dibuat komponen anak. */
+  .email-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+  }
+
+  .email-row :global(.copy-email) {
+    position: relative;
+    display: inline-flex;
+  }
+
+  .email-row :global(.copy-email__btn) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    /* Padding 12 + border 1 menyisakan kotak isi 18px, sama dengan ukuran
+       ikon. Player animasi menggambar SVG selebar kotak isi, jadi ikon
+       tidak ikut membesar mengikuti kotak sentuh 44px. */
+    padding: 12px;
+    border: 1px solid color-mix(in srgb, var(--color-paper) 35%, transparent);
+    background: transparent;
+    color: color-mix(in srgb, var(--color-paper) 92%, transparent);
+    cursor: pointer;
+    transition:
+      color var(--dur-fast) var(--ease),
+      border-color var(--dur-fast) var(--ease);
+  }
+
+  .email-row :global(.copy-email__btn svg) {
+    display: block;
+  }
+
+  .email-row :global(.copy-email__btn:hover) {
+    color: var(--color-lemon);
+    border-color: var(--color-lemon);
+  }
+
+  .email-row :global(.copy-email__btn:focus-visible) {
+    outline: 2px solid var(--color-lemon);
+    outline-offset: 2px;
+  }
+
+  /* Status melayang di atas tombol: tidak menggeser baris saat muncul.
+     Ditengahkan terhadap kotak tombol (bukan rata kiri), karena teksnya
+     lebih lebar daripada tombol 44px. */
+  .email-row :global(.copy-email__status) {
+    position: absolute;
+    bottom: calc(100% + 0.35rem);
+    left: 50%;
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-caps);
+    text-transform: lowercase;
+    white-space: nowrap;
+    color: var(--color-lemon);
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-50%, 2px);
+    transition:
+      opacity var(--dur-fast) var(--ease),
+      transform var(--dur-fast) var(--ease);
+  }
+
+  .email-row :global(.copy-email__status:not(:empty)) {
+    opacity: 1;
+    transform: translate(-50%, 0);
   }
 
   .brief-list {
