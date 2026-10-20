@@ -238,11 +238,13 @@ import CopyEmail from './CopyEmail'
     outline-offset: 2px;
   }
 
-  /* Status melayang di atas tombol: tidak menggeser baris saat muncul. */
+  /* Status melayang di atas tombol: tidak menggeser baris saat muncul.
+     Ditengahkan terhadap kotak tombol (bukan rata kiri), karena teksnya
+     lebih lebar daripada tombol 44px. */
   .email-row :global(.copy-email__status) {
     position: absolute;
     bottom: calc(100% + 0.35rem);
-    left: 0;
+    left: 50%;
     font-family: var(--font-mono);
     font-size: var(--text-label);
     letter-spacing: var(--tracking-caps);
@@ -251,7 +253,7 @@ import CopyEmail from './CopyEmail'
     color: var(--color-lemon);
     pointer-events: none;
     opacity: 0;
-    transform: translateY(2px);
+    transform: translate(-50%, 2px);
     transition:
       opacity var(--dur-fast) var(--ease),
       transform var(--dur-fast) var(--ease);
@@ -259,7 +261,7 @@ import CopyEmail from './CopyEmail'
 
   .email-row :global(.copy-email__status:not(:empty)) {
     opacity: 1;
-    transform: none;
+    transform: translate(-50%, 0);
   }
 
   .brief-list {
