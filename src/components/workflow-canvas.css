@@ -102,12 +102,20 @@
 }
 
 /* Hub tile: label jadi tooltip — muncul saat hover/fokus pada ikon brain saja,
-   bukan seluruh kotak. Posisi: DI ATAS tile. Pola sama dengan LogoLoop. */
+   bukan seluruh kotak. Posisi: DI ATAS tile. Pola sama dengan LogoLoop.
+   Latar badge solid agar teks tetap terbaca di atas foto yang ramai. */
 .wf-tile--hub .wf-tile__label {
   bottom: calc(100% + 14px);
   top: auto;
   width: max-content;
   max-width: 320px;
+  padding: var(--badge-padding);
+  background: var(--badge-bg);
+  border: 1px solid var(--badge-border);
+  border-radius: var(--badge-radius);
+  box-shadow: var(--shadow-wf-tile);
+  backdrop-filter: var(--badge-blur);
+  -webkit-backdrop-filter: var(--badge-blur);
   opacity: 0;
   transform: translate(-50%, -4px);
   transition: opacity var(--dur-base) var(--ease), transform var(--dur-base) var(--ease);

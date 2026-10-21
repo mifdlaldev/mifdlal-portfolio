@@ -123,6 +123,13 @@
   --paper-16: rgba(253, 252, 241, 0.16);
   --paper-60: rgba(253, 252, 241, 0.6);
 
+  /* --- badge tooltip hub ----------------------------------- */
+  --badge-bg: rgba(26, 21, 34, 0.94);
+  --badge-border: rgba(253, 252, 241, 0.12);
+  --badge-padding: 7px 13px;
+  --badge-radius: var(--radius-lg);
+  --badge-blur: blur(6px);
+
   /* --- tipografi: ukuran (lokal diagram) ------------------- */
   --text-eyebrow: 0.75rem; /* label node 12px */
 
