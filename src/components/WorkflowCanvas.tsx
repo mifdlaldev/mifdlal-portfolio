@@ -85,10 +85,10 @@ const TileNode = memo(({ data }: NodeProps) => {
   return (
     <motion.div
       className={cls}
-      initial={{ opacity: 0, y: 8, scale: 0.97 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
       viewport={{ once: true, amount: 0.5 }}
-      transition={{ duration: 0.5, delay: order * 0.09, ease: [0.25, 0.46, 0.45, 0.94] }}
+      transition={{ duration: 0.45, delay: order * 0.09, ease: [0.25, 0.46, 0.45, 0.94] }}
     >
       {/* Napas hub: pulse lembut, redup-menyala. */}
       {d.tone === 'hub' && (
@@ -99,15 +99,25 @@ const TileNode = memo(({ data }: NodeProps) => {
         />
       )}
 
-      <span className="wf-tile__icon">{renderIcon(d.icon, d.brand, tick)}</span>
-      {d.tone === 'hub' ? (
-        <span className="wf-tile__label wf-tile__label--inside">
-          {d.label}
-          <span className="wf-tile__sub">orkestrasi tool</span>
-        </span>
-      ) : (
-        <span className="wf-tile__label">{d.label}</span>
-      )}
+      {/* Isi tile yang bergerak: transform di dalam tile, BUKAN di wrapper node.
+          Kalau wrapper node ditransform, React Flow mengukur handle saat offset
+          dan garis konektor meleset dari pusat tile. */}
+      <motion.span
+        className="wf-tile__inner"
+        initial={{ y: 6, scale: 0.96 }}
+        whileInView={{ y: 0, scale: 1 }}
+        viewport={{ once: true, amount: 0.5 }}
+        transition={{ duration: 0.5, delay: order * 0.09, ease: [0.25, 0.46, 0.45, 0.94] }}
+      >
+        <span className="wf-tile__icon">{renderIcon(d.icon, d.brand, tick)}</span>
+      </motion.span>
+
+      {/* Label di bawah tile untuk SEMUA tile — konsisten.
+          Ikon tepat di tengah tile, konektor melintang menyeberang ikon. */}
+      <span className="wf-tile__label">
+        {d.label}
+        {d.tone === 'hub' && <span className="wf-tile__sub">orkestrasi tool</span>}
+      </span>
 
       <Handle type="target" position={Position.Left} className="wf-handle" />
       <Handle type="source" position={Position.Right} className="wf-handle" />
