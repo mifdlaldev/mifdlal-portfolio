@@ -38,6 +38,12 @@ export default function SafariWindow({
     | null
   >(null);
 
+  // Drag pindah posisi window (dari title bar), clamp ke batas canvas.
+  const moveRef = useRef<
+    | { startX: number; startY: number; rect: Rect; maxW: number; maxH: number }
+    | null
+  >(null);
+
   // Ukuran awal: 84% x 74% dari frame canvas, rata tengah.
   // PENTING: pakai closest('.service-frame'), BUKAN parentElement —
   // Astro membungkus client component di <astro-island> yang ukurannya
@@ -86,9 +92,24 @@ export default function SafariWindow({
     return () => ro.disconnect();
   }, []);
 
-  // Pointer drag untuk resize dari 8 pinggiran/sudut.
+  // Pointer drag: resize dari 8 pinggiran/sudut, pindah dari title bar.
   useEffect(() => {
     const onMove = (e: PointerEvent) => {
+      // --- mode pindah posisi (title bar) ---
+      const m = moveRef.current;
+      if (m) {
+        const dx = e.clientX - m.startX;
+        const dy = e.clientY - m.startY;
+        // Clamp: window selalu utuh di dalam canvas.
+        const maxX = Math.max(0, m.maxW - m.rect.w);
+        const maxY = Math.max(0, m.maxH - m.rect.h);
+        const x = Math.min(Math.max(0, m.rect.x + dx), maxX);
+        const y = Math.min(Math.max(0, m.rect.y + dy), maxY);
+        setRect({ x, y, w: m.rect.w, h: m.rect.h });
+        return;
+      }
+
+      // --- mode resize ---
       const d = dragRef.current;
       if (!d) return;
       const dx = e.clientX - d.startX;
@@ -125,6 +146,10 @@ export default function SafariWindow({
         dragRef.current = null;
         document.body.classList.remove('is-resizing-safari');
       }
+      if (moveRef.current) {
+        moveRef.current = null;
+        document.body.classList.remove('is-moving-safari');
+      }
     };
 
     window.addEventListener('pointermove', onMove);
@@ -136,6 +161,20 @@ export default function SafariWindow({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Mulai pindah window: hanya dari title bar, bukan dari tab/dots.
+  const startMove = (e: React.PointerEvent) => {
+    const target = e.target as HTMLElement;
+    if (target.closest('.safari__tab') || target.closest('.safari__dot')) return;
+    const host = rootRef.current?.closest('.service-frame') as HTMLElement | null;
+    if (!host || !rect) return;
+    const maxW = host.clientWidth;
+    const maxH = host.clientHeight;
+    if (maxW <= 0 || maxH <= 0) return;
+    e.preventDefault();
+    moveRef.current = { startX: e.clientX, startY: e.clientY, rect, maxW, maxH };
+    document.body.classList.add('is-moving-safari');
+  };
 
   const startDrag = (e: React.PointerEvent, dir: Dir) => {
     e.preventDefault();
@@ -168,8 +207,9 @@ export default function SafariWindow({
           : { visibility: 'hidden' }
       }
     >
-      {/* Bar atas: traffic light + tab bar */}
-      <div className="safari__bar">
+      {/* Bar atas: traffic light + tab bar.
+          Drag dari sini memindahkan window (kecuali klik di tab/dots). */}
+      <div className="safari__bar" onPointerDown={startMove}>
         {/* Traffic light — SEMUA DINONAKTIFKAN, hanya affordance visual */}
         <div className="safari__dots" aria-hidden="true">
           <span

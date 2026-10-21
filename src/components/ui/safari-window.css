@@ -23,6 +23,12 @@
   padding: 7px 10px;
   border-bottom: 1px solid var(--ink-16);
   flex: 0 0 auto;
+  cursor: grab;
+  touch-action: none;
+}
+
+body.is-moving-safari .safari__bar {
+  cursor: grabbing;
 }
 
 .safari__dots {
@@ -235,10 +241,12 @@
 }
 
 /* Saat drag: iframe tidak boleh menangkap pointer, teks tidak terblok. */
-body.is-resizing-safari {
+body.is-resizing-safari,
+body.is-moving-safari {
   user-select: none;
 }
 
-body.is-resizing-safari .safari__frame {
+body.is-resizing-safari .safari__frame,
+body.is-moving-safari .safari__frame {
   pointer-events: none;
 }
