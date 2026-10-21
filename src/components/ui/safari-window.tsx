@@ -39,11 +39,17 @@ export default function SafariWindow({
   >(null);
 
   // Ukuran awal: 84% x 74% dari frame canvas, rata tengah.
+  // PENTING: pakai closest('.service-frame'), BUKAN parentElement —
+  // Astro membungkus client component di <astro-island> yang ukurannya
+  // 0×0 (inline kosong, konten absolute keluar dari alur). Jika
+  // parentElement dipakai, clientWidth/host = 0 → window collapse
+  // ke ukuran 0 saat pertama di-resize.
   useEffect(() => {
-    const host = rootRef.current?.parentElement;
+    const host = rootRef.current?.closest('.service-frame');
     if (!host) return;
     const pw = host.clientWidth;
     const ph = host.clientHeight;
+    if (pw <= 0 || ph <= 0) return;
     const w = Math.max(MIN_W, Math.min(pw - 16, Math.round(pw * 0.84)));
     const h = Math.max(MIN_H, Math.min(ph - 16, Math.round(ph * 0.74)));
     setRect({ x: Math.round((pw - w) / 2), y: Math.round((ph - h) / 2), w, h });
@@ -52,20 +58,27 @@ export default function SafariWindow({
 
   // Clamp otomatis saat frame canvas berubah ukuran (resize browser).
   useEffect(() => {
-    const host = rootRef.current?.parentElement;
+    const host = rootRef.current?.closest('.service-frame');
     if (!host) return;
     const ro = new ResizeObserver(() => {
       const pw = host.clientWidth;
       const ph = host.clientHeight;
+      if (pw <= 0 || ph <= 0) return;
       setRect((prev) => {
-        if (!prev) return prev;
+        if (pw <= 0 || ph <= 0) return prev;
+        if (!prev) {
+          // Frame baru punya ukuran (mis. section belum terlihat saat mount).
+          const w = Math.max(MIN_W, Math.min(pw - 16, Math.round(pw * 0.84)));
+          const h = Math.max(MIN_H, Math.min(ph - 16, Math.round(ph * 0.74)));
+          return { x: Math.round((pw - w) / 2), y: Math.round((ph - h) / 2), w, h };
+        }
         const w = Math.max(MIN_W, Math.min(prev.w, pw));
         const h = Math.max(MIN_H, Math.min(prev.h, ph));
         return {
           w,
           h,
-          x: Math.max(0, Math.min(prev.x, pw - w)),
-          y: Math.max(0, Math.min(prev.y, ph - h)),
+          x: Math.max(0, Math.min(prev.x, Math.max(0, pw - w))),
+          y: Math.max(0, Math.min(prev.y, Math.max(0, ph - h))),
         };
       });
     });
@@ -95,11 +108,14 @@ export default function SafariWindow({
         y = bottom - h;
       }
 
-      // Batas frame.
-      x = Math.max(0, Math.min(x, d.maxW - MIN_W));
-      y = Math.max(0, Math.min(y, d.maxH - MIN_H));
-      w = Math.min(w, d.maxW - x);
-      h = Math.min(h, d.maxH - y);
+      // Batas frame. maxW/maxH di-floor ke MIN supaya tidak pernah
+      // menghasilkan lebar/tinggi 0 (penyebab window menghilang).
+      const maxW = Math.max(MIN_W, d.maxW);
+      const maxH = Math.max(MIN_H, d.maxH);
+      x = Math.min(Math.max(0, x), maxW - MIN_W);
+      y = Math.min(Math.max(0, y), maxH - MIN_H);
+      w = Math.min(Math.max(w, MIN_W), maxW - x);
+      h = Math.min(Math.max(h, MIN_H), maxH - y);
 
       setRect({ x, y, w, h });
     };
@@ -124,15 +140,18 @@ export default function SafariWindow({
   const startDrag = (e: React.PointerEvent, dir: Dir) => {
     e.preventDefault();
     e.stopPropagation();
-    const host = rootRef.current?.parentElement;
+    const host = rootRef.current?.closest('.service-frame') as HTMLElement | null;
     if (!host || !rect) return;
+    const maxW = host.clientWidth;
+    const maxH = host.clientHeight;
+    if (maxW <= 0 || maxH <= 0) return;
     dragRef.current = {
       dir,
       startX: e.clientX,
       startY: e.clientY,
       rect,
-      maxW: host.clientWidth,
-      maxH: host.clientHeight,
+      maxW,
+      maxH,
     };
     document.body.classList.add('is-resizing-safari');
   };
