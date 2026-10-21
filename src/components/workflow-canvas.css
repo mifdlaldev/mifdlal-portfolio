@@ -71,8 +71,16 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  /* Canvas induk pointer-events: none, jadi area ikon harus
-     mengaktifkan kembali event mouse agar hover tooltip bekerja. */
+  /* Tile biasa: tidak menerima pointer, kursor standar.
+     Hanya tile hub (brain) yang mengaktifkan event mouse. */
+  pointer-events: none;
+  cursor: default;
+}
+
+/* Tile hub (brain): satu-satunya kotak dengan cursor help + hover tooltip.
+   Canvas induk pointer-events: none, jadi area ikon harus mengaktifkan
+   kembali event mouse agar hover tooltip bekerja. */
+.wf-tile--hub .wf-tile__inner {
   pointer-events: auto;
   cursor: help;
 }
