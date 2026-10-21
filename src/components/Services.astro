@@ -264,13 +264,14 @@ import { AsciiArtStatic } from './ui/ascii-art'
 
   /* Overlay biru elektrik — menyatukan earth tone foto dengan palet situs.
      Multiply: highlight foto jadi biru muda, shadow tetap dalam. Foto tidak
-     mati, hanya di-tone. 40% = foto masih terbaca, palet bersih. */
+     mati, hanya di-tone. 50% = foto masih terbaca, palet bersih, sedikit
+     lebih dalam dari sebelumnya. */
   .service-photo::after {
     content: '';
     position: absolute;
     inset: 0;
     background: var(--electric);
-    opacity: 0.4;
+    opacity: 0.5;
     mix-blend-mode: multiply;
     pointer-events: none;
   }
