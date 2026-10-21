@@ -61,8 +61,8 @@ import { AsciiArtStatic } from './ui/ascii-art'
                 <AsciiArtStatic
                   client:idle
                   src={s.image}
-                  resolution={64}
-                  charset="dots"
+                  resolution={88}
+                  charset="circles"
                   color="var(--electric)"
                   backgroundColor="transparent"
                   objectFit="cover"
@@ -283,7 +283,7 @@ import { AsciiArtStatic } from './ui/ascii-art'
     position: absolute;
     inset: 0;
     z-index: var(--z-content);
-    opacity: 0.2;
+    opacity: 0.3;
     pointer-events: none;
     font-size: 0; /* sembunyikan teks "Loading..." sebelum canvas render */
   }
