@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, useMemo } from 'react';
+import { createContext, memo, useContext, useEffect, useMemo, useState } from 'react';
 import {
   ReactFlow,
   Handle,
@@ -12,6 +12,7 @@ import {
   type NodeProps,
   type EdgeProps,
 } from '@xyflow/react';
+import { motion } from 'motion/react';
 import {
   MessageSquareIcon,
   DatabaseIcon,
@@ -24,6 +25,16 @@ import {
 import '@xyflow/react/dist/style.css';
 import './workflow-canvas.css';
 
+/* ── Tick global: sinkronisasi replay animasi ikon ─────────── */
+const TickCtx = createContext(0);
+const reduceMotion = () =>
+  typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function useIconTick(ms: number) {
+  const tick = useContext(TickCtx);
+  return tick;
+}
+
 /* ---------------------------------------------------------------- nodes --- */
 
 type TileData = {
@@ -34,24 +45,27 @@ type TileData = {
 };
 
 const ICON_SIZE = 44;
+const ICON_MS = 4200; // replay animasi ikon tiap 4.2 detik
 
-function renderIcon(kind: TileData['icon'], brand?: string) {
-  const props = { size: ICON_SIZE, strokeWidth: 1.5, isAnimated: false } as const;
+function renderIcon(kind: TileData['icon'], brand?: string, tick = 0) {
+  const base = { size: ICON_SIZE, strokeWidth: 1.5 } as const;
+  // Ikon trigger selalu animasi; sisanya statis (tidak mengganggu bacaan).
+  if (kind === 'message') {
+    return <MessageSquareIcon {...base} isAnimated duration={1.1} color="#fdfcf1" key={tick} />;
+  }
   switch (kind) {
-    case 'message':
-      return <MessageSquareIcon {...props} />;
     case 'database':
-      return <DatabaseIcon {...props} />;
+      return <DatabaseIcon {...base} />;
     case 'brain':
-      return <BrainIcon {...props} />;
+      return <BrainIcon {...base} />;
     case 'check':
-      return <CheckCheckIcon {...props} />;
+      return <CheckCheckIcon {...base} />;
     case 'send':
-      return <SendHorizontalIcon {...props} />;
+      return <SendHorizontalIcon {...base} />;
     case 'file':
-      return <FileTextIcon {...props} />;
+      return <FileTextIcon {...base} />;
     case 'api':
-      return <WebhookIcon {...props} />;
+      return <WebhookIcon {...base} />;
     case 'brand':
       return <img className="wf-brand" src={brand} alt="" width={ICON_SIZE} height={ICON_SIZE} />;
     default:
@@ -61,11 +75,31 @@ function renderIcon(kind: TileData['icon'], brand?: string) {
 
 const TileNode = memo(({ data }: NodeProps) => {
   const d = data as unknown as TileData;
-  const cls = d.tone === 'hub' ? 'wf-tile wf-tile--hub' : d.tone === 'tool' ? 'wf-tile wf-tile--tool' : 'wf-tile';
+  const tick = useIconTick(ICON_MS);
+  const cls =
+    d.tone === 'hub' ? 'wf-tile wf-tile--hub' : d.tone === 'tool' ? 'wf-tile wf-tile--tool' : 'wf-tile';
+
+  // Stagger berdasarkan urutan node: tile kiri masuk duluan.
+  const order = (d as any).order ?? 0;
 
   return (
-    <div className={cls}>
-      <span className="wf-tile__icon">{renderIcon(d.icon, d.brand)}</span>
+    <motion.div
+      className={cls}
+      initial={{ opacity: 0, y: 8, scale: 0.97 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, amount: 0.5 }}
+      transition={{ duration: 0.5, delay: order * 0.09, ease: [0.25, 0.46, 0.45, 0.94] }}
+    >
+      {/* Napas hub: pulse lembut, redup-menyala. */}
+      {d.tone === 'hub' && (
+        <motion.span
+          className="wf-tile__glow"
+          animate={{ opacity: [0.3, 0.65, 0.3] }}
+          transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      )}
+
+      <span className="wf-tile__icon">{renderIcon(d.icon, d.brand, tick)}</span>
       {d.tone === 'hub' ? (
         <span className="wf-tile__label wf-tile__label--inside">
           {d.label}
@@ -87,7 +121,7 @@ const TileNode = memo(({ data }: NodeProps) => {
       {d.tone === 'tool' && (
         <Handle id="in" type="target" position={Position.Top} className="wf-handle" />
       )}
-    </div>
+    </motion.div>
   );
 });
 TileNode.displayName = 'TileNode';
@@ -132,49 +166,49 @@ const TOOL_LEFT_X = TOOL_MID_X - TOOL_W - TOOL_GAP;
 const TOOL_RIGHT_X = TOOL_MID_X + TOOL_W + TOOL_GAP;
 
 const nodes: Node[] = [
-  { id: 'trigger', type: 'tile', position: { x: 0, y: 0 }, data: { label: 'TRIGGER', icon: 'message', tone: 'node' } },
+  { id: 'trigger', type: 'tile', position: { x: 0, y: 0 }, data: { label: 'TRIGGER', icon: 'message', tone: 'node', order: 0 } },
   {
     id: 'koleksi',
     type: 'tile',
     position: { x: NODE_W + GAP, y: 0 },
-    data: { label: 'KOLEKSI', icon: 'database', tone: 'node' },
+    data: { label: 'KOLEKSI', icon: 'database', tone: 'node', order: 1 },
   },
   {
     id: 'agent',
     type: 'tile',
     position: { x: (NODE_W + GAP) * 2, y: 0 },
-    data: { label: 'AI AGENT', icon: 'brain', tone: 'hub' },
+    data: { label: 'AI AGENT', icon: 'brain', tone: 'hub', order: 2 },
     width: HUB_W,
   },
   {
     id: 'validasi',
     type: 'tile',
     position: { x: (NODE_W + GAP) * 2 + HUB_W + GAP, y: 0 },
-    data: { label: 'VALIDASI', icon: 'check', tone: 'node' },
+    data: { label: 'VALIDASI', icon: 'check', tone: 'node', order: 3 },
   },
   {
     id: 'kirim',
     type: 'tile',
     position: { x: (NODE_W + GAP) * 2 + HUB_W + GAP + NODE_W + GAP, y: 0 },
-    data: { label: 'KIRIM', icon: 'send', tone: 'node' },
+    data: { label: 'KIRIM', icon: 'send', tone: 'node', order: 4 },
   },
   {
     id: 't-model',
     type: 'tile',
     position: { x: TOOL_LEFT_X, y: ROW2_Y },
-    data: { label: 'MODEL LLM', icon: 'brand', tone: 'tool', brand: '/logos/openai.svg' },
+    data: { label: 'MODEL LLM', icon: 'brand', tone: 'tool', brand: '/logos/openai.svg', order: 5 },
   },
   {
     id: 't-dokumen',
     type: 'tile',
     position: { x: TOOL_MID_X, y: ROW2_Y },
-    data: { label: 'DOKUMEN', icon: 'file', tone: 'tool' },
+    data: { label: 'DOKUMEN', icon: 'file', tone: 'tool', order: 6 },
   },
   {
     id: 't-api',
     type: 'tile',
     position: { x: TOOL_RIGHT_X, y: ROW2_Y },
-    data: { label: 'API', icon: 'api', tone: 'tool' },
+    data: { label: 'API', icon: 'api', tone: 'tool', order: 7 },
   },
 ];
 
@@ -191,28 +225,38 @@ const edges: Edge[] = [
 export default function WorkflowCanvas() {
   const n = useMemo(() => nodes, []);
   const e = useMemo(() => edges, []);
+  const [tick, setTick] = useState(0);
+
+  // Replay animasi ikon berkala; hormati prefers-reduced-motion.
+  useEffect(() => {
+    if (reduceMotion()) return;
+    const id = window.setInterval(() => setTick((v) => v + 1), ICON_MS);
+    return () => window.clearInterval(id);
+  }, []);
 
   return (
     <div className="wf-canvas" aria-hidden="true">
-      <ReactFlow
-        nodes={n}
-        edges={e}
-        nodeTypes={nodeTypes}
-        edgeTypes={edgeTypes}
-        fitView
-        fitViewOptions={{ padding: 0.08, includeHiddenNodes: true }}
-        nodesDraggable={false}
-        nodesConnectable={false}
-        elementsSelectable={false}
-        panOnDrag={false}
-        zoomOnScroll={false}
-        zoomOnPinch={false}
-        zoomOnDoubleClick={false}
-        preventScrolling={false}
-        proOptions={{ hideAttribution: true }}
-        minZoom={0.2}
-        maxZoom={2}
-      />
+      <TickCtx.Provider value={tick}>
+        <ReactFlow
+          nodes={n}
+          edges={e}
+          nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
+          fitView
+          fitViewOptions={{ padding: 0.08, includeHiddenNodes: true }}
+          nodesDraggable={false}
+          nodesConnectable={false}
+          elementsSelectable={false}
+          panOnDrag={false}
+          zoomOnScroll={false}
+          zoomOnPinch={false}
+          zoomOnDoubleClick={false}
+          preventScrolling={false}
+          proOptions={{ hideAttribution: true }}
+          minZoom={0.2}
+          maxZoom={2}
+        />
+      </TickCtx.Provider>
     </div>
   );
 }

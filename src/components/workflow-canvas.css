@@ -110,6 +110,26 @@
   stroke-opacity: 0.5;
   stroke-width: 1.4;
   fill: none;
+  /* Marching ants: garis putus-putus bergerak menyusur jalur. */
+  stroke-dasharray: 5 4;
+  animation: wf-march 1.1s linear infinite;
+}
+
+@keyframes wf-march {
+  to {
+    stroke-dashoffset: -9;
+  }
+}
+
+/* Glow di balik hub: napas lembut. */
+.wf-tile__glow {
+  position: absolute;
+  inset: -6px;
+  border-radius: 26px;
+  background: radial-gradient(circle at center, var(--electric) 0%, transparent 68%);
+  opacity: 0.3;
+  z-index: var(--z-below);
+  pointer-events: none;
 }
 
 /* ── Sembunyikan chrome React Flow ─────────────────────────── */
@@ -118,4 +138,14 @@
 .react-flow__minimap,
 .react-flow__panel {
   display: none;
+}
+
+/* ── Reduced motion: matikan gerak berulang ─────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .wf-edge {
+    animation: none;
+  }
+  .wf-tile__glow {
+    opacity: 0.35;
+  }
 }
