@@ -28,6 +28,10 @@ const sections = [
   .footer {
     border-top: 1px solid var(--color-line);
     padding-block: 1.75rem;
+    /* Sama seperti bidang dalam bingkai section: solid, tanpa dot grid.
+       Footer anak dari .page-layer, jadi latar opak di sini menutup grid
+       halaman tanpa perlu menyentuh lapisnya. */
+    background-color: var(--color-white);
   }
 
   .footer-inner {

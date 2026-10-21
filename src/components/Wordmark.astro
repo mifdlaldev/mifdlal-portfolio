@@ -26,6 +26,8 @@
   <span class="wm-node wm-node--tr"></span>
   <span class="wm-node wm-node--bl"></span>
   <span class="wm-node wm-node--br"></span>
+  <span class="wm-dots" aria-hidden="true"></span>
+      <span class="wm-sheet" aria-hidden="true"></span>
 
   <div class="wordmark-stage" data-wordmark>
     <canvas class="wordmark-canvas"></canvas>
@@ -55,13 +57,10 @@
     padding: var(--wm-pad-y) var(--wm-pad-x);
     border-top: 1px solid var(--color-line);
 
+    /* Kertas polos. Dot grid digambar oleh .wm-dots yang dilubangi tepat di
+       kotak plat, jadi dot tidak mungkin muncul di dalam kotak sekalipun
+       lembar putih bergeser 1px karena pembulatan zoom. */
     background-color: var(--color-paper);
-    background-image: radial-gradient(
-      circle at 1px 1px,
-      var(--color-line-soft) 1.2px,
-      transparent 0
-    );
-    background-size: 26px 26px;
   }
 
   /* Kotak plat gambar: empat sisi mengurung huruf, dengan jarak di tiap sisi.
@@ -158,6 +157,8 @@
     top: var(--wm-dim-y);
     transform: translate(-50%, -50%);
     padding: 0.25rem 0.5rem;
+    /* Kertas: label duduk di garis dimensi, di luar kotak plat, jadi latarnya
+       harus sama dengan pita supaya garis terputus bersih di belakang angka. */
     background: var(--color-paper);
     color: color-mix(in srgb, var(--color-ink) 72%, transparent);
   }
@@ -212,6 +213,60 @@
     .wordmark[data-plate='true'] .wm-node {
       display: none;
     }
+  }
+
+  /* Jaring pengaman kedua: lembar putih persis seluas kotak plat. Latar pita
+     sudah putih di dalam bingkai, jadi lembar ini tidak terlihat; fungsinya
+     hanya memastikan bidang kotak tetap putih kalau latar pita gagal diparse.
+     z-index 0 = di atas latar pita, di bawah garis kotak (z-content = 1),
+     supaya keempat sisi kotak tidak pernah tertutup. */
+  /* Dot grid pita, dilubangi seukuran kotak plat (fill-rule evenodd).
+     Hasilnya dot benar-benar absen di dalam kotak, bukan ditutup lapisan. */
+  .wm-dots {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: radial-gradient(
+      circle at 1px 1px,
+      var(--color-line-soft) 1.2px,
+      transparent 0
+    );
+    background-size: 26px 26px;
+    clip-path: polygon(
+      evenodd,
+      0 0,
+      100% 0,
+      100% 100%,
+      0 100%,
+      0 0,
+      var(--wm-f-left) var(--wm-f-top),
+      var(--wm-f-left) calc(var(--wm-f-top) + var(--wm-f-h)),
+      calc(var(--wm-f-left) + var(--wm-f-w)) calc(var(--wm-f-top) + var(--wm-f-h)),
+      calc(var(--wm-f-left) + var(--wm-f-w)) var(--wm-f-top),
+      var(--wm-f-left) var(--wm-f-top)
+    );
+  }
+
+  .wm-sheet {
+    display: none;
+    position: absolute;
+    z-index: 0;
+    /* Tepi lembar digeser 2px keluar dari garis kotak. Penyebab: di zoom
+       peramban (mis. 85%) baris/kolom dot grid terakhir masih lolos 1px di
+       dalam tepi kotak, jadi terlihat garis titik di dalam bidang putih.
+       Kelebihan 2px ini jatuh di luar garis kotak dan tertutup garis itu
+       sendiri (z-content = 1), jadi tidak terlihat sebagai bidang kedua. */
+    left: calc(var(--wm-f-left) - 2px);
+    top: calc(var(--wm-f-top) - 2px);
+    width: calc(var(--wm-f-w) + 4px);
+    height: calc(var(--wm-f-h) + 4px);
+    background: var(--color-white);
+    pointer-events: none;
+  }
+
+  .wordmark[data-plate='true'] .wm-sheet {
+    display: block;
   }
 
   .wordmark-stage {
