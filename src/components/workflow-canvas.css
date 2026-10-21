@@ -102,10 +102,13 @@
 }
 
 /* Hub tile: label jadi tooltip — muncul saat hover/fokus pada ikon brain saja,
-   bukan seluruh kotak. Pola sama dengan LogoLoop: fade + geser naik 250ms. */
+   bukan seluruh kotak. Posisi: DI ATAS tile. Pola sama dengan LogoLoop. */
 .wf-tile--hub .wf-tile__label {
+  bottom: calc(100% + 10px);
+  top: auto;
+  max-width: 168px;
   opacity: 0;
-  transform: translate(-50%, 4px);
+  transform: translate(-50%, -4px);
   transition: opacity var(--dur-base) var(--ease), transform var(--dur-base) var(--ease);
   pointer-events: none;
   z-index: var(--z-tooltip);
