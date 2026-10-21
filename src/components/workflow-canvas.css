@@ -232,9 +232,9 @@
   }
 }
 
-/* Titik kilau di ujung sinyal: ekor elektrik + kepala lemon.
+/* Titik kilau di ujung sinyal: ekor + kepala, keduanya elektrik (monokrom).
    Keduanya meluncur bersamaan dengan kecepatan yang sama sehingga
-   kepala lemon tetap di depan ekor sepanjang perjalanan. */
+   kepala tetap di depan ekor sepanjang perjalanan. */
 .wf-comet {
   fill: none;
   stroke-linecap: round;
@@ -249,7 +249,7 @@
 }
 
 .wf-comet--head {
-  stroke: var(--lemon);
+  stroke: var(--electric);
   stroke-width: 3.4;
   stroke-dasharray: 0.055 0.945;
   stroke-dashoffset: -0.09;
