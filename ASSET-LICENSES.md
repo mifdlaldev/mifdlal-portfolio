@@ -14,3 +14,11 @@ References:
 - https://unsplash.com/license
 - https://unsplash.com/terms
 - https://www.artic.edu/open-access/open-access-images
+
+# Brand logo assets
+
+Technology logos under `public/logos/` are sourced from public icon sets (Simple Icons and similar). They identify the tools and platforms named in the strip; all trademarks remain with their owners.
+
+| Local file | Source | Note |
+|---|---|---|
+| `public/logos/hermes.svg` | LobeHub Icons (`@lobehub/icons-static-svg`, MIT) | Glyph mark for Hermes Agent / Nous Research. Previously a text-only `HERMES` wordmark; replaced with the vector glyph. Trademark of Nous Research. |
