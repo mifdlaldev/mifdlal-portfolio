@@ -77,7 +77,7 @@
   cursor: help;
 }
 
-/* Label di bawah tile — teks PUTIH, satu atau dua baris.
+/* Label di bawah tile — teks LEMON, satu atau dua baris.
    Tile biasa: selalu terlihat. */
 .wf-tile__label {
   position: absolute;
@@ -88,7 +88,7 @@
   font-size: var(--text-eyebrow);
   font-weight: var(--weight-bold);
   letter-spacing: var(--tracking-caps);
-  color: var(--paper);
+  color: var(--lemon);
   white-space: normal;
   text-align: center;
   line-height: var(--leading-ui);
