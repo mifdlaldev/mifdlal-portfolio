@@ -255,8 +255,13 @@ export default function WorkflowCanvas() {
           edges={e}
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
-          fitView
-          fitViewOptions={{ padding: 0.08, includeHiddenNodes: true }}
+          /* Zoom dikunci 1 (integer) — TIDAK ada transform scale pada viewport.
+            fitView dihapus karena menghitung zoom pecahan (mis. 0.98) yang
+            me-raster seluruh layer termasuk teks → burem. Posisi x/y
+            dihitung manual agar graph pas di tengah frame tanpa penskalaan. */
+          minZoom={1}
+          maxZoom={1}
+          defaultViewport={{ x: 12, y: 46, zoom: 1 }}
           nodesDraggable={false}
           nodesConnectable={false}
           elementsSelectable={false}
@@ -266,8 +271,6 @@ export default function WorkflowCanvas() {
           zoomOnDoubleClick={false}
           preventScrolling={false}
           proOptions={{ hideAttribution: true }}
-          minZoom={0.2}
-          maxZoom={2}
         />
       </TickCtx.Provider>
     </div>
