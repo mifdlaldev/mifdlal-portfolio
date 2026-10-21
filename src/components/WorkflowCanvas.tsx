@@ -344,7 +344,6 @@ export default function WorkflowCanvas() {
           nodesConnectable={false}
           nodesFocusable={false}
           edgesFocusable={false}
-          edgesClickable={false}
           elementsSelectable={false}
           panOnDrag={false}
           panOnScroll={false}
