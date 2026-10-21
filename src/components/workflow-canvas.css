@@ -93,6 +93,7 @@
   white-space: normal;
   text-align: center;
   line-height: var(--leading-ui);
+  width: max-content;
   max-width: 104px;
   /* Tanpa outline — teks polos, tajam di skala integer. */
   display: flex;
@@ -104,9 +105,10 @@
 /* Hub tile: label jadi tooltip — muncul saat hover/fokus pada ikon brain saja,
    bukan seluruh kotak. Posisi: DI ATAS tile. Pola sama dengan LogoLoop. */
 .wf-tile--hub .wf-tile__label {
-  bottom: calc(100% + 10px);
+  bottom: calc(100% + 6px);
   top: auto;
-  max-width: 220px;
+  width: max-content;
+  max-width: 240px;
   opacity: 0;
   transform: translate(-50%, -4px);
   transition: opacity var(--dur-base) var(--ease), transform var(--dur-base) var(--ease);
