@@ -44,7 +44,7 @@ type TileData = {
   brand?: string;
 };
 
-const ICON_SIZE = 44;
+const ICON_SIZE = 38;
 const ICON_MS = 4200; // replay animasi ikon tiap 4.2 detik
 
 function renderIcon(kind: TileData['icon'], brand?: string, tick = 0) {
@@ -161,12 +161,12 @@ const edgeTypes = { flow: FlowEdge };
 
 /* -------------------------------------------------------------- graph --- */
 
-const NODE_W = 92;
-const HUB_W = 136;
-const TOOL_W = 84;
-const GAP = 24;
-const TOOL_GAP = 16;
-const ROW2_Y = 188;
+const NODE_W = 76;
+const HUB_W = 112;
+const TOOL_W = 72;
+const GAP = 18;
+const TOOL_GAP = 12;
+const ROW2_Y = 150;
 
 /* Kolom hub: node 1 dan 2 lebar NODE_W, jadi hub mulai di (NODE_W+GAP)*2. */
 const HUB_X = (NODE_W + GAP) * 2;
@@ -261,7 +261,7 @@ export default function WorkflowCanvas() {
             dihitung manual agar graph pas di tengah frame tanpa penskalaan. */
           minZoom={1}
           maxZoom={1}
-          defaultViewport={{ x: 12, y: 46, zoom: 1 }}
+          defaultViewport={{ x: 68, y: 60, zoom: 1 }}
           nodesDraggable={false}
           nodesConnectable={false}
           elementsSelectable={false}
