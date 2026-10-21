@@ -90,15 +90,6 @@ const TileNode = memo(({ data }: NodeProps) => {
       viewport={{ once: true, amount: 0.5 }}
       transition={{ duration: 0.45, delay: order * 0.09, ease: [0.25, 0.46, 0.45, 0.94] }}
     >
-      {/* Napas hub: pulse lembut, redup-menyala. */}
-      {d.tone === 'hub' && (
-        <motion.span
-          className="wf-tile__glow"
-          animate={{ opacity: [0.3, 0.65, 0.3] }}
-          transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
-        />
-      )}
-
       {/* Isi tile yang bergerak: transform di dalam tile, BUKAN di wrapper node.
           Kalau wrapper node ditransform, React Flow mengukur handle saat offset
           dan garis konektor meleset dari pusat tile. */}

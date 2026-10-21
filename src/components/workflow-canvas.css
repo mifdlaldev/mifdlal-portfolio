@@ -31,8 +31,8 @@
   box-shadow: var(--shadow-wf-tile);
 }
 
-/* Hub: tile pusat — tanpa border elektrik (sesuai permintaan operator).
-   Bedanya hanya glow pulse; bentuk & border identik dengan tile biasa. */
+/* Hub: tile pusat — tanpa border elektrik, tanpa glow.
+   Bentuk, border, dan bayangan identik dengan tile biasa. */
 .wf-tile--hub {
   width: 116px;
   height: 84px;
@@ -169,17 +169,6 @@
   }
 }
 
-/* Glow di balik hub: napas lembut. */
-.wf-tile__glow {
-  position: absolute;
-  inset: -6px;
-  border-radius: 26px;
-  background: radial-gradient(circle at center, var(--electric) 0%, transparent 68%);
-  opacity: 0.3;
-  z-index: var(--z-below);
-  pointer-events: none;
-}
-
 /* ── Sembunyikan chrome React Flow ─────────────────────────── */
 .react-flow__attribution,
 .react-flow__controls,
@@ -192,8 +181,5 @@
 @media (prefers-reduced-motion: reduce) {
   .wf-edge {
     animation: none;
-  }
-  .wf-tile__glow {
-    opacity: 0.35;
   }
 }
