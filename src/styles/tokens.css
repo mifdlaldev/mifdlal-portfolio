@@ -116,6 +116,8 @@
 
   /* --- bayangan (lokal diagram alur kerja) ----------------- */
   --shadow-wf-tile: 0 8px 24px rgba(10, 8, 20, 0.35);
+  --ring-shadow-start: 0 0 0 0 rgba(42, 30, 255, 0.55);
+  --ring-shadow-end: 0 0 0 16px rgba(42, 30, 255, 0);
 
   /* --- transparansi kertas (lokal diagram) ----------------- */
   --paper-16: rgba(253, 252, 241, 0.16);

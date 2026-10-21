@@ -182,4 +182,92 @@
   .wf-edge {
     animation: none;
   }
+  .wf-tile.is-active::before {
+    display: none;
+  }
+}
+
+/* ── Sequence alur kerja (n8n-style) ────────────────────────── */
+
+/* Node aktif: outline elektrik + ring pulse yang meluas (menghilang).
+   Meniru node yang "berjalan" di editor n8n. */
+.wf-tile.is-active {
+  outline: 2px solid var(--electric);
+  outline-offset: 3px;
+}
+
+.wf-tile.is-active::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  box-shadow: var(--ring-shadow-start);
+  animation: wf-ring 1.2s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes wf-ring {
+  to {
+    box-shadow: var(--ring-shadow-end);
+  }
+}
+
+/* Sinyal edge: garis elektrik tebal yang "menggambar" diri dari sumber
+   ke tujuan selama fase aktif. pathLength={1} menormalkan panjang path. */
+.wf-edge-signal {
+  fill: none;
+  stroke: var(--electric);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: wf-draw 0.95s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes wf-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Titik kilau di ujung sinyal: ekor elektrik + kepala lemon.
+   Keduanya meluncur bersamaan dengan kecepatan yang sama sehingga
+   kepala lemon tetap di depan ekor sepanjang perjalanan. */
+.wf-comet {
+  fill: none;
+  stroke-linecap: round;
+  animation: wf-travel 0.95s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.wf-comet--tail {
+  stroke: var(--electric);
+  stroke-width: 3.2;
+  stroke-dasharray: 0.16 0.84;
+  stroke-dashoffset: 0;
+}
+
+.wf-comet--head {
+  stroke: var(--lemon);
+  stroke-width: 3.4;
+  stroke-dasharray: 0.055 0.945;
+  stroke-dashoffset: -0.09;
+  animation-name: wf-travel-head;
+}
+
+@keyframes wf-travel {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -1;
+  }
+}
+
+@keyframes wf-travel-head {
+  from {
+    stroke-dashoffset: -0.09;
+  }
+  to {
+    stroke-dashoffset: -1.09;
+  }
 }

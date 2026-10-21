@@ -28,6 +28,29 @@ import './workflow-canvas.css';
 
 /* ── Tick global: sinkronisasi replay animasi ikon ─────────── */
 const TickCtx = createContext(0);
+
+/* ── Sequence ctx: node/edge yang sedang aktif (alur kerja n8n-style) ── */
+type Phase = { nodes: string[]; edges: string[]; ms: number };
+
+/* Timeline eksekusi workflow: tiap langkah ~1 detik, seperti eksekusi
+   workflow di n8n/Zapier. Node menyala → sinyal melintas edge → node
+   berikut menyala. Durasi total ~15 detik sebelum loop ulang. */
+const TIMELINE: Phase[] = [
+  { nodes: ['trigger'], edges: [], ms: 1200 },          // PESAN MASUK menyala
+  { nodes: [], edges: ['e1'], ms: 1000 },               // sinyal → KONTEKS PELANGGAN
+  { nodes: ['koleksi'], edges: [], ms: 1200 },
+  { nodes: [], edges: ['e2'], ms: 1000 },               // sinyal → AI AGENT
+  { nodes: ['agent'], edges: [], ms: 1300 },            // brain menyala
+  { nodes: [], edges: ['b1', 'b2', 'b3'], ms: 1000 },   // fan-out ke 3 tool
+  { nodes: ['t-model', 't-dokumen', 't-api'], edges: [], ms: 1300 },
+  { nodes: [], edges: ['e3'], ms: 1000 },               // sinyal kembali → CEK KEBIJAKAN
+  { nodes: ['validasi'], edges: [], ms: 1200 },
+  { nodes: [], edges: ['e4'], ms: 1000 },               // sinyal → KIRIM BALASAN
+  { nodes: ['kirim'], edges: [], ms: 1800 },            // output akhir
+];
+const PAUSE_MS = 2200; // jeda sebelum loop ulang
+
+const SeqCtx = createContext({ nodes: new Set<string>(), edges: new Set<string>() });
 const reduceMotion = () =>
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -73,9 +96,10 @@ function renderIcon(kind: TileData['icon'], tick = 0) {
   }
 }
 
-const TileNode = memo(({ data }: NodeProps) => {
+const TileNode = memo(({ id, data }: NodeProps) => {
   const d = data as unknown as TileData;
   const tick = useIconTick(ICON_MS);
+  const active = useContext(SeqCtx).nodes.has(id);
   const cls =
     d.tone === 'hub' ? 'wf-tile wf-tile--hub' : d.tone === 'tool' ? 'wf-tile wf-tile--tool' : 'wf-tile';
 
@@ -84,7 +108,7 @@ const TileNode = memo(({ data }: NodeProps) => {
 
   return (
     <motion.div
-      className={cls}
+      className={`${cls}${active ? ' is-active' : ''}`}
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, amount: 0.5 }}
@@ -143,7 +167,22 @@ const FlowEdge = memo(({ id, sourceX, sourceY, targetX, targetY, sourcePosition,
     curvature: 0.35,
   });
 
-  return <BaseEdge id={id} path={path} className="wf-edge" />;
+  const active = useContext(SeqCtx).edges.has(id);
+
+  return (
+    <>
+      <BaseEdge id={id} path={path} className="wf-edge" />
+      {active && (
+        <g className="wf-signal" key={id}>
+          {/* Garis terang yang "menggambar" diri dari sumber ke tujuan */}
+          <path d={path} className="wf-edge-signal" pathLength={1} />
+          {/* Ekor sinyal (elektrik) + kepala (lemon) meluncur menyusur jalur */}
+          <path d={path} className="wf-comet wf-comet--tail" pathLength={1} />
+          <path d={path} className="wf-comet wf-comet--head" pathLength={1} />
+        </g>
+      )}
+    </>
+  );
 });
 FlowEdge.displayName = 'FlowEdge';
 
@@ -232,6 +271,7 @@ export default function WorkflowCanvas() {
   const n = useMemo(() => nodes, []);
   const e = useMemo(() => edges, []);
   const [tick, setTick] = useState(0);
+  const [phase, setPhase] = useState(-1);
 
   // Replay animasi ikon berkala; hormati prefers-reduced-motion.
   useEffect(() => {
@@ -240,10 +280,37 @@ export default function WorkflowCanvas() {
     return () => window.clearInterval(id);
   }, []);
 
+  /* Mesin alur: jalankan timeline berulang. Setiap fase menyalakan node
+     atau mengirim sinyal lewat edge, lalu lanjut ke fase berikutnya.
+     Fase terakhir diikuti jeda panjang sebelum loop ulang. */
+  useEffect(() => {
+    if (reduceMotion()) return;
+    let i = 0;
+    let timer = 0;
+
+    const step = () => {
+      const isPause = i === TIMELINE.length;
+      setPhase(isPause ? -1 : i);
+      const dur = isPause ? PAUSE_MS : TIMELINE[i].ms;
+      i = (i + 1) % (TIMELINE.length + 1);
+      timer = window.setTimeout(step, dur);
+    };
+
+    // Tunggu animasi masuk tile selesai dulu.
+    timer = window.setTimeout(step, 900);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  const seq = useMemo(() => {
+    const p = phase >= 0 ? TIMELINE[phase] : { nodes: [], edges: [] };
+    return { nodes: new Set(p.nodes), edges: new Set(p.edges) };
+  }, [phase]);
+
   return (
     <div className="wf-canvas" aria-hidden="true">
       <TickCtx.Provider value={tick}>
-        <ReactFlow
+        <SeqCtx.Provider value={seq}>
+          <ReactFlow
           nodes={n}
           edges={e}
           nodeTypes={nodeTypes}
@@ -264,7 +331,8 @@ export default function WorkflowCanvas() {
           zoomOnDoubleClick={false}
           preventScrolling={false}
           proOptions={{ hideAttribution: true }}
-        />
+          />
+        </SeqCtx.Provider>
       </TickCtx.Provider>
     </div>
   );
