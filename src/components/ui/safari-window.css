@@ -148,10 +148,10 @@ body.is-moving-safari .safari__toolbar {
 
 .safari__tabbar {
   display: flex;
-  align-items: stretch;
+  align-items: center;
   gap: 2px;
-  height: 32px;
-  padding: 4px 6px 0;
+  height: 34px;
+  padding: 5px 6px 6px;
   background: var(--safari-chrome);
   border-bottom: 1px solid var(--ink-16);
   flex: 0 0 auto;
