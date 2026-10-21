@@ -22,6 +22,12 @@ type Dir = 'n' | 's' | 'e' | 'w' | 'nw' | 'ne' | 'sw' | 'se';
 
 const MIN_W = 240;
 const MIN_H = 180;
+
+/* Lebar viewport virtual. 1280 = resolusi laptop terkecil yang umum
+   (1280×720); situs dirender 1:1 pada lebar ini lalu diskalakan turun
+   agar muat window. Hasilnya layout desktop seperti di laptop, bukan
+   layout sempit yang membuat teks hero membesar. */
+const VIRTUAL_W = 1280;
 const DIRS: Dir[] = ['nw', 'n', 'ne', 'w', 'e', 'sw', 's', 'se'];
 
 export default function SafariWindow({
@@ -56,8 +62,8 @@ export default function SafariWindow({
     const pw = host.clientWidth;
     const ph = host.clientHeight;
     if (pw <= 0 || ph <= 0) return;
-    const w = Math.max(MIN_W, Math.min(pw - 16, Math.round(pw * 0.84)));
-    const h = Math.max(MIN_H, Math.min(ph - 16, Math.round(ph * 0.74)));
+    const w = Math.max(MIN_W, Math.min(pw - 16, Math.round(pw * 0.90)));
+    const h = Math.max(MIN_H, Math.min(ph - 16, Math.round(ph * 0.80)));
     setRect({ x: Math.round((pw - w) / 2), y: Math.round((ph - h) / 2), w, h });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -74,8 +80,8 @@ export default function SafariWindow({
         if (pw <= 0 || ph <= 0) return prev;
         if (!prev) {
           // Frame baru punya ukuran (mis. section belum terlihat saat mount).
-          const w = Math.max(MIN_W, Math.min(pw - 16, Math.round(pw * 0.84)));
-          const h = Math.max(MIN_H, Math.min(ph - 16, Math.round(ph * 0.74)));
+          const w = Math.max(MIN_W, Math.min(pw - 16, Math.round(pw * 0.90)));
+          const h = Math.max(MIN_H, Math.min(ph - 16, Math.round(ph * 0.80)));
           return { x: Math.round((pw - w) / 2), y: Math.round((ph - h) / 2), w, h };
         }
         const w = Math.max(MIN_W, Math.min(prev.w, pw));
@@ -91,6 +97,27 @@ export default function SafariWindow({
     ro.observe(host);
     return () => ro.disconnect();
   }, []);
+
+  // Ukuran viewport untuk menghitung skala render iframe.
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const [vp, setVp] = useState({ w: 0, h: 0 });
+
+  useEffect(() => {
+    const el = viewportRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() =>
+      setVp({ w: el.clientWidth, h: el.clientHeight }),
+    );
+    ro.observe(el);
+    setVp({ w: el.clientWidth, h: el.clientHeight });
+    return () => ro.disconnect();
+  }, []);
+
+  // Skala: lebar virtual 1280px diskalakan ke lebar viewport nyata.
+  const scale = vp.w > 0 ? vp.w / VIRTUAL_W : 1;
+  // Tinggi virtual: tinggi viewport dibagi skala -> iframe memenuhi area
+  // konten, sama seperti mengubah tinggi window browser laptop.
+  const virtualH = scale > 0 ? Math.round(vp.h / scale) : 0;
 
   // Pointer drag: resize dari 8 pinggiran/sudut, pindah dari title bar.
   useEffect(() => {
@@ -271,18 +298,26 @@ export default function SafariWindow({
         <span className="safari__url">{current.url || 'about:blank'}</span>
       </div>
 
-      {/* Konten: iframe asli ke situs showcase */}
-      <div className="safari__viewport">
+      {/* Konten: iframe asli ke situs showcase, dirender pada lebar laptop
+          (1280px) lalu diskalakan agar muat window. */}
+      <div className="safari__viewport" ref={viewportRef}>
         {current.url ? (
-          <iframe
-            key={current.url}
-            className="safari__frame"
-            src={current.url}
-            title={`Pratinjau ${current.label}`}
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
-          />
+          <div className="safari__stage">
+            <iframe
+              key={current.url}
+              className="safari__frame"
+              src={current.url}
+              title={`Pratinjau ${current.label}`}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+              style={{
+                width: `${VIRTUAL_W}px`,
+                height: `${virtualH}px`,
+                transform: `scale(${scale})`,
+              }}
+            />
+          </div>
         ) : (
           <div className="safari__empty">
             <span className="safari__empty-label">Slot showcase</span>
