@@ -49,7 +49,12 @@ import WorkflowCanvas from './WorkflowCanvas.tsx'
                 style={`background-image: url('${s.image}')`}
                 role="img"
                 aria-label={`Foto layanan ${s.no}: ${s.title}`}
-              ></div>
+              >
+                <span class="service-corner service-corner--tl" aria-hidden="true"></span>
+                <span class="service-corner service-corner--tr" aria-hidden="true"></span>
+                <span class="service-corner service-corner--bl" aria-hidden="true"></span>
+                <span class="service-corner service-corner--br" aria-hidden="true"></span>
+              </div>
               {s.no === '03' && <WorkflowCanvas client:visible />}
             </div>
           </div>
@@ -233,13 +238,10 @@ import WorkflowCanvas from './WorkflowCanvas.tsx'
     filter: saturate(0.9) contrast(1.02);
   }
 
-  /* Penanda sudut gambar teknik. Dua kotak menyumbang empat sudut:
-     ::before/::after pada frame untuk sudut atas, pada foto untuk sudut bawah. */
-  .service-frame::before,
-  .service-frame::after,
-  .service-photo::before,
-  .service-photo::after {
-    content: '';
+  /* Penanda sudut gambar teknik — empat L-bracket tipis. Elemen span dipakai
+     (bukan pseudo-element .service-frame) karena foto absolute inset:0
+     menutupi pseudo-element frame; sudut harus berada di ATAS foto. */
+  .service-corner {
     position: absolute;
     width: var(--service-arm);
     height: var(--service-arm);
@@ -247,28 +249,28 @@ import WorkflowCanvas from './WorkflowCanvas.tsx'
     pointer-events: none;
   }
 
-  .service-frame::before {
+  .service-corner--tl {
     top: var(--service-inset);
     left: var(--service-inset);
     border-top-width: var(--service-hair);
     border-left-width: var(--service-hair);
   }
 
-  .service-frame::after {
+  .service-corner--tr {
     top: var(--service-inset);
     right: var(--service-inset);
     border-top-width: var(--service-hair);
     border-right-width: var(--service-hair);
   }
 
-  .service-photo::before {
+  .service-corner--bl {
     bottom: var(--service-inset);
     left: var(--service-inset);
     border-bottom-width: var(--service-hair);
     border-left-width: var(--service-hair);
   }
 
-  .service-photo::after {
+  .service-corner--br {
     bottom: var(--service-inset);
     right: var(--service-inset);
     border-bottom-width: var(--service-hair);
