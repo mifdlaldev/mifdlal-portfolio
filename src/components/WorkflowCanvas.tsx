@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, memo, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, memo, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ReactFlow,
   Handle,
@@ -13,6 +13,7 @@ import {
   type EdgeProps,
 } from '@xyflow/react';
 import { motion } from 'motion/react';
+import { type IconHandle } from '@animateicons/react';
 import {
   MessageSquareIcon,
   DatabaseIcon,
@@ -25,9 +26,6 @@ import {
 import { ChatGptIcon } from '@animateicons/react/huge';
 import '@xyflow/react/dist/style.css';
 import './workflow-canvas.css';
-
-/* ── Tick global: sinkronisasi replay animasi ikon ─────────── */
-const TickCtx = createContext(0);
 
 /* ── Sequence ctx: node/edge yang sedang aktif (alur kerja n8n-style) ── */
 type Phase = { nodes: string[]; edges: string[]; ms: number };
@@ -54,11 +52,6 @@ const SeqCtx = createContext({ nodes: new Set<string>(), edges: new Set<string>(
 const reduceMotion = () =>
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-function useIconTick(ms: number) {
-  const tick = useContext(TickCtx);
-  return tick;
-}
-
 /* ---------------------------------------------------------------- nodes --- */
 
 type TileData = {
@@ -68,37 +61,51 @@ type TileData = {
 };
 
 const ICON_SIZE = 38;
-const ICON_MS = 4200; // replay animasi ikon tiap 4.2 detik
 
-function renderIcon(kind: TileData['icon'], tick = 0) {
-  const base = { size: ICON_SIZE, strokeWidth: 1.5 } as const;
-  // Ikon trigger selalu animasi; sisanya statis (tidak mengganggu bacaan).
-  if (kind === 'message') {
-    return <MessageSquareIcon {...base} isAnimated duration={1.1} color="#fdfcf1" key={tick} />;
-  }
+/* Ikon ikut "hidup" saat tile menyala: outline aktif → animasi ikon jalan.
+   Animasi diputar lewat ref handle (startAnimation), bukan hover, karena
+   pemicunya adalah fase timeline, bukan pointer. */
+const TileIcon = memo(function TileIcon({
+  kind,
+  active,
+}: {
+  kind: TileData['icon'];
+  active: boolean;
+}) {
+  const ref = useRef<IconHandle | null>(null);
+
+  useEffect(() => {
+    if (!ref.current) return;
+    if (active) ref.current.startAnimation();
+    else ref.current.stopAnimation();
+  }, [active, kind]);
+
+  const base = { size: ICON_SIZE, strokeWidth: 1.5, color: '#fdfcf1' } as const;
+
   switch (kind) {
+    case 'message':
+      return <MessageSquareIcon ref={ref} {...base} />;
     case 'database':
-      return <DatabaseIcon {...base} />;
+      return <DatabaseIcon ref={ref} {...base} />;
     case 'brain':
-      return <BrainIcon {...base} />;
+      return <BrainIcon ref={ref} {...base} />;
     case 'shield-check':
-      return <ShieldCheckIcon {...base} />;
+      return <ShieldCheckIcon ref={ref} {...base} />;
     case 'send':
-      return <SendHorizontalIcon {...base} />;
+      return <SendHorizontalIcon ref={ref} {...base} />;
     case 'book':
-      return <BookOpenIcon {...base} />;
+      return <BookOpenIcon ref={ref} {...base} />;
     case 'headset':
-      return <HeadsetIcon {...base} />;
+      return <HeadsetIcon ref={ref} {...base} />;
     case 'chatgpt':
-      return <ChatGptIcon size={ICON_SIZE} color="#fdfcf1" />;
+      return <ChatGptIcon ref={ref} size={ICON_SIZE} color="#fdfcf1" />;
     default:
       return null;
   }
-}
+});
 
 const TileNode = memo(({ id, data }: NodeProps) => {
   const d = data as unknown as TileData;
-  const tick = useIconTick(ICON_MS);
   const active = useContext(SeqCtx).nodes.has(id);
   const cls =
     d.tone === 'hub' ? 'wf-tile wf-tile--hub' : d.tone === 'tool' ? 'wf-tile wf-tile--tool' : 'wf-tile';
@@ -127,7 +134,9 @@ const TileNode = memo(({ id, data }: NodeProps) => {
         role={d.tone === 'hub' ? 'button' : undefined}
         aria-label={d.tone === 'hub' ? `${d.label}, klasifikasi intent dan draf balasan` : undefined}
       >
-        <span className="wf-tile__icon">{renderIcon(d.icon, tick)}</span>
+        <span className="wf-tile__icon">
+          <TileIcon kind={d.icon} active={active} />
+        </span>
       </motion.span>
 
       {/* Label di bawah tile untuk SEMUA tile — konsisten.
@@ -270,15 +279,7 @@ const edges: Edge[] = [
 export default function WorkflowCanvas() {
   const n = useMemo(() => nodes, []);
   const e = useMemo(() => edges, []);
-  const [tick, setTick] = useState(0);
   const [phase, setPhase] = useState(-1);
-
-  // Replay animasi ikon berkala; hormati prefers-reduced-motion.
-  useEffect(() => {
-    if (reduceMotion()) return;
-    const id = window.setInterval(() => setTick((v) => v + 1), ICON_MS);
-    return () => window.clearInterval(id);
-  }, []);
 
   /* Mesin alur: jalankan timeline berulang. Setiap fase menyalakan node
      atau mengirim sinyal lewat edge, lalu lanjut ke fase berikutnya.
@@ -308,9 +309,8 @@ export default function WorkflowCanvas() {
 
   return (
     <div className="wf-canvas" aria-hidden="true">
-      <TickCtx.Provider value={tick}>
-        <SeqCtx.Provider value={seq}>
-          <ReactFlow
+      <SeqCtx.Provider value={seq}>
+        <ReactFlow
           nodes={n}
           edges={e}
           nodeTypes={nodeTypes}
@@ -333,7 +333,6 @@ export default function WorkflowCanvas() {
           proOptions={{ hideAttribution: true }}
           />
         </SeqCtx.Provider>
-      </TickCtx.Provider>
     </div>
   );
 }
