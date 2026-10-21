@@ -110,6 +110,22 @@
   --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --ease-in: cubic-bezier(0.4, 0, 1, 1);
 
+  /* --- radius (lokal diagram) ------------------------------ */
+  --radius-xl: 22px;
+  --radius-lg: 18px;
+
+  /* --- bayangan (lokal diagram alur kerja) ----------------- */
+  --shadow-wf-tile: 0 8px 24px rgba(10, 8, 20, 0.35);
+  --shadow-wf-hub: 0 10px 32px rgba(42, 30, 255, 0.28);
+  --shadow-wf-label: 0 1px 3px rgba(10, 8, 20, 0.6);
+
+  /* --- transparansi kertas (lokal diagram) ----------------- */
+  --paper-16: rgba(253, 252, 241, 0.16);
+  --paper-60: rgba(253, 252, 241, 0.6);
+
+  /* --- tipografi: ukuran (lokal diagram) ------------------- */
+  --text-eyebrow: 0.75rem; /* label node 12px */
+
   /* --- breakpoint -----------------------------------------
      Media query TIDAK bisa memakai var() di CSS, jadi nilai
      ini ditulis literal di @media dan dijaga oleh
