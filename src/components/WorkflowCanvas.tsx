@@ -261,7 +261,7 @@ export default function WorkflowCanvas() {
             dihitung manual agar graph pas di tengah frame tanpa penskalaan. */
           minZoom={1}
           maxZoom={1}
-          defaultViewport={{ x: 34, y: 65, zoom: 1 }}
+          defaultViewport={{ x: 34, y: 82, zoom: 1 }}
           nodesDraggable={false}
           nodesConnectable={false}
           elementsSelectable={false}
