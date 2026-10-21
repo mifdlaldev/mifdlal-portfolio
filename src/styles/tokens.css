@@ -130,6 +130,11 @@
   --badge-radius: var(--radius-lg);
   --badge-blur: blur(6px);
 
+  /* --- penanda sudut foto layanan --------------------------- */
+  --service-arm: 22px;
+  --service-inset: 16px;
+  --service-hair: 1px;
+
   /* --- tipografi: ukuran (lokal diagram) ------------------- */
   --text-eyebrow: 0.75rem; /* label node 12px */
 
