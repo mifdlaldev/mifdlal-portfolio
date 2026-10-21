@@ -342,12 +342,20 @@ export default function WorkflowCanvas() {
           defaultViewport={{ x: 34, y: 82, zoom: 1 }}
           nodesDraggable={false}
           nodesConnectable={false}
+          nodesFocusable={false}
+          edgesFocusable={false}
+          edgesClickable={false}
           elementsSelectable={false}
           panOnDrag={false}
+          panOnScroll={false}
+          selectionOnDrag={false}
+          selectNodesOnDrag={false}
           zoomOnScroll={false}
           zoomOnPinch={false}
           zoomOnDoubleClick={false}
           preventScrolling={false}
+          disableKeyboardA11y
+          elevateEdgesOnSelect={false}
           proOptions={{ hideAttribution: true }}
           />
         </SeqCtx.Provider>

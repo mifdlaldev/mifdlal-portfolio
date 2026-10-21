@@ -153,6 +153,34 @@
   border: 2px solid var(--paper);
 }
 
+/* ── Kunci interaksi React Flow ────────────────────────────────
+   Canvas ini murni visual: tidak ada drag node, tarik garis, seleksi,
+   pan, atau zoom. React Flow tetap menambahkan kelas `connectionindicator`
+   pada handle walau nodesConnectable={false}; kelas itu memaksa
+   `pointer-events: all` + `cursor: crosshair`, sehingga handle tetap bisa
+   ditarik dan kursor berubah crosshair. Semua di-nol-kan di sini. */
+.wf-canvas .react-flow__pane,
+.wf-canvas .react-flow__viewport {
+  cursor: default;
+}
+
+.wf-canvas .react-flow__handle,
+.wf-canvas .react-flow__handle.connectionindicator,
+.wf-canvas .react-flow__handle.connectingfrom {
+  pointer-events: none;
+  cursor: default;
+}
+
+.wf-canvas .react-flow__edge,
+.wf-canvas .react-flow__edge-interactive,
+.wf-canvas .react-flow__connectionline {
+  pointer-events: none;
+}
+
+.wf-canvas .react-flow__connectionline {
+  display: none;
+}
+
 /* ── Edge / konektor ───────────────────────────────────────── */
 .wf-edge {
   stroke: var(--paper);
