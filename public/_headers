@@ -8,4 +8,7 @@
   Permissions-Policy: geolocation=(), microphone=(), camera=(), interest-cohort=()
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
   # unsafe-inline: Astro inject scoped component styles. Fonts are self-hosted (@fontsource).
-  Content-Security-Policy: default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'none';
+  # frame-src: kanvas layanan 01 memuat situs showcase lewat iframe.
+  #   Tambah domain di sini setiap kali menambah URL baru di showcaseSites
+  #   (src/data/site.ts), kalau tidak iframe-nya diblokir CSP.
+  Content-Security-Policy: default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self'; frame-src https://lokalogistics.co.id; frame-ancestors 'none'; base-uri 'self'; form-action 'none';

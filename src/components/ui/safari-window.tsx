@@ -1,0 +1,249 @@
+import { useEffect, useRef, useState } from 'react';
+import './safari-window.css';
+
+/* Showcase browser window — dipakai di canvas layanan 01.
+ *
+ * Perilaku (sesuai permintaan operator):
+ * - Tiga tombol traffic light dirender TETAPI SEMUA dinonaktifkan
+ *   (tidak ada handler, cursor not-allowed, title "Tidak tersedia").
+ * - Minimize & maximize TIDAK mengubah state window; tidak ada animasi.
+ *   Keduanya hanya affordance visual (cursor berubah saat hover pinggir
+ *   window) — user bisa drag pinggiran window untuk ubah ukuran, seperti
+ *   window OS biasa. Klik tombol tidak melakukan apa-apa.
+ * - Tab bar: pindah tab mengubah konten (iframe ke situs showcase).
+ * - Konten tab = iframe asli ke situs (bukan screenshot). Situs yang
+ *   mengirim X-Frame-Options/CSP frame-ancestors akan tampil kosong —
+ *   daftarkan domain yang diizinkan di public/_headers (frame-src).
+ */
+
+type ShowcaseTab = { label: string; url: string };
+type Rect = { x: number; y: number; w: number; h: number };
+type Dir = 'n' | 's' | 'e' | 'w' | 'nw' | 'ne' | 'sw' | 'se';
+
+const MIN_W = 240;
+const MIN_H = 180;
+const DIRS: Dir[] = ['nw', 'n', 'ne', 'w', 'e', 'sw', 's', 'se'];
+
+export default function SafariWindow({
+  tabs,
+}: {
+  tabs: readonly ShowcaseTab[];
+}) {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [rect, setRect] = useState<Rect | null>(null);
+  const [active, setActive] = useState(0);
+
+  const dragRef = useRef<
+    | { dir: Dir; startX: number; startY: number; rect: Rect; maxW: number; maxH: number }
+    | null
+  >(null);
+
+  // Ukuran awal: 84% x 74% dari frame canvas, rata tengah.
+  useEffect(() => {
+    const host = rootRef.current?.parentElement;
+    if (!host) return;
+    const pw = host.clientWidth;
+    const ph = host.clientHeight;
+    const w = Math.max(MIN_W, Math.min(pw - 16, Math.round(pw * 0.84)));
+    const h = Math.max(MIN_H, Math.min(ph - 16, Math.round(ph * 0.74)));
+    setRect({ x: Math.round((pw - w) / 2), y: Math.round((ph - h) / 2), w, h });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Clamp otomatis saat frame canvas berubah ukuran (resize browser).
+  useEffect(() => {
+    const host = rootRef.current?.parentElement;
+    if (!host) return;
+    const ro = new ResizeObserver(() => {
+      const pw = host.clientWidth;
+      const ph = host.clientHeight;
+      setRect((prev) => {
+        if (!prev) return prev;
+        const w = Math.max(MIN_W, Math.min(prev.w, pw));
+        const h = Math.max(MIN_H, Math.min(prev.h, ph));
+        return {
+          w,
+          h,
+          x: Math.max(0, Math.min(prev.x, pw - w)),
+          y: Math.max(0, Math.min(prev.y, ph - h)),
+        };
+      });
+    });
+    ro.observe(host);
+    return () => ro.disconnect();
+  }, []);
+
+  // Pointer drag untuk resize dari 8 pinggiran/sudut.
+  useEffect(() => {
+    const onMove = (e: PointerEvent) => {
+      const d = dragRef.current;
+      if (!d) return;
+      const dx = e.clientX - d.startX;
+      const dy = e.clientY - d.startY;
+      let { x, y, w, h } = d.rect;
+
+      if (d.dir.includes('e')) w = d.rect.w + dx;
+      if (d.dir.includes('s')) h = d.rect.h + dy;
+      if (d.dir.includes('w')) {
+        const right = d.rect.x + d.rect.w;
+        w = Math.max(MIN_W, right - (d.rect.x + dx));
+        x = right - w;
+      }
+      if (d.dir.includes('n')) {
+        const bottom = d.rect.y + d.rect.h;
+        h = Math.max(MIN_H, bottom - (d.rect.y + dy));
+        y = bottom - h;
+      }
+
+      // Batas frame.
+      x = Math.max(0, Math.min(x, d.maxW - MIN_W));
+      y = Math.max(0, Math.min(y, d.maxH - MIN_H));
+      w = Math.min(w, d.maxW - x);
+      h = Math.min(h, d.maxH - y);
+
+      setRect({ x, y, w, h });
+    };
+
+    const onUp = () => {
+      if (dragRef.current) {
+        dragRef.current = null;
+        document.body.classList.remove('is-resizing-safari');
+      }
+    };
+
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+    return () => {
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+      onUp();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const startDrag = (e: React.PointerEvent, dir: Dir) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const host = rootRef.current?.parentElement;
+    if (!host || !rect) return;
+    dragRef.current = {
+      dir,
+      startX: e.clientX,
+      startY: e.clientY,
+      rect,
+      maxW: host.clientWidth,
+      maxH: host.clientHeight,
+    };
+    document.body.classList.add('is-resizing-safari');
+  };
+
+  const current = tabs[active];
+
+  return (
+    <div
+      ref={rootRef}
+      className="safari"
+      style={
+        rect
+          ? { left: rect.x, top: rect.y, width: rect.w, height: rect.h }
+          : { visibility: 'hidden' }
+      }
+    >
+      {/* Bar atas: traffic light + tab bar */}
+      <div className="safari__bar">
+        {/* Traffic light — SEMUA DINONAKTIFKAN, hanya affordance visual */}
+        <div className="safari__dots" aria-hidden="true">
+          <span
+            className="safari__dot safari__dot--close"
+            role="button"
+            aria-disabled="true"
+            tabIndex={-1}
+            title="Tidak tersedia"
+          />
+          <span
+            className="safari__dot safari__dot--min"
+            role="button"
+            aria-disabled="true"
+            tabIndex={-1}
+            title="Tidak tersedia"
+          />
+          <span
+            className="safari__dot safari__dot--max"
+            role="button"
+            aria-disabled="true"
+            tabIndex={-1}
+            title="Tidak tersedia"
+          />
+        </div>
+
+        <div className="safari__tabs" role="tablist" aria-label="Showcase website">
+          {tabs.map((t, i) => (
+            <button
+              key={`${t.label}-${i}`}
+              type="button"
+              role="tab"
+              aria-selected={i === active}
+              className={`safari__tab${i === active ? ' is-active' : ''}`}
+              onClick={() => setActive(i)}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Address bar */}
+      <div className="safari__address">
+        <svg
+          className="safari__lock"
+          width="10"
+          height="10"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <rect x="4" y="11" width="16" height="10" rx="2" />
+          <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+        </svg>
+        <span className="safari__url">{current.url || 'about:blank'}</span>
+      </div>
+
+      {/* Konten: iframe asli ke situs showcase */}
+      <div className="safari__viewport">
+        {current.url ? (
+          <iframe
+            key={current.url}
+            className="safari__frame"
+            src={current.url}
+            title={`Pratinjau ${current.label}`}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+          />
+        ) : (
+          <div className="safari__empty">
+            <span className="safari__empty-label">Slot showcase</span>
+            <p className="safari__empty-text">
+              Isi <code>url</code> di <code>src/data/site.ts</code> untuk
+              menampilkan website di tab ini.
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Handle resize — 8 pinggiran/sudut, cursor berubah per region */}
+      {DIRS.map((dir) => (
+        <span
+          key={dir}
+          className={`safari__handle safari__handle--${dir}`}
+          onPointerDown={(e) => startDrag(e, dir)}
+          aria-hidden="true"
+        />
+      ))}
+    </div>
+  );
+}

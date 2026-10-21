@@ -98,6 +98,17 @@ export const services = [
   },
 ] as const
 
+/* Tab showcase di dalam kanvas layanan 01 (Website dan web app).
+   Tiap tab memuat satu situs melalui iframe. URL kosong =
+   panel placeholder lokal (bukan iframe eksternal).
+   Tambah/ubah URL di sini; domain baru juga wajib didaftarkan di
+   Content-Security-Policy (frame-src) pada public/_headers. */
+export const showcaseSites = [
+  { label: 'Lokal Logistics', url: 'https://lokalogistics.co.id/' },
+  { label: 'Slot 02', url: '' },
+  { label: 'Slot 03', url: '' },
+] as const
+
 export const stack = [
   /* Website dan web app */
   { name: 'Next.js', logo: '/logos/nextdotjs.svg' },
