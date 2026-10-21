@@ -31,12 +31,12 @@
   box-shadow: var(--shadow-wf-tile);
 }
 
-/* Hub: satu-satunya kartu ber-border aksen electric. */
+/* Hub: tile pusat — tanpa border elektrik (sesuai permintaan operator).
+   Bedanya hanya glow pulse; bentuk & border identik dengan tile biasa. */
 .wf-tile--hub {
   width: 116px;
   height: 84px;
-  border: 2px solid var(--electric);
-  box-shadow: var(--shadow-wf-hub);
+  box-shadow: var(--shadow-wf-tile);
 }
 
 /* Tool: lebih kecil, di baris kedua. */
