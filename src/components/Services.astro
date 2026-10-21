@@ -5,6 +5,7 @@ import ServiceBrowserIcon from './ServiceBrowserIcon'
 import ServiceBotIcon from './ServiceBotIcon'
 import ServiceWorkflowIcon from './ServiceWorkflowIcon'
 import WorkflowCanvas from './WorkflowCanvas.tsx'
+import { AsciiArtStatic } from './ui/ascii-art'
 ---
 
 <section id="layanan" class="section">
@@ -49,12 +50,29 @@ import WorkflowCanvas from './WorkflowCanvas.tsx'
                 style={`background-image: url('${s.image}')`}
                 role="img"
                 aria-label={`Foto layanan ${s.no}: ${s.title}`}
-              >
-                <span class="service-corner service-corner--tl" aria-hidden="true"></span>
-                <span class="service-corner service-corner--tr" aria-hidden="true"></span>
-                <span class="service-corner service-corner--bl" aria-hidden="true"></span>
-                <span class="service-corner service-corner--br" aria-hidden="true"></span>
-              </div>
+              ></div>
+
+              {/* ASCII tekstur — karakter elektrik samar, di atas overlay biru,
+                  di bawah tile. AsciiArtStatic = sekali gambar, nol animasi. */}
+              <AsciiArtStatic
+                client:idle
+                src={s.image}
+                resolution={64}
+                charset="dots"
+                color="var(--electric)"
+                backgroundColor="transparent"
+                objectFit="cover"
+                fontFamily={'"Geist Mono Variable", ui-monospace, monospace'}
+                class="service-ascii"
+              />
+
+              {/* Penanda sudut gambar teknik — sekarang sibling .service-photo
+                  (z 3) agar di atas ASCII. */}
+              <span class="service-corner service-corner--tl" aria-hidden="true"></span>
+              <span class="service-corner service-corner--tr" aria-hidden="true"></span>
+              <span class="service-corner service-corner--bl" aria-hidden="true"></span>
+              <span class="service-corner service-corner--br" aria-hidden="true"></span>
+
               {s.no === '03' && <WorkflowCanvas client:visible />}
             </div>
           </div>
@@ -235,19 +253,51 @@ import WorkflowCanvas from './WorkflowCanvas.tsx'
     background-color: var(--ink-900);
     background-size: cover;
     background-position: center;
+    z-index: 0;
     /* Sedikit diturunkan saturasinya supaya lukisan masuk palet kertas-tinta. */
     filter: saturate(0.9) contrast(1.02);
   }
 
-  /* Penanda sudut gambar teknik — empat L-bracket tipis. Elemen span dipakai
-     (bukan pseudo-element .service-frame) karena foto absolute inset:0
-     menutupi pseudo-element frame; sudut harus berada di ATAS foto. */
+  /* Overlay biru elektrik — menyatukan earth tone foto dengan palet situs.
+     Multiply: highlight foto jadi biru muda, shadow tetap dalam. Foto tidak
+     mati, hanya di-tone. 40% = foto masih terbaca, palet bersih. */
+  .service-photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--electric);
+    opacity: 0.4;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+  }
+
+  /* ASCII tekstur — karakter elektrik samar di atas overlay, di bawah tile.
+     Bukan elemen dekorasi: tekstur halftone yang membaca sebagai "gambar teknik".
+     pointer-events: none WAJIB — kalau tidak, hover tooltip brain mati. */
+  .service-ascii {
+    position: absolute;
+    inset: 0;
+    z-index: var(--z-content);
+    opacity: 0.2;
+    pointer-events: none;
+    font-size: 0; /* sembunyikan teks "Loading..." sebelum canvas render */
+  }
+  .service-ascii canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  /* Penanda sudut gambar teknik — empat L-bracket tipis. Pindah dari dalam
+     .service-photo ke .service-frame agar bertumpuk di ATAS ASCII (z 3).
+     .service-frame sudah position:relative, jadi posisi relatif frame sama. */
   .service-corner {
     position: absolute;
     width: var(--service-arm);
     height: var(--service-arm);
     border: 0 solid var(--paper-60);
     pointer-events: none;
+    z-index: var(--z-corner);
   }
 
   .service-corner--tl {

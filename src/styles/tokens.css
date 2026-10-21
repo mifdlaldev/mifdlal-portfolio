@@ -94,6 +94,7 @@
   --z-content: 1;
   --z-raise: 2;
   --z-band: 3;
+  --z-corner: 3;
   --z-tooltip: 4;
   --z-nav: 50;
   --z-skip: 100;
