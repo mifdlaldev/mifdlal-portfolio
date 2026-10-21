@@ -490,6 +490,7 @@ body {
   display: inline-block;
   font-family: var(--font-mono);
   font-size: var(--text-label);
+  font-weight: 700;
   letter-spacing: var(--tracking-caps-tight);
   text-transform: none;
   padding: 0.15rem 0.45rem;
