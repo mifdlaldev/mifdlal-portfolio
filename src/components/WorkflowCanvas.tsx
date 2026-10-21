@@ -164,8 +164,8 @@ const edgeTypes = { flow: FlowEdge };
 const NODE_W = 76;
 const HUB_W = 112;
 const TOOL_W = 72;
-const GAP = 18;
-const TOOL_GAP = 12;
+const GAP = 30;
+const TOOL_GAP = 22;
 const ROW2_Y = 150;
 
 /* Kolom hub: node 1 dan 2 lebar NODE_W, jadi hub mulai di (NODE_W+GAP)*2. */
@@ -261,7 +261,7 @@ export default function WorkflowCanvas() {
             dihitung manual agar graph pas di tengah frame tanpa penskalaan. */
           minZoom={1}
           maxZoom={1}
-          defaultViewport={{ x: 68, y: 60, zoom: 1 }}
+          defaultViewport={{ x: 44, y: 70, zoom: 1 }}
           nodesDraggable={false}
           nodesConnectable={false}
           elementsSelectable={false}
