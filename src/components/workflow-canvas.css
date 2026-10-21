@@ -54,15 +54,13 @@
   color: var(--paper);
 }
 
-/* Pembungkus animasi ikon: flex penuh tile supaya ikon tetap centered
-   meski transform aktif. Transform di sini, bukan di wrapper node,
-   agar React Flow mengukur handle di posisi netral. */
+/* Pembungkus animasi ikon: ukuran mengikuti ikon (bukan full tile),
+   supaya trigger hover tooltip hanya area glyph brain. Transform di sini,
+   bukan di wrapper node, agar React Flow mengukur handle di posisi netral. */
 .wf-tile__inner {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
 }
 
 /* Ikon brand (openai/claude) diseragamkan ke tema monokrom. */
@@ -91,8 +89,8 @@
   gap: 2px;
 }
 
-/* Hub tile: label jadi tooltip — tersembunyi sampai hover.
-   Pola sama dengan LogoLoop: fade + geser naik 250ms. */
+/* Hub tile: label jadi tooltip — muncul saat hover/fokus pada ikon brain saja,
+   bukan seluruh kotak. Pola sama dengan LogoLoop: fade + geser naik 250ms. */
 .wf-tile--hub .wf-tile__label {
   opacity: 0;
   transform: translate(-50%, 4px);
@@ -101,15 +99,17 @@
   z-index: var(--z-tooltip);
 }
 
-.wf-tile--hub:hover .wf-tile__label,
-.wf-tile--hub:focus-visible .wf-tile__label {
+/* Trigger: hover/fokus tepat di glyph ikon (area 44px), bukan kotak penuh. */
+.wf-tile--hub .wf-tile__inner:hover + .wf-tile__label,
+.wf-tile--hub .wf-tile__inner:focus-visible + .wf-tile__label {
   opacity: 1;
   transform: translate(-50%, 0);
 }
 
-.wf-tile--hub:focus-visible {
+.wf-tile--hub .wf-tile__inner:focus-visible {
   outline: 2px solid var(--electric);
   outline-offset: 4px;
+  border-radius: var(--radius-xl);
 }
 
 .wf-tile__sub {

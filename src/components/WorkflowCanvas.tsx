@@ -108,6 +108,9 @@ const TileNode = memo(({ data }: NodeProps) => {
         whileInView={{ y: 0, scale: 1 }}
         viewport={{ once: true, amount: 0.5 }}
         transition={{ duration: 0.5, delay: order * 0.09, ease: [0.25, 0.46, 0.45, 0.94] }}
+        tabIndex={d.tone === 'hub' ? 0 : undefined}
+        role={d.tone === 'hub' ? 'button' : undefined}
+        aria-label={d.tone === 'hub' ? `${d.label}, orkestrasi tool` : undefined}
       >
         <span className="wf-tile__icon">{renderIcon(d.icon, d.brand, tick)}</span>
       </motion.span>
