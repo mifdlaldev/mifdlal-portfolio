@@ -188,7 +188,7 @@ export type Experience = {
   no: string
   role: string
   org: string
-  kind: 'magang' | 'kontrak' | 'freelance' | 'organisasi'
+  kind: 'Magang' | 'Kontrak' | 'Freelance' | 'Organisasi'
   location: string
   period: string
   points: readonly string[]
@@ -200,7 +200,7 @@ export const experience: readonly Experience[] = [
     no: '01',
     role: 'Pengembang Aplikasi PE-SMKK',
     org: 'Dinas Pekerjaan Umum dan Penataan Ruang Kabupaten Sumedang',
-    kind: 'magang',
+    kind: 'Magang',
     location: 'Sumedang',
     period: 'Jun - Okt 2025',
     points: [
@@ -228,7 +228,7 @@ export const education: readonly Education[] = [
     program: 'Rekayasa Perangkat Lunak',
     location: 'Sumedang',
     period: '2023 - 2026',
-    status: 'lulus',
+    status: 'Lulus',
     note: 'Materi kejuruan mencakup basis data relasional dan SQL, pemrograman web statis dan dinamis, aplikasi mobile dan desktop, IoT, dan cloud computing. Framework yang dipelajari: Laravel dan CodeIgniter untuk backend, React dan Next.js untuk frontend, Flutter untuk aplikasi mobile, serta Bootstrap dan Tailwind CSS untuk antarmuka.',
   },
 ]

@@ -18,7 +18,7 @@ import copyIcon from "react-useanimations/lib/copy";
       area padding tombol tidak memicu animasi — hanya klik tepat di ikon.
    3. Ikon hanya beranimasi saat diklik, bukan saat hover — animasi hover
       di layar sentuh menempel setelah tap.
-   4. Status "tersalin" diumumkan lewat role="status", bukan hanya warna. */
+   4. Status "Tersalin" diumumkan lewat role="status", bukan hanya warna. */
 
 type CopyStatus = "idle" | "done" | "fail";
 
@@ -118,7 +118,7 @@ export default function CopyEmail({ email }: CopyEmailProps) {
         </button>
       )}
       <span className="copy-email__status" role="status" aria-live="polite">
-        {status === "done" ? "tersalin" : status === "fail" ? "salin manual" : ""}
+        {status === "done" ? "Tersalin" : status === "fail" ? "Salin manual" : ""}
       </span>
     </span>
   );

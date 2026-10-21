@@ -19,15 +19,15 @@ import CopyEmail from './CopyEmail'
 
         <ul class="spec-list">
           <li>
-            <span class="spec-k">balasan</span>
+            <span class="spec-k">Balasan</span>
             <span class="spec-v">1 hari kerja</span>
           </li>
           <li>
-            <span class="spec-k">zona waktu</span>
+            <span class="spec-k">Zona waktu</span>
             <span class="spec-v">gmt+7 (wib)</span>
           </li>
           <li>
-            <span class="spec-k">lokasi</span>
+            <span class="spec-k">Lokasi</span>
             <span class="spec-v">bandung, id</span>
           </li>
         </ul>
@@ -35,7 +35,7 @@ import CopyEmail from './CopyEmail'
 
       <div class="contact-panel">
         <div class="panel-block">
-          <p class="panel-label">email</p>
+          <p class="panel-label">Email</p>
           <div class="email-row">
             <a
               href={`mailto:${contact.email}?subject=${subject}`}
@@ -48,19 +48,19 @@ import CopyEmail from './CopyEmail'
         </div>
 
         <div class="panel-block">
-          <p class="panel-label">yang mempercepat balasan</p>
+          <p class="panel-label">Yang mempercepat balasan</p>
           <ol class="brief-list">
-            <li><span class="brief-no" aria-hidden="true">01</span><span>jenis usaha Anda</span></li>
-            <li><span class="brief-no" aria-hidden="true">02</span><span>yang ingin dibangun atau diperbaiki</span></li>
-            <li><span class="brief-no" aria-hidden="true">03</span><span>target waktu atau tenggat</span></li>
-            <li><span class="brief-no" aria-hidden="true">04</span><span>perkiraan anggaran, kalau sudah ada</span></li>
+            <li><span class="brief-no" aria-hidden="true">01</span><span>Jenis usaha anda</span></li>
+            <li><span class="brief-no" aria-hidden="true">02</span><span>Yang ingin dibangun atau diperbaiki</span></li>
+            <li><span class="brief-no" aria-hidden="true">03</span><span>Target waktu atau tenggat</span></li>
+            <li><span class="brief-no" aria-hidden="true">04</span><span>Perkiraan anggaran, kalau sudah ada</span></li>
           </ol>
         </div>
       </div>
     </div>
 
     <div class="contact-social">
-      <p class="panel-label">media sosial</p>
+      <p class="panel-label">Media sosial</p>
       <SocialIcons />
     </div>
   </div>
@@ -107,7 +107,7 @@ import CopyEmail from './CopyEmail'
     font-family: var(--font-mono);
     font-size: var(--text-label);
     letter-spacing: var(--tracking-caps);
-    text-transform: lowercase;
+    text-transform: none;
     color: var(--color-muted);
   }
 
@@ -154,7 +154,7 @@ import CopyEmail from './CopyEmail'
     font-family: var(--font-mono);
     font-size: var(--text-label);
     letter-spacing: var(--tracking-caps);
-    text-transform: lowercase;
+    text-transform: none;
     color: var(--color-muted);
   }
 
@@ -248,7 +248,7 @@ import CopyEmail from './CopyEmail'
     font-family: var(--font-mono);
     font-size: var(--text-label);
     letter-spacing: var(--tracking-caps);
-    text-transform: lowercase;
+    text-transform: none;
     white-space: nowrap;
     color: var(--color-lemon);
     pointer-events: none;

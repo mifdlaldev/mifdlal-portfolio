@@ -83,13 +83,14 @@ const logos = stack.map((s) => ({ src: s.logo, alt: s.name, title: s.name }))
      posisi rail yang sama dengan section lain, jadi tidak perlu pseudo
      di sini. */
 
-  /* Tooltip nama tools: chip mono kecil di bawah logo. */
+  /* Tooltip nama tools: chip mono kecil di bawah logo. Nama tool ditulis apa
+     adanya ("Next.js", "Tailwind CSS"); jangan dipaksa lowercase. */
   .loop-band :global(li > span) {
     z-index: var(--z-tooltip);
     font-family: var(--font-mono);
     font-size: var(--text-cap);
     letter-spacing: var(--tracking-caps);
-    text-transform: lowercase;
+    text-transform: none;
     color: var(--color-ink);
     background: var(--color-paper);
     border: 1px solid var(--color-line);

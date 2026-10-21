@@ -57,7 +57,7 @@ import CodeComment from './CodeComment.astro'
               {e.points.map((pt) => <li>{pt}</li>)}
             </ul>
             {e.link && (
-              <a class="entry-link" href={e.link} target="_blank" rel="noopener noreferrer">bukti ↗</a>
+              <a class="entry-link" href={e.link} target="_blank" rel="noopener noreferrer">Bukti ↗</a>
             )}
           </li>
         ))
@@ -66,7 +66,7 @@ import CodeComment from './CodeComment.astro'
 
     {experience.length === 0 && (
       <>
-        <p class="empty-note">belum diisi</p>
+        <p class="empty-note">Belum diisi</p>
         <p class="sr-only">Bagian pengalaman belum diisi.</p>
       </>
     )}
@@ -129,7 +129,7 @@ import CodeComment from './CodeComment.astro'
     font-family: var(--font-mono);
     font-size: var(--text-label);
     color: var(--color-muted);
-    text-transform: lowercase;
+    text-transform: none;
   }
 
   .entry-points {

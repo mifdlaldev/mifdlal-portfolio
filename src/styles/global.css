@@ -475,7 +475,9 @@ body {
   font-family: var(--font-mono);
   font-size: var(--text-label);
   letter-spacing: var(--tracking-caps-loose);
-  text-transform: lowercase;
+  /* Label fig. ditulis apa adanya: "fig. 02 · tentang" tetap lowercase,
+     sedangkan label kalimat seperti "Terbuka untuk proyek" tetap kapital. */
+  text-transform: none;
   color: var(--accent, var(--color-electric));
   font-weight: 500;
 }
@@ -489,7 +491,7 @@ body {
   font-family: var(--font-mono);
   font-size: var(--text-label);
   letter-spacing: var(--tracking-caps-tight);
-  text-transform: lowercase;
+  text-transform: none;
   padding: 0.15rem 0.45rem;
   border: 1px solid var(--accent);
   background: var(--accent);
@@ -537,7 +539,8 @@ body {
   font-size: var(--text-nav);
   font-weight: 600;
   line-height: var(--leading-ui);
-  text-transform: lowercase;
+  /* Teks tombol ditulis sentence case di sumber; jangan dipaksa lowercase. */
+  text-transform: none;
   text-decoration: none;
   border: 1px solid var(--color-ink);
   cursor: pointer;
