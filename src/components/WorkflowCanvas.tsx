@@ -23,7 +23,7 @@ import {
   BookOpenIcon,
   HeadsetIcon,
 } from '@animateicons/react/lucide';
-import { ChatGptIcon } from '@animateicons/react/huge';
+import { ClaudeIcon } from '@animateicons/react/huge';
 import '@xyflow/react/dist/style.css';
 import './workflow-canvas.css';
 
@@ -59,7 +59,7 @@ const reduceMotion = () =>
 
 type TileData = {
   label: string;
-  icon: 'message' | 'database' | 'brain' | 'shield-check' | 'send' | 'chatgpt' | 'book' | 'headset';
+  icon: 'message' | 'database' | 'brain' | 'shield-check' | 'send' | 'claude' | 'book' | 'headset';
   tone: 'node' | 'hub' | 'tool';
 };
 
@@ -100,8 +100,8 @@ const TileIcon = memo(function TileIcon({
       return <BookOpenIcon ref={ref} {...base} />;
     case 'headset':
       return <HeadsetIcon ref={ref} {...base} />;
-    case 'chatgpt':
-      return <ChatGptIcon ref={ref} size={ICON_SIZE} color="var(--electric)" />;
+    case 'claude':
+      return <ClaudeIcon ref={ref} size={ICON_SIZE} color="var(--electric)" />;
     default:
       return null;
   }
@@ -263,7 +263,7 @@ const nodes: Node[] = [
     id: 't-model',
     type: 'tile',
     position: { x: TOOL_LEFT_X, y: ROW2_Y },
-    data: { label: 'MODEL LLM', icon: 'chatgpt', tone: 'tool', order: 5 },
+    data: { label: 'MODEL LLM', icon: 'claude', tone: 'tool', order: 5 },
   },
   {
     id: 't-dokumen',
