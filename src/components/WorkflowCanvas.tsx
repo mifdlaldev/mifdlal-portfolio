@@ -38,10 +38,13 @@ const TIMELINE: Phase[] = [
   { nodes: [], edges: ['e1'], ms: 1000 },               // sinyal → KONTEKS PELANGGAN
   { nodes: ['koleksi'], edges: [], ms: 1200 },
   { nodes: [], edges: ['e2'], ms: 1000 },               // sinyal → AI AGENT
-  { nodes: ['agent'], edges: [], ms: 2400 },            // brain menyala + tooltip tampil
-  { nodes: [], edges: ['b1', 'b2', 'b3'], ms: 1000 },   // fan-out ke 3 tool
-  { nodes: ['t-model', 't-dokumen', 't-api'], edges: [], ms: 1300 },
-  { nodes: [], edges: ['e3'], ms: 1000 },               // sinyal kembali → CEK KEBIJAKAN
+  /* Brain sticky: menyala di sini dan TETAP menyala sampai ketiga cabang
+     selesai dan sinyalnya kembali. Tooltip ikut terbuka selama aktif. */
+  { nodes: ['agent'], edges: [], ms: 2400 },            // brain menyala + tooltip
+  { nodes: ['agent'], edges: ['b1', 'b2', 'b3'], ms: 1000 },        // fan-out, brain tetap
+  { nodes: ['agent', 't-model', 't-dokumen', 't-api'], edges: [], ms: 1300 }, // tool bekerja
+  { nodes: ['agent'], edges: ['r1', 'r2', 'r3'], ms: 1000 },        // cabang kembali ke brain
+  { nodes: [], edges: ['e3'], ms: 1000 },               // brain → CEK KEBIJAKAN (padam)
   { nodes: ['validasi'], edges: [], ms: 1200 },
   { nodes: [], edges: ['e4'], ms: 1000 },               // sinyal → KIRIM BALASAN
   { nodes: ['kirim'], edges: [], ms: 1800 },            // output akhir
@@ -153,10 +156,17 @@ const TileNode = memo(({ id, data }: NodeProps) => {
           <Handle id="b1" type="source" position={Position.Bottom} className="wf-handle" style={{ left: '14%' }} />
           <Handle id="b2" type="source" position={Position.Bottom} className="wf-handle" style={{ left: '50%' }} />
           <Handle id="b3" type="source" position={Position.Bottom} className="wf-handle" style={{ left: '86%' }} />
+          {/* Titik masuk sinyal balik dari 3 tool — posisi identik dengan b1/b2/b3 */}
+          <Handle id="rb1" type="target" position={Position.Bottom} className="wf-handle" style={{ left: '14%' }} />
+          <Handle id="rb2" type="target" position={Position.Bottom} className="wf-handle" style={{ left: '50%' }} />
+          <Handle id="rb3" type="target" position={Position.Bottom} className="wf-handle" style={{ left: '86%' }} />
         </>
       )}
       {d.tone === 'tool' && (
-        <Handle id="in" type="target" position={Position.Top} className="wf-handle" />
+        <>
+          <Handle id="in" type="target" position={Position.Top} className="wf-handle" />
+          <Handle id="out" type="source" position={Position.Top} className="wf-handle" />
+        </>
       )}
     </motion.div>
   );
@@ -165,7 +175,7 @@ TileNode.displayName = 'TileNode';
 
 /* ---------------------------------------------------------------- edges --- */
 
-const FlowEdge = memo(({ id, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition }: EdgeProps) => {
+const FlowEdge = memo(({ id, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, data }: EdgeProps) => {
   const [path] = getBezierPath({
     sourceX,
     sourceY,
@@ -177,10 +187,13 @@ const FlowEdge = memo(({ id, sourceX, sourceY, targetX, targetY, sourcePosition,
   });
 
   const active = useContext(SeqCtx).edges.has(id);
+  // Edge balik (r1/r2/r3): garis dasar disembunyikan — tumpang tindih dengan
+  // garis turun b1/b2/b3 yang geometrinya identik terbalik.
+  const isReturn = Boolean((data as { ret?: boolean } | undefined)?.ret);
 
   return (
     <>
-      <BaseEdge id={id} path={path} className="wf-edge" />
+      {!isReturn && <BaseEdge id={id} path={path} className="wf-edge" />}
       {active && (
         <g className="wf-signal" key={id}>
           {/* Garis terang yang "menggambar" diri dari sumber ke tujuan */}
@@ -274,6 +287,11 @@ const edges: Edge[] = [
   { id: 'b1', source: 'agent', sourceHandle: 'b1', target: 't-model', targetHandle: 'in', type: 'flow' },
   { id: 'b2', source: 'agent', sourceHandle: 'b2', target: 't-dokumen', targetHandle: 'in', type: 'flow' },
   { id: 'b3', source: 'agent', sourceHandle: 'b3', target: 't-api', targetHandle: 'in', type: 'flow' },
+  // Edge balik: 3 tool → brain. Garis dasar disembunyikan (tumpang tindih
+  // dengan b1/b2/b3 turun), sinyal draw + comet tetap jalan naik ke brain.
+  { id: 'r1', source: 't-model', sourceHandle: 'out', target: 'agent', targetHandle: 'rb1', type: 'flow', data: { ret: true } },
+  { id: 'r2', source: 't-dokumen', sourceHandle: 'out', target: 'agent', targetHandle: 'rb2', type: 'flow', data: { ret: true } },
+  { id: 'r3', source: 't-api', sourceHandle: 'out', target: 'agent', targetHandle: 'rb3', type: 'flow', data: { ret: true } },
 ];
 
 export default function WorkflowCanvas() {
