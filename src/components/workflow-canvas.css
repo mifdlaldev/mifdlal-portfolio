@@ -113,7 +113,7 @@
    bukan seluruh kotak. Posisi: DI ATAS tile. Pola sama dengan LogoLoop.
    Latar badge putih agar teks biru tetap terbaca di atas foto yang ramai. */
 .wf-tile--hub .wf-tile__label {
-  bottom: calc(100% + 14px);
+  bottom: calc(100% + 22px);
   top: auto;
   width: max-content;
   max-width: 320px;
