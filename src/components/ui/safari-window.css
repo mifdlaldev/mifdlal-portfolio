@@ -177,85 +177,13 @@ body.is-moving-safari .safari__bar {
   color: var(--color-ink);
 }
 
-/* ---------- handle resize: cursor per region ---------- */
+/* ---------- resize dihapus: ukuran window tetap, hanya bisa dipindah ---------- */
 
-.safari__handle {
-  position: absolute;
-  z-index: var(--z-raise);
-  touch-action: none;
-}
-
-.safari__handle--n {
-  top: 0;
-  left: 12px;
-  right: 12px;
-  height: 7px;
-  cursor: ns-resize;
-}
-
-.safari__handle--s {
-  bottom: 0;
-  left: 12px;
-  right: 12px;
-  height: 7px;
-  cursor: ns-resize;
-}
-
-.safari__handle--w {
-  left: 0;
-  top: 12px;
-  bottom: 12px;
-  width: 7px;
-  cursor: ew-resize;
-}
-
-.safari__handle--e {
-  right: 0;
-  top: 12px;
-  bottom: 12px;
-  width: 7px;
-  cursor: ew-resize;
-}
-
-.safari__handle--nw {
-  top: 0;
-  left: 0;
-  width: 14px;
-  height: 14px;
-  cursor: nwse-resize;
-}
-
-.safari__handle--ne {
-  top: 0;
-  right: 0;
-  width: 14px;
-  height: 14px;
-  cursor: nesw-resize;
-}
-
-.safari__handle--sw {
-  bottom: 0;
-  left: 0;
-  width: 14px;
-  height: 14px;
-  cursor: nesw-resize;
-}
-
-.safari__handle--se {
-  bottom: 0;
-  right: 0;
-  width: 14px;
-  height: 14px;
-  cursor: nwse-resize;
-}
-
-/* Saat drag: iframe tidak boleh menangkap pointer, teks tidak terblok. */
-body.is-resizing-safari,
+/* Saat drag pindah: iframe tidak boleh menangkap pointer, teks tidak terblok. */
 body.is-moving-safari {
   user-select: none;
 }
 
-body.is-resizing-safari .safari__frame,
 body.is-moving-safari .safari__frame {
   pointer-events: none;
 }

@@ -7,18 +7,20 @@ import './safari-window.css';
  * - Tiga tombol traffic light dirender TETAPI SEMUA dinonaktifkan
  *   (tidak ada handler, cursor not-allowed, title "Tidak tersedia").
  * - Minimize & maximize TIDAK mengubah state window; tidak ada animasi.
- *   Keduanya hanya affordance visual (cursor berubah saat hover pinggir
- *   window) — user bisa drag pinggiran window untuk ubah ukuran, seperti
- *   window OS biasa. Klik tombol tidak melakukan apa-apa.
+ *   Keduanya hanya affordance visual. Klik tombol tidak melakukan apa-apa.
+ * - Window TIDAK bisa di-resize. Ukuran tetap 90% x 80% frame canvas.
+ * - Window BISA dipindah dengan drag di title bar, terbatas di dalam
+ *   batas canvas (tidak bisa keluar dari .service-frame).
  * - Tab bar: pindah tab mengubah konten (iframe ke situs showcase).
  * - Konten tab = iframe asli ke situs (bukan screenshot). Situs yang
  *   mengirim X-Frame-Options/CSP frame-ancestors akan tampil kosong —
  *   daftarkan domain yang diizinkan di public/_headers (frame-src).
+ * - iframe dirender pada lebar virtual 1280px (layar laptop) lalu
+ *   diskalakan turun — layout desktop 1:1, bukan layout sempit.
  */
 
 type ShowcaseTab = { label: string; url: string };
 type Rect = { x: number; y: number; w: number; h: number };
-type Dir = 'n' | 's' | 'e' | 'w' | 'nw' | 'ne' | 'sw' | 'se';
 
 const MIN_W = 240;
 const MIN_H = 180;
@@ -28,7 +30,6 @@ const MIN_H = 180;
    agar muat window. Hasilnya layout desktop seperti di laptop, bukan
    layout sempit yang membuat teks hero membesar. */
 const VIRTUAL_W = 1280;
-const DIRS: Dir[] = ['nw', 'n', 'ne', 'w', 'e', 'sw', 's', 'se'];
 
 export default function SafariWindow({
   tabs,
@@ -38,11 +39,6 @@ export default function SafariWindow({
   const rootRef = useRef<HTMLDivElement>(null);
   const [rect, setRect] = useState<Rect | null>(null);
   const [active, setActive] = useState(0);
-
-  const dragRef = useRef<
-    | { dir: Dir; startX: number; startY: number; rect: Rect; maxW: number; maxH: number }
-    | null
-  >(null);
 
   // Drag pindah posisi window (dari title bar), clamp ke batas canvas.
   const moveRef = useRef<
@@ -119,60 +115,22 @@ export default function SafariWindow({
   // konten, sama seperti mengubah tinggi window browser laptop.
   const virtualH = scale > 0 ? Math.round(vp.h / scale) : 0;
 
-  // Pointer drag: resize dari 8 pinggiran/sudut, pindah dari title bar.
+  // Pointer drag: pindahkan window dari title bar (tanpa resize).
   useEffect(() => {
     const onMove = (e: PointerEvent) => {
-      // --- mode pindah posisi (title bar) ---
       const m = moveRef.current;
-      if (m) {
-        const dx = e.clientX - m.startX;
-        const dy = e.clientY - m.startY;
-        // Clamp: window selalu utuh di dalam canvas.
-        const maxX = Math.max(0, m.maxW - m.rect.w);
-        const maxY = Math.max(0, m.maxH - m.rect.h);
-        const x = Math.min(Math.max(0, m.rect.x + dx), maxX);
-        const y = Math.min(Math.max(0, m.rect.y + dy), maxY);
-        setRect({ x, y, w: m.rect.w, h: m.rect.h });
-        return;
-      }
-
-      // --- mode resize ---
-      const d = dragRef.current;
-      if (!d) return;
-      const dx = e.clientX - d.startX;
-      const dy = e.clientY - d.startY;
-      let { x, y, w, h } = d.rect;
-
-      if (d.dir.includes('e')) w = d.rect.w + dx;
-      if (d.dir.includes('s')) h = d.rect.h + dy;
-      if (d.dir.includes('w')) {
-        const right = d.rect.x + d.rect.w;
-        w = Math.max(MIN_W, right - (d.rect.x + dx));
-        x = right - w;
-      }
-      if (d.dir.includes('n')) {
-        const bottom = d.rect.y + d.rect.h;
-        h = Math.max(MIN_H, bottom - (d.rect.y + dy));
-        y = bottom - h;
-      }
-
-      // Batas frame. maxW/maxH di-floor ke MIN supaya tidak pernah
-      // menghasilkan lebar/tinggi 0 (penyebab window menghilang).
-      const maxW = Math.max(MIN_W, d.maxW);
-      const maxH = Math.max(MIN_H, d.maxH);
-      x = Math.min(Math.max(0, x), maxW - MIN_W);
-      y = Math.min(Math.max(0, y), maxH - MIN_H);
-      w = Math.min(Math.max(w, MIN_W), maxW - x);
-      h = Math.min(Math.max(h, MIN_H), maxH - y);
-
-      setRect({ x, y, w, h });
+      if (!m) return;
+      const dx = e.clientX - m.startX;
+      const dy = e.clientY - m.startY;
+      // Clamp: window selalu utuh di dalam canvas.
+      const maxX = Math.max(0, m.maxW - m.rect.w);
+      const maxY = Math.max(0, m.maxH - m.rect.h);
+      const x = Math.min(Math.max(0, m.rect.x + dx), maxX);
+      const y = Math.min(Math.max(0, m.rect.y + dy), maxY);
+      setRect({ x, y, w: m.rect.w, h: m.rect.h });
     };
 
     const onUp = () => {
-      if (dragRef.current) {
-        dragRef.current = null;
-        document.body.classList.remove('is-resizing-safari');
-      }
       if (moveRef.current) {
         moveRef.current = null;
         document.body.classList.remove('is-moving-safari');
@@ -201,25 +159,6 @@ export default function SafariWindow({
     e.preventDefault();
     moveRef.current = { startX: e.clientX, startY: e.clientY, rect, maxW, maxH };
     document.body.classList.add('is-moving-safari');
-  };
-
-  const startDrag = (e: React.PointerEvent, dir: Dir) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const host = rootRef.current?.closest('.service-frame') as HTMLElement | null;
-    if (!host || !rect) return;
-    const maxW = host.clientWidth;
-    const maxH = host.clientHeight;
-    if (maxW <= 0 || maxH <= 0) return;
-    dragRef.current = {
-      dir,
-      startX: e.clientX,
-      startY: e.clientY,
-      rect,
-      maxW,
-      maxH,
-    };
-    document.body.classList.add('is-resizing-safari');
   };
 
   const current = tabs[active];
@@ -329,15 +268,7 @@ export default function SafariWindow({
         )}
       </div>
 
-      {/* Handle resize — 8 pinggiran/sudut, cursor berubah per region */}
-      {DIRS.map((dir) => (
-        <span
-          key={dir}
-          className={`safari__handle safari__handle--${dir}`}
-          onPointerDown={(e) => startDrag(e, dir)}
-          aria-hidden="true"
-        />
-      ))}
+      {/* Handle resize dihapus: ukuran window tetap, hanya bisa dipindah. */}
     </div>
   );
 }
