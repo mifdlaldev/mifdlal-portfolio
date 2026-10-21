@@ -1,6 +1,9 @@
 ---
 import { services } from '../data/site'
 import CodeComment from './CodeComment.astro'
+import ServiceBrowserIcon from './ServiceBrowserIcon'
+import ServiceBotIcon from './ServiceBotIcon'
+import ServiceWorkflowIcon from './ServiceWorkflowIcon'
 ---
 
 <section id="layanan" class="section">
@@ -21,7 +24,12 @@ import CodeComment from './CodeComment.astro'
         <li class="service-row">
           <div class="service-text">
             <span class="service-no">{s.no}</span>
-            <h3 class="service-title">{s.title}</h3>
+            <div class="service-title-row">
+              <h3 class="service-title service-title--blue">{s.title}</h3>
+              {s.no === '01' && <ServiceBrowserIcon client:load />}
+              {s.no === '02' && <ServiceBotIcon client:load />}
+              {s.no === '03' && <ServiceWorkflowIcon client:load />}
+            </div>
             <p class="service-desc">{s.body}</p>
           </div>
 
@@ -33,12 +41,13 @@ import CodeComment from './CodeComment.astro'
               <span class="service-bar-label">fig. 05.{s.no}</span>
             </div>
             <div class="service-frame">
-              {/* Kanvas kosong: digambar oleh public/js/service-canvas.js.
-                  Ganti isi skrip itu dengan animasi asli saat asetnya siap. */}
+              {/* Gambar layanan dipotong cover oleh public/js/service-canvas.js;
+                  kanvas menambah overlay gambar teknik dan label fig. */}
               <canvas
                 class="service-canvas"
                 data-service-canvas
                 data-index={s.no}
+                data-src={s.image}
                 role="img"
                 aria-label={`Kanvas alur kerja layanan ${s.no}: ${s.title}`}
               ></canvas>
@@ -90,11 +99,46 @@ import CodeComment from './CodeComment.astro'
     gap: 0.6rem;
   }
 
+  /* Judul dan ikon berdiri sebaris: ikon di kanan judul, bukan turun ke
+     baris berikutnya seperti elemen blok. align-items center membuat sumbu
+     ikon sejajar sumbu teks walau tingginya berbeda. */
+  .service-title-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 0;
+  }
+
+  .service-title-row .service-title {
+    margin: 0;
+    min-width: 0;
+  }
+
+  .service-browser-icon {
+    display: inline-flex;
+    flex: none;
+    color: var(--electric);
+  }
+
+  .service-bot-icon {
+    display: inline-flex;
+    flex: none;
+    color: var(--electric);
+  }
+
+  .service-workflow-icon {
+    display: inline-flex;
+    flex: none;
+    color: var(--electric);
+  }
+
   .service-no {
     font-family: var(--font-mono);
-    font-size: var(--text-label);
+    font-size: calc(var(--text-label) + 0.125rem);
+    font-weight: var(--weight-bold);
     letter-spacing: var(--tracking-caps-loose);
-    color: var(--color-muted);
+    color: var(--electric);
     text-transform: uppercase;
   }
 
@@ -107,6 +151,12 @@ import CodeComment from './CodeComment.astro'
     line-height: var(--leading-heading);
     color: var(--color-ink);
     text-wrap: balance;
+  }
+
+  /* Judul layanan 01 dan 03 memakai warna aksen biru; layanan 02 tetap
+     tinta supaya dua judul tidak berdiri sebagai satu blok warna. */
+  .service-title--blue {
+    color: var(--electric);
   }
 
   .service-desc {

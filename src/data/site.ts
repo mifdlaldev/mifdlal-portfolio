@@ -74,24 +74,27 @@ export const projects: readonly Project[] = [
   },
 ]
 
+/* Foto layanan: unduhan Unsplash, dipotong 16/10 oleh kanvas layanan.
+   Berkas asli ada di public/services/layanan-0N.jpg (1600 px, sRGB).
+   Rincian sumber dan status lisensi: ASSET-LICENSES.md. */
 export const services = [
   {
     no: '01',
     title: 'Website dan web app',
     body: 'Landing page, profil perusahaan, e-commerce, sampai POS. Dari desain sampai rilis, bukan sekadar serah terima berkas.',
-    image: '/services/layanan-01.svg',
+    image: '/services/layanan-01.jpg',
   },
   {
     no: '02',
     title: 'Chatbot',
     body: 'Balas pelanggan secara otomatis dan jawab pertanyaan berdasarkan data bisnis Anda, bukan templat yang selalu sama.',
-    image: '/services/layanan-02.svg',
+    image: '/services/layanan-02.jpg',
   },
   {
     no: '03',
     title: 'Otomasi AI dan workflow',
     body: 'Kurangi pekerjaan berulang, hubungkan perkakas yang sudah Anda gunakan, agar tim kecil tidak mengerjakan hal yang sama dua kali.',
-    image: '/services/layanan-03.svg',
+    image: '/services/layanan-03.jpg',
   },
 ] as const
 
