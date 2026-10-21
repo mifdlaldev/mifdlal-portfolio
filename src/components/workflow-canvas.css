@@ -61,6 +61,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  /* Canvas induk pointer-events: none, jadi area ikon harus
+     mengaktifkan kembali event mouse agar hover tooltip bekerja. */
+  pointer-events: auto;
+  cursor: help;
 }
 
 /* Ikon brand (openai/claude) diseragamkan ke tema monokrom. */
