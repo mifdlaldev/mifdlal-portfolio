@@ -17,10 +17,10 @@ import {
   MessageSquareIcon,
   DatabaseIcon,
   BrainIcon,
-  CheckCheckIcon,
+  ShieldCheckIcon,
   SendHorizontalIcon,
-  FileTextIcon,
-  WebhookIcon,
+  BookOpenIcon,
+  HeadsetIcon,
 } from '@animateicons/react/lucide';
 import '@xyflow/react/dist/style.css';
 import './workflow-canvas.css';
@@ -39,7 +39,7 @@ function useIconTick(ms: number) {
 
 type TileData = {
   label: string;
-  icon: 'message' | 'database' | 'brain' | 'check' | 'send' | 'file' | 'api' | 'brand';
+  icon: 'message' | 'database' | 'brain' | 'shield-check' | 'send' | 'brand' | 'book' | 'headset';
   tone: 'node' | 'hub' | 'tool';
   brand?: string;
 };
@@ -58,14 +58,14 @@ function renderIcon(kind: TileData['icon'], brand?: string, tick = 0) {
       return <DatabaseIcon {...base} />;
     case 'brain':
       return <BrainIcon {...base} />;
-    case 'check':
-      return <CheckCheckIcon {...base} />;
+    case 'shield-check':
+      return <ShieldCheckIcon {...base} />;
     case 'send':
       return <SendHorizontalIcon {...base} />;
-    case 'file':
-      return <FileTextIcon {...base} />;
-    case 'api':
-      return <WebhookIcon {...base} />;
+    case 'book':
+      return <BookOpenIcon {...base} />;
+    case 'headset':
+      return <HeadsetIcon {...base} />;
     case 'brand':
       return <img className="wf-brand" src={brand} alt="" width={ICON_SIZE} height={ICON_SIZE} />;
     default:
@@ -198,7 +198,7 @@ const nodes: Node[] = [
     type: 'tile',
     className: 'wf-node-2line',
     position: { x: (NODE_W + GAP) * 2 + HUB_W + GAP, y: 0 },
-    data: { label: 'CEK KEBIJAKAN', icon: 'check', tone: 'node', order: 3 },
+    data: { label: 'CEK KEBIJAKAN', icon: 'shield-check', tone: 'node', order: 3 },
   },
   {
     id: 'kirim',
@@ -217,13 +217,13 @@ const nodes: Node[] = [
     id: 't-dokumen',
     type: 'tile',
     position: { x: TOOL_MID_X, y: ROW2_Y },
-    data: { label: 'KNOWLEDGE BASE', icon: 'file', tone: 'tool', order: 6 },
+    data: { label: 'KNOWLEDGE BASE', icon: 'book', tone: 'tool', order: 6 },
   },
   {
     id: 't-api',
     type: 'tile',
     position: { x: TOOL_RIGHT_X, y: ROW2_Y },
-    data: { label: 'CRM HELPDESK', icon: 'api', tone: 'tool', order: 7 },
+    data: { label: 'CRM HELPDESK', icon: 'headset', tone: 'tool', order: 7 },
   },
 ];
 
