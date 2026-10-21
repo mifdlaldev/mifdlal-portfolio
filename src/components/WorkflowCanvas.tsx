@@ -83,7 +83,7 @@ const TileIcon = memo(function TileIcon({
     else ref.current.stopAnimation();
   }, [active, kind]);
 
-  const base = { size: ICON_SIZE, strokeWidth: 1.5, color: '#fdfcf1' } as const;
+  const base = { size: ICON_SIZE, strokeWidth: 1.75, color: 'var(--electric)' } as const;
 
   switch (kind) {
     case 'message':
@@ -101,7 +101,7 @@ const TileIcon = memo(function TileIcon({
     case 'headset':
       return <HeadsetIcon ref={ref} {...base} />;
     case 'chatgpt':
-      return <ChatGptIcon ref={ref} size={ICON_SIZE} color="#fdfcf1" />;
+      return <ChatGptIcon ref={ref} size={ICON_SIZE} color="var(--electric)" />;
     default:
       return null;
   }
