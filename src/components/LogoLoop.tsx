@@ -583,9 +583,11 @@ const createEngine = (
     const L = st.length;
     const half = L / 2;
     const T = -st.offset - geo.lead;
+    // Bulatkan ke piksel bulat: track pecahan membuat layer GPU berisi
+    // teks tooltip ter-sample di offset subpiksel → teks terlihat blur.
     const lineT = cfg.vertical
-      ? `translate3d(0px, ${T.toFixed(2)}px, 0px)`
-      : `translate3d(${T.toFixed(2)}px, 0px, 0px)`;
+      ? `translate3d(0px, ${Math.round(T)}px, 0px)`
+      : `translate3d(${Math.round(T)}px, 0px, 0px)`;
     track.style.transform = geo.tilted ? `rotateX(${geo.tiltX}deg) rotateY(${geo.tiltY}deg) ${lineT}` : lineT;
     const introRunning = st.introStart >= 0;
     const elapsed = introRunning ? (now - st.introStart) / 1000 : 0;
