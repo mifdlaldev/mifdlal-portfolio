@@ -155,8 +155,8 @@
 
 /* ── Edge / konektor ───────────────────────────────────────── */
 .wf-edge {
-  stroke: var(--ink-900);
-  stroke-opacity: 0.5;
+  stroke: var(--paper);
+  stroke-opacity: 0.9;
   stroke-width: 1.4;
   fill: none;
   /* Marching ants: garis putus-putus bergerak menyusur jalur. */
