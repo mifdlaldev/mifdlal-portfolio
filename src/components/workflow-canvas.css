@@ -71,7 +71,8 @@
   display: block;
 }
 
-/* Label di bawah tile — teks PUTIH, satu atau dua baris. */
+/* Label di bawah tile — teks PUTIH, satu atau dua baris.
+   Tile biasa: selalu terlihat. */
 .wf-tile__label {
   position: absolute;
   top: calc(100% + 10px);
@@ -88,6 +89,27 @@
   flex-direction: column;
   align-items: center;
   gap: 2px;
+}
+
+/* Hub tile: label jadi tooltip — tersembunyi sampai hover.
+   Pola sama dengan LogoLoop: fade + geser naik 250ms. */
+.wf-tile--hub .wf-tile__label {
+  opacity: 0;
+  transform: translate(-50%, 4px);
+  transition: opacity var(--dur-base) var(--ease), transform var(--dur-base) var(--ease);
+  pointer-events: none;
+  z-index: var(--z-tooltip);
+}
+
+.wf-tile--hub:hover .wf-tile__label,
+.wf-tile--hub:focus-visible .wf-tile__label {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.wf-tile--hub:focus-visible {
+  outline: 2px solid var(--electric);
+  outline-offset: 4px;
 }
 
 .wf-tile__sub {
