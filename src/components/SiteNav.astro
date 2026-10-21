@@ -179,19 +179,41 @@ const links = [
     min-height: 44px;
     display: inline-flex;
     align-items: center;
+    position: relative;
     transition: color var(--dur-fast) var(--ease);
+  }
+
+  /* Garis bawah animasi: mulai dari titik tengah teks, lalu melebar
+     simetris ke kiri dan ke kanan sampai selebar teks.
+     Anchor left:50% + translateX(-50%) membuat titik tumbuh tepat di
+     tengah; width 0 -> 100% melebar dua arah sekaligus.
+     currentColor supaya warna garis ikut state teks (muted/ink/paper). */
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: calc(50% + 0.7em);
+    width: 0;
+    height: 2px;
+    background: currentColor;
+    transform: translateX(-50%);
+    transition: width var(--dur-base) var(--ease);
+    pointer-events: none;
   }
 
   .nav-link:hover {
     color: var(--color-ink);
   }
 
-  /* Section yang sedang dilihat: underline tipis + warna penuh. */
+  .nav-link:hover::after,
+  .nav-link:focus-visible::after,
+  .nav-link.is-active::after {
+    width: 100%;
+  }
+
+  /* Section yang sedang dilihat: warna penuh + garis bawah penuh. */
   .nav-link.is-active {
     color: var(--color-ink);
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 4px;
   }
 
   .nav:not(.is-scrolled) .nav-link.is-active {
