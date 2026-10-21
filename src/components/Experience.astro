@@ -15,7 +15,6 @@ import CodeComment from './CodeComment.astro'
       {experience.length === 0 ? (
         <>
           <li class="entry-row">
-            <span class="entry-no">01</span>
             <div class="entry-main">
               <span class="entry-title ph ph--title"></span>
               <p class="entry-org"><span class="ph ph--sub"></span></p>
@@ -27,7 +26,6 @@ import CodeComment from './CodeComment.astro'
             </ul>
           </li>
           <li class="entry-row">
-            <span class="entry-no">02</span>
             <div class="entry-main">
               <span class="entry-title ph ph--title"></span>
               <p class="entry-org"><span class="ph ph--sub"></span></p>
@@ -42,7 +40,6 @@ import CodeComment from './CodeComment.astro'
       ) : (
         experience.map((e) => (
           <li class="entry-row">
-            <span class="entry-no">{e.no}</span>
             <div class="entry-main">
               <h3 class="entry-title">{e.role}</h3>
               <p class="entry-org">
@@ -89,18 +86,10 @@ import CodeComment from './CodeComment.astro'
 
   .entry-row {
     display: grid;
-    grid-template-columns: 2.5rem 1fr;
-    gap: 0.35rem 1.25rem;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.35rem;
     padding: 1.75rem 0.5rem;
     border-bottom: 1px solid var(--color-line);
-  }
-
-  .entry-no {
-    font-family: var(--font-mono);
-    font-size: var(--text-label);
-    color: var(--accent, var(--color-electric));
-    padding-top: 0.3rem;
-    grid-row: 1 / span 3;
   }
 
   .entry-title {
@@ -180,11 +169,8 @@ import CodeComment from './CodeComment.astro'
        poin ditaruh di kolom ketiga sehingga mulai ~400px di kanan judul dan
        entri terbaca sebagai dua blok terpisah. */
     .entry-row {
-      grid-template-columns: 3rem minmax(0, 1fr) auto;
+      grid-template-columns: minmax(0, 1fr) auto;
       align-items: baseline;
-    }
-    .entry-no {
-      grid-row: 1 / span 2;
     }
     .entry-main {
       grid-row: 1 / span 2;
@@ -194,18 +180,18 @@ import CodeComment from './CodeComment.astro'
       text-align: right;
       flex-direction: column;
       gap: 0.25rem;
-      grid-column: 3;
+      grid-column: 2;
       grid-row: 1;
     }
     .entry-points {
-      /* Kolom 2 saja, bukan 2 / -1: tepi kanan teks jadi sejajar dengan kolom
-         periode dan lokasi di kanan atas. */
-      grid-column: 2;
+      /* Kolom 1 saja, bukan 2 / -1: teks mulai di garis kiri yang sama
+         dengan judul. */
+      grid-column: 1;
       grid-row: 3;
       margin: 0.9rem 0 0;
     }
     .entry-link {
-      grid-column: 2 / -1;
+      grid-column: 1 / -1;
       grid-row: 4;
     }
   }

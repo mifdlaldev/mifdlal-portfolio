@@ -14,7 +14,6 @@ import CodeComment from './CodeComment.astro'
     <ul class="edu-list" aria-hidden={education.length === 0 ? 'true' : undefined}>
       {education.length === 0 ? (
         <li class="edu-row">
-          <span class="edu-no">01</span>
           <div class="edu-main">
             <span class="edu-title ph ph--title"></span>
             <p class="edu-program"><span class="ph ph--sub"></span></p>
@@ -24,7 +23,6 @@ import CodeComment from './CodeComment.astro'
       ) : (
         education.map((e) => (
           <li class="edu-row">
-            <span class="edu-no">{e.no}</span>
             <div class="edu-main">
               <h3 class="edu-title">{e.institution}</h3>
               <p class="edu-program">
@@ -67,17 +65,10 @@ import CodeComment from './CodeComment.astro'
 
   .edu-row {
     display: grid;
-    grid-template-columns: 2.5rem 1fr;
-    gap: 0.35rem 1.25rem;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.35rem;
     padding: 1.75rem 0.5rem;
     border-bottom: 1px solid var(--color-line);
-  }
-
-  .edu-no {
-    font-family: var(--font-mono);
-    font-size: var(--text-label);
-    color: var(--accent, var(--color-electric));
-    padding-top: 0.3rem;
   }
 
   .edu-title {
@@ -121,7 +112,7 @@ import CodeComment from './CodeComment.astro'
 
   @media (min-width: 860px) {
     .edu-row {
-      grid-template-columns: 3rem 1fr auto;
+      grid-template-columns: minmax(0, 1fr) auto;
       align-items: baseline;
     }
     .edu-meta {
