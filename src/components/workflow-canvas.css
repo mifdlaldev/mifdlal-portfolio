@@ -125,7 +125,9 @@
 
 /* Trigger: hover/fokus tepat di glyph ikon (area 44px), bukan kotak penuh. */
 .wf-tile--hub .wf-tile__inner:hover + .wf-tile__label,
-.wf-tile--hub .wf-tile__inner:focus-visible + .wf-tile__label {
+.wf-tile--hub .wf-tile__inner:focus-visible + .wf-tile__label,
+/* Timeline: tooltip otomatis muncul saat node brain aktif (fase AI AGENT). */
+.wf-tile--hub.is-active .wf-tile__label {
   opacity: 1;
   transform: translate(-50%, 0);
 }

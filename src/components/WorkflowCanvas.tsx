@@ -38,7 +38,7 @@ const TIMELINE: Phase[] = [
   { nodes: [], edges: ['e1'], ms: 1000 },               // sinyal → KONTEKS PELANGGAN
   { nodes: ['koleksi'], edges: [], ms: 1200 },
   { nodes: [], edges: ['e2'], ms: 1000 },               // sinyal → AI AGENT
-  { nodes: ['agent'], edges: [], ms: 1300 },            // brain menyala
+  { nodes: ['agent'], edges: [], ms: 2400 },            // brain menyala + tooltip tampil
   { nodes: [], edges: ['b1', 'b2', 'b3'], ms: 1000 },   // fan-out ke 3 tool
   { nodes: ['t-model', 't-dokumen', 't-api'], edges: [], ms: 1300 },
   { nodes: [], edges: ['e3'], ms: 1000 },               // sinyal kembali → CEK KEBIJAKAN
