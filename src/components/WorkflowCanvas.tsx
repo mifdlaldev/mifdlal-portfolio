@@ -196,12 +196,14 @@ const nodes: Node[] = [
   {
     id: 'validasi',
     type: 'tile',
+    className: 'wf-node-2line',
     position: { x: (NODE_W + GAP) * 2 + HUB_W + GAP, y: 0 },
     data: { label: 'CEK KEBIJAKAN', icon: 'check', tone: 'node', order: 3 },
   },
   {
     id: 'kirim',
     type: 'tile',
+    className: 'wf-node-2line',
     position: { x: (NODE_W + GAP) * 2 + HUB_W + GAP + NODE_W + GAP, y: 0 },
     data: { label: 'KIRIM BALASAN', icon: 'send', tone: 'node', order: 4 },
   },

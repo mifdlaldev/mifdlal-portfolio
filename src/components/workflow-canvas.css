@@ -51,6 +51,11 @@
   max-width: 96px;
 }
 
+/* Node validasi & kirim: judul panjang dipaksa 2 baris agar proporsional. */
+.wf-node-2line .wf-tile__label {
+  max-width: 72px;
+}
+
 /* Ikon di tengah tile. */
 .wf-tile__icon {
   display: flex;
