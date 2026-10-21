@@ -77,12 +77,6 @@
   cursor: help;
 }
 
-/* Ikon brand (openai/claude) diseragamkan ke tema monokrom. */
-.wf-brand {
-  filter: brightness(0) invert(1);
-  display: block;
-}
-
 /* Label di bawah tile — teks PUTIH, satu atau dua baris.
    Tile biasa: selalu terlihat. */
 .wf-tile__label {

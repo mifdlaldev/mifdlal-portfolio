@@ -22,6 +22,7 @@ import {
   BookOpenIcon,
   HeadsetIcon,
 } from '@animateicons/react/lucide';
+import { ChatGptIcon } from '@animateicons/react/huge';
 import '@xyflow/react/dist/style.css';
 import './workflow-canvas.css';
 
@@ -39,15 +40,14 @@ function useIconTick(ms: number) {
 
 type TileData = {
   label: string;
-  icon: 'message' | 'database' | 'brain' | 'shield-check' | 'send' | 'brand' | 'book' | 'headset';
+  icon: 'message' | 'database' | 'brain' | 'shield-check' | 'send' | 'chatgpt' | 'book' | 'headset';
   tone: 'node' | 'hub' | 'tool';
-  brand?: string;
 };
 
 const ICON_SIZE = 38;
 const ICON_MS = 4200; // replay animasi ikon tiap 4.2 detik
 
-function renderIcon(kind: TileData['icon'], brand?: string, tick = 0) {
+function renderIcon(kind: TileData['icon'], tick = 0) {
   const base = { size: ICON_SIZE, strokeWidth: 1.5 } as const;
   // Ikon trigger selalu animasi; sisanya statis (tidak mengganggu bacaan).
   if (kind === 'message') {
@@ -66,8 +66,8 @@ function renderIcon(kind: TileData['icon'], brand?: string, tick = 0) {
       return <BookOpenIcon {...base} />;
     case 'headset':
       return <HeadsetIcon {...base} />;
-    case 'brand':
-      return <img className="wf-brand" src={brand} alt="" width={ICON_SIZE} height={ICON_SIZE} />;
+    case 'chatgpt':
+      return <ChatGptIcon size={ICON_SIZE} color="#fdfcf1" />;
     default:
       return null;
   }
@@ -112,7 +112,7 @@ const TileNode = memo(({ data }: NodeProps) => {
         role={d.tone === 'hub' ? 'button' : undefined}
         aria-label={d.tone === 'hub' ? `${d.label}, klasifikasi intent dan draf balasan` : undefined}
       >
-        <span className="wf-tile__icon">{renderIcon(d.icon, d.brand, tick)}</span>
+        <span className="wf-tile__icon">{renderIcon(d.icon, tick)}</span>
       </motion.span>
 
       {/* Label di bawah tile untuk SEMUA tile — konsisten.
@@ -211,7 +211,7 @@ const nodes: Node[] = [
     id: 't-model',
     type: 'tile',
     position: { x: TOOL_LEFT_X, y: ROW2_Y },
-    data: { label: 'MODEL LLM', icon: 'brand', tone: 'tool', brand: '/logos/openai.svg', order: 5 },
+    data: { label: 'MODEL LLM', icon: 'chatgpt', tone: 'tool', order: 5 },
   },
   {
     id: 't-dokumen',
