@@ -53,18 +53,22 @@ import { AsciiArtStatic } from './ui/ascii-art'
               ></div>
 
               {/* ASCII tekstur — karakter elektrik samar, di atas overlay biru,
-                  di bawah tile. AsciiArtStatic = sekali gambar, nol animasi. */}
-              <AsciiArtStatic
-                client:idle
-                src={s.image}
-                resolution={64}
-                charset="dots"
-                color="var(--electric)"
-                backgroundColor="transparent"
-                objectFit="cover"
-                fontFamily={'"Geist Mono Variable", ui-monospace, monospace'}
-                class="service-ascii"
-              />
+                  di bawah tile. AsciiArtStatic = sekali gambar, nol animasi.
+                  Wrapper .service-ascii mengatur posisi/opacity — class tidak
+                  diteruskan sebagai prop React oleh Astro, jadi div pembungkus
+                  WAJIB. */}
+              <div class="service-ascii">
+                <AsciiArtStatic
+                  client:idle
+                  src={s.image}
+                  resolution={64}
+                  charset="dots"
+                  color="var(--electric)"
+                  backgroundColor="transparent"
+                  objectFit="cover"
+                  fontFamily={'"Geist Mono Variable", ui-monospace, monospace'}
+                />
+              </div>
 
               {/* Penanda sudut gambar teknik — sekarang sibling .service-photo
                   (z 3) agar di atas ASCII. */}
@@ -282,10 +286,19 @@ import { AsciiArtStatic } from './ui/ascii-art'
     pointer-events: none;
     font-size: 0; /* sembunyikan teks "Loading..." sebelum canvas render */
   }
-  .service-ascii canvas {
+
+  /* Root div komponen dirender React — tidak membawa atribut scope Astro,
+     jadi wajib :global(). Tanpa ini tinggi root = tinggi canvas default
+     (150px), clientHeight salah, grid ASCII gepeng. */
+  .service-ascii > :global(div) {
+    position: absolute;
+    inset: 0;
+  }
+
+  .service-ascii :global(canvas) {
     display: block;
-    width: 100% !important;
-    height: 100% !important;
+    width: 100%;
+    height: 100%;
   }
 
   /* Penanda sudut gambar teknik — empat L-bracket tipis. Pindah dari dalam
