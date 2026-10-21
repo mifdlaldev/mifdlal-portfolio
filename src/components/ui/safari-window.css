@@ -1,4 +1,8 @@
 /* Safari-style showcase window di dalam canvas layanan 01.
+   Layout Safari macOS asli (layout "Separate"):
+     baris 1: toolbar — traffic light + navigasi + smart search + aksi
+     baris 2: tab bar — tab terpisah di bawah toolbar
+     baris 3: viewport konten
    Semua nilai desain lewat token — tidak ada warna/ukuran literal di sini
    (dijaga scripts/check-tokens.mjs). */
 
@@ -14,38 +18,41 @@
   z-index: var(--z-safari);
 }
 
-/* ---------- bar atas: titik jendela + tab ---------- */
+/* ---------- baris 1: toolbar ---------- */
 
-.safari__bar {
+.safari__toolbar {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 7px 10px;
+  gap: 8px;
+  height: 38px;
+  padding: 0 10px;
+  background: var(--safari-chrome);
   border-bottom: 1px solid var(--ink-16);
   flex: 0 0 auto;
   cursor: grab;
   touch-action: none;
 }
 
-body.is-moving-safari .safari__bar {
+body.is-moving-safari .safari__toolbar {
   cursor: grabbing;
 }
 
-.safari__dots {
+/* Traffic light — 3 titik kiri, monokrom mengikuti konvensi situs.
+   (Safari asli memakai merah/kuning/hijau; ganti ke palet warna asli
+   bila ingin warna titik seperti macOS.) */
+.safari__traffic {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   flex: 0 0 auto;
+  padding-right: 4px;
 }
 
-/* Titik monokrom mengikuti konvensi panel situs (bukan merah/kuning/hijau).
-   Semua disabled: tidak ada handler, cursor not-allowed, opasitas turun. */
 .safari__dot {
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   display: block;
-  opacity: 0.55;
   cursor: not-allowed;
 }
 
@@ -53,37 +60,143 @@ body.is-moving-safari .safari__bar {
 .safari__dot--min { background: var(--ink-70); }
 .safari__dot--max { background: var(--ink-16); }
 
-.safari__tabs {
+/* Grup ikon kiri/kanan */
+.safari__tools {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
+  flex: 0 0 auto;
+}
+
+.safari__tools--end {
+  margin-left: auto;
+}
+
+.safari__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink-70);
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+.safari__icon.is-muted {
+  opacity: 0.35;
+}
+
+.safari__icon svg {
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Smart search field — kapsul di tengah toolbar */
+.safari__address {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 420px;
+  flex: 1 1 auto;
+  margin: 0 auto;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--safari-field);
+  color: var(--color-muted);
+}
+
+.safari__address svg {
+  flex: 0 0 auto;
+  width: 11px;
+  height: 11px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.safari__url {
+  flex: 1 1 auto;
   min-width: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-eyebrow);
+  letter-spacing: var(--tracking-caps-tight);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+.safari__reload {
+  flex: 0 0 auto;
+  margin-left: auto;
+  opacity: 0.6;
+}
+
+/* ---------- baris 2: tab bar (layout Separate) ---------- */
+
+.safari__tabbar {
+  display: flex;
+  align-items: stretch;
+  gap: 2px;
+  height: 32px;
+  padding: 4px 6px 0;
+  background: var(--safari-chrome);
+  border-bottom: 1px solid var(--ink-16);
+  flex: 0 0 auto;
+  cursor: grab;
+  touch-action: none;
   overflow-x: auto;
   scrollbar-width: none;
 }
 
-.safari__tabs::-webkit-scrollbar { display: none; }
+.safari__tabbar::-webkit-scrollbar { display: none; }
 
-.safari__tab {
-  font-family: var(--font-mono);
-  font-size: var(--text-eyebrow);
-  letter-spacing: var(--tracking-caps-tight);
-  line-height: var(--leading-relaxed);
-  padding: 2px 8px;
-  border: 0;
-  border-radius: var(--badge-radius);
-  background: transparent;
-  color: var(--color-muted);
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+body.is-moving-safari .safari__tabbar {
+  cursor: grabbing;
 }
 
-.safari__tab:hover { color: var(--color-ink); }
+/* Tab: rounded rect, tab aktif berwarna kertas (menonjol dari bar) */
+.safari__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+  max-width: 160px;
+  padding: 3px 10px 3px 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-cap);
+  letter-spacing: var(--tracking-caps-tight);
+  line-height: var(--leading-snug);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+
+.safari__tab:hover {
+  color: var(--color-ink);
+  background: var(--ink-07);
+}
 
 .safari__tab.is-active {
-  background: var(--electric);
-  color: var(--paper);
+  background: var(--paper);
+  color: var(--color-ink);
 }
 
 .safari__tab:focus-visible {
@@ -91,36 +204,21 @@ body.is-moving-safari .safari__bar {
   outline-offset: 1px;
 }
 
-/* ---------- address bar ---------- */
-
-.safari__address {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin: 0 10px;
-  padding: 4px 9px;
-  border-radius: var(--badge-radius);
-  background: var(--ink-07);
+/* Favicon tab — lingkaran kecil berwarna ink */
+.safari__favicon {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ink-70);
   flex: 0 0 auto;
-  margin-top: 7px;
-  margin-bottom: 7px;
 }
 
-.safari__lock {
-  flex: 0 0 auto;
-  color: var(--color-muted);
-}
-
-.safari__url {
-  font-family: var(--font-mono);
-  font-size: var(--text-eyebrow);
-  color: var(--color-muted);
-  white-space: nowrap;
+.safari__tab-label {
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* ---------- viewport ---------- */
+/* ---------- viewport konten ---------- */
 
 .safari__viewport {
   position: relative;
@@ -146,6 +244,8 @@ body.is-moving-safari .safari__bar {
   background: var(--paper);
   transform-origin: top left;
 }
+
+/* ---------- state kosong ---------- */
 
 .safari__empty {
   display: flex;
@@ -177,9 +277,8 @@ body.is-moving-safari .safari__bar {
   color: var(--color-ink);
 }
 
-/* ---------- resize dihapus: ukuran window tetap, hanya bisa dipindah ---------- */
+/* ---------- drag pindah: iframe tidak menangkap pointer ---------- */
 
-/* Saat drag pindah: iframe tidak boleh menangkap pointer, teks tidak terblok. */
 body.is-moving-safari {
   user-select: none;
 }

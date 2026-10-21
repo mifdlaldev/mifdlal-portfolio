@@ -3,15 +3,22 @@ import './safari-window.css';
 
 /* Showcase browser window — dipakai di canvas layanan 01.
  *
+ * Layout mengikuti Safari macOS asli (layout tab "Separate"):
+ *   baris 1 toolbar   : traffic light, sidebar, back/forward,
+ *                       smart search field (kapsul), share, new tab,
+ *                       tab overview
+ *   baris 2 tab bar   : tab terpisah di bawah toolbar; tab aktif
+ *                       berwarna kertas sehingga menonjol dari bar
+ *   baris 3 viewport  : iframe situs showcase
+ *
  * Perilaku (sesuai permintaan operator):
  * - Tiga tombol traffic light dirender TETAPI SEMUA dinonaktifkan
- *   (tidak ada handler, cursor not-allowed, title "Tidak tersedia").
- * - Minimize & maximize TIDAK mengubah state window; tidak ada animasi.
- *   Keduanya hanya affordance visual. Klik tombol tidak melakukan apa-apa.
+ *   (tidak ada handler, cursor not-allowed). Titik monokrom mengikuti
+ *   konvensi situs, bukan merah/kuning/hijau.
+ * - Ikon toolbar lain juga dinonaktifkan; hanya tab yang bisa diklik.
  * - Window TIDAK bisa di-resize. Ukuran tetap 90% x 80% frame canvas.
- * - Window BISA dipindah dengan drag di title bar, terbatas di dalam
- *   batas canvas (tidak bisa keluar dari .service-frame).
- * - Tab bar: pindah tab mengubah konten (iframe ke situs showcase).
+ * - Window BISA dipindah dengan drag di area kosong toolbar/tab bar,
+ *   terbatas di dalam batas canvas (tidak bisa keluar .service-frame).
  * - Konten tab = iframe asli ke situs (bukan screenshot). Situs yang
  *   mengirim X-Frame-Options/CSP frame-ancestors akan tampil kosong —
  *   daftarkan domain yang diizinkan di public/_headers (frame-src).
@@ -40,26 +47,25 @@ export default function SafariWindow({
   const [rect, setRect] = useState<Rect | null>(null);
   const [active, setActive] = useState(0);
 
-  // Drag pindah posisi window (dari title bar), clamp ke batas canvas.
+  // Drag pindah posisi window (dari toolbar), clamp ke batas canvas.
   const moveRef = useRef<
     | { startX: number; startY: number; rect: Rect; maxW: number; maxH: number }
     | null
   >(null);
 
-  // Ukuran awal: 84% x 74% dari frame canvas, rata tengah.
+  // Ukuran awal: 90% x 80% dari frame canvas, rata tengah.
   // PENTING: pakai closest('.service-frame'), BUKAN parentElement —
   // Astro membungkus client component di <astro-island> yang ukurannya
   // 0×0 (inline kosong, konten absolute keluar dari alur). Jika
-  // parentElement dipakai, clientWidth/host = 0 → window collapse
-  // ke ukuran 0 saat pertama di-resize.
+  // parentElement dipakai, clientWidth host = 0 → window collapse.
   useEffect(() => {
     const host = rootRef.current?.closest('.service-frame');
     if (!host) return;
     const pw = host.clientWidth;
     const ph = host.clientHeight;
     if (pw <= 0 || ph <= 0) return;
-    const w = Math.max(MIN_W, Math.min(pw - 16, Math.round(pw * 0.90)));
-    const h = Math.max(MIN_H, Math.min(ph - 16, Math.round(ph * 0.80)));
+    const w = Math.max(MIN_W, Math.min(pw - 16, Math.round(pw * 0.9)));
+    const h = Math.max(MIN_H, Math.min(ph - 16, Math.round(ph * 0.8)));
     setRect({ x: Math.round((pw - w) / 2), y: Math.round((ph - h) / 2), w, h });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -73,12 +79,16 @@ export default function SafariWindow({
       const ph = host.clientHeight;
       if (pw <= 0 || ph <= 0) return;
       setRect((prev) => {
-        if (pw <= 0 || ph <= 0) return prev;
         if (!prev) {
           // Frame baru punya ukuran (mis. section belum terlihat saat mount).
-          const w = Math.max(MIN_W, Math.min(pw - 16, Math.round(pw * 0.90)));
-          const h = Math.max(MIN_H, Math.min(ph - 16, Math.round(ph * 0.80)));
-          return { x: Math.round((pw - w) / 2), y: Math.round((ph - h) / 2), w, h };
+          const w = Math.max(MIN_W, Math.min(pw - 16, Math.round(pw * 0.9)));
+          const h = Math.max(MIN_H, Math.min(ph - 16, Math.round(ph * 0.8)));
+          return {
+            x: Math.round((pw - w) / 2),
+            y: Math.round((ph - h) / 2),
+            w,
+            h,
+          };
         }
         const w = Math.max(MIN_W, Math.min(prev.w, pw));
         const h = Math.max(MIN_H, Math.min(prev.h, ph));
@@ -115,7 +125,7 @@ export default function SafariWindow({
   // konten, sama seperti mengubah tinggi window browser laptop.
   const virtualH = scale > 0 ? Math.round(vp.h / scale) : 0;
 
-  // Pointer drag: pindahkan window dari title bar (tanpa resize).
+  // Pointer drag: pindahkan window dari toolbar (tanpa resize).
   useEffect(() => {
     const onMove = (e: PointerEvent) => {
       const m = moveRef.current;
@@ -147,10 +157,10 @@ export default function SafariWindow({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Mulai pindah window: hanya dari title bar, bukan dari tab/dots.
+  // Mulai pindah window: dari area kosong toolbar/tab bar.
   const startMove = (e: React.PointerEvent) => {
     const target = e.target as HTMLElement;
-    if (target.closest('.safari__tab') || target.closest('.safari__dot')) return;
+    if (target.closest('button') || target.closest('.safari__dot')) return;
     const host = rootRef.current?.closest('.service-frame') as HTMLElement | null;
     if (!host || !rect) return;
     const maxW = host.clientWidth;
@@ -163,6 +173,16 @@ export default function SafariWindow({
 
   const current = tabs[active];
 
+  // Safari menampilkan domain di smart search field, bukan URL penuh.
+  let displayUrl = 'about:blank';
+  if (current.url) {
+    try {
+      displayUrl = new URL(current.url).host.replace(/^www\./, '');
+    } catch {
+      displayUrl = current.url;
+    }
+  }
+
   return (
     <div
       ref={rootRef}
@@ -173,72 +193,137 @@ export default function SafariWindow({
           : { visibility: 'hidden' }
       }
     >
-      {/* Bar atas: traffic light + tab bar.
-          Drag dari sini memindahkan window (kecuali klik di tab/dots). */}
-      <div className="safari__bar" onPointerDown={startMove}>
-        {/* Traffic light — SEMUA DINONAKTIFKAN, hanya affordance visual */}
-        <div className="safari__dots" aria-hidden="true">
-          <span
-            className="safari__dot safari__dot--close"
-            role="button"
-            aria-disabled="true"
-            tabIndex={-1}
-            title="Tidak tersedia"
-          />
-          <span
-            className="safari__dot safari__dot--min"
-            role="button"
-            aria-disabled="true"
-            tabIndex={-1}
-            title="Tidak tersedia"
-          />
-          <span
-            className="safari__dot safari__dot--max"
-            role="button"
-            aria-disabled="true"
-            tabIndex={-1}
-            title="Tidak tersedia"
-          />
+      {/* Baris 1 — toolbar Safari macOS */}
+      <div className="safari__toolbar" onPointerDown={startMove}>
+        <div className="safari__traffic" aria-hidden="true">
+          <span className="safari__dot safari__dot--close" />
+          <span className="safari__dot safari__dot--min" />
+          <span className="safari__dot safari__dot--max" />
         </div>
 
-        <div className="safari__tabs" role="tablist" aria-label="Showcase website">
-          {tabs.map((t, i) => (
-            <button
-              key={`${t.label}-${i}`}
-              type="button"
-              role="tab"
-              aria-selected={i === active}
-              className={`safari__tab${i === active ? ' is-active' : ''}`}
-              onClick={() => setActive(i)}
-            >
-              {t.label}
-            </button>
-          ))}
+        <div className="safari__tools">
+          {/* Sidebar */}
+          <button
+            type="button"
+            className="safari__icon"
+            aria-disabled="true"
+            tabIndex={-1}
+            title="Tidak tersedia"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="16" rx="2.5" />
+              <path d="M9 4v16" />
+            </svg>
+          </button>
+          {/* Back */}
+          <button
+            type="button"
+            className="safari__icon"
+            aria-disabled="true"
+            tabIndex={-1}
+            title="Tidak tersedia"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M15 5l-7 7 7 7" />
+            </svg>
+          </button>
+          {/* Forward — redup: tidak ada riwayat */}
+          <button
+            type="button"
+            className="safari__icon is-muted"
+            aria-disabled="true"
+            tabIndex={-1}
+            title="Tidak tersedia"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Smart search field */}
+        <div className="safari__address">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="4" y="11" width="16" height="10" rx="2" />
+            <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+          </svg>
+          <span className="safari__url">{displayUrl}</span>
+          <svg className="safari__reload" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20 12a8 8 0 1 1-2.3-5.7" />
+            <path d="M20 4v5h-5" />
+          </svg>
+        </div>
+
+        <div className="safari__tools safari__tools--end">
+          {/* Share */}
+          <button
+            type="button"
+            className="safari__icon"
+            aria-disabled="true"
+            tabIndex={-1}
+            title="Tidak tersedia"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 15V4" />
+              <path d="M8 8l4-4 4 4" />
+              <path d="M5 14v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5" />
+            </svg>
+          </button>
+          {/* New tab */}
+          <button
+            type="button"
+            className="safari__icon"
+            aria-disabled="true"
+            tabIndex={-1}
+            title="Tidak tersedia"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 5v14" />
+              <path d="M5 12h14" />
+            </svg>
+          </button>
+          {/* Tab overview */}
+          <button
+            type="button"
+            className="safari__icon"
+            aria-disabled="true"
+            tabIndex={-1}
+            title="Tidak tersedia"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="4" y="4" width="7" height="7" rx="1.5" />
+              <rect x="13" y="4" width="7" height="7" rx="1.5" />
+              <rect x="4" y="13" width="7" height="7" rx="1.5" />
+              <rect x="13" y="13" width="7" height="7" rx="1.5" />
+            </svg>
+          </button>
         </div>
       </div>
 
-      {/* Address bar */}
-      <div className="safari__address">
-        <svg
-          className="safari__lock"
-          width="10"
-          height="10"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-        >
-          <rect x="4" y="11" width="16" height="10" rx="2" />
-          <path d="M8 11V8a4 4 0 0 1 8 0v3" />
-        </svg>
-        <span className="safari__url">{current.url || 'about:blank'}</span>
+      {/* Baris 2 — tab bar terpisah (layout Separate Safari macOS) */}
+      <div
+        className="safari__tabbar"
+        role="tablist"
+        aria-label="Showcase website"
+        onPointerDown={startMove}
+      >
+        {tabs.map((t, i) => (
+          <button
+            key={`${t.label}-${i}`}
+            type="button"
+            role="tab"
+            aria-selected={i === active}
+            className={`safari__tab${i === active ? ' is-active' : ''}`}
+            onClick={() => setActive(i)}
+          >
+            <span className="safari__favicon" aria-hidden="true" />
+            <span className="safari__tab-label">{t.label}</span>
+          </button>
+        ))}
       </div>
 
-      {/* Konten: iframe asli ke situs showcase, dirender pada lebar laptop
-          (1280px) lalu diskalakan agar muat window. */}
+      {/* Baris 3 — konten: iframe asli ke situs showcase, dirender pada
+          lebar laptop (1280px) lalu diskalakan agar muat window. */}
       <div className="safari__viewport" ref={viewportRef}>
         {current.url ? (
           <div className="safari__stage">
@@ -267,8 +352,6 @@ export default function SafariWindow({
           </div>
         )}
       </div>
-
-      {/* Handle resize dihapus: ukuran window tetap, hanya bisa dipindah. */}
     </div>
   );
 }

@@ -134,6 +134,12 @@
   --service-inset: 16px;
   --service-hair: 1px;
 
+  /* --- chrome window Safari (lokal, hanya showcase layanan 01) ---
+     Tema tetap putih: kertas diturunkan sedikit supaya toolbar dan
+     tab bar terbaca sebagai lapisan berbeda dari konten. */
+  --safari-chrome: #f2f1e6;
+  --safari-field: #e6e5d8;
+
   /* --- tipografi: ukuran (lokal diagram) ------------------- */
   --text-eyebrow: 0.75rem; /* label node 12px */
 
