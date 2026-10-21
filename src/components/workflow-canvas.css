@@ -139,6 +139,41 @@
   transform: translate(-50%, 0);
 }
 
+/* Ekor tooltip: segitiga mengarah ke bawah, menyambung ke tepi bawah badge,
+   di tengah horizontal. Dua lapis supaya outline biru ikut terbentuk:
+   ::before = lapisan outline (lebih besar), ::after = isi putih di atasnya. */
+.wf-tile--hub .wf-tile__label::before,
+.wf-tile--hub .wf-tile__label::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-left-style: solid;
+  border-right-style: solid;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  pointer-events: none;
+}
+
+/* Lapisan outline: 1px lebih besar dari isi di semua sisi. */
+.wf-tile--hub .wf-tile__label::before {
+  bottom: -7px;
+  transform: translateX(-50%);
+  border-left-width: 7px;
+  border-right-width: 7px;
+  border-top: 7px solid var(--ink-16);
+}
+
+/* Isi putih: menutup bagian dalam outline, menyisakan 1px garis biru. */
+.wf-tile--hub .wf-tile__label::after {
+  bottom: -6px;
+  transform: translateX(-50%);
+  border-left-width: 6px;
+  border-right-width: 6px;
+  border-top: 6px solid var(--paper);
+}
+
 .wf-tile--hub .wf-tile__inner:focus-visible {
   outline: 2px solid var(--electric);
   outline-offset: 4px;
