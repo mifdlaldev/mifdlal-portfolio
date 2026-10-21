@@ -155,7 +155,6 @@ export const stack = [
   { name: 'GitKraken', logo: '/logos/gitkraken.svg' },
   { name: 'Obsidian', logo: '/logos/obsidian.svg' },
   { name: 'Hermes Agent', logo: '/logos/hermes.svg' },
-  { name: 'RAG', logo: '/logos/rag.svg' },
   { name: 'Node.js', logo: '/logos/nodedotjs.svg' },
   { name: 'Docker', logo: '/logos/docker.svg' },
   { name: 'Podman', logo: '/logos/podman.svg' },
