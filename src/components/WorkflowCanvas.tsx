@@ -161,12 +161,12 @@ const edgeTypes = { flow: FlowEdge };
 
 /* -------------------------------------------------------------- graph --- */
 
-const NODE_W = 104;
-const HUB_W = 152;
-const TOOL_W = 96;
-const GAP = 28;
-const TOOL_GAP = 20;
-const ROW2_Y = 196;
+const NODE_W = 92;
+const HUB_W = 136;
+const TOOL_W = 84;
+const GAP = 24;
+const TOOL_GAP = 16;
+const ROW2_Y = 188;
 
 /* Kolom hub: node 1 dan 2 lebar NODE_W, jadi hub mulai di (NODE_W+GAP)*2. */
 const HUB_X = (NODE_W + GAP) * 2;
