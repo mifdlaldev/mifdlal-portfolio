@@ -504,15 +504,15 @@ const certAttrs = (c: (typeof featured)[number]) => ({
     letter-spacing: var(--tracking-caps);
     text-transform: uppercase;
     padding: 0.45rem 0.8rem;
-    border: 1px solid var(--color-line);
-    background: transparent;
-    color: var(--color-ink);
+    border: 1px solid var(--electric);
+    background: var(--electric);
+    color: var(--paper);
     cursor: pointer;
-    transition: border-color var(--dur-fast) var(--ease);
+    transition: opacity var(--dur-fast) var(--ease);
   }
 
   .cert-dialog-close:hover {
-    border-color: var(--color-ink);
+    opacity: 0.85;
   }
 
   /* --- dialog daftar lengkap ------------------------------ */
@@ -593,16 +593,16 @@ const certAttrs = (c: (typeof featured)[number]) => ({
     letter-spacing: var(--tracking-caps);
     text-transform: uppercase;
     padding: 0.45rem 0.8rem;
-    border: 1px solid var(--color-line);
-    background: transparent;
-    color: var(--color-ink);
+    border: 1px solid var(--electric);
+    background: var(--electric);
+    color: var(--paper);
     cursor: pointer;
-    transition: border-color var(--dur-fast) var(--ease);
+    transition: opacity var(--dur-fast) var(--ease);
   }
 
   .cert-list-close:hover,
   .cert-list-close:focus-visible {
-    border-color: var(--color-ink);
+    opacity: 0.85;
   }
 
   .cert-grid--list {
