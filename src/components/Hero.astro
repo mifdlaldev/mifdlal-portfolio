@@ -18,7 +18,7 @@ const liveCount = projects.length
   <div class="hero-bg" aria-hidden="true">
     <GradientASCII
       client:load
-      colors={['var(--electric)', 'var(--hero-ramp-mid)', 'var(--ink-900)']}
+      colors={['var(--electric)']}
       shape="horizon"
       density={1}
       glyphOpacity={1}
@@ -31,7 +31,7 @@ const liveCount = projects.length
       clickEffect="none"
       lightMode={false}
       intro={false}
-      fontFamily='"Azeret Mono Variable", ui-monospace, monospace'
+      fontFamily='"Geist Mono Variable", ui-monospace, monospace'
     />
     <div class="hero-veil"></div>
   </div>
@@ -175,7 +175,9 @@ const liveCount = projects.length
     font-size: var(--text-hero);
     line-height: var(--leading-display);
     letter-spacing: var(--tracking-display);
-    font-weight: 600;
+    /* Inter di ukuran display: bobot ringan seperti acuan, bukan 600.
+       Space Grotesk 600 terlalu tebal untuk huruf yang lebih lebar ini. */
+    font-weight: 400;
     margin: 1rem 0 0;
     text-wrap: balance;
     color: var(--color-paper);

@@ -19,7 +19,6 @@
   --paper: #fdfcf1;
   --electric: #2a1eff;
   --lemon: #eef17c;
-  --hero-ramp-mid: #8982f9; /* electric 55% di atas kertas: nada tengah ramp ASCII */
   --white: #ffffff;
 
   /* Tiga titik jendela di panel gelap. Monokrom: kertas dengan tiga tingkat
@@ -30,9 +29,9 @@
   --dot-max: #fdfcf147;
 
   /* --- tipografi: keluarga -------------------------------- */
-  --font-display: "Space Grotesk Variable", system-ui, sans-serif;
+  --font-display: "Inter Variable", system-ui, sans-serif;
   --font-body: "Inter Variable", system-ui, -apple-system, sans-serif;
-  --font-mono: "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", monospace;
+  --font-mono: "Geist Mono Variable", ui-monospace, "SFMono-Regular", monospace;
   --font-serif: "Instrument Serif", Georgia, serif;
 
   /* --- tipografi: ukuran ---------------------------------
@@ -74,7 +73,7 @@
 
   /* --- tipografi: tracking --------------------------------
      Positif untuk huruf kapital mono, negatif untuk display.   */
-  --tracking-display: -0.03em;
+  --tracking-display: -0.02em;
   --tracking-heading: -0.02em;
   --tracking-title: -0.015em;
   --tracking-caps: 0.06em;

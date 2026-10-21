@@ -1,8 +1,6 @@
 @import "tailwindcss";
-@import "@fontsource-variable/space-grotesk";
 @import "@fontsource-variable/inter";
-@import "@fontsource-variable/azeret-mono";
-@import "@fontsource-variable/jetbrains-mono";
+@import "@fontsource-variable/geist-mono";
 @import "./tokens.css";
 @import "./semantic.css";
 

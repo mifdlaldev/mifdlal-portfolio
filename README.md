@@ -38,7 +38,7 @@ sendiri, bukan klaim.
 | Framework | Astro 7 (output `static`) | Konten-first, JS nol di klien |
 | Interaksi | React 19 islands | Hanya bila benar-benar perlu |
 | Styling | Tailwind CSS 4 + `@tailwindcss/vite` | Config CSS-first `@theme` |
-| Font | Space Grotesk + Inter + Azeret Mono (self-hosted, `@fontsource-variable`) | Bahasa desain warp.dev, nol CDN |
+| Font | Inter + Geist Mono (self-hosted, `@fontsource-variable`) | Nol CDN, dua keluarga saja |
 | Bahasa | TypeScript (strict) | Kontrak tipe di source data |
 | Hosting | Cloudflare Workers Static Assets | Edge, cepat, tanpa server Node |
 
@@ -288,10 +288,12 @@ bawah daftar ada catatan mono `belum diisi`.
 
 ## Font kode
 
-`--font-mono` memakai JetBrains Mono Variable (`@fontsource-variable/jetbrains-mono`,
+`--font-mono` memakai Geist Mono Variable (`@fontsource-variable/geist-mono`,
 lisensi OFL), self-hosted seperti font lain. Font ini dipakai untuk fig label, tag
-teknologi, tombol, tooltip logo, dan elemen data lain. Azeret Mono tetap dipakai
-khusus kanvas ASCII di hero.
+teknologi, tombol, tooltip logo, kanvas ASCII hero, dan elemen data lain.
+
+`--font-display` dan `--font-body` sama-sama Inter Variable, jadi seluruh teks
+proporsional memakai satu keluarga; beda peran dibentuk ukuran dan bobot.
 
 `vite.build.assetsInlineLimit` diset `0` supaya font tidak pernah di-inline sebagai
 `data:` URI. Subset font kecil (misalnya cyrillic-ext) sebelumnya di-inline Vite dan
@@ -506,7 +508,7 @@ dalam huruf, latar tetap kertas.
 | Padding | `clamp(0.75rem, 2.4vw, 1.75rem)` vertikal, `clamp(1rem, 4vw, 3.5rem)` horizontal |
 | Dasar huruf | `--color-ink` |
 | Stop Aurora | `--color-electric` → `--color-lemon` (kiri ke kanan) |
-| Huruf | Space Grotesk 700, tracking `-0.035em`, `ctx.letterSpacing` supaya kerning utuh |
+| Huruf | Inter 700, tracking `-0.035em`, `ctx.letterSpacing` supaya kerning utuh |
 | Reveal | `.is-armed` → `.is-in` (IntersectionObserver 18%), geser 18% + fade 1100ms |
 
 Kenapa mask Canvas2D, bukan `clip-path` atau SVG `<text>`: SVG yang dimuat sebagai mask
