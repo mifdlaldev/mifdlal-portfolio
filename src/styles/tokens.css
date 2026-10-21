@@ -124,11 +124,8 @@
   --paper-60: rgba(253, 252, 241, 0.6);
 
   /* --- badge tooltip hub ----------------------------------- */
-  --badge-bg: rgba(26, 21, 34, 0.94);
-  --badge-border: rgba(253, 252, 241, 0.12);
   --badge-padding: 7px 13px;
   --badge-radius: var(--radius-lg);
-  --badge-blur: blur(6px);
 
   /* --- penanda sudut foto layanan --------------------------- */
   --service-arm: 22px;

@@ -83,7 +83,7 @@ const TileIcon = memo(function TileIcon({
     else ref.current.stopAnimation();
   }, [active, kind]);
 
-  const base = { size: ICON_SIZE, strokeWidth: 1.75, color: 'var(--electric)' } as const;
+  const base = { size: ICON_SIZE, strokeWidth: 1.5, color: 'var(--electric)' } as const;
 
   switch (kind) {
     case 'message':

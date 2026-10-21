@@ -23,8 +23,8 @@
   width: 84px;
   height: 84px;
   border-radius: var(--radius-xl);
-  background: var(--ink-900);
-  border: 1px solid var(--paper-16);
+  background: var(--paper);
+  border: 1px solid var(--ink-16);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -56,12 +56,12 @@
   max-width: 72px;
 }
 
-/* Ikon di tengah tile. */
+/* Ikon di tengah tile — biru elektrik. */
 .wf-tile__icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--paper);
+  color: var(--electric);
 }
 
 /* Pembungkus animasi ikon: ukuran mengikuti ikon (bukan full tile),
@@ -103,19 +103,18 @@
 
 /* Hub tile: label jadi tooltip — muncul saat hover/fokus pada ikon brain saja,
    bukan seluruh kotak. Posisi: DI ATAS tile. Pola sama dengan LogoLoop.
-   Latar badge solid agar teks tetap terbaca di atas foto yang ramai. */
+   Latar badge putih agar teks biru tetap terbaca di atas foto yang ramai. */
 .wf-tile--hub .wf-tile__label {
   bottom: calc(100% + 14px);
   top: auto;
   width: max-content;
   max-width: 320px;
   padding: var(--badge-padding);
-  background: var(--badge-bg);
-  border: 1px solid var(--badge-border);
+  background: var(--paper);
+  border: 1px solid var(--ink-16);
   border-radius: var(--badge-radius);
   box-shadow: var(--shadow-wf-tile);
-  backdrop-filter: var(--badge-blur);
-  -webkit-backdrop-filter: var(--badge-blur);
+  color: var(--electric);
   opacity: 0;
   transform: translate(-50%, -4px);
   transition: opacity var(--dur-base) var(--ease), transform var(--dur-base) var(--ease);
