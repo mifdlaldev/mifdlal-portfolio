@@ -20,8 +20,8 @@
 /* ── Node tile ─────────────────────────────────────────────── */
 .wf-tile {
   position: relative;
-  width: 76px;
-  height: 76px;
+  width: 84px;
+  height: 84px;
   border-radius: var(--radius-xl);
   background: var(--ink-900);
   border: 1px solid var(--paper-16);
@@ -33,17 +33,22 @@
 
 /* Hub: satu-satunya kartu ber-border aksen electric. */
 .wf-tile--hub {
-  width: 112px;
-  height: 76px;
+  width: 116px;
+  height: 84px;
   border: 2px solid var(--electric);
   box-shadow: var(--shadow-wf-hub);
 }
 
 /* Tool: lebih kecil, di baris kedua. */
 .wf-tile--tool {
-  width: 72px;
-  height: 64px;
+  width: 80px;
+  height: 72px;
   border-radius: var(--radius-lg);
+}
+
+/* Label tool lebih sempit — dua kata tetap muat tanpa menyentuh tetangga. */
+.wf-tile--tool .wf-tile__label {
+  max-width: 96px;
 }
 
 /* Ikon di tengah tile. */
@@ -85,7 +90,10 @@
   font-weight: var(--weight-bold);
   letter-spacing: var(--tracking-caps);
   color: var(--paper);
-  white-space: nowrap;
+  white-space: normal;
+  text-align: center;
+  line-height: var(--leading-ui);
+  max-width: 104px;
   /* Tanpa outline — teks polos, tajam di skala integer. */
   display: flex;
   flex-direction: column;

@@ -93,7 +93,7 @@ export const services = [
   {
     no: '03',
     title: 'Otomasi AI dan workflow',
-    body: 'Kurangi pekerjaan berulang, hubungkan perkakas yang sudah Anda gunakan, agar tim kecil tidak mengerjakan hal yang sama dua kali.',
+    body: 'AI menangani pesan masuk, merangkum konteks pelanggan, dan mengirim balasan otomatis — tim hanya turun saat benar-benar dibutuhkan.',
     image: '/services/layanan-03.jpg',
   },
 ] as const

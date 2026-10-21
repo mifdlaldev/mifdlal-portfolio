@@ -110,7 +110,7 @@ const TileNode = memo(({ data }: NodeProps) => {
         transition={{ duration: 0.5, delay: order * 0.09, ease: [0.25, 0.46, 0.45, 0.94] }}
         tabIndex={d.tone === 'hub' ? 0 : undefined}
         role={d.tone === 'hub' ? 'button' : undefined}
-        aria-label={d.tone === 'hub' ? `${d.label}, orkestrasi tool` : undefined}
+        aria-label={d.tone === 'hub' ? `${d.label}, klasifikasi intent dan draf balasan` : undefined}
       >
         <span className="wf-tile__icon">{renderIcon(d.icon, d.brand, tick)}</span>
       </motion.span>
@@ -119,7 +119,7 @@ const TileNode = memo(({ data }: NodeProps) => {
           Ikon tepat di tengah tile, konektor melintang menyeberang ikon. */}
       <span className="wf-tile__label">
         {d.label}
-        {d.tone === 'hub' && <span className="wf-tile__sub">orkestrasi tool</span>}
+        {d.tone === 'hub' && <span className="wf-tile__sub">klasifikasi intent + draf balasan</span>}
       </span>
 
       <Handle type="target" position={Position.Left} className="wf-handle" />
@@ -161,11 +161,11 @@ const edgeTypes = { flow: FlowEdge };
 
 /* -------------------------------------------------------------- graph --- */
 
-const NODE_W = 76;
-const HUB_W = 112;
-const TOOL_W = 72;
-const GAP = 30;
-const TOOL_GAP = 22;
+const NODE_W = 84;
+const HUB_W = 116;
+const TOOL_W = 80;
+const GAP = 26;
+const TOOL_GAP = 24;
 const ROW2_Y = 150;
 
 /* Kolom hub: node 1 dan 2 lebar NODE_W, jadi hub mulai di (NODE_W+GAP)*2. */
@@ -179,12 +179,12 @@ const TOOL_LEFT_X = TOOL_MID_X - TOOL_W - TOOL_GAP;
 const TOOL_RIGHT_X = TOOL_MID_X + TOOL_W + TOOL_GAP;
 
 const nodes: Node[] = [
-  { id: 'trigger', type: 'tile', position: { x: 0, y: 0 }, data: { label: 'TRIGGER', icon: 'message', tone: 'node', order: 0 } },
+  { id: 'trigger', type: 'tile', position: { x: 0, y: 0 }, data: { label: 'PESAN MASUK', icon: 'message', tone: 'node', order: 0 } },
   {
     id: 'koleksi',
     type: 'tile',
     position: { x: NODE_W + GAP, y: 0 },
-    data: { label: 'KOLEKSI', icon: 'database', tone: 'node', order: 1 },
+    data: { label: 'KONTEKS PELANGGAN', icon: 'database', tone: 'node', order: 1 },
   },
   {
     id: 'agent',
@@ -197,13 +197,13 @@ const nodes: Node[] = [
     id: 'validasi',
     type: 'tile',
     position: { x: (NODE_W + GAP) * 2 + HUB_W + GAP, y: 0 },
-    data: { label: 'VALIDASI', icon: 'check', tone: 'node', order: 3 },
+    data: { label: 'CEK KEBIJAKAN', icon: 'check', tone: 'node', order: 3 },
   },
   {
     id: 'kirim',
     type: 'tile',
     position: { x: (NODE_W + GAP) * 2 + HUB_W + GAP + NODE_W + GAP, y: 0 },
-    data: { label: 'KIRIM', icon: 'send', tone: 'node', order: 4 },
+    data: { label: 'KIRIM BALASAN', icon: 'send', tone: 'node', order: 4 },
   },
   {
     id: 't-model',
@@ -215,13 +215,13 @@ const nodes: Node[] = [
     id: 't-dokumen',
     type: 'tile',
     position: { x: TOOL_MID_X, y: ROW2_Y },
-    data: { label: 'DOKUMEN', icon: 'file', tone: 'tool', order: 6 },
+    data: { label: 'KNOWLEDGE BASE', icon: 'file', tone: 'tool', order: 6 },
   },
   {
     id: 't-api',
     type: 'tile',
     position: { x: TOOL_RIGHT_X, y: ROW2_Y },
-    data: { label: 'API', icon: 'api', tone: 'tool', order: 7 },
+    data: { label: 'CRM HELPDESK', icon: 'api', tone: 'tool', order: 7 },
   },
 ];
 
@@ -261,7 +261,7 @@ export default function WorkflowCanvas() {
             dihitung manual agar graph pas di tengah frame tanpa penskalaan. */
           minZoom={1}
           maxZoom={1}
-          defaultViewport={{ x: 44, y: 70, zoom: 1 }}
+          defaultViewport={{ x: 34, y: 65, zoom: 1 }}
           nodesDraggable={false}
           nodesConnectable={false}
           elementsSelectable={false}
