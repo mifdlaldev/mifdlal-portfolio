@@ -93,8 +93,8 @@
   --z-below: -1;
   --z-content: 1;
   --z-raise: 2;
-  --z-safari: 2;
-  --z-safari-handle: 3;
+  --z-safari: 4;
+  --z-safari-handle: 5;
   --z-band: 3;
   --z-corner: 3;
   --z-tooltip: 4;
