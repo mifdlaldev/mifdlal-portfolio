@@ -44,14 +44,19 @@ import { AsciiArtStatic } from './ui/ascii-art'
               <span class="service-bar-label">fig. 04.{s.no}</span>
             </div>
             <div class="service-frame">
-              {/* Foto layanan langsung via CSS background-image, tanpa kanvas JS.
-                  Tidak ada placeholder: kalau gambar gagal, tinggal latar ink-900. */}
-              <div
-                class="service-photo"
-                style={`background-image: url('${s.image}')`}
-                role="img"
-                aria-label={`Foto layanan ${s.no}: ${s.title}`}
-              ></div>
+              {/* Clip parallax: membungkus foto + overlay biru agar pergeseran
+                  parallax TIDAK pernah meluber keluar frame. overflow:hidden
+                  di sini aman — tidak menyentuh window Safari (sibling di luar
+                  wrapper ini, jadi bayangan/handle tidak terpotong).
+                  Foto mulai di BAWAH batas frame, naik saat halaman di-scroll. */}
+              <div class="service-photo-clip">
+                <div
+                  class="service-photo"
+                  style={`background-image: url('${s.image}')`}
+                  role="img"
+                  aria-label={`Foto layanan ${s.no}: ${s.title}`}
+                ></div>
+              </div>
 
               {/* ASCII tekstur — karakter elektrik samar, di atas overlay biru,
                   di bawah tile. AsciiArtStatic = sekali gambar, nol animasi.
@@ -262,20 +267,34 @@ import { AsciiArtStatic } from './ui/ascii-art'
        bayangan window Safari dan handle resize di pinggir. */
   }
 
-  .service-photo {
+  /* Clip parallax: hanya membungkus foto + overlay biru. overflow:hidden
+     di sini memastikan pergeseran foto tidak pernah meluber ke section
+     biru atau keluar frame. Window Safari berada DI LUAR wrapper ini,
+     jadi bayangan dan handle resize tidak ikut terpotong. */
+  .service-photo-clip {
     position: absolute;
     inset: 0;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Foto lebih tinggi dari frame (124%) dengan tepi atas -12%: ada cadangan
+     12% di atas dan 12% di bawah untuk bergerak tanpa menampakkan celah.
+     --parallax di-set JS: +12% tinggi frame (foto turun, tampak masuk dari
+     bawah) -> -12% (foto naik). Nilai px, negatif = naik. */
+  .service-photo {
+    position: absolute;
+    top: -12%;
+    left: 0;
+    right: 0;
+    height: 124%;
     background-color: var(--ink-900);
     background-size: cover;
     background-position: center;
-    z-index: 0;
     /* Sedikit diturunkan saturasinya supaya lukisan masuk palet kertas-tinta. */
     filter: saturate(0.9) contrast(1.02);
-    /* Parallax: gambar bergerak melawan arah scroll. Disesuaikan lewat
-       variabel --parallax (px, negatif = naik) dari script Services.astro.
-       scale 1.12 memberi headroom ±6% agar pergeseran tidak menampakkan
-       tepi kosong. */
-    transform: translate3d(0, var(--parallax, 0px), 0) scale(1.12);
+    transform: translate3d(0, var(--parallax, 0px), 0);
     will-change: transform;
   }
 
@@ -403,29 +422,29 @@ import { AsciiArtStatic } from './ui/ascii-art'
     true
   );
 
-  /* Parallax foto canvas layanan.
-     Foto bergeser naik saat halaman di-scroll ke bawah (gerak melawan
-     scroll). Pergeseran dibatasi 5% tinggi frame supaya tidak pernah
-     menampakkan tepi kosong — foto sudah diskalakan 1.12 di CSS sehingga
-     ada headroom ±6%.
+  /* Parallax foto canvas layanan — versi clip: foto tidak pernah meluber.
+     Foto di dalam .service-photo-clip (overflow:hidden). Pergeseran dibatasi
+     ±12% tinggi frame = cadangan headroom foto (tinggi 124%, tepi atas -12%).
+     Efek: saat halaman di-scroll, foto naik/turun pelan di dalam frame,
+     tidak menimpa section biru di sekitarnya.
      Dimatikan saat prefers-reduced-motion: reduce. */
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   if (!reduceMotion.matches) {
-    const photos = Array.from(document.querySelectorAll<HTMLElement>('.service-photo'));
-    const SHIFT_RATIO = 0.05; // 5% tinggi frame, di dalam headroom scale 1.12
+    const clips = Array.from(document.querySelectorAll<HTMLElement>('.service-photo-clip'));
+    const SHIFT_MAX = 0.12; // ±12% tinggi frame (pas dengan headroom foto)
     let ticking = false;
 
     const update = () => {
       ticking = false;
       const vh = window.innerHeight;
-      for (const el of photos) {
-        const rect = el.getBoundingClientRect();
+      for (const clip of clips) {
+        const rect = clip.getBoundingClientRect();
         if (rect.bottom < -vh * 0.2 || rect.top > vh * 1.2) continue;
-        // p: 0 = frame baru masuk dari bawah, 1 = frame hampir keluar di atas
+        // p: 0 = frame baru masuk dari bawah viewport, 1 = frame hampir keluar di atas
         const p = (vh - rect.top) / (vh + rect.height);
-        const maxShift = rect.height * SHIFT_RATIO;
-        const shift = (0.5 - p) * 2 * maxShift;
-        el.style.setProperty('--parallax', `${shift.toFixed(2)}px`);
+        // +SHIFT_MAX (foto turun, tampak masuk dari bawah) -> -SHIFT_MAX (foto naik)
+        const shift = (SHIFT_MAX - p * 2 * SHIFT_MAX) * rect.height;
+        clip.style.setProperty('--parallax', `${shift.toFixed(1)}px`);
       }
     };
 
