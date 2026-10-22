@@ -106,7 +106,7 @@ export const services = [
 export const showcaseSites = [
   { label: 'Loka Logistics', url: 'https://lokalogistics.co.id/' },
   { label: 'Mahoni House', url: 'https://mahoni-house.vercel.app/en' },
-  { label: 'Slot 03', url: '' },
+  { label: 'Orbit CLI', url: 'https://mifdlaldev.github.io/orbit-cli/' },
 ] as const
 
 export const stack = [
