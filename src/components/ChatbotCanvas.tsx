@@ -7,6 +7,8 @@
 // 6 pesan; area chat scrollable + auto-scroll ke pesan terbaru.
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'motion/react'
+import { HugeiconsIcon } from '@hugeicons/react'
+import { ChatBotIcon } from '@hugeicons/core-free-icons'
 import './chatbot-canvas.css'
 
 type Msg = { from: 'user' | 'bot'; text: string }
@@ -360,16 +362,13 @@ export default function ChatbotCanvas() {
             </span>
           </div>
 
-          {/* Header kontak ala WhatsApp: avatar + nama + status,
+          {/* Header kontak ala WhatsApp: avatar ikon bot + nama centered,
               background putih, tepat di bawah status bar */}
           <div className="cb-contact" aria-hidden="true">
-            <span className="cb-contact-avatar">R</span>
-            <span className="cb-contact-info">
-              <span className="cb-contact-name">Rifqa</span>
-              <span className="cb-contact-status">
-                {typing ? 'Mengetik…' : 'online'}
-              </span>
+            <span className="cb-contact-avatar">
+              <HugeiconsIcon icon={ChatBotIcon} />
             </span>
+            <span className="cb-contact-name">Chatbot AI</span>
           </div>
 
           {/* Wallpaper HP — hanya area chat, mulai di bawah header */}
@@ -416,6 +415,12 @@ export default function ChatbotCanvas() {
                 ))}
               </motion.div>
             )}
+          </div>
+
+          {/* Kolom mengetik + tombol kirim ala WhatsApp */}
+          <div className="cb-msgbar">
+            <span className="cb-msgbar-field">Tulis pesan</span>
+            <span className="cb-msgbar-send">↑</span>
           </div>
 
           {showHandoff && (
