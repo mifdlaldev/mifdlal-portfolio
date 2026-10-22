@@ -291,6 +291,11 @@
 }
 
 /* Dorong isi ke bawah saat pesan masih sedikit. */
+/* Pesan tidak boleh diperas: tingginya selalu natural, wadah yang scroll. */
+.cb-chat > * {
+  flex: none;
+}
+
 .cb-chat > :first-child {
   margin-top: auto;
 }
@@ -364,13 +369,13 @@
    leading-relaxed, max-w-80%, wrap-break-word, overflow hidden.
    Sudut SERAGAM (tidak ada ekor asimetris). */
 .cb-bubble {
-  max-width: 80%;
+  width: fit-content;
+  max-width: 86%;
   padding: 5px 8px;
   font-size: var(--text-cap);
   line-height: var(--leading-relaxed);
   border-radius: var(--radius-md);
   border: 1px solid transparent;
-  overflow: hidden;
   overflow-wrap: break-word;
 }
 
