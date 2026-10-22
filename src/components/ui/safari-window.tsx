@@ -22,9 +22,10 @@ import './safari-window.css';
  * - Konten tab = iframe asli ke situs (bukan screenshot). Situs yang
  *   mengirim X-Frame-Options/CSP frame-ancestors akan tampil kosong —
  *   daftarkan domain yang diizinkan di public/_headers (frame-src).
- * - iframe dirender pada lebar virtual adaptif [800-1280]px dengan
- *   zoom ~70% — layout desktop tetap utuh (di atas breakpoint 720px
- *   situs), teks terbaca, bukan layout sempit yang membuat teks membesar.
+ * - iframe dirender pada lebar virtual tetap 1024px (laptop klasik
+ *   1024×768) lalu diskalakan fit-to-width. 1024 ada di atas breakpoint
+ *   992px situs, jadi nav horizontal dan hero tetap proporsional seperti
+ *   di laptop — bukan layout tablet (800px) atau teks 6px (1280px).
  */
 
 type ShowcaseTab = { label: string; url: string };
@@ -33,18 +34,18 @@ type Rect = { x: number; y: number; w: number; h: number };
 const MIN_W = 240;
 const MIN_H = 180;
 
-/* Zoom tetap ~70%: iframe selalu dirender pada ukuran yang membuat
-   teks terbaca, tanpa jatuh ke layout mobile.
-   - virtualW = lebar viewport / 0.7, di-clamp [800, 1280]
-   - 800 = batas bawah aman: di atas breakpoint mobile (720px) situs,
-     jadi layout desktop (header horizontal, hero) tetap utuh
-   - 1280 = cap; layar di atas ini tidak diperbesar lagi (hindari blur)
-   - Efek: teks 16px tampil ~10-11px pada window showcase, tidak
-     terlalu besar (layout tidak terpaksa sempit) dan tidak terlalu
-     kecil (tidak terlihat seperti teks 6px pada virtual 1280). */
-const MIN_VIRTUAL_W = 800;
-const MAX_VIRTUAL_W = 1280;
-const TARGET_ZOOM = 0.7;
+/* Resolusi virtual tetap: 1024×768 = laptop klasik terkecil.
+   Kenapa 1024, bukan 1280 atau adaptif:
+   - Situs showcase punya breakpoint @media (min-width:992px) untuk
+     layout desktop penuh (nav horizontal, hero proporsional). Di bawah
+     991px nav berubah jadi tombol Menu + hamburger dan hero melar
+     sampai tepi — bukan tampilan laptop.
+   - 1280 membuat skala jatuh ke ~0.39 di window showcase: teks 16px
+     tampil ~6px, tidak terbaca.
+   - 1024 adalah titik seimbang: tetap di atas 992 (layout laptop asli)
+     dan hanya 20% lebih lebar dari 800, jadi teks tidak sekecil 1280.
+   Konsekuensi: skala tetap mengikuti lebar window (fit-to-width). */
+const VIRTUAL_W = 1024; // laptop klasik terkecil (1024×768), di atas breakpoint 992px situs
 
 export default function SafariWindow({
   tabs,
@@ -127,14 +128,8 @@ export default function SafariWindow({
     return () => ro.disconnect();
   }, []);
 
-  // Lebar virtual adaptif: jaga zoom ~70%, clamp [800, 1280].
-  const virtualW =
-    vp.w > 0
-      ? Math.round(
-          Math.min(MAX_VIRTUAL_W, Math.max(MIN_VIRTUAL_W, vp.w / TARGET_ZOOM)),
-        )
-      : MAX_VIRTUAL_W;
-  const scale = vp.w > 0 ? vp.w / virtualW : 1;
+  // Skala: lebar virtual 1024px diskalakan ke lebar viewport nyata.
+  const scale = vp.w > 0 ? vp.w / VIRTUAL_W : 1;
   // Tinggi virtual: tinggi viewport dibagi skala -> iframe memenuhi area
   // konten, sama seperti mengubah tinggi window browser laptop.
   const virtualH = scale > 0 ? Math.round(vp.h / scale) : 0;
@@ -350,7 +345,7 @@ export default function SafariWindow({
               referrerPolicy="no-referrer-when-downgrade"
               sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
               style={{
-                width: `${virtualW}px`,
+                width: `${VIRTUAL_W}px`,
                 height: `${virtualH}px`,
                 transform: `scale(${scale})`,
               }}
