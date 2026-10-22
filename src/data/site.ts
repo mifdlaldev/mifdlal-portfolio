@@ -18,22 +18,21 @@ export type Project = {
 export const projects: readonly Project[] = [
   {
     no: '01',
-    name: 'gmrh-kitchen',
-    role: 'Website klien',
+    name: 'PT Loka Logistics',
+    role: 'Website perusahaan',
     description:
-      'Situs restoran dan katering dengan katalog menu dan halaman pemesanan.',
-    stack: ['Next.js', 'Supabase'],
-    live: 'https://gmrh-kitchen.vercel.app',
-    note: 'Repo deploy berisi deskripsi "delivered for a client".',
+      'Situs profil perusahaan logistik B2B: layanan general, project, dan retail cargo, visi misi, area jangkauan, serta formulir kontak.',
+    stack: ['WordPress', 'Tema kustom'],
+    live: 'https://lokalogistics.co.id/',
   },
   {
     no: '02',
-    name: 'VeggiePos',
-    role: 'Aplikasi point of sale',
+    name: 'Simulasi Lokasi Ujian UT Bandung',
+    role: 'Aplikasi simulasi',
     description:
-      'POS untuk jualan sayur: login, kelola transaksi, stok, dan laporan penjualan harian.',
-    stack: ['Web app', 'Vercel'],
-    live: 'https://veggie-pos.vercel.app',
+      'Wizard enam langkah untuk memilih lokasi ujian Universitas Terbuka: identitas, wilayah, sekolah, detail, konfirmasi, lalu ringkasan pilihan.',
+    stack: ['Vite', 'JavaScript'],
+    live: 'https://simulasi-pemilihan-lokasi-ujian-ut.vercel.app/',
   },
   {
     no: '03',

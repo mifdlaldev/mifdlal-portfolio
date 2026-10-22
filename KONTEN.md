@@ -28,16 +28,17 @@ Tanpa badge pill di atas H1. Tanpa angka palsu. Tanpa "crafted with passion".
 Format tiap entri: nomor besar, nama, satu baris fungsi, stack, tautan live.
 Komposisi baris lebar bernomor, BUKAN grid kartu identik (RHYTHM 3).
 
-01. gmrh-kitchen
-    Fungsi: situs restoran/katering, dibuat untuk klien, sudah live.
-    Stack: Next.js, Supabase.
-    Link: https://gmrh-kitchen.vercel.app
-    Catatan: repo mifdlaldev/gmrh-kitchen-deploy berisi deskripsi "delivered for a client".
+01. PT Loka Logistics
+    Fungsi: situs profil perusahaan logistik B2B, layanan general/project/retail
+    cargo, visi misi, area jangkauan, formulir kontak.
+    Stack: WordPress, tema kustom.
+    Link: https://lokalogistics.co.id/
 
-02. VeggiePos
-    Fungsi: aplikasi POS untuk jualan sayur, login, kelola transaksi.
-    Stack: web app, deploy Vercel.
-    Link: https://veggie-pos.vercel.app
+02. Simulasi Lokasi Ujian UT Bandung
+    Fungsi: wizard enam langkah pemilihan lokasi ujian Universitas Terbuka
+    (identitas, wilayah, sekolah, detail, konfirmasi, ringkasan).
+    Stack: Vite, JavaScript.
+    Link: https://simulasi-pemilihan-lokasi-ujian-ut.vercel.app/
 
 03. Mahoni-House
     Fungsi: landing villa, dua bahasa Indonesia/Inggris.
