@@ -1,0 +1,62 @@
+---
+// Lenis smooth scroll — satu instance untuk seluruh halaman.
+// Dipasang di Layout.astro sebelum </body>.
+//
+// Lenis v1 memakai native scroll + interpolasi RAF: position:sticky,
+// anchor link, keyboard navigation, CMD+F, dan scroll restoration tetap
+// berfungsi. Tidak ada transform wrapper.
+//
+// Catatan integrasi:
+// - anchors:true  -> #main, #kontak, #proyek, #cert-dialog tetap melompat
+// - smoothTouch:false -> iOS pakai momentum native (lebih halus dari sintetis)
+// - data-lenis-prevent dipasang pada dialog sertifikat supaya wheel di
+//   dalam dialog tidak di-intercept instance halaman
+// - instance diekspos ke window.__lenis agar script lain (to-top.js)
+//   memakai jalur scroll yang sama, tidak menabrak smoothing
+---
+
+<script>
+  import Lenis from 'lenis';
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const lenis = new Lenis({
+    anchors: true, // anchor link tetap berfungsi; default Lenis mematikannya
+    lerp: reduceMotion ? 1 : 0.085, // 0.05 sangat berat | 0.15 responsif
+    smoothWheel: true,
+    smoothTouch: false, // iOS natives lebih baik
+    syncTouch: false,
+    infinite: false,
+  });
+
+  // Dipakai to-top.js dan komponen lain yang perlu scroll programatik.
+  (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
+
+  const raf = (time: number) => {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  };
+  requestAnimationFrame(raf);
+
+  // Dialog sertifikat sudah diberi atribut data-lenis-prevent di markup,
+  // tidak perlu di-set dari sini.
+</script>
+
+<style is:global>
+  /* Matikan CSS smooth bawaan global.css saat Lenis aktif: dua lapis
+     smoothing (CSS + JS) membuat scroll terasa patah. */
+  html.lenis,
+  html.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  /* Lenis menandai halaman tidak scrollable (mis. dialog terbuka). */
+  html.lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  /* Container scroll internal yang dikecualikan dari intercept Lenis. */
+  [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+</style>

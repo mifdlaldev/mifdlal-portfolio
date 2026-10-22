@@ -13,6 +13,7 @@ import Contact from '../components/Contact.astro'
 import Footer from '../components/Footer.astro'
 import ToTop from '../components/ToTop.astro'
 import Wordmark from '../components/Wordmark.astro'
+import LenisScroll from '../components/LenisScroll.astro'
 
 interface Props {
   title: string
@@ -82,6 +83,7 @@ const { title, description } = Astro.props
     </div>
     <ToTop />
     <Wordmark />
+    <LenisScroll />
     <script is:inline src="/js/image-guard.js" defer></script>
     <script is:inline src="/js/reveal.js" defer></script>
   </body>
