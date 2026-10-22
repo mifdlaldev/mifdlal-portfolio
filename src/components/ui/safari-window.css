@@ -151,9 +151,12 @@ body.is-moving-safari .safari__toolbar {
   align-items: flex-end;
   gap: 0;
   height: 34px;
-  padding: 5px 6px 3px;
+  padding: 5px 6px 0;
   background: var(--safari-chrome);
-  border-bottom: 1px solid var(--ink-16);
+  /* Garis pemisah digambar sebagai inset shadow, BUKAN border:
+     border tidak bisa ditimpa anak (terpotong overflow), sehingga tab
+     aktif tidak akan pernah bisa menyatu ke konten. */
+  box-shadow: inset 0 -1px 0 var(--ink-16);
   flex: 0 0 auto;
   cursor: grab;
   touch-action: none;
@@ -167,18 +170,19 @@ body.is-moving-safari .safari__tabbar {
   cursor: grabbing;
 }
 
-/* Tab gaya kotak (Chrome-like): sudut atas kecil, bawah siku,
-   menempel rapat, dipisah hairline. Tab aktif memakai warna kertas
-   sehingga terbaca menyatu dengan konten di bawahnya. */
+/* Tab gaya kotak (Chrome-like): sudut atas membulat, bawah siku,
+   menempel rapat ke garis bawah tab bar. Tab aktif MENIMPA garis
+   bawah bar dengan shadow warna kertas -> menyatu dengan konten. */
 .safari__tab {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   flex: 0 0 auto;
   max-width: 160px;
-  padding: 4px 10px;
+  margin-bottom: 1px; /* garis bar tetap terlihat di bawah tab non-aktif */
+  padding: 5px 10px;
   border: 0;
-  border-radius: 4px 4px 0 0;
+  border-radius: 5px 5px 0 0;
   background: var(--ink-07);
   box-shadow: inset -1px 0 0 var(--ink-16);
   color: var(--color-muted);
@@ -197,7 +201,10 @@ body.is-moving-safari .safari__tabbar {
   color: var(--color-ink);
 }
 
+/* Tab aktif: turun 1px (margin 0) sehingga latar kertasnya menutup
+   garis bawah tab bar tepat selebar tab -> menyatu dengan konten. */
 .safari__tab.is-active {
+  margin-bottom: 0;
   background: var(--paper);
   box-shadow: inset -1px 0 0 transparent;
   color: var(--color-ink);
