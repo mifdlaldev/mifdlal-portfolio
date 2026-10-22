@@ -16,7 +16,8 @@ import './safari-window.css';
  *   (tidak ada handler, cursor not-allowed). Titik monokrom mengikuti
  *   konvensi situs, bukan merah/kuning/hijau.
  * - Ikon toolbar lain juga dinonaktifkan; hanya tab yang bisa diklik.
- * - Window TIDAK bisa di-resize. Ukuran tetap 90% x 80% frame canvas.
+ * - Window BISA diperbesar via handle resize (sudut + sisi), tetapi
+ *   tidak bisa diperkecil di bawah ukuran default 90% x 80% frame.
  * - Window BISA dipindah dengan drag di area kosong toolbar/tab bar,
  *   terbatas di dalam batas canvas (tidak bisa keluar .service-frame).
  * - Konten tab = iframe asli ke situs (bukan screenshot). Situs yang
@@ -30,6 +31,9 @@ import './safari-window.css';
 
 type ShowcaseTab = { label: string; url: string };
 type Rect = { x: number; y: number; w: number; h: number };
+type Dir = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw';
+
+const DIRS: readonly Dir[] = ['n', 's', 'e', 'w', 'ne', 'nw', 'se', 'sw'];
 
 const MIN_W = 240;
 const MIN_H = 180;
@@ -59,6 +63,23 @@ export default function SafariWindow({
   // Drag pindah posisi window (dari toolbar), clamp ke batas canvas.
   const moveRef = useRef<
     | { startX: number; startY: number; rect: Rect; maxW: number; maxH: number }
+    | null
+  >(null);
+
+  // Resize: HANYA boleh memperbesar. floorW/floorH = ukuran default
+  // (90% x 80% frame), sehingga drag ke arah dalam tidak mengecilkan
+  // window di bawah ukuran desain awal. Ceiling = frame canvas.
+  const resizeRef = useRef<
+    | {
+        startX: number;
+        startY: number;
+        dir: Dir;
+        rect: Rect;
+        floorW: number;
+        floorH: number;
+        maxW: number;
+        maxH: number;
+      }
     | null
   >(null);
 
@@ -134,9 +155,48 @@ export default function SafariWindow({
   // konten, sama seperti mengubah tinggi window browser laptop.
   const virtualH = scale > 0 ? Math.round(vp.h / scale) : 0;
 
-  // Pointer drag: pindahkan window dari toolbar (tanpa resize).
+  // Pointer drag: pindahkan window (toolbar) atau perbesar (handle).
   useEffect(() => {
     const onMove = (e: PointerEvent) => {
+      const r = resizeRef.current;
+      if (r) {
+        const dx = e.clientX - r.startX;
+        const dy = e.clientY - r.startY;
+        const b = r.rect;
+        let x = b.x;
+        let y = b.y;
+        let w = b.w;
+        let h = b.h;
+
+        if (r.dir.includes('e')) w = b.w + dx;
+        if (r.dir.includes('s')) h = b.h + dy;
+        if (r.dir.includes('w')) {
+          w = b.w - dx;
+          x = b.x + dx;
+        }
+        if (r.dir.includes('n')) {
+          h = b.h - dy;
+          y = b.y + dy;
+        }
+
+        // Hanya membesar: floor = ukuran default, ceiling = canvas.
+        w = Math.min(Math.max(w, r.floorW), r.maxW);
+        h = Math.min(Math.max(h, r.floorH), r.maxH);
+
+        // Sisi kiri/atas dijangkarkan: tepi kanan/bawah tetap.
+        if (r.dir.includes('w')) x = b.x + b.w - w;
+        if (r.dir.includes('n')) y = b.y + b.h - h;
+
+        // Tetap utuh di dalam canvas.
+        x = Math.max(0, Math.min(x, Math.max(0, r.maxW - w)));
+        y = Math.max(0, Math.min(y, Math.max(0, r.maxH - h)));
+        w = Math.min(w, r.maxW - x);
+        h = Math.min(h, r.maxH - y);
+
+        setRect({ x, y, w, h });
+        return;
+      }
+
       const m = moveRef.current;
       if (!m) return;
       const dx = e.clientX - m.startX;
@@ -153,6 +213,10 @@ export default function SafariWindow({
       if (moveRef.current) {
         moveRef.current = null;
         document.body.classList.remove('is-moving-safari');
+      }
+      if (resizeRef.current) {
+        resizeRef.current = null;
+        document.body.classList.remove('is-resizing-safari');
       }
     };
 
@@ -178,6 +242,31 @@ export default function SafariWindow({
     e.preventDefault();
     moveRef.current = { startX: e.clientX, startY: e.clientY, rect, maxW, maxH };
     document.body.classList.add('is-moving-safari');
+  };
+
+  // Mulai resize dari salah satu handle. Hanya memperbesar.
+  const startResize = (e: React.PointerEvent, dir: Dir) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const host = rootRef.current?.closest('.service-frame') as HTMLElement | null;
+    if (!host || !rect) return;
+    const maxW = host.clientWidth;
+    const maxH = host.clientHeight;
+    if (maxW <= 0 || maxH <= 0) return;
+    // Floor = ukuran desain default, sama dengan ukuran awal window.
+    const floorW = Math.max(MIN_W, Math.min(maxW, Math.round(maxW * 0.9)));
+    const floorH = Math.max(MIN_H, Math.min(maxH, Math.round(maxH * 0.8)));
+    resizeRef.current = {
+      startX: e.clientX,
+      startY: e.clientY,
+      dir,
+      rect,
+      floorW,
+      floorH,
+      maxW,
+      maxH,
+    };
+    document.body.classList.add('is-resizing-safari');
   };
 
   const current = tabs[active];
@@ -351,6 +440,16 @@ export default function SafariWindow({
           </div>
         )}
       </div>
+
+      {/* Handle resize: hanya sudut/sisi, drag ke luar = membesar. */}
+      {DIRS.map((d) => (
+        <span
+          key={d}
+          className={`safari__handle safari__handle--${d}`}
+          onPointerDown={(e) => startResize(e, d)}
+          aria-hidden="true"
+        />
+      ))}
     </div>
   );
 }
