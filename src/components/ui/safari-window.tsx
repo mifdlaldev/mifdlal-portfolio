@@ -263,21 +263,33 @@ export default function SafariWindow({
           </svg>
         </div>
 
+        {/* Tab — sebaris dengan toolbar, di kanan address bar */}
+        <div
+          className="safari__tablist"
+          role="tablist"
+          aria-label="Showcase website"
+        >
+          {tabs.map((t, i) => (
+            <button
+              key={`${t.label}-${i}`}
+              type="button"
+              role="tab"
+              aria-selected={i === active}
+              className={`safari__tab${i === active ? ' is-active' : ''}`}
+              onClick={() => setActive(i)}
+            >
+              <span className="safari__tab-label">{t.label}</span>
+              <span className="safari__tab-x" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M6 6l12 12" />
+                  <path d="M18 6L6 18" />
+                </svg>
+              </span>
+            </button>
+          ))}
+        </div>
+
         <div className="safari__tools safari__tools--end">
-          {/* Share */}
-          <button
-            type="button"
-            className="safari__icon"
-            aria-disabled="true"
-            tabIndex={-1}
-            title="Tidak tersedia"
-          >
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 15V4" />
-              <path d="M8 8l4-4 4 4" />
-              <path d="M5 14v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5" />
-            </svg>
-          </button>
           {/* New tab */}
           <button
             type="button"
@@ -291,7 +303,7 @@ export default function SafariWindow({
               <path d="M5 12h14" />
             </svg>
           </button>
-          {/* Tab overview */}
+          {/* Menu */}
           <button
             type="button"
             className="safari__icon"
@@ -300,35 +312,12 @@ export default function SafariWindow({
             title="Tidak tersedia"
           >
             <svg viewBox="0 0 24 24" aria-hidden="true">
-              <rect x="4" y="4" width="7" height="7" rx="1.5" />
-              <rect x="13" y="4" width="7" height="7" rx="1.5" />
-              <rect x="4" y="13" width="7" height="7" rx="1.5" />
-              <rect x="13" y="13" width="7" height="7" rx="1.5" />
+              <path d="M4 7h16" />
+              <path d="M4 12h16" />
+              <path d="M4 17h16" />
             </svg>
           </button>
         </div>
-      </div>
-
-      {/* Baris 2 — tab bar terpisah (layout Separate Safari macOS) */}
-      <div
-        className="safari__tabbar"
-        role="tablist"
-        aria-label="Showcase website"
-        onPointerDown={startMove}
-      >
-        {tabs.map((t, i) => (
-          <button
-            key={`${t.label}-${i}`}
-            type="button"
-            role="tab"
-            aria-selected={i === active}
-            className={`safari__tab${i === active ? ' is-active' : ''}`}
-            onClick={() => setActive(i)}
-          >
-            <span className="safari__favicon" aria-hidden="true" />
-            <span className="safari__tab-label">{t.label}</span>
-          </button>
-        ))}
       </div>
 
       {/* Baris 3 — konten: iframe asli ke situs showcase, dirender pada
