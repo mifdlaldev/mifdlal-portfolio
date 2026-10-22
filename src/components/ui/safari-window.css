@@ -327,10 +327,17 @@ body.is-resizing-safari .safari {
 }
 
 .safari__frame {
-  display: block;
   border: 0;
-  background: var(--paper);
+  display: block;
   transform-origin: top left;
+  background: var(--paper);
+  /* Pembatas keras: iframe tidak menerima pointer event sama sekali.
+     Semua klik kanan jatuh ke .service-frame dan ditangkap listener
+     contextmenu (fase capture) di Services.astro, sehingga menu sistem
+     tidak pernah muncul. Konsekuensi: konten situs bersifat tampilan
+     (tidak bisa diklik/di-scroll di dalam iframe). */
+  pointer-events: none;
+  -webkit-touch-callout: none;
 }
 
 /* ---------- state kosong ---------- */

@@ -451,6 +451,7 @@ export default function SafariWindow({
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+              onContextMenu={(e) => e.preventDefault()}
               style={{
                 width: `${VIRTUAL_W}px`,
                 height: `${virtualH}px`,
