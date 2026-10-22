@@ -1,24 +1,27 @@
 /* ChatbotCanvas — ilustrasi animasi layanan chatbot.
-   Semua warna/ukuran desain via token. Pointer-events: none (tontonan).
-   Di atas foto + ASCII layanan 02, di bawah corner mark (z-corner 3). */
+   Layout: flex row (widget web - garis - iPhone). Flex membuat garis
+   putus-putus selalu menyambung tepat dari tepi widget ke tepi phone,
+   berapa pun lebar frame-nya.
+   Semua warna/ukuran desain via token. Pointer-events: none (tontonan). */
 
 .cb-canvas {
   position: absolute;
   inset: 0;
   z-index: var(--z-raise);
   pointer-events: none;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6% 5%;
 }
 
-/* ── Widget web — belakang kiri ───────────────────────────── */
+/* ── Widget web — kiri ────────────────────────────────────── */
 .cb-widget {
-  position: absolute;
-  left: 3%;
-  top: 22%;
-  width: clamp(150px, 40%, 240px);
+  flex: none;
+  width: clamp(150px, 36%, 224px);
   border-radius: var(--radius-lg);
   border: 1px solid var(--ink-16);
-  background: color-mix(in oklab, var(--paper) 88%, transparent);
+  background: color-mix(in oklab, var(--paper) 92%, transparent);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   box-shadow: var(--shadow-wf-tile);
@@ -48,8 +51,9 @@
 .cb-head-label {
   font-family: var(--font-mono);
   font-size: var(--text-cap);
-  letter-spacing: var(--tracking-caps-loose, 0.04em);
+  letter-spacing: var(--tracking-caps-tight);
   color: var(--color-muted);
+  white-space: nowrap;
 }
 
 .cb-widget-body {
@@ -81,6 +85,11 @@
 .cb-skel:nth-child(2) { animation-delay: 0.12s; }
 .cb-skel:nth-child(3) { animation-delay: 0.24s; }
 
+@keyframes cb-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 /* Percakapan yang sama dengan phone — muncul saat fase mirror. */
 .cb-mirror {
   display: flex;
@@ -90,50 +99,113 @@
 
 .cb-mini {
   font-size: var(--text-cap);
-  padding: 4px 8px;
+  padding: 5px 8px;
   border-radius: 10px 10px 10px 3px;
   line-height: var(--leading-ui);
 }
 
-/* ── Garis sinkron ────────────────────────────────────────── */
-.cb-sync {
-  position: absolute;
-  left: 42%;
-  top: 40%;
-  width: 30%;
+/* Composer — footer widget web (ada input = tidak terasa satu arah). */
+.cb-composer {
   display: flex;
   align-items: center;
   gap: 6px;
+  padding: 6px 10px;
+  border-top: 1px solid var(--ink-07);
+}
+
+.cb-composer-field {
+  flex: 1;
+  height: 22px;
+  border-radius: 999px;
+  border: 1px solid var(--ink-16);
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  font-size: var(--text-micro);
+  color: var(--color-muted);
+}
+
+.cb-send {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--electric);
+  color: var(--paper);
+  font-size: var(--text-micro);
+}
+
+/* Catatan sinkron — menjelaskan perpindahan perangkat. */
+.cb-sync-note {
+  padding: 5px 10px 6px;
+  border-top: 1px solid var(--ink-07);
+  font-size: var(--text-micro);
+  line-height: var(--leading-ui);
+  color: var(--electric);
+  white-space: nowrap;
+}
+
+/* ── Garis sinkron ────────────────────────────────────────── */
+.cb-sync {
+  flex: 1 1 auto;
+  position: relative;
+  min-width: 40px;
+  max-width: 170px;
+  display: flex;
+  align-items: center;
 }
 
 .cb-sync-line {
   flex: 1;
   position: relative;
+  margin: 0 2px;
   height: 1px;
-  border-top: 1px dashed color-mix(in oklab, var(--paper) 50%, transparent);
+  border-top: 1px dashed color-mix(in oklab, var(--paper) 55%, transparent);
   transition: border-color var(--dur-slow) var(--ease);
 }
 
-/* Titik junction di kedua ujung — bahasa gambar teknik. */
-.cb-sync-line::before,
-.cb-sync-line::after {
+/* Titik junction di ujung kiri, panah di ujung kanan (arah ke phone). */
+.cb-sync-line::before {
   content: '';
   position: absolute;
   top: -2px;
+  left: 0;
   width: 4px;
   height: 4px;
   background: var(--paper);
 }
 
-.cb-sync-line::before { left: 0; }
-.cb-sync-line::after { right: 0; }
+.cb-sync-line::after {
+  content: '';
+  position: absolute;
+  top: -3px;
+  right: -1px;
+  width: 0;
+  height: 0;
+  border-left: 5px solid var(--paper);
+  border-top: 3.5px solid transparent;
+  border-bottom: 3.5px solid transparent;
+}
 
 /* Garis menyala lemon saat percakapan tersinkron — kontras di atas foto. */
 .cb-sync.is-live .cb-sync-line {
   border-color: var(--lemon);
 }
 
+.cb-sync.is-live .cb-sync-line::before {
+  background: var(--lemon);
+}
+
+.cb-sync.is-live .cb-sync-line::after {
+  border-left-color: var(--lemon);
+}
+
 .cb-sync-label {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   font-family: var(--font-mono);
   font-size: var(--text-cap);
   letter-spacing: var(--tracking-caps-tight);
@@ -143,46 +215,116 @@
   padding: 1px 5px;
 }
 
-/* ── Phone — depan kanan ──────────────────────────────────── */
+/* ── iPhone — kanan ───────────────────────────────────────────
+   Frame mengikuti proporsi MagicUI iPhone: 433 x 882, layar
+   389.5 x 843.5 radius 55.75, dynamic island di y 30-67. */
 .cb-phone {
-  position: absolute;
-  right: 6%;
-  top: 8%;
-  width: clamp(96px, 24%, 132px);
-  aspect-ratio: 9 / 19.5;
-  border-radius: 18px;
-  border: 1px solid var(--ink-16);
-  background: var(--paper);
-  box-shadow: var(--shadow-wf-tile);
-  padding: 8px 6px 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  overflow: hidden;
+  flex: none;
+  position: relative;
+  width: clamp(112px, 23%, 148px);
+  aspect-ratio: 433 / 882;
+  filter: drop-shadow(0 12px 22px color-mix(in oklab, var(--ink-900) 30%, transparent));
 }
 
-.cb-notch {
+.cb-frame {
   position: absolute;
-  top: 6px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 40%;
-  height: 4px;
-  border-radius: 999px;
-  background: var(--ink-16);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
+/* Konten di dalam layar (persentase mengikuti kotak layar di SVG). */
 .cb-screen {
-  margin-top: 6px;
+  position: absolute;
+  left: 4.908%;
+  top: 2.183%;
+  width: 89.954%;
+  height: 95.635%;
+  border-radius: 14.3% / 6.6%;
+  overflow: hidden;
+  padding: 4% 7% 12%;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  flex: 1;
+  gap: 5px;
+  background: var(--paper);
+}
+
+/* Dynamic island — di atas overlay layar, proporsi dari SVG MagicUI. */
+.cb-island {
+  position: absolute;
+  top: 3.4%;
+  left: 35.6%;
+  width: 28.6%;
+  height: 4.2%;
+  border-radius: 999px;
+  background: var(--ink-900);
+}
+
+.cb-camera {
+  position: absolute;
+  top: 50%;
+  right: 9%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  background: var(--ink-70);
+}
+
+/* ── Status bar ───────────────────────────────────────────── */
+.cb-statusbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  color: var(--color-ink);
+  margin-bottom: 2px;
+}
+
+.cb-status-icons {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.cb-bar {
+  width: 8px;
+  height: 5px;
+  background: repeating-linear-gradient(
+    to right,
+    var(--ink-70) 0 1.5px,
+    transparent 1.5px 3px
+  );
+}
+
+.cb-wifi {
+  width: 7px;
+  height: 5px;
+  border-top: 1.5px solid var(--ink-70);
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+}
+
+.cb-batt {
+  position: relative;
+  width: 12px;
+  height: 6px;
+  border: 1px solid var(--ink-70);
+  border-radius: 2px;
+}
+
+.cb-batt::after {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  background: var(--ink-70);
+  border-radius: 1px;
 }
 
 /* ── Bubble ───────────────────────────────────────────────── */
 .cb-bubble {
-  max-width: 82%;
+  max-width: 86%;
   padding: 5px 8px;
   font-size: var(--text-cap);
   line-height: var(--leading-ui);
@@ -192,7 +334,7 @@
 
 .cb-bubble--in {
   background: var(--paper);
-  border: 1px solid var(--ink-07);
+  border: 1px solid var(--ink-16);
 }
 
 .cb-bubble--out {
@@ -219,14 +361,14 @@
   padding: 8px 10px;
   border-radius: 12px 12px 12px 4px;
   background: var(--paper);
-  border: 1px solid var(--ink-07);
+  border: 1px solid var(--ink-16);
 }
 
 .cb-dot {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: var(--ink-16);
+  background: var(--ink-70);
   animation: cb-bounce 1.2s infinite ease-in-out;
 }
 
@@ -234,7 +376,7 @@
 .cb-dot:nth-child(3) { animation-delay: 0.36s; }
 
 @keyframes cb-bounce {
-  0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.45; }
   30% { transform: translateY(-4px); opacity: 1; }
 }
 
@@ -258,17 +400,18 @@
   display: flex;
   gap: 5px;
   justify-content: flex-end;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   margin-top: 2px;
 }
 
 .cb-chip {
-  font-size: var(--text-cap);
+  font-size: var(--text-micro);
   line-height: var(--leading-ui);
-  padding: 3px 7px;
+  padding: 2px 5px;
   border-radius: 999px;
   border: 1px solid var(--electric);
   color: var(--electric);
+  white-space: nowrap;
   transition: background-color var(--dur-fast) var(--ease),
     color var(--dur-fast) var(--ease);
 }
@@ -281,17 +424,18 @@
 /* ── Handoff ──────────────────────────────────────────────── */
 .cb-handoff {
   margin-top: auto;
-  padding-top: 6px;
-  border-top: 1px solid var(--ink-07);
+  padding-top: 4px;
+  border-top: 1px solid var(--ink-16);
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: var(--text-cap);
+  font-size: var(--text-micro);
   color: var(--color-muted);
   line-height: var(--leading-ui);
 }
 
 .cb-monogram {
+  flex: none;
   display: grid;
   place-items: center;
   width: 18px;
@@ -302,6 +446,18 @@
   font-family: var(--font-mono);
   font-size: var(--text-micro);
   font-weight: var(--weight-bold);
+}
+
+/* ── Home indicator ───────────────────────────────────────── */
+.cb-home-indicator {
+  position: absolute;
+  bottom: 2.5%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 38%;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--ink-16);
 }
 
 /* ── Reduced motion: hentikan animasi, tetap baca sebagai "menunggu" ── */
@@ -317,25 +473,52 @@
    Label "satu basis data" disembunyikan; garis tetap ada sebagai
    penghubung visual antara widget dan phone. */
 @media (max-width: 560px) {
+  .cb-canvas {
+    padding: 5% 6%;
+  }
+
   .cb-widget {
-    left: 4%;
-    top: 20%;
-    width: 46%;
+    width: 40%;
   }
 
   .cb-phone {
-    right: 5%;
-    top: 12%;
     width: 30%;
   }
 
   .cb-sync {
-    left: 51%;
-    top: 44%;
-    width: 13%;
+    min-width: 26px;
   }
 
-  .cb-sync-label {
+  .cb-sync-label,
+  .cb-chips {
     display: none;
+  }
+
+  .cb-screen {
+    gap: 3px;
+  }
+
+  .cb-bubble {
+    padding: 3px 6px;
+    line-height: var(--leading-ui);
+  }
+
+  .cb-bubble,
+  .cb-handoff {
+    font-size: var(--text-micro);
+  }
+
+  .cb-time {
+    display: none;
+  }
+
+  .cb-monogram {
+    width: 14px;
+    height: 14px;
+  }
+
+  .cb-handoff {
+    padding-top: 2px;
+    gap: 4px;
   }
 }
