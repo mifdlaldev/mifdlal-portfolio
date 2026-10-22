@@ -43,10 +43,13 @@
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     // Lenis aktif: pakai jalur scroll yang sama supaya tidak menabrak
     // smoothing halaman (native scrollTo + Lenis = dua kontrol berebut).
+    // force:true  -> tetap jalan walau Lenis sedang stopped/locked
+    // duration    -> animasi berbasis waktu, pasti selesai; mode lerp
+    //                asimtotik terasa berhenti sebelum mentok 0
     const lenis = window.__lenis;
     if (lenis) {
       event.preventDefault();
-      lenis.scrollTo(0, { immediate: reduce });
+      lenis.scrollTo(0, { immediate: reduce, force: true, duration: reduce ? 0 : 1.2 });
       return;
     }
     if (reduce || !('scrollBehavior' in document.documentElement.style)) return;

@@ -6,7 +6,16 @@
 // tersembunyi, jadi tidak ada kontrol mati di halaman.
 ---
 
-<a class="to-top" href="#main" aria-label="Kembali ke atas" data-trigger="#kontak">
+{/* Tombol, bukan <a>: Lenis anchors hanya men-intercept <a href="#...">.
+    Kalau pakai <a>, klik ini di-hijack Lenis untuk scroll ke #main,
+    berebut dengan scrollTo(0) kita -> animasi saling batalkan, berhenti
+    di tengah. Button tidak punya href, jadi Lenis mengabaikannya sepenuhnya. */}
+<button
+  class="to-top"
+  type="button"
+  aria-label="Kembali ke atas"
+  data-trigger="#kontak"
+>
   <svg
     class="to-top-icon"
     viewBox="0 0 16 16"
@@ -22,13 +31,21 @@
       stroke-width="1.5"
       stroke-linecap="square"></path>
   </svg>
-</a>
+</button>
 
 <script is:inline src="/js/to-top.js" defer></script>
 
 <style>
   .to-top {
     position: fixed;
+    /* Reset default button: tanpa ini browser menambahkan padding/font
+       native yang merusak grid place-items center. */
+    appearance: none;
+    -webkit-appearance: none;
+    font: inherit;
+    padding: 0;
+    border: none;
+    cursor: pointer;
     /* Pojok jendela, bukan tepi konten. Di layar lebar tombol duduk di
        gutter luar yang kosong, jadi tidak menimpa baris teks mana pun. */
     right: var(--grid-gutter);
