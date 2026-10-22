@@ -279,16 +279,17 @@ import { AsciiArtStatic } from './ui/ascii-art'
     pointer-events: none;
   }
 
-  /* Foto lebih tinggi dari frame (124%) dengan tepi atas -12%: ada cadangan
-     12% di atas dan 12% di bawah untuk bergerak tanpa menampakkan celah.
-     --parallax di-set JS: +12% tinggi frame (foto turun, tampak masuk dari
-     bawah) -> -12% (foto naik). Nilai px, negatif = naik. */
+  /* Foto lebih tinggi dari frame (140%) dengan tepi atas -20%: cadangan
+     20% di atas dan 20% di bawah. Rentang gerak parallax ±20% tinggi frame
+     (total travel 40% ~ 160px pada frame 400px) supaya ilusi kedalaman
+     terasa jelas, bukan sekadar geseran kecil.
+     --parallax di-set JS: +20% (foto turun, masuk dari bawah) -> -20% (naik). */
   .service-photo {
     position: absolute;
-    top: -12%;
+    top: -20%;
     left: 0;
     right: 0;
-    height: 124%;
+    height: 140%;
     background-color: var(--ink-900);
     background-size: cover;
     background-position: center;
@@ -424,38 +425,56 @@ import { AsciiArtStatic } from './ui/ascii-art'
 
   /* Parallax foto canvas layanan — versi clip: foto tidak pernah meluber.
      Foto di dalam .service-photo-clip (overflow:hidden). Pergeseran dibatasi
-     ±12% tinggi frame = cadangan headroom foto (tinggi 124%, tepi atas -12%).
-     Efek: saat halaman di-scroll, foto naik/turun pelan di dalam frame,
-     tidak menimpa section biru di sekitarnya.
+     ±20% tinggi frame = cadangan headroom foto (tinggi 140%, tepi atas -20%).
+     Total travel 40% tinggi frame (~160px pada frame 400px) — gerakan cukup
+     besar agar ilusi kedalaman terasa jelas, bukan sekadar geseran kecil.
+     Lerp 0.12 membuat pergerakan mulus, tidak patah-patah di tiap scroll.
      Dimatikan saat prefers-reduced-motion: reduce. */
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   if (!reduceMotion.matches) {
     const clips = Array.from(document.querySelectorAll<HTMLElement>('.service-photo-clip'));
-    const SHIFT_MAX = 0.12; // ±12% tinggi frame (pas dengan headroom foto)
-    let ticking = false;
+    const SHIFT_MAX = 0.2; // ±20% tinggi frame (pas dengan headroom foto 140%)
+    const LERP = 0.14; // penghalusan per frame (~60fps)
+    const current = new Map<HTMLElement, number>();
+    let running = false;
 
-    const update = () => {
-      ticking = false;
+    const tick = () => {
       const vh = window.innerHeight;
+      let animating = false;
+
       for (const clip of clips) {
         const rect = clip.getBoundingClientRect();
-        if (rect.bottom < -vh * 0.2 || rect.top > vh * 1.2) continue;
-        // p: 0 = frame baru masuk dari bawah viewport, 1 = frame hampir keluar di atas
+        const inView = rect.bottom > -vh * 0.2 && rect.top < vh * 1.2;
+        if (!inView) continue;
+
+        // p: 0 = frame baru masuk dari bawah, 1 = frame hampir keluar di atas
         const p = (vh - rect.top) / (vh + rect.height);
-        // +SHIFT_MAX (foto turun, tampak masuk dari bawah) -> -SHIFT_MAX (foto naik)
-        const shift = (SHIFT_MAX - p * 2 * SHIFT_MAX) * rect.height;
-        clip.style.setProperty('--parallax', `${shift.toFixed(1)}px`);
+        // target: +20% (foto turun, masuk dari bawah) -> -20% (foto naik penuh)
+        const target = (SHIFT_MAX - p * 2 * SHIFT_MAX) * rect.height;
+        const prev = current.get(clip) ?? target;
+        const next = prev + (target - prev) * LERP;
+
+        current.set(clip, next);
+        clip.style.setProperty('--parallax', `${next.toFixed(1)}px`);
+
+        if (Math.abs(target - next) > 0.5) animating = true;
+      }
+
+      if (animating) {
+        window.requestAnimationFrame(tick);
+      } else {
+        running = false;
       }
     };
 
-    const request = () => {
-      if (ticking) return;
-      ticking = true;
-      window.requestAnimationFrame(update);
+    const kick = () => {
+      if (running) return;
+      running = true;
+      window.requestAnimationFrame(tick);
     };
 
-    update();
-    window.addEventListener('scroll', request, { passive: true });
-    window.addEventListener('resize', request, { passive: true });
+    kick();
+    window.addEventListener('scroll', kick, { passive: true });
+    window.addEventListener('resize', kick, { passive: true });
   }
 </script>
