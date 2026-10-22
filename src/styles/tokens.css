@@ -55,6 +55,8 @@
   --text-label: 0.6875rem;
   --text-cap: 0.625rem;
   --text-micro: 0.5rem; /* metadata di dalam kanvas mini (timestamp, monogram) */
+  --text-nano: 0.3125rem; /* jam + ikon status bar di mockup phone (5px) */
+  --text-xs: 0.4375rem; /* jam status bar mockup phone (7px) */
 
   /* --- tipografi: bobot ----------------------------------- */
   --weight-medium: 500;

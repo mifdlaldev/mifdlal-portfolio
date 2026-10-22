@@ -42,7 +42,22 @@ export default function ChatbotCanvas() {
   const [step, setStep] = useState(0)
   const [visible, setVisible] = useState(true)
   const [chars, setChars] = useState(0)
+  const [clock, setClock] = useState('')
   const timers = useRef<number[]>([])
+
+  // Jam status bar realtime (format 12 jam seperti iOS: 2:40 PM).
+  useEffect(() => {
+    const tick = () =>
+      setClock(
+        new Date().toLocaleTimeString('en-US', {
+          hour: 'numeric',
+          minute: '2-digit',
+        })
+      )
+    tick()
+    const id = window.setInterval(tick, 15000)
+    return () => window.clearInterval(id)
+  }, [])
 
   // Karakter jawaban muncul bertahap (efek streaming).
   useEffect(() => {
@@ -145,34 +160,61 @@ export default function ChatbotCanvas() {
         <span className="cb-sync-label">satu basis data</span>
       </div>
 
-      {/* Phone — depan kanan, mockup iPhone (proporsi 433:882) */}
+      {/* Phone — depan kanan, mockup PNG iPhone 18 Pro Max (962x1978) */}
       <div className="cb-phone">
-        <svg className="cb-frame" viewBox="0 0 433 882" fill="none" aria-hidden="true">
-          {/* Body + bezel */}
-          <path d="M2 73C2 32.6832 34.6832 0 75 0H357C397.317 0 430 32.6832 430 73V809C430 849.317 397.317 882 357 882H75C34.6832 882 2 849.317 2 809V73Z" fill="var(--ink-900)" />
-          {/* Tombol volume kiri */}
-          <path d="M0 171C0 170.448 0.447715 170 1 170H3V204H1C0.447715 204 0 203.552 0 203V171Z" fill="var(--ink-900)" />
-          <path d="M1 234C1 233.448 1.44772 233 2 233H3.5V300H2C1.44772 300 1 299.552 1 299V234Z" fill="var(--ink-900)" />
-          <path d="M1 319C1 318.448 1.44772 318 2 318H3.5V385H2C1.44772 385 1 384.552 1 384V319Z" fill="var(--ink-900)" />
-          {/* Tombol power kanan */}
-          <path d="M430 279H432C432.552 279 433 280V384C433 384.552 432.552 385 432 385H430V279Z" fill="var(--ink-900)" />
-          {/* Layar */}
-          <rect x="21.25" y="19.25" width="389.5" height="843.5" rx="55.75" ry="55.75" fill="var(--paper)" />
-          {/* Dynamic island — dirender via .cb-island di atas overlay layar. */}
-          {/* Kamera depan */}
-        </svg>
+        <img
+          className="cb-frame-img"
+          src="/device-mockups/apple/apple-iphone-18-pro-max-2026device.png"
+          alt=""
+          width="962"
+          height="1978"
+          loading="eager"
+          decoding="async"
+          draggable="false"
+        />
 
-        {/* Konten di atas layar */}
+        {/* Konten di dalam layar PNG (area layar: 3.01%/0.76%/94.07%/98.13%) */}
         <div className="cb-screen">
-          <div className="cb-statusbar">
-            <span>10:24</span>
-            <span className="cb-status-icons" aria-hidden="true">
-              <span className="cb-bar"></span>
-              <span className="cb-wifi"></span>
-              <span className="cb-batt"></span>
+          {/* Dynamic island — aset PNG, center atas, di atas konten */}
+          <img
+            className="cb-island-img"
+            src="/device-mockups/apple/dynamic-island.png"
+            alt=""
+            width="840"
+            height="289"
+            loading="eager"
+            decoding="async"
+            draggable="false"
+          />
+
+          {/* Status bar: jam realtime + sinyal + wifi + baterai */}
+          <div className="cb-statusbar" aria-hidden="true">
+            <span className="cb-clock">{clock || '12:00 PM'}</span>
+            <span className="cb-status-icons">
+              {/* Sinyal 4 bar */}
+              <svg className="cb-ico cb-ico-signal" viewBox="0 0 18 12" fill="currentColor">
+                <rect x="0" y="8" width="3" height="4" rx="1" />
+                <rect x="5" y="5.5" width="3" height="6.5" rx="1" />
+                <rect x="10" y="3" width="3" height="9" rx="1" />
+                <rect x="15" y="0.5" width="3" height="11.5" rx="1" />
+              </svg>
+              {/* Wi-Fi */}
+              <svg className="cb-ico cb-ico-wifi" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z" />
+              </svg>
+              {/* Baterai */}
+              <svg className="cb-ico cb-ico-batt" viewBox="0 0 25 12" fill="currentColor">
+                <rect x="0.5" y="0.5" width="21" height="11" rx="3" fill="none" stroke="currentColor" strokeWidth="1" />
+                <rect x="2" y="2" width="18" height="8" rx="1.5" />
+                <rect x="22" y="3.5" width="2" height="5" rx="1" />
+              </svg>
             </span>
           </div>
 
+          {/* Wallpaper HP — hanya area chat, mulai di bawah status bar */}
+          <span className="cb-wall" aria-hidden="true"></span>
+
+          <div className="cb-chat">
           {showUser && (
             <motion.div
               className="cb-bubble cb-bubble--out"
@@ -181,7 +223,6 @@ export default function ChatbotCanvas() {
               transition={{ duration: 0.18, ease: 'easeOut' }}
             >
               {SCRIPT.user}
-              <span className="cb-time">10:24</span>
             </motion.div>
           )}
 
@@ -202,7 +243,6 @@ export default function ChatbotCanvas() {
             >
               {SCRIPT.bot.slice(0, chars)}
               {chars < SCRIPT.bot.length && <span className="cb-caret"></span>}
-              <span className="cb-time">10:24</span>
             </motion.div>
           )}
 
@@ -236,13 +276,10 @@ export default function ChatbotCanvas() {
             </motion.div>
           )}
 
+          </div>
+
           <span className="cb-home-indicator" aria-hidden="true"></span>
         </div>
-
-        {/* Dynamic island di atas overlay layar (bukan di SVG, agar tidak tertutup). */}
-        <span className="cb-island" aria-hidden="true">
-          <span className="cb-camera"></span>
-        </span>
       </div>
 
     </motion.div>
