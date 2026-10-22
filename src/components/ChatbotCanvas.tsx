@@ -3,47 +3,172 @@
 // ChatbotCanvas — ilustrasi animasi layanan chatbot (fig. 04.02).
 // Satu percakapan muncul di dua perangkat: phone (depan) + widget web
 // (belakang), disinkronkan oleh garis putus-putus "satu basis data".
-// State machine: TIMELINE fase berurutan lalu loop. Nol interaksi
-// (pointer-events: none) — ini tontonan, seperti WorkflowCanvas.
+// State machine: 6 topik percakapan agensi diputar bergiliran, tiap topik
+// 6 pesan; area chat scrollable + auto-scroll ke pesan terbaru.
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'motion/react'
 import './chatbot-canvas.css'
 
-/* Fase alur: bubble masuk -> typing -> jawaban di-stream -> chip ->
-   highlight chip -> handoff -> mirror widget web -> jeda -> fade out -> loop */
-type Phase = { id: string; ms: number }
+type Msg = { from: 'user' | 'bot'; text: string }
+type Topic = {
+  id: string
+  label: string
+  msgs: Msg[]
+  chips: [string, string]
+  handoff: string
+}
 
-const TIMELINE: Phase[] = [
-  { id: 'q', ms: 1200 },         // pesan user muncul
-  { id: 'typing', ms: 1800 },    // tiga titik mengetik
-  { id: 'answer', ms: 1700 },    // jawaban di-stream + caret
-  { id: 'chips', ms: 1400 },     // dua chip muncul
-  { id: 'highlight', ms: 1800 }, // chip "Hubungi tim" menyala
-  { id: 'handoff', ms: 2000 },   // frame disambungkan ke tim
-  { id: 'mirror', ms: 2600 },    // widget web menampilkan percakapan sama
-  { id: 'hold', ms: 2400 },      // tahan frame akhir
-  { id: 'fade', ms: 500 },       // fade out, lalu loop
+/* Enam topik nyata dari percakapan agensi web di Indonesia:
+   budget & timeline, kepemilikan domain/akses, revisi & garansi,
+   SEO, maintenance bulanan, serah terima. */
+const TOPICS: Topic[] = [
+  {
+    id: 'budget',
+    label: 'Paket & timeline',
+    msgs: [
+      { from: 'user', text: 'Bikin toko online, budgetnya berapa?' },
+      { from: 'bot', text: 'Starter Rp 3,5jt (2 minggu). Grow Rp 8jt + SEO (4 minggu).' },
+      { from: 'user', text: 'Domain & hosting termasuk?' },
+      { from: 'bot', text: 'Termasuk 1 tahun. Perpanjangan Rp 900rb/tahun.' },
+      { from: 'user', text: 'Revisi berapa putaran?' },
+      { from: 'bot', text: '3 putaran per halaman, lebihnya dihitung per jam.' },
+    ],
+    chips: ['Lihat paket', 'Konsultasi'],
+    handoff: 'Konsultan bergabung · ~2 menit',
+  },
+  {
+    id: 'domain',
+    label: 'Domain & akses',
+    msgs: [
+      { from: 'user', text: 'Domain-nya atas nama siapa?' },
+      { from: 'bot', text: 'Atas nama Anda. Saya hanya diberi akses DNS.' },
+      { from: 'user', text: 'Kalau pindah vendor, bisa?' },
+      { from: 'bot', text: 'Bisa. Auth code & akses admin diserahkan saat launch.' },
+      { from: 'user', text: 'Saya dapat admin panel penuh?' },
+      { from: 'bot', text: 'Ya, role administrator + training 30 menit.' },
+    ],
+    chips: ['Lihat akses', 'Tanya tim'],
+    handoff: 'Konsultan bergabung · ~2 menit',
+  },
+  {
+    id: 'revisi',
+    label: 'Revisi & garansi',
+    msgs: [
+      { from: 'user', text: 'Garansi setelah live berapa lama?' },
+      { from: 'bot', text: '30 hari untuk bug, gratis. Lewat itu kontrak support.' },
+      { from: 'user', text: 'Revisi desain termasuk?' },
+      { from: 'bot', text: '2 putaran desain + 3 putaran konten per halaman.' },
+      { from: 'user', text: 'Kalau minta ubah total?' },
+      { from: 'bot', text: 'Masuk change order, estimasi dulu sebelum kerja.' },
+    ],
+    chips: ['Lihat garansi', 'Konsultasi'],
+    handoff: 'Konsultan bergabung · ~2 menit',
+  },
+  {
+    id: 'seo',
+    label: 'SEO & hasil',
+    msgs: [
+      { from: 'user', text: 'SEO-nya beneran jalan?' },
+      { from: 'bot', text: 'Meta, H1, schema, sitemap, Search Console saat launch.' },
+      { from: 'user', text: 'Berapa lama naik peringkat?' },
+      { from: 'bot', text: 'Realistis 3-6 bulan. Tanpa janji halaman 1.' },
+      { from: 'user', text: 'Ada laporan bulanan?' },
+      { from: 'bot', text: 'Ya, ringkasan trafik + kata kunci tiap awal bulan.' },
+    ],
+    chips: ['Lihat rincian', 'Konsultasi'],
+    handoff: 'Konsultan bergabung · ~2 menit',
+  },
+  {
+    id: 'maintenance',
+    label: 'Maintenance',
+    msgs: [
+      { from: 'user', text: 'Ada biaya bulanan?' },
+      { from: 'bot', text: 'Maintenance Rp 450rb/bulan: update, backup, monitoring.' },
+      { from: 'user', text: 'Kalau website error?' },
+      { from: 'bot', text: 'Respon 1x24 jam kerja, prioritas kalau down.' },
+      { from: 'user', text: 'Bisa upgrade paket nanti?' },
+      { from: 'bot', text: 'Bisa, fitur tambahan dihitung dari scope baru.' },
+    ],
+    chips: ['Lihat paket', 'Konsultasi'],
+    handoff: 'Konsultan bergabung · ~2 menit',
+  },
+  {
+    id: 'handover',
+    label: 'Serah terima',
+    msgs: [
+      { from: 'user', text: 'Pembayarannya bagaimana?' },
+      { from: 'bot', text: 'DP 50% saat kontrak, 50% setelah approve sebelum launch.' },
+      { from: 'user', text: 'Apa saja yang diserahkan?' },
+      { from: 'bot', text: 'Kode, hosting, domain, analytics, manual CMS.' },
+      { from: 'user', text: 'Berapa lama prosesnya?' },
+      { from: 'bot', text: 'Serah terima 3 hari kerja setelah peluncuran.' },
+    ],
+    chips: ['Lihat alur', 'Konsultasi'],
+    handoff: 'Konsultan bergabung · ~2 menit',
+  },
 ]
 
-/* Kapan tiap fase mulai (ms), dihitung sekali dari TIMELINE. */
-const AT = TIMELINE.reduce<number[]>((acc, p, i) => {
-  acc.push(i === 0 ? 0 : acc[i - 1] + TIMELINE[i - 1].ms)
-  return acc
-}, [])
+const TYPING_MS = 900
+const MSG_GAP = 650
 
-const SCRIPT = {
-  user: 'Kirim ke Surabaya berapa lama?',
-  bot: 'Estimasi 2-3 hari kerja. Tarif Rp 15rb/kg.',
-  chips: ['Cek tarif', 'Hubungi'],
-  handoff: 'Disambungkan ke Rani · ~2 menit',
+type Setters = {
+  setShown: (n: number) => void
+  setTyping: (b: boolean) => void
+  setPhase: (p: number) => void
+}
+type Event = { at: number; run: (s: Setters) => void }
+
+/* Jadwal satu topik: tiap pesan muncul bergiliran, pesan bot didahului
+   indikator mengetik. Setelah 6 pesan -> chips (3), highlight (4),
+   handoff (5), mirror widget (6), tahan (7), lalu ganti topik. */
+function buildSchedule(topic: Topic): { events: Event[]; total: number } {
+  const events: Event[] = []
+  let t = 350
+
+  topic.msgs.forEach((m, i) => {
+    if (m.from === 'bot') {
+      events.push({ at: t, run: (s) => s.setTyping(true) })
+      t += TYPING_MS
+      events.push({
+        at: t,
+        run: (s) => {
+          s.setTyping(false)
+          s.setShown(i + 1)
+        },
+      })
+      t += MSG_GAP
+    } else {
+      events.push({ at: t, run: (s) => s.setShown(i + 1) })
+      t += MSG_GAP
+    }
+  })
+
+  events.push({ at: t, run: (s) => s.setPhase(3) })
+  t += 1300
+  events.push({ at: t, run: (s) => s.setPhase(4) })
+  t += 1500
+  events.push({ at: t, run: (s) => s.setPhase(5) })
+  t += 1700
+  events.push({ at: t, run: (s) => s.setPhase(6) })
+  t += 2100
+  events.push({ at: t, run: (s) => s.setPhase(7) })
+  t += 2400
+
+  return { events, total: t }
 }
 
 export default function ChatbotCanvas() {
-  const [step, setStep] = useState(0)
+  const [cycle, setCycle] = useState(0)
+  const [shown, setShown] = useState(0)
+  const [typing, setTyping] = useState(false)
+  const [phase, setPhase] = useState(0)
   const [visible, setVisible] = useState(true)
-  const [chars, setChars] = useState(0)
   const [clock, setClock] = useState('')
   const timers = useRef<number[]>([])
+  const chatRef = useRef<HTMLDivElement | null>(null)
+
+  const topicIndex = cycle % TOPICS.length
+  const topic = TOPICS[topicIndex]
 
   // Jam status bar realtime (format 12 jam seperti iOS: 2:40 PM).
   useEffect(() => {
@@ -59,59 +184,64 @@ export default function ChatbotCanvas() {
     return () => window.clearInterval(id)
   }, [])
 
-  // Karakter jawaban muncul bertahap (efek streaming).
+  // Auto-scroll ke pesan terbaru setiap ada perubahan isi chat.
   useEffect(() => {
-    if (step !== 2) return
-    setChars(0)
-    const id = window.setInterval(() => {
-      setChars((c) => Math.min(c + 2, SCRIPT.bot.length))
-    }, 28)
-    return () => window.clearInterval(id)
-  }, [step])
+    const el = chatRef.current
+    if (el) el.scrollTop = el.scrollHeight
+  }, [shown, typing, phase])
 
-  // Mesin fase: maju berurutan, loop di akhir. Reduced motion -> frame akhir.
+  // Mesin fase: satu siklus = satu topik penuh. Selesai -> `cycle`
+  // bertambah (topik berikutnya), semua timer dijadwalkan dari nol.
   useEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const current = TOPICS[cycle % TOPICS.length]
+
     if (reduce) {
-      setStep(TIMELINE.length - 2)
-      setChars(SCRIPT.bot.length)
+      setShown(current.msgs.length)
+      setTyping(false)
+      setPhase(7)
       setVisible(true)
       return
     }
 
+    setShown(0)
+    setTyping(false)
+    setPhase(0)
+    setVisible(true)
+
+    const { events, total } = buildSchedule(current)
     const push = (fn: () => void, at: number) => {
       timers.current.push(window.setTimeout(fn, at))
     }
 
-    for (let i = 1; i <= 7; i += 1) {
-      push(() => setStep(i), AT[i])
+    const setters: Setters = {
+      setShown: (n) => setShown(n),
+      setTyping: (b) => setTyping(b),
+      setPhase: (p) => setPhase(p),
     }
-    // Fade out, lalu reset ke fase pertama.
-    push(() => setVisible(false), AT[7] + TIMELINE[7].ms)
-    push(() => {
-      setStep(0)
-      setChars(0)
-      setVisible(true)
-    }, AT[7] + TIMELINE[7].ms + TIMELINE[8].ms)
+
+    events.forEach((ev) => push(() => ev.run(setters), ev.at))
+
+    // Fade out lalu topik berikutnya.
+    push(() => setVisible(false), total)
+    push(() => setCycle((c) => c + 1), total + 450)
 
     return () => {
       timers.current.forEach(clearTimeout)
       timers.current = []
     }
-  }, [])
+  }, [cycle])
 
-  const showUser = step >= 0
-  const showTyping = step >= 1 && step < 2
-  const showAnswer = step >= 2
-  const showChips = step >= 3
-  const showHighlight = step >= 4
-  const showHandoff = step >= 5
-  const showMirror = step >= 6
+  const showChips = phase >= 3
+  const showHighlight = phase >= 4
+  const showHandoff = phase >= 5
+  const showMirror = phase >= 6
 
   return (
     <motion.div
       className="cb-canvas"
-      data-step={step}
+      data-step={phase}
+      data-topic={topic.id}
       animate={{ opacity: visible ? 1 : 0 }}
       transition={{ duration: 0.4, ease: 'easeInOut' }}
       aria-hidden="true"
@@ -140,8 +270,8 @@ export default function ChatbotCanvas() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.3 }}
             >
-              <span className="cb-bubble cb-bubble--out cb-mini">{SCRIPT.user}</span>
-              <span className="cb-bubble cb-bubble--in cb-mini">{SCRIPT.bot}</span>
+              <span className="cb-bubble cb-bubble--out cb-mini">{topic.msgs[0].text}</span>
+              <span className="cb-bubble cb-bubble--in cb-mini">{topic.msgs[1].text}</span>
             </motion.div>
           )}
         </div>
@@ -214,55 +344,48 @@ export default function ChatbotCanvas() {
           {/* Wallpaper HP — hanya area chat, mulai di bawah status bar */}
           <span className="cb-wall" aria-hidden="true"></span>
 
-          <div className="cb-chat">
-          {showUser && (
-            <motion.div
-              className="cb-bubble cb-bubble--out"
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.18, ease: 'easeOut' }}
-            >
-              {SCRIPT.user}
-            </motion.div>
-          )}
+          {/* Area chat: scrollable, auto-scroll ke pesan terbaru */}
+          <div className="cb-chat" ref={chatRef}>
+            {topic.msgs.slice(0, shown).map((m, i) => (
+              <motion.div
+                key={topic.id + '-' + i}
+                className={
+                  'cb-bubble ' + (m.from === 'user' ? 'cb-bubble--out' : 'cb-bubble--in')
+                }
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.18, ease: 'easeOut' }}
+              >
+                {m.text}
+              </motion.div>
+            ))}
 
-          {showTyping && (
-            <div className="cb-typing">
-              <span className="cb-dot"></span>
-              <span className="cb-dot"></span>
-              <span className="cb-dot"></span>
-            </div>
-          )}
+            {typing && (
+              <div className="cb-typing">
+                <span className="cb-dot"></span>
+                <span className="cb-dot"></span>
+                <span className="cb-dot"></span>
+              </div>
+            )}
 
-          {showAnswer && (
-            <motion.div
-              className="cb-bubble cb-bubble--in"
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.18, ease: 'easeOut' }}
-            >
-              {SCRIPT.bot.slice(0, chars)}
-              {chars < SCRIPT.bot.length && <span className="cb-caret"></span>}
-            </motion.div>
-          )}
-
-          {showChips && (
-            <motion.div
-              className="cb-chips"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.2 }}
-            >
-              {SCRIPT.chips.map((chip, i) => (
-                <span
-                  key={chip}
-                  className={'cb-chip' + (showHighlight && i === 1 ? ' cb-chip--active' : '')}
-                >
-                  {chip}
-                </span>
-              ))}
-            </motion.div>
-          )}
+            {showChips && (
+              <motion.div
+                className="cb-chips"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.2 }}
+              >
+                {topic.chips.map((chip, i) => (
+                  <span
+                    key={chip}
+                    className={'cb-chip' + (showHighlight && i === 1 ? ' cb-chip--active' : '')}
+                  >
+                    {chip}
+                  </span>
+                ))}
+              </motion.div>
+            )}
+          </div>
 
           {showHandoff && (
             <motion.div
@@ -272,16 +395,13 @@ export default function ChatbotCanvas() {
               transition={{ duration: 0.22, ease: 'easeOut' }}
             >
               <span className="cb-monogram">R</span>
-              <span className="cb-handoff-text">{SCRIPT.handoff}</span>
+              <span className="cb-handoff-text">{topic.handoff}</span>
             </motion.div>
           )}
-
-          </div>
 
           <span className="cb-home-indicator" aria-hidden="true"></span>
         </div>
       </div>
-
     </motion.div>
   )
 }

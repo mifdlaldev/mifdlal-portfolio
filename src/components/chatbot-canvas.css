@@ -270,15 +270,29 @@
   pointer-events: none;
 }
 
-/* Wrapper konten chat — di atas wallpaper. */
+/* Area chat — di atas wallpaper, scrollable (6 pesan per topik).
+   Auto-scroll dikendalikan JS; pengguna juga bisa scroll manual. */
 .cb-chat {
   position: relative;
-  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 5px;
   flex: 1 1 auto;
   min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  pointer-events: auto;
+  z-index: var(--z-content);
+  scrollbar-width: none;
+}
+
+.cb-chat::-webkit-scrollbar {
+  display: none;
+}
+
+/* Dorong isi ke bawah saat pesan masih sedikit. */
+.cb-chat > :first-child {
+  margin-top: auto;
 }
 
 /* Home indicator — bawaan PNG tidak punya; digambar CSS di dasar layar. */
@@ -302,7 +316,7 @@
   transform: translateX(-50%);
   width: 28%;
   height: auto;
-  z-index: 3;
+  z-index: var(--z-band);
   pointer-events: none;
   user-select: none;
   -webkit-user-drag: none;
@@ -319,10 +333,10 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 7%;
-  z-index: 2;
+  z-index: var(--z-raise);
   color: var(--ink-900);
   font-size: var(--text-xs);
-  line-height: 1;
+  line-height: var(--leading-none);
 }
 
 .cb-clock {
@@ -345,25 +359,33 @@
 }
 
 /* ── Bubble ───────────────────────────────────────────────── */
+/* Port shadcn/ui Bubble (base/bubble) ke CSS murni.
+   BubbleContent: rounded-xl, border transparan, px-3 py-2, text-sm,
+   leading-relaxed, max-w-80%, wrap-break-word, overflow hidden.
+   Sudut SERAGAM (tidak ada ekor asimetris). */
 .cb-bubble {
-  max-width: 86%;
+  max-width: 80%;
   padding: 5px 8px;
   font-size: var(--text-cap);
-  line-height: var(--leading-ui);
-  color: var(--color-ink);
-  border-radius: 12px 12px 12px 4px;
+  line-height: var(--leading-relaxed);
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  overflow: hidden;
+  overflow-wrap: break-word;
 }
 
+/* variant=secondary — bubble balasan (netral, tanpa border) */
 .cb-bubble--in {
+  align-self: flex-start;
   background: var(--paper);
-  border: 1px solid var(--ink-16);
+  color: var(--color-ink);
 }
 
+/* variant=default — bubble pesan kita (primary kuat) */
 .cb-bubble--out {
   align-self: flex-end;
-  background: color-mix(in oklab, var(--electric) 12%, var(--paper));
-  border: 1px solid color-mix(in oklab, var(--electric) 28%, transparent);
-  border-radius: 12px 12px 4px 12px;
+  background: var(--electric);
+  color: var(--paper);
 }
 
 /* ── Typing indicator: satu keyframe, tiga delay ──────────── */
@@ -371,10 +393,10 @@
   align-self: flex-start;
   display: flex;
   gap: 4px;
-  padding: 8px 10px;
-  border-radius: 12px 12px 12px 4px;
+  padding: 6px 9px;
+  border-radius: var(--radius-md);
   background: var(--paper);
-  border: 1px solid var(--ink-16);
+  border: 1px solid transparent;
 }
 
 .cb-dot {
@@ -437,7 +459,7 @@
 
 /* ── Handoff ──────────────────────────────────────────────── */
 .cb-handoff {
-  margin-top: auto;
+  flex: none;
   padding-top: 4px;
   border-top: 1px solid color-mix(in oklab, var(--paper) 25%, transparent);
   display: flex;
@@ -515,7 +537,7 @@
 
   .cb-bubble {
     padding: 3px 6px;
-    line-height: var(--leading-ui);
+    line-height: var(--leading-relaxed);
   }
 
   .cb-bubble,
