@@ -86,7 +86,7 @@ import { AsciiArtStatic } from './ui/ascii-art'
               {/* Ilustrasi chatbot — hanya di layanan 02. Browser Safari di
                   latar belakang, widget chat melayang di atasnya, phone di
                   depan. Non-interaktif. */}
-              {s.no === '02' && <ChatbotCanvas client:visible tabs={showcaseSites} />}
+              {s.no === '02' && <ChatbotCanvas client:visible />}
 
               {/* Penanda sudut gambar teknik — sekarang sibling .service-photo
                   (z 3) agar di atas ASCII. */}

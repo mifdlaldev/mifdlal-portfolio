@@ -7,7 +7,6 @@
 // 6 pesan; area chat scrollable + auto-scroll ke pesan terbaru.
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'motion/react'
-import SafariWindow from './ui/safari-window.tsx'
 import './chatbot-canvas.css'
 
 type Msg = { from: 'user' | 'bot'; text: string }
@@ -158,13 +157,7 @@ function buildSchedule(topic: Topic): { events: Event[]; total: number } {
   return { events, total: t }
 }
 
-type Tab = { label: string; url: string }
-
-export default function ChatbotCanvas({
-  tabs,
-}: {
-  tabs: readonly Tab[]
-}) {
+export default function ChatbotCanvas() {
   const [cycle, setCycle] = useState(0)
   const [shown, setShown] = useState(0)
   const [typing, setTyping] = useState(false)
@@ -253,50 +246,69 @@ export default function ChatbotCanvas({
       transition={{ duration: 0.4, ease: 'easeInOut' }}
       aria-hidden="true"
     >
-      {/* Browser Safari — latar belakang, di belakang widget chat.
-          Menunjukkan chatbot sebagai bagian dari situs. */}
-      <div className="cb-browser">
-        <SafariWindow tabs={tabs} />
-      </div>
-
-      {/* Widget chat — melayang di atas browser. */}
-      <div className="cb-widget">
-        <div className="cb-head">
-          <span className="cb-dots">
+      {/* Browser statis (tanpa iframe): hero sederhana + widget chat
+          di pojok kanan bawah viewport. */}
+      <div className="cb-browser" aria-hidden="true">
+        <div className="cb-br-bar">
+          <span className="cb-br-dots">
             <span></span><span></span><span></span>
           </span>
-          <span className="cb-head-label">Asisten · online</span>
+          <span className="cb-br-url">studio-mifdlal.com</span>
         </div>
-        <div className="cb-widget-body">
-          {!showMirror && (
-            <>
-              <span className="cb-skel cb-skel--short"></span>
-              <span className="cb-skel cb-skel--mid"></span>
-              <span className="cb-skel cb-skel--long"></span>
-            </>
-          )}
-          {showMirror && (
-            <motion.div
-              className="cb-mirror"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3 }}
-            >
-              <span className="cb-bubble cb-bubble--out cb-mini">{topic.msgs[0].text}</span>
-              <span className="cb-bubble cb-bubble--in cb-mini">{topic.msgs[1].text}</span>
-            </motion.div>
-          )}
-        </div>
-        <div className="cb-composer">
-          <span className="cb-composer-field">Tulis pesan</span>
-          <span className="cb-send">↑</span>
-        </div>
-        {showMirror && (
-          <div className="cb-sync-note">
-            Lanjut di aplikasi →
+        <div className="cb-br-view">
+          <div className="cb-br-nav">
+            <span className="cb-br-logo">M</span>
+            <span className="cb-br-links">
+              <span>Layanan</span>
+              <span>Proyek</span>
+            </span>
           </div>
-        )}
+          <div className="cb-br-hero">
+            <span className="cb-br-kicker">Studio web + otomatisasi AI</span>
+            <span className="cb-br-h1">Website yang bekerja, bukan cuma tampil.</span>
+            <span className="cb-br-sub">Asisten menjawab pelanggan 24 jam, tanpa Anda ribut.</span>
+            <span className="cb-br-cta">Mulai proyek</span>
+          </div>
+
+          {/* Widget chat — pojok kanan bawah viewport browser */}
+          <div className="cb-widget">
+            <div className="cb-head">
+              <span className="cb-dots">
+                <span></span><span></span><span></span>
+              </span>
+              <span className="cb-head-label">Asisten · online</span>
+            </div>
+            <div className="cb-widget-body">
+              {!showMirror && (
+                <>
+                  <span className="cb-skel cb-skel--short"></span>
+                  <span className="cb-skel cb-skel--mid"></span>
+                  <span className="cb-skel cb-skel--long"></span>
+                </>
+              )}
+              {showMirror && (
+                <motion.div
+                  className="cb-mirror"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <span className="cb-bubble cb-bubble--out cb-mini">{topic.msgs[0].text}</span>
+                  <span className="cb-bubble cb-bubble--in cb-mini">{topic.msgs[1].text}</span>
+                </motion.div>
+              )}
+            </div>
+            <div className="cb-composer">
+              <span className="cb-composer-field">Tulis pesan</span>
+              <span className="cb-send">↑</span>
+            </div>
+            {showMirror && (
+              <div className="cb-sync-note">Lanjut di aplikasi →</div>
+            )}
+          </div>
+        </div>
       </div>
+
       {/* Phone — depan kanan, mockup PNG iPhone 18 Pro Max (962x1978) */}
       <div className="cb-phone">
         <img
