@@ -104,7 +104,7 @@ export const services = [
    Tambah/ubah URL di sini; domain baru juga wajib didaftarkan di
    Content-Security-Policy (frame-src) pada public/_headers. */
 export const showcaseSites = [
-  { label: 'Lokal Logistics', url: 'https://lokalogistics.co.id/' },
+  { label: 'Loka Logistics', url: 'https://lokalogistics.co.id/' },
   { label: 'Slot 02', url: '' },
   { label: 'Slot 03', url: '' },
 ] as const
