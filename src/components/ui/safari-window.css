@@ -208,14 +208,6 @@ body.is-moving-safari .safari__tablist {
   color: var(--color-ink);
 }
 
-.safari__tab-favicon {
-  flex: 0 0 auto;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--ink-70);
-}
-
 .safari__tab-label {
   flex: 1 1 auto;
   min-width: 0;
