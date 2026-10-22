@@ -16,6 +16,15 @@
   box-shadow: var(--shadow-wf-tile);
   overflow: hidden;
   z-index: var(--z-safari);
+  /* Animasi maximize/restore (double-click header). Dimatikan saat drag
+     atau resize supaya gerakan pointer tetap 1:1 tanpa lag. */
+  transition: left var(--dur-base) var(--ease), top var(--dur-base) var(--ease),
+    width var(--dur-base) var(--ease), height var(--dur-base) var(--ease);
+}
+
+body.is-moving-safari .safari,
+body.is-resizing-safari .safari {
+  transition: none;
 }
 
 /* ---------- baris 1: toolbar ---------- */

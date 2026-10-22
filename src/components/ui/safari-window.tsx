@@ -268,6 +268,34 @@ export default function SafariWindow({
     document.body.classList.add('is-resizing-safari');
   };
 
+  // Double-click header = toggle maximize / restore (perilaku title bar OS).
+  //   ukuran default        -> maximize penuh canvas
+  //   maximize / sudah diubah-> kembali ke default 90% x 80%, rata tengah
+  const toggleZoom = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    if (target.closest('button') || target.closest('.safari__dot')) return;
+    const host = rootRef.current?.closest('.service-frame') as HTMLElement | null;
+    if (!host || !rect) return;
+    const maxW = host.clientWidth;
+    const maxH = host.clientHeight;
+    if (maxW <= 0 || maxH <= 0) return;
+
+    const defW = Math.max(MIN_W, Math.min(maxW - 16, Math.round(maxW * 0.9)));
+    const defH = Math.max(MIN_H, Math.min(maxH - 16, Math.round(maxH * 0.8)));
+    const isDefault = rect.w === defW && rect.h === defH;
+
+    if (isDefault) {
+      setRect({ x: 0, y: 0, w: maxW, h: maxH });
+    } else {
+      setRect({
+        x: Math.round((maxW - defW) / 2),
+        y: Math.round((maxH - defH) / 2),
+        w: defW,
+        h: defH,
+      });
+    }
+  };
+
   const current = tabs[active];
 
   // Safari menampilkan domain di smart search field, bukan URL penuh.
@@ -291,7 +319,7 @@ export default function SafariWindow({
       }
     >
       {/* Baris 1 — toolbar Safari macOS */}
-      <div className="safari__toolbar" onPointerDown={startMove}>
+      <div className="safari__toolbar" onPointerDown={startMove} onDoubleClick={toggleZoom}>
         <div className="safari__traffic" aria-hidden="true">
           <span className="safari__dot safari__dot--close" />
           <span className="safari__dot safari__dot--min" />
@@ -388,6 +416,7 @@ export default function SafariWindow({
         role="tablist"
         aria-label="Showcase website"
         onPointerDown={startMove}
+        onDoubleClick={toggleZoom}
       >
         {tabs.map((t, i) => (
           <button
