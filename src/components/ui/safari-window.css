@@ -167,18 +167,19 @@ body.is-moving-safari .safari__tablist {
   cursor: grabbing;
 }
 
-/* Tab kotak sempurna: radius 0, padding 0 di keempat sisi. Label
-   dipusatkan lewat flex, bukan padding. */
+/* Tab kotak sempurna: radius 0. Padding horizontal untuk teks,
+   ditambah favicon dot di kiri dan tombol close di kanan. */
 .safari__tab {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  gap: 7px;
   flex: 0 0 auto;
-  min-width: 96px;
-  max-width: 160px;
+  min-width: 124px;
+  max-width: 184px;
   height: 100%;
   margin: 0;
-  padding: 0;
+  padding: 0 8px 0 10px;
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -207,9 +208,46 @@ body.is-moving-safari .safari__tablist {
   color: var(--color-ink);
 }
 
+.safari__tab-favicon {
+  flex: 0 0 auto;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ink-70);
+}
+
 .safari__tab-label {
+  flex: 1 1 auto;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-align: left;
+}
+
+/* Tombol close — affordance visual seperti browser umum */
+.safari__tab-x {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 14px;
+  height: 14px;
+  margin-left: auto;
+  opacity: 0.45;
+}
+
+.safari__tab-x svg {
+  width: 8px;
+  height: 8px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.safari__tab:hover .safari__tab-x,
+.safari__tab.is-active .safari__tab-x {
+  opacity: 0.8;
 }
 
 .safari__tab:focus-visible {

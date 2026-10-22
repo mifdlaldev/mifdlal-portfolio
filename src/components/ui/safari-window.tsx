@@ -310,7 +310,14 @@ export default function SafariWindow({
             className={`safari__tab${i === active ? ' is-active' : ''}`}
             onClick={() => setActive(i)}
           >
+            <span className="safari__tab-favicon" aria-hidden="true" />
             <span className="safari__tab-label">{t.label}</span>
+            <span className="safari__tab-x" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M6 6l12 12" />
+                <path d="M18 6L6 18" />
+              </svg>
+            </span>
           </button>
         ))}
       </div>
