@@ -256,6 +256,10 @@ import { AsciiArtStatic } from './ui/ascii-art'
   .service-frame {
     position: relative;
     aspect-ratio: 16 / 10;
+    /* Catatan: TIDAK ada overflow:hidden. Pergeseran parallax dibatasi
+       5% tinggi frame, jauh di bawah headroom scale 1.12 (±6%), jadi
+       tidak ada tepi kosong yang bocor. overflow:hidden akan memotong
+       bayangan window Safari dan handle resize di pinggir. */
   }
 
   .service-photo {
@@ -267,6 +271,12 @@ import { AsciiArtStatic } from './ui/ascii-art'
     z-index: 0;
     /* Sedikit diturunkan saturasinya supaya lukisan masuk palet kertas-tinta. */
     filter: saturate(0.9) contrast(1.02);
+    /* Parallax: gambar bergerak melawan arah scroll. Disesuaikan lewat
+       variabel --parallax (px, negatif = naik) dari script Services.astro.
+       scale 1.12 memberi headroom ±6% agar pergeseran tidak menampakkan
+       tepi kosong. */
+    transform: translate3d(0, var(--parallax, 0px), 0) scale(1.12);
+    will-change: transform;
   }
 
   /* Overlay biru elektrik — menyatukan earth tone foto dengan palet situs.
@@ -392,4 +402,41 @@ import { AsciiArtStatic } from './ui/ascii-art'
     },
     true
   );
+
+  /* Parallax foto canvas layanan.
+     Foto bergeser naik saat halaman di-scroll ke bawah (gerak melawan
+     scroll). Pergeseran dibatasi 5% tinggi frame supaya tidak pernah
+     menampakkan tepi kosong — foto sudah diskalakan 1.12 di CSS sehingga
+     ada headroom ±6%.
+     Dimatikan saat prefers-reduced-motion: reduce. */
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (!reduceMotion.matches) {
+    const photos = Array.from(document.querySelectorAll<HTMLElement>('.service-photo'));
+    const SHIFT_RATIO = 0.05; // 5% tinggi frame, di dalam headroom scale 1.12
+    let ticking = false;
+
+    const update = () => {
+      ticking = false;
+      const vh = window.innerHeight;
+      for (const el of photos) {
+        const rect = el.getBoundingClientRect();
+        if (rect.bottom < -vh * 0.2 || rect.top > vh * 1.2) continue;
+        // p: 0 = frame baru masuk dari bawah, 1 = frame hampir keluar di atas
+        const p = (vh - rect.top) / (vh + rect.height);
+        const maxShift = rect.height * SHIFT_RATIO;
+        const shift = (0.5 - p) * 2 * maxShift;
+        el.style.setProperty('--parallax', `${shift.toFixed(2)}px`);
+      }
+    };
+
+    const request = () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener('scroll', request, { passive: true });
+    window.addEventListener('resize', request, { passive: true });
+  }
 </script>

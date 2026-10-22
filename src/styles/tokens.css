@@ -105,6 +105,10 @@
   --dur-fast: 150ms;
   --dur-base: 180ms;
   --dur-slow: 200ms;
+  /* --parallax: offset vertikal px untuk foto canvas (runtime, di-set JS
+     parallax Services.astro). 0px = diam. Selalu ada nilai default agar
+     checker tidak menolak var() yang belum di-assign. */
+  --parallax: 0px;
   /* Masuk lebih panjang dari keluar: elemen yang datang butuh waktu untuk
      terbaca, elemen yang pergi tidak boleh menahan pandangan. */
   --dur-enter: 260ms;
