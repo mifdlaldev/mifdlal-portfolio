@@ -105,7 +105,7 @@ export const services = [
    Content-Security-Policy (frame-src) pada public/_headers. */
 export const showcaseSites = [
   { label: 'Loka Logistics', url: 'https://lokalogistics.co.id/' },
-  { label: 'Slot 02', url: '' },
+  { label: 'Mahoni House', url: 'https://mahoni-house.vercel.app/en' },
   { label: 'Slot 03', url: '' },
 ] as const
 
