@@ -341,7 +341,19 @@ export default function ChatbotCanvas() {
             </span>
           </div>
 
-          {/* Wallpaper HP — hanya area chat, mulai di bawah status bar */}
+          {/* Header kontak ala WhatsApp: avatar + nama + status,
+              background putih, tepat di bawah status bar */}
+          <div className="cb-contact" aria-hidden="true">
+            <span className="cb-contact-avatar">R</span>
+            <span className="cb-contact-info">
+              <span className="cb-contact-name">Rifqa</span>
+              <span className="cb-contact-status">
+                {typing ? 'Mengetik…' : 'online'}
+              </span>
+            </span>
+          </div>
+
+          {/* Wallpaper HP — hanya area chat, mulai di bawah header */}
           <span className="cb-wall" aria-hidden="true"></span>
 
           {/* Area chat: scrollable, auto-scroll ke pesan terbaru */}
