@@ -54,7 +54,7 @@ body.is-moving-safari .safari__toolbar {
   height: 8px;
   border-radius: 50%;
   display: block;
-  cursor: not-allowed;
+  cursor: default;
 }
 
 .safari__dot--close { background: var(--ink-900); }
@@ -84,7 +84,7 @@ body.is-moving-safari .safari__toolbar {
   border-radius: 50%;
   background: transparent;
   color: var(--ink-70);
-  cursor: not-allowed;
+  cursor: default;
   opacity: 0.85;
 }
 
