@@ -150,8 +150,39 @@ body.is-moving-safari .safari__toolbar {
 
 .safari__reload {
   flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
   margin-left: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
   opacity: 0.6;
+  transition: opacity var(--dur-fast) var(--ease);
+}
+
+.safari__reload:hover {
+  opacity: 1;
+}
+
+.safari__reload:focus-visible {
+  outline: 2px solid var(--electric);
+  outline-offset: 1px;
+}
+
+.safari__reload svg {
+  width: 13px;
+  height: 13px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 /* ---------- tab: baris sendiri di bawah toolbar ---------- */

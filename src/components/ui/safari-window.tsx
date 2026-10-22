@@ -58,6 +58,9 @@ export default function SafariWindow({
   const rootRef = useRef<HTMLDivElement>(null);
   const [rect, setRect] = useState<Rect | null>(null);
   const [active, setActive] = useState(0);
+  // Kenaikkan nilai ini memaksa iframe di-mount ulang = reload halaman.
+  const [reloadKey, setReloadKey] = useState(0);
+  const reload = () => setReloadKey((k) => k + 1);
 
   // Drag pindah posisi window (dari toolbar), clamp ke batas canvas.
   const moveRef = useRef<
@@ -373,10 +376,19 @@ export default function SafariWindow({
             <path d="M8 11V8a4 4 0 0 1 8 0v3" />
           </svg>
           <span className="safari__url">{displayUrl}</span>
-          <svg className="safari__reload" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M20 12a8 8 0 1 1-2.3-5.7" />
-            <path d="M20 4v5h-5" />
-          </svg>
+          <button
+            type="button"
+            className="safari__reload"
+            title="Muat ulang"
+            aria-label="Muat ulang halaman"
+            onPointerDown={(e) => e.stopPropagation()}
+            onClick={reload}
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20 12a8 8 0 1 1-2.3-5.7" />
+              <path d="M20 4v5h-5" />
+            </svg>
+          </button>
         </div>
 
         <div className="safari__tools safari__tools--end">
@@ -444,7 +456,7 @@ export default function SafariWindow({
         {current.url ? (
           <div className="safari__stage">
             <iframe
-              key={current.url}
+              key={`${current.url}#${reloadKey}`}
               className="safari__frame"
               src={current.url}
               title={`Pratinjau ${current.label}`}
