@@ -27,7 +27,9 @@
   height: 38px;
   padding: 0 10px;
   background: var(--safari-chrome);
-  border-bottom: 1px solid var(--ink-16);
+  /* Tanpa border-bottom: toolbar + tab bar dibaca sebagai satu
+     permukaan chrome, seperti Safari macOS. Garis pemisah ke konten
+     digambar oleh tab bar (inset shadow). */
   flex: 0 0 auto;
   cursor: grab;
   touch-action: none;
