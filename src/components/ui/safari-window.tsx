@@ -38,18 +38,17 @@ const DIRS: readonly Dir[] = ['n', 's', 'e', 'w', 'ne', 'nw', 'se', 'sw'];
 const MIN_W = 240;
 const MIN_H = 180;
 
-/* Resolusi virtual tetap: 1024×768 = laptop klasik terkecil.
-   Kenapa 1024, bukan 1280 atau adaptif:
-   - Situs showcase punya breakpoint @media (min-width:992px) untuk
-     layout desktop penuh (nav horizontal, hero proporsional). Di bawah
-     991px nav berubah jadi tombol Menu + hamburger dan hero melar
-     sampai tepi — bukan tampilan laptop.
-   - 1280 membuat skala jatuh ke ~0.39 di window showcase: teks 16px
-     tampil ~6px, tidak terbaca.
-   - 1024 adalah titik seimbang: tetap di atas 992 (layout laptop asli)
-     dan hanya 20% lebih lebar dari 800, jadi teks tidak sekecil 1280.
+/* Resolusi virtual tetap 1200px.
+   Kenapa 1200, bukan 1024 atau 1280:
+   - Breakpoint nav situs showcase BUKAN 992px. Di main.css:
+       @media (max-width:1100px){ .site-nav{display:none} .nav-toggle{display:inline-flex} }
+     Artinya di 1024px (percobaan sebelumnya) nav horizontal disembunyikan
+     dan diganti tombol "Menu" + hamburger — tampilan tablet, bukan laptop.
+   - 1200 > 1100 sehingga nav horizontal tampil, container 1180px aktif,
+     dan grid desktop penuh (bukan single-column).
+   - 1280 tidak dipakai: skalanya jatuh terlalu kecil di window showcase.
    Konsekuensi: skala tetap mengikuti lebar window (fit-to-width). */
-const VIRTUAL_W = 1024; // laptop klasik terkecil (1024×768), di atas breakpoint 992px situs
+const VIRTUAL_W = 1200; // desktop penuh: di atas breakpoint 1100px situs (nav horizontal)
 
 export default function SafariWindow({
   tabs,
