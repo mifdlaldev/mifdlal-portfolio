@@ -41,6 +41,14 @@
 
   btn.addEventListener('click', (event) => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Lenis aktif: pakai jalur scroll yang sama supaya tidak menabrak
+    // smoothing halaman (native scrollTo + Lenis = dua kontrol berebut).
+    const lenis = window.__lenis;
+    if (lenis) {
+      event.preventDefault();
+      lenis.scrollTo(0, { immediate: reduce });
+      return;
+    }
     if (reduce || !('scrollBehavior' in document.documentElement.style)) return;
     event.preventDefault();
     window.scrollTo({ top: 0, behavior: 'smooth' });

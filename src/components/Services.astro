@@ -434,7 +434,10 @@ import { AsciiArtStatic } from './ui/ascii-art'
   if (!reduceMotion.matches) {
     const clips = Array.from(document.querySelectorAll<HTMLElement>('.service-photo-clip'));
     const SHIFT_MAX = 0.2; // ±20% tinggi frame (pas dengan headroom foto 140%)
-    const LERP = 0.14; // penghalusan per frame (~60fps)
+    // LERP 1 (tanpa penghalusan): Lenis sudah me-smoothing input scroll,
+    // jadi parallax mengikuti scroll yang sudah halus 1:1. Menambah lerp di
+    // sini berarti dua lapis easing -> gerakan terasa lembab/mushy.
+    const LERP = 1;
     const current = new Map<HTMLElement, number>();
     let running = false;
 

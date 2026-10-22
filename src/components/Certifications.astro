@@ -93,7 +93,7 @@ const certAttrs = (c: (typeof featured)[number]) => ({
   </div>
 
   <dialog class="cert-dialog" id="cert-dialog" aria-labelledby="cert-dialog-title">
-    <div class="cert-dialog-box">
+    <div class="cert-dialog-box" data-lenis-prevent>
       <div class="cert-dialog-head">
         <p class="cert-dialog-issuer" data-dialog-issuer></p>
         <h3 class="cert-dialog-title" id="cert-dialog-title" tabindex="-1" data-dialog-title></h3>
@@ -115,7 +115,7 @@ const certAttrs = (c: (typeof featured)[number]) => ({
   </dialog>
 
   <dialog class="cert-list" id="cert-list" aria-labelledby="cert-list-title">
-    <div class="cert-list-box">
+    <div class="cert-list-box" data-lenis-prevent>
       <div class="cert-list-head">
         <p class="cert-list-fig fig-label">fig. 07b · daftar lengkap</p>
         <h3 class="cert-list-title" id="cert-list-title" tabindex="-1">
