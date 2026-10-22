@@ -7,6 +7,7 @@
 // 6 pesan; area chat scrollable + auto-scroll ke pesan terbaru.
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'motion/react'
+import SafariWindow from './ui/safari-window.tsx'
 import './chatbot-canvas.css'
 
 type Msg = { from: 'user' | 'bot'; text: string }
@@ -157,7 +158,13 @@ function buildSchedule(topic: Topic): { events: Event[]; total: number } {
   return { events, total: t }
 }
 
-export default function ChatbotCanvas() {
+type Tab = { label: string; url: string }
+
+export default function ChatbotCanvas({
+  tabs,
+}: {
+  tabs: readonly Tab[]
+}) {
   const [cycle, setCycle] = useState(0)
   const [shown, setShown] = useState(0)
   const [typing, setTyping] = useState(false)
@@ -246,8 +253,13 @@ export default function ChatbotCanvas() {
       transition={{ duration: 0.4, ease: 'easeInOut' }}
       aria-hidden="true"
     >
-      {/* Widget web — belakang kiri. Skeleton saat awal, lalu terisi
-          percakapan yang sama dengan phone (bukti satu basis data). */}
+      {/* Browser Safari — latar belakang, di belakang widget chat.
+          Menunjukkan chatbot sebagai bagian dari situs. */}
+      <div className="cb-browser">
+        <SafariWindow tabs={tabs} />
+      </div>
+
+      {/* Widget chat — melayang di atas browser. */}
       <div className="cb-widget">
         <div className="cb-head">
           <span className="cb-dots">
@@ -285,11 +297,6 @@ export default function ChatbotCanvas() {
           </div>
         )}
       </div>
-      <div className={'cb-sync' + (showMirror ? ' is-live' : '')}>
-        <span className="cb-sync-line"></span>
-        <span className="cb-sync-label">satu basis data</span>
-      </div>
-
       {/* Phone — depan kanan, mockup PNG iPhone 18 Pro Max (962x1978) */}
       <div className="cb-phone">
         <img

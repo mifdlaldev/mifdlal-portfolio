@@ -11,13 +11,25 @@
   pointer-events: none;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   padding: 4% 4%;
+}
+
+/* Browser Safari di latar belakang. isolation: isolate mengurung
+   z-index internal .safari (--z-safari) supaya widget & phone bisa
+   berada di atasnya. */
+.cb-browser {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-content);
+  isolation: isolate;
 }
 
 /* ── Widget web — kiri ────────────────────────────────────── */
 .cb-widget {
   flex: none;
+  position: relative;
+  z-index: var(--z-raise);
   width: clamp(150px, 36%, 224px);
   border-radius: var(--radius-lg);
   border: 1px solid var(--ink-16);
@@ -148,73 +160,6 @@
 }
 
 /* ── Garis sinkron ────────────────────────────────────────── */
-.cb-sync {
-  flex: 1 1 auto;
-  position: relative;
-  min-width: 40px;
-  max-width: 170px;
-  display: flex;
-  align-items: center;
-}
-
-.cb-sync-line {
-  flex: 1;
-  position: relative;
-  margin: 0 2px;
-  height: 1px;
-  border-top: 1px dashed color-mix(in oklab, var(--paper) 55%, transparent);
-  transition: border-color var(--dur-slow) var(--ease);
-}
-
-/* Titik junction di ujung kiri, panah di ujung kanan (arah ke phone). */
-.cb-sync-line::before {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: 0;
-  width: 4px;
-  height: 4px;
-  background: var(--paper);
-}
-
-.cb-sync-line::after {
-  content: '';
-  position: absolute;
-  top: -3px;
-  right: -1px;
-  width: 0;
-  height: 0;
-  border-left: 5px solid var(--paper);
-  border-top: 3.5px solid transparent;
-  border-bottom: 3.5px solid transparent;
-}
-
-/* Garis menyala lemon saat percakapan tersinkron — kontras di atas foto. */
-.cb-sync.is-live .cb-sync-line {
-  border-color: var(--lemon);
-}
-
-.cb-sync.is-live .cb-sync-line::before {
-  background: var(--lemon);
-}
-
-.cb-sync.is-live .cb-sync-line::after {
-  border-left-color: var(--lemon);
-}
-
-.cb-sync-label {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: var(--font-mono);
-  font-size: var(--text-cap);
-  letter-spacing: var(--tracking-caps-tight);
-  color: var(--color-ink);
-  white-space: nowrap;
-  background: var(--paper);
-  padding: 1px 5px;
-}
-
 /* ── iPhone — kanan ───────────────────────────────────────────
    Mockup PNG 962 x 1978 (apple-iphone-18-pro-max-2026device.png).
    Layar opaque di PNG ditutup layer konten paper; island digambar
@@ -222,6 +167,7 @@
 .cb-phone {
   flex: none;
   position: relative;
+  z-index: var(--z-band);
   height: clamp(190px, 96%, 330px);
   aspect-ratio: 962 / 1978;
   filter: drop-shadow(0 12px 22px color-mix(in oklab, var(--ink-900) 30%, transparent));
@@ -567,11 +513,6 @@
     height: clamp(180px, 62%, 280px);
   }
 
-  .cb-sync {
-    min-width: 26px;
-  }
-
-  .cb-sync-label,
   .cb-chips {
     display: none;
   }
