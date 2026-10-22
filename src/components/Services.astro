@@ -374,3 +374,22 @@ import { AsciiArtStatic } from './ui/ascii-art'
     }
   }
 </style>
+
+<!-- Larangan klik kanan (context menu) pada ketiga canvas layanan.
+     Event listener di fase capture: diblokir sebelum elemen lain
+     menanganinya. Cakupan: klik kanan dan long-press di seluruh area
+     .service-frame beserta turunannya (foto, ASCII, tiles, window Safari,
+     iframe). Menu sistem (Inspect Element, View Page Source, dll.) tidak
+     pernah muncul di area canvas. -->
+<script>
+  document.addEventListener(
+    'contextmenu',
+    (e) => {
+      const frame = (e.target as HTMLElement | null)?.closest('.service-frame');
+      if (!frame) return;
+      e.preventDefault();
+      e.stopPropagation();
+    },
+    true
+  );
+</script>
