@@ -22,8 +22,9 @@ import './safari-window.css';
  * - Konten tab = iframe asli ke situs (bukan screenshot). Situs yang
  *   mengirim X-Frame-Options/CSP frame-ancestors akan tampil kosong —
  *   daftarkan domain yang diizinkan di public/_headers (frame-src).
- * - iframe dirender pada lebar virtual 1280px (layar laptop) lalu
- *   diskalakan turun — layout desktop 1:1, bukan layout sempit.
+ * - iframe dirender pada lebar virtual adaptif [800-1280]px dengan
+ *   zoom ~70% — layout desktop tetap utuh (di atas breakpoint 720px
+ *   situs), teks terbaca, bukan layout sempit yang membuat teks membesar.
  */
 
 type ShowcaseTab = { label: string; url: string };
@@ -32,11 +33,18 @@ type Rect = { x: number; y: number; w: number; h: number };
 const MIN_W = 240;
 const MIN_H = 180;
 
-/* Lebar viewport virtual. 1280 = resolusi laptop terkecil yang umum
-   (1280×720); situs dirender 1:1 pada lebar ini lalu diskalakan turun
-   agar muat window. Hasilnya layout desktop seperti di laptop, bukan
-   layout sempit yang membuat teks hero membesar. */
-const VIRTUAL_W = 1280;
+/* Zoom tetap ~70%: iframe selalu dirender pada ukuran yang membuat
+   teks terbaca, tanpa jatuh ke layout mobile.
+   - virtualW = lebar viewport / 0.7, di-clamp [800, 1280]
+   - 800 = batas bawah aman: di atas breakpoint mobile (720px) situs,
+     jadi layout desktop (header horizontal, hero) tetap utuh
+   - 1280 = cap; layar di atas ini tidak diperbesar lagi (hindari blur)
+   - Efek: teks 16px tampil ~10-11px pada window showcase, tidak
+     terlalu besar (layout tidak terpaksa sempit) dan tidak terlalu
+     kecil (tidak terlihat seperti teks 6px pada virtual 1280). */
+const MIN_VIRTUAL_W = 800;
+const MAX_VIRTUAL_W = 1280;
+const TARGET_ZOOM = 0.7;
 
 export default function SafariWindow({
   tabs,
@@ -119,8 +127,14 @@ export default function SafariWindow({
     return () => ro.disconnect();
   }, []);
 
-  // Skala: lebar virtual 1280px diskalakan ke lebar viewport nyata.
-  const scale = vp.w > 0 ? vp.w / VIRTUAL_W : 1;
+  // Lebar virtual adaptif: jaga zoom ~70%, clamp [800, 1280].
+  const virtualW =
+    vp.w > 0
+      ? Math.round(
+          Math.min(MAX_VIRTUAL_W, Math.max(MIN_VIRTUAL_W, vp.w / TARGET_ZOOM)),
+        )
+      : MAX_VIRTUAL_W;
+  const scale = vp.w > 0 ? vp.w / virtualW : 1;
   // Tinggi virtual: tinggi viewport dibagi skala -> iframe memenuhi area
   // konten, sama seperti mengubah tinggi window browser laptop.
   const virtualH = scale > 0 ? Math.round(vp.h / scale) : 0;
@@ -336,7 +350,7 @@ export default function SafariWindow({
               referrerPolicy="no-referrer-when-downgrade"
               sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
               style={{
-                width: `${VIRTUAL_W}px`,
+                width: `${virtualW}px`,
                 height: `${virtualH}px`,
                 transform: `scale(${scale})`,
               }}
