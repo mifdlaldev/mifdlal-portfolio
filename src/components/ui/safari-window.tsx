@@ -263,32 +263,6 @@ export default function SafariWindow({
           </svg>
         </div>
 
-        {/* Tab — sebaris dengan toolbar, di kanan address bar */}
-        <div
-          className="safari__tablist"
-          role="tablist"
-          aria-label="Showcase website"
-        >
-          {tabs.map((t, i) => (
-            <button
-              key={`${t.label}-${i}`}
-              type="button"
-              role="tab"
-              aria-selected={i === active}
-              className={`safari__tab${i === active ? ' is-active' : ''}`}
-              onClick={() => setActive(i)}
-            >
-              <span className="safari__tab-label">{t.label}</span>
-              <span className="safari__tab-x" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path d="M6 6l12 12" />
-                  <path d="M18 6L6 18" />
-                </svg>
-              </span>
-            </button>
-          ))}
-        </div>
-
         <div className="safari__tools safari__tools--end">
           {/* New tab */}
           <button
@@ -320,8 +294,29 @@ export default function SafariWindow({
         </div>
       </div>
 
+      {/* Baris 2 — tab: kotak sempurna, tanpa padding, di bawah toolbar */}
+      <div
+        className="safari__tablist"
+        role="tablist"
+        aria-label="Showcase website"
+        onPointerDown={startMove}
+      >
+        {tabs.map((t, i) => (
+          <button
+            key={`${t.label}-${i}`}
+            type="button"
+            role="tab"
+            aria-selected={i === active}
+            className={`safari__tab${i === active ? ' is-active' : ''}`}
+            onClick={() => setActive(i)}
+          >
+            <span className="safari__tab-label">{t.label}</span>
+          </button>
+        ))}
+      </div>
+
       {/* Baris 3 — konten: iframe asli ke situs showcase, dirender pada
-          lebar laptop (1280px) lalu diskalakan agar muat window. */}
+          lebar laptop (1024px) lalu diskalakan agar muat window. */}
       <div className="safari__viewport" ref={viewportRef}>
         {current.url ? (
           <div className="safari__stage">

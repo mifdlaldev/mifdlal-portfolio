@@ -27,9 +27,7 @@
   height: 42px;
   padding: 0 8px 0 10px;
   background: var(--safari-chrome);
-  /* Garis pemisah ke konten digambar sebagai inset shadow (bukan border):
-     tab aktif menurunkan margin 1px untuk menutupinya -> menyatu. */
-  box-shadow: inset 0 -1px 0 var(--ink-16);
+  /* Tanpa border: garis pemisah ditangani baris tab di bawahnya. */
   flex: 0 0 auto;
   cursor: grab;
   touch-action: none;
@@ -146,16 +144,20 @@ body.is-moving-safari .safari__toolbar {
   opacity: 0.6;
 }
 
-/* ---------- tab: sebaris dengan toolbar ---------- */
+/* ---------- tab: baris sendiri di bawah toolbar ---------- */
 
 .safari__tablist {
   display: flex;
-  align-items: flex-end;
-  align-self: stretch;
-  gap: 2px;
-  min-width: 0;
-  /* overflow WAJIB visible: tab aktif memakai margin-bottom -1px untuk
-     menutupi garis bawah toolbar; scroll container akan memotongnya. */
+  align-items: stretch;
+  gap: 0;
+  height: 30px;
+  padding: 0;
+  background: var(--safari-chrome);
+  /* Garis pemisah ke konten sebagai inset shadow; tab aktif menutupinya. */
+  box-shadow: inset 0 -1px 0 var(--ink-16);
+  flex: 0 0 auto;
+  cursor: grab;
+  touch-action: none;
   overflow: visible;
   flex-wrap: nowrap;
 }
@@ -164,68 +166,49 @@ body.is-moving-safari .safari__tablist {
   cursor: grabbing;
 }
 
-/* Tab kotak: sudut atas membulat, bawah siku, menempel ke garis bawah
-   toolbar. Tab aktif turun 1px menutupi garis (inset shadow) tepat
-   selebar dirinya -> menyatu dengan konten di bawahnya. */
+/* Tab kotak sempurna: radius 0, padding 0 di keempat sisi. Label
+   dipusatkan lewat flex, bukan padding. */
 .safari__tab {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  flex: 0 1 auto;
-  min-width: 0;
-  max-width: 132px;
-  height: 30px;
-  margin-bottom: 1px; /* garis toolbar tetap terlihat di bawah tab non-aktif */
-  padding: 0 6px 0 10px;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-width: 96px;
+  max-width: 160px;
+  height: 100%;
+  margin: 0;
+  padding: 0;
   border: 0;
-  border-radius: 6px 6px 0 0;
-  background: var(--ink-07);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: inset -1px 0 0 var(--ink-16);
   color: var(--color-muted);
   font-family: var(--font-mono);
   font-size: var(--text-cap);
   letter-spacing: var(--tracking-caps-tight);
   line-height: var(--leading-ui);
   white-space: nowrap;
+  overflow: hidden;
   cursor: pointer;
   transition: background var(--dur-fast) var(--ease),
     color var(--dur-fast) var(--ease);
 }
 
 .safari__tab:hover {
-  background: var(--ink-16);
+  background: var(--ink-07);
   color: var(--color-ink);
 }
 
-/* Tab aktif: turun 1px -> latar kertas menutup garis bawah toolbar. */
+/* Tab aktif: kertas penuh setinggi baris + menutup garis bawah baris. */
 .safari__tab.is-active {
-  margin-bottom: -1px;
   background: var(--paper);
+  box-shadow: inset -1px 0 0 var(--ink-16);
   color: var(--color-ink);
 }
 
 .safari__tab-label {
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-/* Tombol tutup tab — hanya affordance, tidak ada handler */
-.safari__tab-x {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 auto;
-  width: 12px;
-  height: 12px;
-  opacity: 0.5;
-}
-
-.safari__tab-x svg {
-  width: 8px;
-  height: 8px;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 2.2;
-  stroke-linecap: round;
 }
 
 .safari__tab:focus-visible {
