@@ -6,6 +6,7 @@ import ServiceBotIcon from './ServiceBotIcon'
 import ServiceWorkflowIcon from './ServiceWorkflowIcon'
 import WorkflowCanvas from './WorkflowCanvas.tsx'
 import SafariWindow from './ui/safari-window.tsx'
+import ChatbotCanvas from './ChatbotCanvas.tsx'
 import { AsciiArtStatic } from './ui/ascii-art'
 ---
 
@@ -81,6 +82,11 @@ import { AsciiArtStatic } from './ui/ascii-art'
                   lewat iframe. Resize bebas dari 8 pinggiran; tombol window
                   semua dinonaktifkan. Mengambang di atas foto + ASCII. */}
               {s.no === '01' && <SafariWindow client:visible tabs={showcaseSites} />}
+
+              {/* Ilustrasi chatbot — hanya di layanan 02. Satu percakapan
+                  tampil di phone (depan) dan widget web (belakang), disatukan
+                  garis putus-putus "satu basis data". Non-interaktif. */}
+              {s.no === '02' && <ChatbotCanvas client:visible />}
 
               {/* Penanda sudut gambar teknik — sekarang sibling .service-photo
                   (z 3) agar di atas ASCII. */}

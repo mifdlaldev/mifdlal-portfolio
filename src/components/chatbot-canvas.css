@@ -1,0 +1,341 @@
+/* ChatbotCanvas — ilustrasi animasi layanan chatbot.
+   Semua warna/ukuran desain via token. Pointer-events: none (tontonan).
+   Di atas foto + ASCII layanan 02, di bawah corner mark (z-corner 3). */
+
+.cb-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-raise);
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* ── Widget web — belakang kiri ───────────────────────────── */
+.cb-widget {
+  position: absolute;
+  left: 3%;
+  top: 22%;
+  width: clamp(150px, 40%, 240px);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--ink-16);
+  background: color-mix(in oklab, var(--paper) 88%, transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: var(--shadow-wf-tile);
+  overflow: hidden;
+}
+
+.cb-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--ink-07);
+}
+
+.cb-dots {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.cb-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ink-16);
+}
+
+.cb-head-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-cap);
+  letter-spacing: var(--tracking-caps-loose, 0.04em);
+  color: var(--color-muted);
+}
+
+.cb-widget-body {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 64px;
+}
+
+/* Skeleton shimmer — satu keyframe, tiga delay (teknik standar). */
+.cb-skel {
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--ink-07) 0%,
+    var(--ink-16) 50%,
+    var(--ink-07) 100%
+  );
+  background-size: 200% 100%;
+  animation: cb-shimmer 1.8s ease-in-out infinite;
+}
+
+.cb-skel--short { width: 55%; }
+.cb-skel--mid { width: 80%; }
+.cb-skel--long { width: 65%; }
+
+.cb-skel:nth-child(2) { animation-delay: 0.12s; }
+.cb-skel:nth-child(3) { animation-delay: 0.24s; }
+
+/* Percakapan yang sama dengan phone — muncul saat fase mirror. */
+.cb-mirror {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cb-mini {
+  font-size: var(--text-cap);
+  padding: 4px 8px;
+  border-radius: 10px 10px 10px 3px;
+  line-height: var(--leading-ui);
+}
+
+/* ── Garis sinkron ────────────────────────────────────────── */
+.cb-sync {
+  position: absolute;
+  left: 42%;
+  top: 40%;
+  width: 30%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cb-sync-line {
+  flex: 1;
+  position: relative;
+  height: 1px;
+  border-top: 1px dashed color-mix(in oklab, var(--paper) 50%, transparent);
+  transition: border-color var(--dur-slow) var(--ease);
+}
+
+/* Titik junction di kedua ujung — bahasa gambar teknik. */
+.cb-sync-line::before,
+.cb-sync-line::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  width: 4px;
+  height: 4px;
+  background: var(--paper);
+}
+
+.cb-sync-line::before { left: 0; }
+.cb-sync-line::after { right: 0; }
+
+/* Garis menyala lemon saat percakapan tersinkron — kontras di atas foto. */
+.cb-sync.is-live .cb-sync-line {
+  border-color: var(--lemon);
+}
+
+.cb-sync-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-cap);
+  letter-spacing: var(--tracking-caps-tight);
+  color: var(--color-ink);
+  white-space: nowrap;
+  background: var(--paper);
+  padding: 1px 5px;
+}
+
+/* ── Phone — depan kanan ──────────────────────────────────── */
+.cb-phone {
+  position: absolute;
+  right: 6%;
+  top: 8%;
+  width: clamp(96px, 24%, 132px);
+  aspect-ratio: 9 / 19.5;
+  border-radius: 18px;
+  border: 1px solid var(--ink-16);
+  background: var(--paper);
+  box-shadow: var(--shadow-wf-tile);
+  padding: 8px 6px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow: hidden;
+}
+
+.cb-notch {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40%;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--ink-16);
+}
+
+.cb-screen {
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+/* ── Bubble ───────────────────────────────────────────────── */
+.cb-bubble {
+  max-width: 82%;
+  padding: 5px 8px;
+  font-size: var(--text-cap);
+  line-height: var(--leading-ui);
+  color: var(--color-ink);
+  border-radius: 12px 12px 12px 4px;
+}
+
+.cb-bubble--in {
+  background: var(--paper);
+  border: 1px solid var(--ink-07);
+}
+
+.cb-bubble--out {
+  align-self: flex-end;
+  background: color-mix(in oklab, var(--electric) 12%, var(--paper));
+  border: 1px solid color-mix(in oklab, var(--electric) 28%, transparent);
+  border-radius: 12px 12px 4px 12px;
+}
+
+.cb-time {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  color: var(--color-muted);
+  text-align: right;
+}
+
+/* ── Typing indicator: satu keyframe, tiga delay ──────────── */
+.cb-typing {
+  align-self: flex-start;
+  display: flex;
+  gap: 4px;
+  padding: 8px 10px;
+  border-radius: 12px 12px 12px 4px;
+  background: var(--paper);
+  border: 1px solid var(--ink-07);
+}
+
+.cb-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ink-16);
+  animation: cb-bounce 1.2s infinite ease-in-out;
+}
+
+.cb-dot:nth-child(2) { animation-delay: 0.18s; }
+.cb-dot:nth-child(3) { animation-delay: 0.36s; }
+
+@keyframes cb-bounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
+
+/* Caret streaming — kedip di ujung jawaban yang belum selesai. */
+.cb-caret {
+  display: inline-block;
+  width: 1px;
+  height: 10px;
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  background: var(--electric);
+  animation: cb-blink 1s steps(2) infinite;
+}
+
+@keyframes cb-blink {
+  50% { opacity: 0; }
+}
+
+/* ── Quick reply chips ────────────────────────────────────── */
+.cb-chips {
+  display: flex;
+  gap: 5px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+
+.cb-chip {
+  font-size: var(--text-cap);
+  line-height: var(--leading-ui);
+  padding: 3px 7px;
+  border-radius: 999px;
+  border: 1px solid var(--electric);
+  color: var(--electric);
+  transition: background-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+
+.cb-chip--active {
+  background: var(--electric);
+  color: var(--paper);
+}
+
+/* ── Handoff ──────────────────────────────────────────────── */
+.cb-handoff {
+  margin-top: auto;
+  padding-top: 6px;
+  border-top: 1px solid var(--ink-07);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-cap);
+  color: var(--color-muted);
+  line-height: var(--leading-ui);
+}
+
+.cb-monogram {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid var(--electric);
+  color: var(--electric);
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  font-weight: var(--weight-bold);
+}
+
+/* ── Reduced motion: hentikan animasi, tetap baca sebagai "menunggu" ── */
+@media (prefers-reduced-motion: reduce) {
+  .cb-dot,
+  .cb-caret,
+  .cb-skel {
+    animation: none;
+  }
+}
+
+/* ── Mobile: kanvas sempit, rapatkan dua perangkat ──────────
+   Label "satu basis data" disembunyikan; garis tetap ada sebagai
+   penghubung visual antara widget dan phone. */
+@media (max-width: 560px) {
+  .cb-widget {
+    left: 4%;
+    top: 20%;
+    width: 46%;
+  }
+
+  .cb-phone {
+    right: 5%;
+    top: 12%;
+    width: 30%;
+  }
+
+  .cb-sync {
+    left: 51%;
+    top: 44%;
+    width: 13%;
+  }
+
+  .cb-sync-label {
+    display: none;
+  }
+}
