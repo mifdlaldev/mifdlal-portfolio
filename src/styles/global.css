@@ -291,6 +291,41 @@ picture {
     --grid-gutter: var(--grid-gutter-mobile);
   }
 
+  /* Rail vertikal + node disembunyikan: hanya garis horizontal yang
+     tersisa, sesuai bahasa blueprint "cukup garis horizontal di layar
+     kecil". Sheet dalam bingkai jadi full-width (tanpa inset rail),
+     jadi konten tidak lagi menempel rail vertikal. */
+  .section {
+    background-image:
+      linear-gradient(var(--color-line), var(--color-line)),
+      linear-gradient(var(--color-line), var(--color-line)),
+      repeating-linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--color-ink) 16%, transparent) 0 2px,
+        transparent 2px 10px
+      ),
+      linear-gradient(var(--color-white), var(--color-white));
+    background-size:
+      100% 1px,
+      100% 1px,
+      100% var(--space-section),
+      100% calc(100% - var(--space-section));
+    background-position:
+      0 0,
+      0 var(--space-section),
+      0 0,
+      0 var(--space-section);
+  }
+
+  /* Pita band: rail putus-putus vertikal dibuang, sisakan garis tepi. */
+  .section--band {
+    background-image:
+      linear-gradient(var(--color-line), var(--color-line)),
+      linear-gradient(var(--color-white), var(--color-white));
+    background-size: 100% 1px, 100% 100%;
+    background-position: 0 0, 0 0;
+  }
+
   .section::before,
   .section::after,
   .section > .wrap::before,
