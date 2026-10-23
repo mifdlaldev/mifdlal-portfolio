@@ -300,7 +300,7 @@
   position: absolute;
   right: 5%;
   bottom: 5%;
-  width: clamp(84px, 36%, 126px);
+  width: clamp(120px, 52%, 230px);
   z-index: var(--z-raise);
   border-radius: var(--radius-lg);
   border: 1px solid var(--ink-16);
