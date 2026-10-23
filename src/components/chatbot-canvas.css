@@ -379,6 +379,17 @@
   line-height: var(--leading-ui);
 }
 
+/* Indikator mengetik versi widget (kompak) */
+.cb-typing--mini {
+  gap: 3px;
+  padding: 4px 7px;
+}
+
+.cb-typing--mini .cb-dot {
+  width: 3px;
+  height: 3px;
+}
+
 /* Composer — footer widget web (ada input = tidak terasa satu arah). */
 .cb-composer {
   display: flex;

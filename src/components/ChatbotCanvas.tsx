@@ -300,22 +300,29 @@ export default function ChatbotCanvas() {
               <span className="cb-head-label">Chatbot AI</span>
             </div>
             <div className="cb-widget-body">
-              <motion.div
-                key={topic.id}
-                className="cb-mirror"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
-              >
-                {topic.msgs.map((msg, i) => (
-                  <span
+              <div className="cb-mirror">
+                {topic.msgs.slice(0, shown).map((m, i) => (
+                  <motion.div
                     key={`${topic.id}-${i}`}
-                    className={`cb-bubble cb-mini ${msg.from === 'user' ? 'cb-bubble--out' : 'cb-bubble--in'}`}
+                    className={
+                      'cb-bubble cb-mini ' +
+                      (m.from === 'user' ? 'cb-bubble--out' : 'cb-bubble--in')
+                    }
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.18, ease: 'easeOut' }}
                   >
-                    {msg.text}
-                  </span>
+                    {m.text}
+                  </motion.div>
                 ))}
-              </motion.div>
+                {typing && (
+                  <div className="cb-typing cb-typing--mini" aria-hidden="true">
+                    <span className="cb-dot"></span>
+                    <span className="cb-dot"></span>
+                    <span className="cb-dot"></span>
+                  </div>
+                )}
+              </div>
             </div>
             <div className="cb-composer">
               <span className="cb-composer-field">Tulis pesan</span>
