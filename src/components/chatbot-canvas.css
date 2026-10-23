@@ -165,13 +165,12 @@
   line-height: var(--leading-none);
 }
 
-/* Teks handoff: satu baris, potong dengan ellipsis bila sempit. */
+/* Teks handoff: boleh 2 baris (tanpa ellipsis) supaya tidak terpotong. */
 .cb-handoff-text {
   flex: 1 1 auto;
   min-width: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  overflow-wrap: break-word;
 }
 
 /* ── Kolom mengetik + tombol kirim ala WhatsApp ──────────── */
@@ -664,7 +663,7 @@
   border-top: 1px solid var(--ink-16);
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   font-size: var(--text-micro);
   color: var(--ink-70);
   line-height: var(--leading-ui);
@@ -674,8 +673,8 @@
   flex: none;
   display: grid;
   place-items: center;
-  width: 18px;
-  height: 18px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   border: 1px solid var(--ink-16);
   color: var(--electric);
