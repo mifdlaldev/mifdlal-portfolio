@@ -91,6 +91,9 @@
   /* --- layout --------------------------------------------- */
   --grid-max: 1180px;
   --grid-gutter: 24px;
+  /* Gutter konten di layar kecil: lebih lega dari desktop supaya teks
+     tidak terasa menempel tepi layar HP. Override aktif di @media 719px. */
+  --grid-gutter-mobile: 2rem;
   --space-section: clamp(5rem, 10vw, 8rem);
   --nav-h: 64px;
   --node-size: 12px;

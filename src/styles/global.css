@@ -284,6 +284,13 @@ picture {
 
 /* Layar kecil: cukup garis horizontal, rail dan node disembunyikan. */
 @media (max-width: 719px) {
+  /* Gutter mobile lebih lega: 24px -> 32px. Mempengaruhi seluruh .wrap
+     (semua section), rail pita, dan ToTop. Full-bleed (hero image,
+     hairline, strip pita) tidak tersentuh. */
+  :root {
+    --grid-gutter: var(--grid-gutter-mobile);
+  }
+
   .section::before,
   .section::after,
   .section > .wrap::before,
