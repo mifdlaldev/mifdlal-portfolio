@@ -295,10 +295,10 @@ export default function ChatbotCanvas() {
           {/* Widget chat — pojok kanan bawah viewport browser */}
           <div className="cb-widget">
             <div className="cb-head">
-              <span className="cb-dots">
-                <span></span><span></span><span></span>
+              <span className="cb-head-avatar">
+                <HugeiconsIcon icon={ChatBotIcon} />
               </span>
-              <span className="cb-head-label">Asisten · online</span>
+              <span className="cb-head-label">Chatbot AI</span>
             </div>
             <div className="cb-widget-body">
               {!showMirror && (
@@ -324,9 +324,6 @@ export default function ChatbotCanvas() {
               <span className="cb-composer-field">Tulis pesan</span>
               <span className="cb-send">↑</span>
             </div>
-            {showMirror && (
-              <div className="cb-sync-note">Lanjut di aplikasi →</div>
-            )}
           </div>
         </div>
       </div>
