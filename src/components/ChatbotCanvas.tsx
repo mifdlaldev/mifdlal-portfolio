@@ -8,7 +8,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'motion/react'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { ChatBotIcon } from '@hugeicons/core-free-icons'
+import { ChatBotIcon, UserIcon } from '@hugeicons/core-free-icons'
 import './chatbot-canvas.css'
 
 type Msg = { from: 'user' | 'bot'; text: string }
@@ -443,7 +443,7 @@ export default function ChatbotCanvas() {
               transition={{ duration: 0.22, ease: 'easeOut' }}
             >
               <span className="cb-handoff-avatar">
-                <HugeiconsIcon icon={ChatBotIcon} />
+                <HugeiconsIcon icon={UserIcon} />
               </span>
               <span className="cb-handoff-text">{topic.handoff}</span>
             </motion.div>
