@@ -91,9 +91,12 @@
   /* --- layout --------------------------------------------- */
   --grid-max: 1180px;
   --grid-gutter: 24px;
-  /* Gutter konten di layar kecil: lebih lega dari desktop supaya teks
-     tidak terasa menempel tepi layar HP. Override aktif di @media 719px. */
-  --grid-gutter-mobile: 2rem;
+  /* Padding konten (.wrap) di layar kecil: TERPISAH dari --grid-gutter
+     yang mengatur posisi rail section. Rail tetap 24px di semua ukuran;
+     konten digeser lebih jauh agar tidak menempel garis. Desktop
+     (>=1229px) tetap memakai --grid-gutter apa adanya. */
+  --wrap-gutter-tablet: 2.25rem;   /* 36px di 720–1228px, jarak 12px dari rail */
+  --wrap-gutter-mobile: 2.5rem;   /* 40px di <720px, jarak 16px dari rail */
   --space-section: clamp(5rem, 10vw, 8rem);
   --nav-h: 64px;
   --node-size: 12px;

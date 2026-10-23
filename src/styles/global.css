@@ -284,13 +284,6 @@ picture {
 
 /* Layar kecil: cukup garis horizontal, rail dan node disembunyikan. */
 @media (max-width: 719px) {
-  /* Gutter mobile lebih lega: 24px -> 32px. Mempengaruhi seluruh .wrap
-     (semua section), rail pita, dan ToTop. Full-bleed (hero image,
-     hairline, strip pita) tidak tersentuh. */
-  :root {
-    --grid-gutter: var(--grid-gutter-mobile);
-  }
-
   .section::before,
   .section::after,
   .section > .wrap::before,
@@ -702,5 +695,26 @@ body {
   to {
     transform: translateY(0);
     opacity: 1;
+  }
+}
+
+/* ============================================================
+   PADDING KONTEN DI LAYAR KECIL
+   .wrap dasar (24px) dipakai DESKTOP >=1229px dan TIDAK DIUBAH.
+   Di bawah 1229px konten digeser lebih jauh dari tepi supaya tidak
+   menempel rail section. Rail tetap di 24px karena --grid-gutter
+   tidak ditimpa — hanya padding .wrap yang berubah.
+   Diletakkan setelah deklarasi .wrap dasar (baris ~473) agar menang
+   cascade; kalau ditaruh sebelum, base .wrap menimpanya.
+   ============================================================ */
+@media (max-width: 1228px) {
+  .wrap {
+    padding-inline: var(--wrap-gutter-tablet); /* 36px, jarak 12px dari rail */
+  }
+}
+
+@media (max-width: 719px) {
+  .wrap {
+    padding-inline: var(--wrap-gutter-mobile); /* 40px, jarak 16px dari rail */
   }
 }
