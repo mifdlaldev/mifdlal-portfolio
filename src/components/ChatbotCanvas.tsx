@@ -291,14 +291,6 @@ export default function ChatbotCanvas() {
             <span className="cb-br-trust">Konsultasi 30 menit · tanpa DP</span>
           </div>
 
-          {/* Ilustrasi blueprint: kartu pratinjau situs (pengganti gambar CDN) */}
-          <div className="cb-br-art" aria-hidden="true">
-            <span className="cb-br-art-bar"><i></i><i></i><i></i></span>
-            <span className="cb-br-art-line"></span>
-            <span className="cb-br-art-line cb-br-art-line--w70"></span>
-            <span className="cb-br-art-line cb-br-art-line--w45"></span>
-            <span className="cb-br-art-line cb-br-art-line--accent"></span>
-          </div>
 
           {/* Widget chat — pojok kanan bawah viewport browser */}
           <div className="cb-widget">

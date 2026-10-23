@@ -235,55 +235,6 @@
   line-height: var(--leading-none);
 }
 
-/* Ilustrasi blueprint: kartu pratinjau situs, dipaku kiri bawah viewport.
-   Absolute supaya hero bisa center vertikal murni tanpa terdorong. */
-.cb-br-art {
-  position: absolute;
-  left: 5%;
-  bottom: 5%;
-  width: 38%;
-  z-index: var(--z-content);
-  padding: 5px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  border: 1px solid var(--ink-16);
-  border-radius: var(--radius-md);
-  background: var(--paper);
-}
-
-.cb-br-art-bar {
-  display: flex;
-  gap: 3px;
-}
-
-.cb-br-art-bar i {
-  display: block;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--ink-16);
-}
-
-.cb-br-art-line {
-  height: 5px;
-  border-radius: 3px;
-  background: color-mix(in oklab, var(--ink-900) 8%, var(--paper));
-}
-
-.cb-br-art-line--w70 {
-  width: 70%;
-}
-
-.cb-br-art-line--w45 {
-  width: 45%;
-}
-
-.cb-br-art-line--accent {
-  width: 38%;
-  background: var(--electric);
-}
-
 /* Teks handoff: boleh 2 baris (tanpa ellipsis) supaya tidak terpotong. */
 .cb-handoff-text {
   flex: 1 1 auto;
