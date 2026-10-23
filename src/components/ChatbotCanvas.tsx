@@ -258,18 +258,46 @@ export default function ChatbotCanvas() {
           <span className="cb-br-url">studio-mifdlal.com</span>
         </div>
         <div className="cb-br-view">
+          {/* Navbar mockup */}
           <div className="cb-br-nav">
-            <span className="cb-br-logo">M</span>
+            <span className="cb-br-brand">
+              <span className="cb-br-logo">M</span>
+              <span className="cb-br-word">mifdlal</span>
+            </span>
             <span className="cb-br-links">
               <span>Layanan</span>
               <span>Proyek</span>
+              <span>Kontak</span>
             </span>
+            <span className="cb-br-navcta">Mulai proyek</span>
           </div>
+
+          {/* Hero */}
           <div className="cb-br-hero">
             <span className="cb-br-kicker">Studio web + otomatisasi AI</span>
-            <span className="cb-br-h1">Website yang bekerja, bukan cuma tampil.</span>
+            <span className="cb-br-h1">
+              Website yang <span className="cb-br-mark">bekerja</span>, bukan cuma tampil.
+            </span>
             <span className="cb-br-sub">Asisten menjawab pelanggan 24 jam, tanpa Anda ribut.</span>
-            <span className="cb-br-cta">Mulai proyek</span>
+            <span className="cb-br-actions">
+              <span className="cb-br-cta">Mulai proyek</span>
+              <span className="cb-br-ghost">
+                <svg className="cb-br-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M8 5.14v13.72c0 .8.87 1.3 1.55.97l11-6.86a.99.99 0 0 0 0-1.94l-11-6.86A.99.99 0 0 0 8 5.14Z" />
+                </svg>
+                Lihat preview
+              </span>
+            </span>
+            <span className="cb-br-trust">Konsultasi 30 menit · tanpa DP</span>
+          </div>
+
+          {/* Ilustrasi blueprint: kartu pratinjau situs (pengganti gambar CDN) */}
+          <div className="cb-br-art" aria-hidden="true">
+            <span className="cb-br-art-bar"><i></i><i></i><i></i></span>
+            <span className="cb-br-art-line"></span>
+            <span className="cb-br-art-line cb-br-art-line--w70"></span>
+            <span className="cb-br-art-line cb-br-art-line--w45"></span>
+            <span className="cb-br-art-line cb-br-art-line--accent"></span>
           </div>
 
           {/* Widget chat — pojok kanan bawah viewport browser */}

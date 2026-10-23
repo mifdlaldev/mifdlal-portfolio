@@ -90,10 +90,18 @@
   overflow: hidden;
 }
 
+/* Navbar mockup — struktur dari hero-section-with-responsive-navigation */
 .cb-br-nav {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 8px;
+}
+
+.cb-br-brand {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
 }
 
 .cb-br-logo {
@@ -110,9 +118,18 @@
   line-height: var(--leading-none);
 }
 
+.cb-br-word {
+  font-size: var(--text-micro);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-caps-tight);
+  color: var(--ink-900);
+  line-height: var(--leading-none);
+}
+
 .cb-br-links {
   display: flex;
-  gap: 6px;
+  gap: 7px;
+  margin-left: auto;
 }
 
 .cb-br-links span {
@@ -121,16 +138,30 @@
   line-height: var(--leading-none);
 }
 
-/* Hero minim — fokus ke chatbot */
+.cb-br-navcta {
+  flex: none;
+  margin-left: 6px;
+  padding: 3px 6px;
+  border-radius: var(--radius-xl);
+  background: var(--ink-900);
+  color: var(--paper);
+  font-size: var(--text-nano);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-none);
+}
+
+/* Hero — rata tengah, headline tebal */
 .cb-br-hero {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  margin-top: 12%;
+  align-items: center;
+  gap: 5px;
+  margin-top: 9%;
+  text-align: center;
 }
 
 .cb-br-kicker {
-  font-size: var(--text-nano);
+  font-size: var(--text-micro);
   font-weight: var(--weight-bold);
   color: var(--electric);
   letter-spacing: var(--tracking-caps-tight);
@@ -139,30 +170,116 @@
 }
 
 .cb-br-h1 {
-  font-size: var(--text-cap);
+  max-width: 84%;
+  font-size: var(--text-hero-1);
   font-weight: var(--weight-bold);
   color: var(--ink-900);
   line-height: var(--leading-ui);
-  max-width: 80%;
+}
+
+/* Sorotan stabilo (pengganti blur-gradient di komponen asli) */
+.cb-br-mark {
+  padding: 0 2px;
+  background: linear-gradient(
+    transparent 58%,
+    color-mix(in oklab, var(--lemon) 65%, transparent) 58%
+  );
 }
 
 .cb-br-sub {
-  font-size: var(--text-xs);
+  max-width: 78%;
+  font-size: var(--text-hero-2);
   color: var(--ink-70);
   line-height: var(--leading-ui);
-  max-width: 74%;
+}
+
+.cb-br-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
 }
 
 .cb-br-cta {
-  align-self: flex-start;
-  margin-top: 4px;
-  padding: 3px 8px;
+  padding: 4px 10px;
+  border-radius: var(--radius-xl);
   background: var(--electric);
   color: var(--paper);
-  border-radius: var(--radius-xl);
-  font-size: var(--text-nano);
+  font-size: var(--text-btn-mini);
   font-weight: var(--weight-bold);
   line-height: var(--leading-none);
+}
+
+.cb-br-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 4px 8px;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--ink-16);
+  color: var(--ink-900);
+  font-size: var(--text-btn-mini);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-none);
+}
+
+.cb-br-play {
+  width: 7px;
+  height: 7px;
+}
+
+.cb-br-trust {
+  margin-top: 5px;
+  font-size: var(--text-nano);
+  color: var(--ink-70);
+  line-height: var(--leading-none);
+}
+
+/* Ilustrasi blueprint: kartu pratinjau situs, rata kiri bawah hero.
+   Diletakkan di kiri agar tidak bertabrakan dengan widget chat di kanan. */
+.cb-br-art {
+  width: 44%;
+  margin: 6% 0 0 4%;
+  align-self: flex-start;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border: 1px solid var(--ink-16);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+}
+
+.cb-br-art-bar {
+  display: flex;
+  gap: 3px;
+}
+
+.cb-br-art-bar i {
+  display: block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--ink-16);
+}
+
+.cb-br-art-line {
+  height: 5px;
+  border-radius: 3px;
+  background: color-mix(in oklab, var(--ink-900) 8%, var(--paper));
+}
+
+.cb-br-art-line--w70 {
+  width: 70%;
+}
+
+.cb-br-art-line--w45 {
+  width: 45%;
+}
+
+.cb-br-art-line--accent {
+  width: 38%;
+  background: var(--electric);
 }
 
 /* Teks handoff: boleh 2 baris (tanpa ellipsis) supaya tidak terpotong. */
