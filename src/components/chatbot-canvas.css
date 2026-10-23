@@ -186,7 +186,7 @@
   margin-top: 4px;
   padding: 3px 4px;
   border-radius: var(--radius-xl);
-  background: color-mix(in oklab, var(--paper) 15%, transparent);
+  background: color-mix(in oklab, var(--ink-900) 7%, var(--paper));
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
 }
@@ -457,7 +457,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: var(--chat-wall);
+  background: var(--paper);
   z-index: 0;
   pointer-events: none;
 }
@@ -574,7 +574,7 @@
 /* variant=secondary — bubble balasan (netral, tanpa border) */
 .cb-bubble--in {
   align-self: flex-start;
-  background: var(--paper);
+  background: color-mix(in oklab, var(--ink-900) 7%, var(--paper));
   color: var(--color-ink);
 }
 
