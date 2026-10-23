@@ -442,7 +442,9 @@ export default function ChatbotCanvas() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.22, ease: 'easeOut' }}
             >
-              <span className="cb-monogram">R</span>
+              <span className="cb-handoff-avatar">
+                <HugeiconsIcon icon={ChatBotIcon} />
+              </span>
               <span className="cb-handoff-text">{topic.handoff}</span>
             </motion.div>
           )}

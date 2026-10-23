@@ -671,18 +671,22 @@
   line-height: var(--leading-ui);
 }
 
-.cb-monogram {
+/* Avatar handoff: identik dengan avatar header HP (lingkaran --electric + ikon bot). */
+.cb-handoff-avatar {
   flex: none;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  border: 1px solid var(--ink-16);
-  color: var(--electric);
-  font-family: var(--font-mono);
-  font-size: var(--text-micro);
-  font-weight: var(--weight-bold);
+  background: var(--electric);
+  color: var(--paper);
+}
+
+.cb-handoff-avatar svg {
+  width: 58%;
+  height: 58%;
 }
 
 /* ── Reduced motion: hentikan animasi, tetap baca sebagai "menunggu" ── */
