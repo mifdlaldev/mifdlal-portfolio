@@ -237,7 +237,6 @@ export default function ChatbotCanvas() {
   const showChips = phase >= 3
   const showHighlight = phase >= 4
   const showHandoff = phase >= 5
-  const showMirror = phase >= 6
 
   return (
     <motion.div
@@ -301,24 +300,16 @@ export default function ChatbotCanvas() {
               <span className="cb-head-label">Chatbot AI</span>
             </div>
             <div className="cb-widget-body">
-              {!showMirror && (
-                <>
-                  <span className="cb-skel cb-skel--short"></span>
-                  <span className="cb-skel cb-skel--mid"></span>
-                  <span className="cb-skel cb-skel--long"></span>
-                </>
-              )}
-              {showMirror && (
-                <motion.div
-                  className="cb-mirror"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <span className="cb-bubble cb-bubble--out cb-mini">{topic.msgs[0].text}</span>
-                  <span className="cb-bubble cb-bubble--in cb-mini">{topic.msgs[1].text}</span>
-                </motion.div>
-              )}
+              <motion.div
+                key={topic.id}
+                className="cb-mirror"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <span className="cb-bubble cb-bubble--out cb-mini">{topic.msgs[0].text}</span>
+                <span className="cb-bubble cb-bubble--in cb-mini">{topic.msgs[1].text}</span>
+              </motion.div>
             </div>
             <div className="cb-composer">
               <span className="cb-composer-field">Tulis pesan</span>

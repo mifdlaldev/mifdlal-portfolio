@@ -357,31 +357,6 @@
 }
 
 /* Skeleton shimmer — satu keyframe, tiga delay (teknik standar). */
-.cb-skel {
-  height: 10px;
-  border-radius: 999px;
-  background: linear-gradient(
-    90deg,
-    var(--ink-07) 0%,
-    var(--ink-16) 50%,
-    var(--ink-07) 100%
-  );
-  background-size: 200% 100%;
-  animation: cb-shimmer 1.8s ease-in-out infinite;
-}
-
-.cb-skel--short { width: 55%; }
-.cb-skel--mid { width: 80%; }
-.cb-skel--long { width: 65%; }
-
-.cb-skel:nth-child(2) { animation-delay: 0.12s; }
-.cb-skel:nth-child(3) { animation-delay: 0.24s; }
-
-@keyframes cb-shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
 /* Percakapan yang sama dengan phone — muncul saat fase mirror. */
 .cb-mirror {
   display: flex;
@@ -760,8 +735,7 @@
 /* ── Reduced motion: hentikan animasi, tetap baca sebagai "menunggu" ── */
 @media (prefers-reduced-motion: reduce) {
   .cb-dot,
-  .cb-caret,
-  .cb-skel {
+  .cb-caret {
     animation: none;
   }
 }
