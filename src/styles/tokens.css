@@ -74,6 +74,7 @@
   --leading-loose: 1.7;
   --leading-wordmark: 0.74; /* wordmark raksasa: huruf menempel ke tepi pita */
   --leading-none: 1; /* status bar: angka jam tidak terpotong */
+  --chat-wall: #e8e7e1; /* background area chat HP (abu-abu, ganti wallpaper) */
 
   /* --- tipografi: tracking --------------------------------
      Positif untuk huruf kapital mono, negatif untuk display.   */

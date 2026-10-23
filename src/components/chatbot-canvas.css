@@ -457,7 +457,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: url('/device-mockups/apple/wallpaper.jpg') center / cover no-repeat;
+  background: var(--chat-wall);
   z-index: 0;
   pointer-events: none;
 }
@@ -641,8 +641,8 @@
   line-height: var(--leading-ui);
   padding: 2px 5px;
   border-radius: 999px;
-  border: 1px solid color-mix(in oklab, var(--paper) 55%, transparent);
-  color: var(--paper);
+  border: 1px solid var(--ink-16);
+  color: var(--ink-900);
   white-space: nowrap;
   transition: background-color var(--dur-fast) var(--ease),
     color var(--dur-fast) var(--ease);
@@ -661,12 +661,12 @@
   z-index: var(--z-content);
   flex: none;
   padding-top: 4px;
-  border-top: 1px solid color-mix(in oklab, var(--paper) 25%, transparent);
+  border-top: 1px solid var(--ink-16);
   display: flex;
   align-items: center;
   gap: 6px;
   font-size: var(--text-micro);
-  color: color-mix(in oklab, var(--paper) 78%, transparent);
+  color: var(--ink-70);
   line-height: var(--leading-ui);
 }
 
@@ -677,8 +677,8 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  border: 1px solid color-mix(in oklab, var(--paper) 55%, transparent);
-  color: var(--paper);
+  border: 1px solid var(--ink-16);
+  color: var(--electric);
   font-family: var(--font-mono);
   font-size: var(--text-micro);
   font-weight: var(--weight-bold);
