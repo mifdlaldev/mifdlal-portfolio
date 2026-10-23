@@ -337,6 +337,8 @@
   letter-spacing: var(--tracking-caps-tight);
   color: var(--color-muted);
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .cb-widget-body {
@@ -633,7 +635,7 @@
    Sudut SERAGAM (tidak ada ekor asimetris). */
 .cb-bubble {
   width: fit-content;
-  max-width: 86%;
+  max-width: 90%;
   padding: 5px 8px;
   font-size: var(--text-cap);
   line-height: var(--leading-relaxed);
