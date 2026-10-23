@@ -254,7 +254,7 @@ export default function ChatbotCanvas() {
           <span className="cb-br-dots">
             <span></span><span></span><span></span>
           </span>
-          <span className="cb-br-url">studio-mifdlal.com</span>
+          <span className="cb-br-url">mifdlal.com</span>
         </div>
         <div className="cb-br-view">
           {/* Navbar mockup */}
