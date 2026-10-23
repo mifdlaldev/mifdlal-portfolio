@@ -36,7 +36,7 @@ const TOPICS: Topic[] = [
       { from: 'bot', text: '3 putaran per halaman, lebihnya dihitung per jam.' },
     ],
     chips: ['Lihat paket', 'Konsultasi'],
-    handoff: 'Konsultan bergabung · ~2 menit',
+    handoff: 'Dipindahkan ke kontak konsultasi',
   },
   {
     id: 'domain',
@@ -50,7 +50,7 @@ const TOPICS: Topic[] = [
       { from: 'bot', text: 'Ya, role administrator + training 30 menit.' },
     ],
     chips: ['Lihat akses', 'Tanya tim'],
-    handoff: 'Konsultan bergabung · ~2 menit',
+    handoff: 'Dipindahkan ke kontak konsultasi',
   },
   {
     id: 'revisi',
@@ -64,7 +64,7 @@ const TOPICS: Topic[] = [
       { from: 'bot', text: 'Masuk change order, estimasi dulu sebelum kerja.' },
     ],
     chips: ['Lihat garansi', 'Konsultasi'],
-    handoff: 'Konsultan bergabung · ~2 menit',
+    handoff: 'Dipindahkan ke kontak konsultasi',
   },
   {
     id: 'seo',
@@ -78,7 +78,7 @@ const TOPICS: Topic[] = [
       { from: 'bot', text: 'Ya, ringkasan trafik + kata kunci tiap awal bulan.' },
     ],
     chips: ['Lihat rincian', 'Konsultasi'],
-    handoff: 'Konsultan bergabung · ~2 menit',
+    handoff: 'Dipindahkan ke kontak konsultasi',
   },
   {
     id: 'maintenance',
@@ -92,7 +92,7 @@ const TOPICS: Topic[] = [
       { from: 'bot', text: 'Bisa, fitur tambahan dihitung dari scope baru.' },
     ],
     chips: ['Lihat paket', 'Konsultasi'],
-    handoff: 'Konsultan bergabung · ~2 menit',
+    handoff: 'Dipindahkan ke kontak konsultasi',
   },
   {
     id: 'handover',
@@ -106,7 +106,7 @@ const TOPICS: Topic[] = [
       { from: 'bot', text: 'Serah terima 3 hari kerja setelah peluncuran.' },
     ],
     chips: ['Lihat alur', 'Konsultasi'],
-    handoff: 'Konsultan bergabung · ~2 menit',
+    handoff: 'Dipindahkan ke kontak konsultasi',
   },
 ]
 
