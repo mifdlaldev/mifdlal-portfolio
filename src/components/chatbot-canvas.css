@@ -348,12 +348,19 @@
   text-overflow: ellipsis;
 }
 
+/* Isi widget: percakapan penuh topik, dibatasi tinggi + fade atas
+   supaya kartu tetap ringkas dan pesan terbaru selalu terlihat. */
 .cb-widget-body {
   padding: 12px;
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
   gap: 8px;
   min-height: 64px;
+  max-height: 148px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, var(--ink-900) 20px);
+  mask-image: linear-gradient(to bottom, transparent 0, var(--ink-900) 20px);
 }
 
 /* Skeleton shimmer — satu keyframe, tiga delay (teknik standar). */
@@ -361,6 +368,7 @@
 .cb-mirror {
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
   gap: 6px;
 }
 

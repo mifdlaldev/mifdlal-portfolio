@@ -307,8 +307,14 @@ export default function ChatbotCanvas() {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
               >
-                <span className="cb-bubble cb-bubble--out cb-mini">{topic.msgs[0].text}</span>
-                <span className="cb-bubble cb-bubble--in cb-mini">{topic.msgs[1].text}</span>
+                {topic.msgs.map((msg, i) => (
+                  <span
+                    key={`${topic.id}-${i}`}
+                    className={`cb-bubble cb-mini ${msg.from === 'user' ? 'cb-bubble--out' : 'cb-bubble--in'}`}
+                  >
+                    {msg.text}
+                  </span>
+                ))}
               </motion.div>
             </div>
             <div className="cb-composer">
