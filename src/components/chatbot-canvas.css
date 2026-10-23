@@ -475,6 +475,8 @@
   pointer-events: auto;
   z-index: var(--z-content);
   scrollbar-width: none;
+  /* jarak aman di bawah isi: chip terakhir tidak menempel ke handoff */
+  padding-bottom: 6px;
 }
 
 .cb-chat::-webkit-scrollbar {
@@ -659,7 +661,7 @@
   position: relative;
   z-index: var(--z-content);
   flex: none;
-  padding-top: 4px;
+  padding-top: 6px;
   border-top: 1px solid var(--ink-16);
   display: flex;
   align-items: center;
