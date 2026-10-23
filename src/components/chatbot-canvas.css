@@ -81,7 +81,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 6% 6% 0;
+  padding: 6% 6% 6%;
   background: linear-gradient(
     160deg,
     var(--paper) 0%,
@@ -156,7 +156,7 @@
   flex-direction: column;
   align-items: center;
   gap: 5px;
-  margin-top: 9%;
+  margin: auto 0;
   text-align: center;
 }
 
@@ -170,7 +170,7 @@
 }
 
 .cb-br-h1 {
-  max-width: 84%;
+  max-width: 78%;
   font-size: var(--text-hero-1);
   font-weight: var(--weight-bold);
   color: var(--ink-900);
@@ -187,7 +187,7 @@
 }
 
 .cb-br-sub {
-  max-width: 78%;
+  max-width: 72%;
   font-size: var(--text-hero-2);
   color: var(--ink-70);
   line-height: var(--leading-ui);
@@ -235,12 +235,14 @@
   line-height: var(--leading-none);
 }
 
-/* Ilustrasi blueprint: kartu pratinjau situs, rata kiri bawah hero.
-   Diletakkan di kiri agar tidak bertabrakan dengan widget chat di kanan. */
+/* Ilustrasi blueprint: kartu pratinjau situs, dipaku kiri bawah viewport.
+   Absolute supaya hero bisa center vertikal murni tanpa terdorong. */
 .cb-br-art {
-  width: 44%;
-  margin: 6% 0 0 4%;
-  align-self: flex-start;
+  position: absolute;
+  left: 5%;
+  bottom: 5%;
+  width: 38%;
+  z-index: var(--z-content);
   padding: 5px;
   display: flex;
   flex-direction: column;
@@ -347,7 +349,7 @@
   position: absolute;
   right: 5%;
   bottom: 5%;
-  width: clamp(92px, 46%, 148px);
+  width: clamp(84px, 36%, 126px);
   z-index: var(--z-raise);
   border-radius: var(--radius-lg);
   border: 1px solid var(--ink-16);
