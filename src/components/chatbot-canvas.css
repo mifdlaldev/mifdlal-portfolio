@@ -50,6 +50,8 @@
   display: flex;
   gap: 3px;
   flex: none;
+  /* jarak dari sudut rounded kiri toolbar */
+  margin-left: 4px;
 }
 
 .cb-br-dots span {
