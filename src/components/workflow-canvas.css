@@ -343,3 +343,63 @@
     stroke-dashoffset: -1.09;
   }
 }
+
+/* ── Mobile: tile compact ───────────────────────────────────────
+   Layout graph dihitung di WorkflowCanvas.tsx (LAYOUT_MOBILE):
+   NODE 52, HUB 68, TOOL 48, GAP 8, ROW2_Y 104 → total 296px.
+   Ukuran tile di sini WAJIB sama dengan konstanta tsb, kalau tidak
+   node saling tumpuk dan konektor meleset dari handle.
+
+   Ikon 24px (dari 38px) karena tile 52px — ikon 38 menyentuh tepi. */
+@media (max-width: 560px) {
+  .wf-tile {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-lg);
+  }
+
+  .wf-tile--hub {
+    width: 68px;
+    height: 52px;
+  }
+
+  .wf-tile--tool {
+    width: 48px;
+    height: 44px;
+    border-radius: var(--radius-md);
+  }
+
+  /* Label: 8px, jarak 5px dari tile. max-width dijaga 56px supaya
+     dua kata tetap 2 baris tanpa menyentuh tile tetangga (gap 8px). */
+  .wf-tile__label {
+    top: calc(100% + 5px);
+    font-size: var(--text-micro);
+    letter-spacing: 0;
+    max-width: 56px;
+    line-height: var(--leading-ui);
+  }
+
+  .wf-tile--tool .wf-tile__label {
+    max-width: 56px;
+  }
+
+  .wf-node-2line .wf-tile__label {
+    max-width: 52px;
+  }
+
+  /* Tooltip hub: jangan sampai keluar frame 296px. */
+  .wf-tile--hub .wf-tile__label {
+    bottom: calc(100% + 12px);
+    max-width: 200px;
+  }
+
+  .wf-handle {
+    width: 6px;
+    height: 6px;
+  }
+
+  .wf-edge {
+    stroke-width: 1.2;
+    stroke-dasharray: 4 3;
+  }
+}

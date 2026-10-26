@@ -61,6 +61,10 @@ type TileData = {
   label: string;
   icon: 'message' | 'database' | 'brain' | 'shield-check' | 'send' | 'claude' | 'book' | 'headset';
   tone: 'node' | 'hub' | 'tool';
+  order?: number;
+  /* Ukuran ikon per layout: 38 desktop, 24 mobile. Tile mobile hanya
+     52px, ikon 38 akan menyentuh tepi. */
+  iconSize?: number;
 };
 
 const ICON_SIZE = 38;
@@ -71,9 +75,11 @@ const ICON_SIZE = 38;
 const TileIcon = memo(function TileIcon({
   kind,
   active,
+  size = ICON_SIZE,
 }: {
   kind: TileData['icon'];
   active: boolean;
+  size?: number;
 }) {
   const ref = useRef<IconHandle | null>(null);
 
@@ -83,7 +89,7 @@ const TileIcon = memo(function TileIcon({
     else ref.current.stopAnimation();
   }, [active, kind]);
 
-  const base = { size: ICON_SIZE, strokeWidth: 1.5, color: 'var(--electric)' } as const;
+  const base = { size, strokeWidth: 1.5, color: 'var(--electric)' } as const;
 
   switch (kind) {
     case 'message':
@@ -101,7 +107,7 @@ const TileIcon = memo(function TileIcon({
     case 'headset':
       return <HeadsetIcon ref={ref} {...base} />;
     case 'claude':
-      return <ClaudeIcon ref={ref} size={ICON_SIZE} color="var(--electric)" />;
+      return <ClaudeIcon ref={ref} size={size} color="var(--electric)" />;
     default:
       return null;
   }
@@ -138,7 +144,7 @@ const TileNode = memo(({ id, data }: NodeProps) => {
         aria-label={d.tone === 'hub' ? `${d.label}, klasifikasi intent dan draf balasan` : undefined}
       >
         <span className="wf-tile__icon">
-          <TileIcon kind={d.icon} active={active} />
+          <TileIcon kind={d.icon} active={active} size={d.iconSize} />
         </span>
       </motion.span>
 
@@ -230,55 +236,97 @@ const TOOL_MID_X = HUB_CX - TOOL_W / 2;
 const TOOL_LEFT_X = TOOL_MID_X - TOOL_W - TOOL_GAP;
 const TOOL_RIGHT_X = TOOL_MID_X + TOOL_W + TOOL_GAP;
 
-const nodes: Node[] = [
-  { id: 'trigger', type: 'tile', position: { x: 0, y: 0 }, data: { label: 'PESAN MASUK', icon: 'message', tone: 'node', order: 0 } },
-  {
-    id: 'koleksi',
-    type: 'tile',
-    position: { x: NODE_W + GAP, y: 0 },
-    data: { label: 'KONTEKS PELANGGAN', icon: 'database', tone: 'node', order: 1 },
-  },
-  {
-    id: 'agent',
-    type: 'tile',
-    position: { x: (NODE_W + GAP) * 2, y: 0 },
-    data: { label: 'AI AGENT', icon: 'brain', tone: 'hub', order: 2 },
-    width: HUB_W,
-  },
-  {
-    id: 'validasi',
-    type: 'tile',
-    className: 'wf-node-2line',
-    position: { x: (NODE_W + GAP) * 2 + HUB_W + GAP, y: 0 },
-    data: { label: 'CEK KEBIJAKAN', icon: 'shield-check', tone: 'node', order: 3 },
-  },
-  {
-    id: 'kirim',
-    type: 'tile',
-    className: 'wf-node-2line',
-    position: { x: (NODE_W + GAP) * 2 + HUB_W + GAP + NODE_W + GAP, y: 0 },
-    data: { label: 'KIRIM BALASAN', icon: 'send', tone: 'node', order: 4 },
-  },
-  {
-    id: 't-model',
-    type: 'tile',
-    position: { x: TOOL_LEFT_X, y: ROW2_Y },
-    data: { label: 'MODEL LLM', icon: 'claude', tone: 'tool', order: 5 },
-  },
-  {
-    id: 't-dokumen',
-    type: 'tile',
-    position: { x: TOOL_MID_X, y: ROW2_Y },
-    data: { label: 'KNOWLEDGE BASE', icon: 'book', tone: 'tool', order: 6 },
-  },
-  {
-    id: 't-api',
-    type: 'tile',
-    position: { x: TOOL_RIGHT_X, y: ROW2_Y },
-    data: { label: 'CRM HELPDESK', icon: 'headset', tone: 'tool', order: 7 },
-  },
-];
+/* ── Layout responsif ─────────────────────────────────────────
+   Desktop: graph penuh 556px lebar (lihat konstanta di atas).
+   Mobile (<560px): frame hanya ~295px → semua ukuran diperkecil
+   (NODE 52, HUB 68, GAP 8) sehingga total 296px muat tanpa penskalaan
+   zoom (zoom pecahan dihindari karena me-raster teks → burem). */
+const LAYOUT_MOBILE: Layout = {
+  nodeW: 52,
+  hubW: 68,
+  toolW: 48,
+  gap: 8,
+  toolGap: 6,
+  row2Y: 104,
+  icon: 24,
+};
 
+type Layout = {
+  nodeW: number;
+  hubW: number;
+  toolW: number;
+  gap: number;
+  toolGap: number;
+  row2Y: number;
+  icon: number;
+};
+
+function buildGraph(L: Layout) {
+  const { nodeW, hubW, toolW, gap, toolGap, row2Y, icon } = L;
+  const hubX = (nodeW + gap) * 2;
+  const hubCx = hubX + hubW / 2;
+  const toolMidX = hubCx - toolW / 2;
+  const toolLeftX = toolMidX - toolW - toolGap;
+  const toolRightX = toolMidX + toolW + toolGap;
+
+  const mkNode = (
+    id: string,
+    x: number,
+    y: number,
+    label: string,
+    icon: TileData['icon'],
+    tone: TileData['tone'],
+    order: number,
+    width?: number,
+  ): Node => ({
+    id,
+    type: 'tile',
+    position: { x, y },
+    data: { label, icon, tone, order, iconSize: L.icon } as TileData,
+    ...(width ? { width } : {}),
+  });
+
+  const nodes: Node[] = [
+    mkNode('trigger', 0, 0, 'PESAN MASUK', 'message', 'node', 0),
+    mkNode('koleksi', nodeW + gap, 0, 'KONTEKS PELANGGAN', 'database', 'node', 1),
+    mkNode('agent', (nodeW + gap) * 2, 0, 'AI AGENT', 'brain', 'hub', 2, hubW),
+    mkNode('validasi', (nodeW + gap) * 2 + hubW + gap, 0, 'CEK KEBIJAKAN', 'shield-check', 'node', 3),
+    mkNode('kirim', (nodeW + gap) * 2 + hubW + gap + nodeW + gap, 0, 'KIRIM BALASAN', 'send', 'node', 4),
+    mkNode('t-model', toolLeftX, row2Y, 'MODEL LLM', 'claude', 'tool', 5),
+    mkNode('t-dokumen', toolMidX, row2Y, 'KNOWLEDGE BASE', 'book', 'tool', 6),
+    mkNode('t-api', toolRightX, row2Y, 'CRM HELPDESK', 'headset', 'tool', 7),
+  ];
+
+  const edges: Edge[] = [
+    { id: 'e1', source: 'trigger', target: 'koleksi', type: 'flow' },
+    { id: 'e2', source: 'koleksi', target: 'agent', type: 'flow' },
+    { id: 'e3', source: 'agent', target: 'validasi', type: 'flow' },
+    { id: 'e4', source: 'validasi', target: 'kirim', type: 'flow' },
+    { id: 'b1', source: 'agent', sourceHandle: 'b1', target: 't-model', targetHandle: 'in', type: 'flow' },
+    { id: 'b2', source: 'agent', sourceHandle: 'b2', target: 't-dokumen', targetHandle: 'in', type: 'flow' },
+    { id: 'b3', source: 'agent', sourceHandle: 'b3', target: 't-api', targetHandle: 'in', type: 'flow' },
+    // Edge balik: 3 tool → brain. Garis dasar disembunyikan (tumpang tindih
+    // dengan b1/b2/b3 turun), sinyal draw + comet tetap jalan naik ke brain.
+    { id: 'r1', source: 't-model', sourceHandle: 'out', target: 'agent', targetHandle: 'rb1', type: 'flow', data: { ret: true } },
+    { id: 'r2', source: 't-dokumen', sourceHandle: 'out', target: 'agent', targetHandle: 'rb2', type: 'flow', data: { ret: true } },
+    { id: 'r3', source: 't-api', sourceHandle: 'out', target: 'agent', targetHandle: 'rb3', type: 'flow', data: { ret: true } },
+  ];
+
+  const width = (nodeW + gap) * 2 + hubW + gap + nodeW + gap + nodeW;
+  const height = row2Y + toolW + 24; // tile tool + label
+  return { nodes, edges, width, height };
+}
+
+/* Layout desktop (konstanta lama) — tetap dipakai >= 561px */
+const nodes: Node[] = buildGraph({
+  nodeW: NODE_W,
+  hubW: HUB_W,
+  toolW: TOOL_W,
+  gap: GAP,
+  toolGap: TOOL_GAP,
+  row2Y: ROW2_Y,
+  icon: ICON_SIZE,
+}).nodes;
 const edges: Edge[] = [
   { id: 'e1', source: 'trigger', target: 'koleksi', type: 'flow' },
   { id: 'e2', source: 'koleksi', target: 'agent', type: 'flow' },
@@ -287,16 +335,51 @@ const edges: Edge[] = [
   { id: 'b1', source: 'agent', sourceHandle: 'b1', target: 't-model', targetHandle: 'in', type: 'flow' },
   { id: 'b2', source: 'agent', sourceHandle: 'b2', target: 't-dokumen', targetHandle: 'in', type: 'flow' },
   { id: 'b3', source: 'agent', sourceHandle: 'b3', target: 't-api', targetHandle: 'in', type: 'flow' },
-  // Edge balik: 3 tool → brain. Garis dasar disembunyikan (tumpang tindih
-  // dengan b1/b2/b3 turun), sinyal draw + comet tetap jalan naik ke brain.
   { id: 'r1', source: 't-model', sourceHandle: 'out', target: 'agent', targetHandle: 'rb1', type: 'flow', data: { ret: true } },
   { id: 'r2', source: 't-dokumen', sourceHandle: 'out', target: 'agent', targetHandle: 'rb2', type: 'flow', data: { ret: true } },
   { id: 'r3', source: 't-api', sourceHandle: 'out', target: 'agent', targetHandle: 'rb3', type: 'flow', data: { ret: true } },
 ];
 
 export default function WorkflowCanvas() {
-  const n = useMemo(() => nodes, []);
-  const e = useMemo(() => edges, []);
+  const [compact, setCompact] = useState(false);
+  const hostRef = useRef<HTMLDivElement>(null);
+  const [box, setBox] = useState({ w: 0, h: 0 });
+
+  /* Breakpoint 560px sama dengan media query CSS .wf-tile compact.
+     Di bawah itu graph penuh 556px tidak akan muat di frame ~295px. */
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 560px)');
+    const sync = () => setCompact(mq.matches);
+    sync();
+    mq.addEventListener('change', sync);
+    return () => mq.removeEventListener('change', sync);
+  }, []);
+
+  /* Ukur container: viewport React Flow dipusatkan manual (x/y), bukan
+     fitView — fitView menghasilkan zoom pecahan yang me-raster teks. */
+  useEffect(() => {
+    const el = hostRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => {
+      setBox({ w: el.clientWidth, h: el.clientHeight });
+    });
+    ro.observe(el);
+    setBox({ w: el.clientWidth, h: el.clientHeight });
+    return () => ro.disconnect();
+  }, []);
+
+  const graph = useMemo(() => (compact ? buildGraph(LAYOUT_MOBILE) : buildGraph({
+    nodeW: NODE_W,
+    hubW: HUB_W,
+    toolW: TOOL_W,
+    gap: GAP,
+    toolGap: TOOL_GAP,
+    row2Y: ROW2_Y,
+    icon: ICON_SIZE,
+  })), [compact]);
+
+  const n = graph.nodes;
+  const e = graph.edges;
   const [phase, setPhase] = useState(-1);
 
   /* Mesin alur: jalankan timeline berulang. Setiap fase menyalakan node
@@ -326,9 +409,10 @@ export default function WorkflowCanvas() {
   }, [phase]);
 
   return (
-    <div className="wf-canvas" aria-hidden="true">
+    <div className="wf-canvas" aria-hidden="true" ref={hostRef}>
       <SeqCtx.Provider value={seq}>
         <ReactFlow
+          key={compact ? `m-${Math.round(box.w)}` : `d-${Math.round(box.w)}`}
           nodes={n}
           edges={e}
           nodeTypes={nodeTypes}
@@ -336,10 +420,21 @@ export default function WorkflowCanvas() {
           /* Zoom dikunci 1 (integer) — TIDAK ada transform scale pada viewport.
             fitView dihapus karena menghitung zoom pecahan (mis. 0.98) yang
             me-raster seluruh layer termasuk teks → burem. Posisi x/y
-            dihitung manual agar graph pas di tengah frame tanpa penskalaan. */
+            dihitung manual agar graph pas di tengah frame tanpa penskalaan.
+
+            Mobile: layout compact (graph 296px) dipusatkan manual lewat
+            defaultViewport — x dihitung dari lebar container terukur. */
           minZoom={1}
           maxZoom={1}
-          defaultViewport={{ x: 34, y: 102, zoom: 1 }}
+          defaultViewport={
+            compact
+              ? {
+                  x: box.w > 0 ? Math.max(0, (box.w - graph.width) / 2) : 2,
+                  y: box.h > 0 ? Math.max(0, (box.h - graph.height) / 2) : 24,
+                  zoom: 1,
+                }
+              : { x: 34, y: 102, zoom: 1 }
+          }
           nodesDraggable={false}
           nodesConnectable={false}
           nodesFocusable={false}
