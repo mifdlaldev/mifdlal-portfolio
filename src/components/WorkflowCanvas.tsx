@@ -251,6 +251,18 @@ const LAYOUT_MOBILE: Layout = {
   icon: 24,
 };
 
+/* Tier 320px: frame hanya ~240px (viewport 320 − gutter 40×2).
+   Total graph 218px → muat. Ikon 18px di tile 38px. */
+const LAYOUT_TINY: Layout = {
+  nodeW: 38,
+  hubW: 50,
+  toolW: 38,
+  gap: 4,
+  toolGap: 4,
+  row2Y: 84,
+  icon: 18,
+};
+
 type Layout = {
   nodeW: number;
   hubW: number;
@@ -278,20 +290,22 @@ function buildGraph(L: Layout) {
     tone: TileData['tone'],
     order: number,
     width?: number,
+    className?: string,
   ): Node => ({
     id,
     type: 'tile',
     position: { x, y },
     data: { label, icon, tone, order, iconSize: L.icon } as TileData,
     ...(width ? { width } : {}),
+    ...(className ? { className } : {}),
   });
 
   const nodes: Node[] = [
     mkNode('trigger', 0, 0, 'PESAN MASUK', 'message', 'node', 0),
     mkNode('koleksi', nodeW + gap, 0, 'KONTEKS PELANGGAN', 'database', 'node', 1),
     mkNode('agent', (nodeW + gap) * 2, 0, 'AI AGENT', 'brain', 'hub', 2, hubW),
-    mkNode('validasi', (nodeW + gap) * 2 + hubW + gap, 0, 'CEK KEBIJAKAN', 'shield-check', 'node', 3),
-    mkNode('kirim', (nodeW + gap) * 2 + hubW + gap + nodeW + gap, 0, 'KIRIM BALASAN', 'send', 'node', 4),
+    mkNode('validasi', (nodeW + gap) * 2 + hubW + gap, 0, 'CEK KEBIJAKAN', 'shield-check', 'node', 3, undefined, 'wf-node-2line'),
+    mkNode('kirim', (nodeW + gap) * 2 + hubW + gap + nodeW + gap, 0, 'KIRIM BALASAN', 'send', 'node', 4, undefined, 'wf-node-2line'),
     mkNode('t-model', toolLeftX, row2Y, 'MODEL LLM', 'claude', 'tool', 5),
     mkNode('t-dokumen', toolMidX, row2Y, 'KNOWLEDGE BASE', 'book', 'tool', 6),
     mkNode('t-api', toolRightX, row2Y, 'CRM HELPDESK', 'headset', 'tool', 7),
@@ -341,18 +355,30 @@ const edges: Edge[] = [
 ];
 
 export default function WorkflowCanvas() {
-  const [compact, setCompact] = useState(false);
+  const [tier, setTier] = useState<'desktop' | 'mobile' | 'tiny'>('desktop');
   const hostRef = useRef<HTMLDivElement>(null);
   const [box, setBox] = useState({ w: 0, h: 0 });
 
-  /* Breakpoint 560px sama dengan media query CSS .wf-tile compact.
-     Di bawah itu graph penuh 556px tidak akan muat di frame ~295px. */
+  /* 3 tier layout:
+     desktop >560px : graph penuh 556px (NODE 84, HUB 116, GAP 26)
+     mobile 321-560 : graph 308px (NODE 52, HUB 68, GAP 8)
+     tiny   ≤320px  : graph 218px (NODE 38, HUB 50, GAP 4)
+     Floor 320px: iPhone SE, Display Zoom, foldable cover screen. */
   useEffect(() => {
-    const mq = window.matchMedia('(max-width: 560px)');
-    const sync = () => setCompact(mq.matches);
+    const mq1 = window.matchMedia('(max-width: 320px)');
+    const mq2 = window.matchMedia('(max-width: 560px)');
+    const sync = () => {
+      if (mq1.matches) setTier('tiny');
+      else if (mq2.matches) setTier('mobile');
+      else setTier('desktop');
+    };
     sync();
-    mq.addEventListener('change', sync);
-    return () => mq.removeEventListener('change', sync);
+    mq1.addEventListener('change', sync);
+    mq2.addEventListener('change', sync);
+    return () => {
+      mq1.removeEventListener('change', sync);
+      mq2.removeEventListener('change', sync);
+    };
   }, []);
 
   /* Ukur container: viewport React Flow dipusatkan manual (x/y), bukan
@@ -368,15 +394,23 @@ export default function WorkflowCanvas() {
     return () => ro.disconnect();
   }, []);
 
-  const graph = useMemo(() => (compact ? buildGraph(LAYOUT_MOBILE) : buildGraph({
-    nodeW: NODE_W,
-    hubW: HUB_W,
-    toolW: TOOL_W,
-    gap: GAP,
-    toolGap: TOOL_GAP,
-    row2Y: ROW2_Y,
-    icon: ICON_SIZE,
-  })), [compact]);
+  const graph = useMemo(() => {
+    const L =
+      tier === 'tiny'
+        ? LAYOUT_TINY
+        : tier === 'mobile'
+          ? LAYOUT_MOBILE
+          : {
+              nodeW: NODE_W,
+              hubW: HUB_W,
+              toolW: TOOL_W,
+              gap: GAP,
+              toolGap: TOOL_GAP,
+              row2Y: ROW2_Y,
+              icon: ICON_SIZE,
+            };
+    return buildGraph(L);
+  }, [tier]);
 
   const n = graph.nodes;
   const e = graph.edges;
@@ -412,7 +446,7 @@ export default function WorkflowCanvas() {
     <div className="wf-canvas" aria-hidden="true" ref={hostRef}>
       <SeqCtx.Provider value={seq}>
         <ReactFlow
-          key={compact ? `m-${Math.round(box.w)}` : `d-${Math.round(box.w)}`}
+          key={`wf-${tier}-${Math.round(box.w)}`}
           nodes={n}
           edges={e}
           nodeTypes={nodeTypes}
@@ -422,23 +456,27 @@ export default function WorkflowCanvas() {
             me-raster seluruh layer termasuk teks → burem. Posisi x/y
             dihitung manual agar graph pas di tengah frame tanpa penskalaan.
 
-            Mobile: layout compact (graph 296px) dipusatkan manual lewat
-            defaultViewport — x dihitung dari lebar container terukur. */
+            Mobile: tiga tier layout (tiny ≤320, mobile ≤560, desktop >560)
+            dipusatkan manual lewat defaultViewport — x/y dihitung dari
+            container terukur, tanpa penskalaan zoom. */
           minZoom={1}
           maxZoom={1}
           defaultViewport={
-            compact
-              ? {
+            tier === 'desktop'
+              ? { x: 34, y: 102, zoom: 1 }
+              : {
                   x: box.w > 0 ? Math.max(0, (box.w - graph.width) / 2) : 2,
-                  /* y minimum 38px: tooltip AI AGENT muncul di atas tile
-                     baris pertama, butuh ~34px ruang (badge + ekor). */
-                  y: box.h > 0 ? Math.max(38, (box.h - graph.height) / 2) : 38,
+                  /* y minimum: tooltip AI AGENT muncul di atas tile baris
+                     pertama. Mobile 38px, tiny 30px (badge 8px lebih pendek). */
+                  y:
+                    box.h > 0
+                      ? Math.max(tier === 'tiny' ? 30 : 38, (box.h - graph.height) / 2)
+                      : tier === 'tiny'
+                        ? 30
+                        : 38,
                   zoom: 1,
                 }
-              : { x: 34, y: 102, zoom: 1 }
           }
-          /* Mobile: y minimum 38px — tooltip AI AGENT muncul DI ATAS
-             tile baris pertama, butuh ruang agar tidak terpotong frame. */
           nodesDraggable={false}
           nodesConnectable={false}
           nodesFocusable={false}

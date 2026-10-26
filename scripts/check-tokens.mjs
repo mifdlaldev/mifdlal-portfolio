@@ -19,7 +19,7 @@ const TOKEN_FILES = ['src/styles/tokens.css', 'src/styles/semantic.css'];
 
 // Breakpoint yang boleh dipakai. Menambah nilai = keputusan sadar,
 // bukan hasil tuning di tengah jalan.
-const BREAKPOINTS = new Set([560, 620, 720, 800, 860, 900, 980, 1228]);
+const BREAKPOINTS = new Set([320, 560, 620, 720, 800, 860, 900, 980, 1228]);
 // max-width: N sah kalau N+1 ada di daftar (pasangan komplementer dari
 // min-width, mis. min-width: 860 + max-width: 859 supaya tidak tumpang tindih).
 

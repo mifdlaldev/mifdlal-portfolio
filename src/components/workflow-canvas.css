@@ -428,3 +428,71 @@
     stroke-dasharray: 4 3;
   }
 }
+
+/* ── Tier 320px: tile lebih kecil lagi ─────────────────────────
+   Layout graph 218px (NODE 38, HUB 50, TOOL 38, GAP 4). Ikon 18px.
+   Dipisah dari blok 560px agar tidak menimpa ukuran 52px. */
+@media (max-width: 320px) {
+  .wf-tile {
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-md);
+  }
+
+  .wf-tile--hub {
+    width: 50px;
+    height: 38px;
+  }
+
+  .wf-tile--tool {
+    width: 38px;
+    height: 34px;
+    border-radius: var(--radius-sm);
+  }
+
+  .wf-tile__label {
+    top: calc(100% + 4px);
+    font-size: var(--text-xs);
+    max-width: 44px;
+    gap: 1px;
+  }
+
+  .wf-tile--tool .wf-tile__label,
+  .wf-node-2line .wf-tile__label {
+    max-width: 44px;
+  }
+
+  .wf-tile--hub .wf-tile__label {
+    bottom: calc(100% + 6px);
+    max-width: 140px;
+    padding: 3px 6px;
+  }
+
+  .wf-tile--hub .wf-tile__sub {
+    display: none;
+  }
+
+  .wf-tile--hub .wf-tile__label::before {
+    bottom: -4px;
+    border-left-width: 4px;
+    border-right-width: 4px;
+    border-top-width: 4px;
+  }
+
+  .wf-tile--hub .wf-tile__label::after {
+    bottom: -3px;
+    border-left-width: 3px;
+    border-right-width: 3px;
+    border-top-width: 3px;
+  }
+
+  .wf-handle {
+    width: 5px;
+    height: 5px;
+  }
+
+  .wf-edge {
+    stroke-width: 1;
+    stroke-dasharray: 3 2;
+  }
+}

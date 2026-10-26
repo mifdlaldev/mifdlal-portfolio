@@ -435,6 +435,24 @@ import { AsciiArtStatic } from './ui/ascii-art'
       aspect-ratio: 4 / 5;
     }
   }
+
+  /* Tier 320px (iPhone SE, Display Zoom, foldable cover screen — 7% traffic).
+     Semua frame jadi portrait 4/5: window Safari dan workflow graph
+     butuh ruang vertikal, chatbot phone juga portrait. Lebar frame
+     ~240px (viewport 320 − padding 40×2). */
+  @media (max-width: 320px) {
+    .service-frame {
+      aspect-ratio: 4 / 5;
+    }
+
+    .service-bar {
+      padding: 0.4rem 0.6rem;
+    }
+
+    .service-bar-label {
+      font-size: var(--text-micro);
+    }
+  }
 </style>
 
 <!-- Larangan klik kanan (context menu) pada ketiga canvas layanan.

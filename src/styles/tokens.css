@@ -135,6 +135,7 @@
   --radius-xl: 22px;
   --radius-lg: 18px;
   --radius-md: 12px; /* bubble chat (rounded-xl shadcn) */
+  --radius-sm: 10px; /* tile diagram tier 320px */
 
   /* --- bayangan (lokal diagram alur kerja) ----------------- */
   --shadow-wf-tile: 0 8px 24px rgba(10, 8, 20, 0.35);

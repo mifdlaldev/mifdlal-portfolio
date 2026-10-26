@@ -54,7 +54,8 @@ const MIN_H = 180;
    768 -> 0.4 tetap kecil tapi dapat dibaca, dan layout tablet showcase
    memang dirancang untuk lebar tersebut. */
 const VIRTUAL_W = 1200; // desktop penuh: di atas breakpoint 1100px situs (nav horizontal)
-const VIRTUAL_W_MOBILE = 768;
+const VIRTUAL_W_MOBILE = 768; // 420-719px: tablet/ponsel besar
+const VIRTUAL_W_TINY = 480; // ≤320px: iPhone SE, Display Zoom, layar lipat (floor 320px)
 
 export default function SafariWindow({
   tabs,
@@ -171,8 +172,14 @@ export default function SafariWindow({
   }, []);
 
   // Skala: lebar virtual diskalakan ke lebar viewport nyata.
-  // Layar kecil memakai 768px supaya teks iframe tetap terbaca.
-  const virtualW = vp.w > 0 && vp.w < 420 ? VIRTUAL_W_MOBILE : VIRTUAL_W;
+  // 3 tier: ≤320px pakai 480 (teks 2x lebih besar dari 768 pada frame 224px),
+  // <420px pakai 768, sisanya 1200.
+  const virtualW =
+    vp.w > 0 && vp.w <= 240
+      ? VIRTUAL_W_TINY
+      : vp.w > 0 && vp.w < 420
+        ? VIRTUAL_W_MOBILE
+        : VIRTUAL_W;
   const scale = vp.w > 0 ? vp.w / virtualW : 1;
   // Tinggi virtual: tinggi viewport dibagi skala -> iframe memenuhi area
   // konten, sama seperti mengubah tinggi window browser laptop.

@@ -846,3 +846,58 @@
     height: 18px;
   }
 }
+
+/* ── Tier 320px: phone mockup lebih ringkas ─────────────────────
+   Frame 240×300 (viewport 320 − gutter 40×2, portrait 4/5).
+   Padding canvas dikecilkan ke 3% agar phone dapat lebar maksimal;
+   bubble 8px supaya satu baris muat 14-16 karakter. */
+@media (max-width: 320px) {
+  .cb-canvas {
+    padding: 3% 3%;
+  }
+
+  .cb-phone {
+    height: 98%;
+  }
+
+  .cb-screen {
+    gap: 3px;
+    padding: 19% 6% 10%;
+  }
+
+  .cb-statusbar {
+    padding: 0 6%;
+  }
+
+  .cb-bubble {
+    padding: 3px 5px;
+    font-size: var(--text-micro);
+    max-width: 92%;
+  }
+
+  .cb-handoff {
+    font-size: var(--text-micro);
+    padding-top: 3px;
+    gap: 3px;
+  }
+
+  .cb-handoff-avatar {
+    width: 12px;
+    height: 12px;
+  }
+
+  .cb-msgbar {
+    gap: 3px;
+    padding: 2px 3px;
+  }
+
+  .cb-msgbar-field {
+    height: 16px;
+    font-size: var(--text-micro);
+  }
+
+  .cb-msgbar-send {
+    width: 16px;
+    height: 16px;
+  }
+}

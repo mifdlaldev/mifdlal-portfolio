@@ -477,3 +477,40 @@ body.is-moving-safari .safari__frame {
     display: none;
   }
 }
+
+/* ── Tier 320px: toolbar & tab dipadatkan ───────────────────────
+   Frame 240px (viewport 320 − gutter 40×2). Window 224px.
+   Toolbar 30px, tab bar 22px → konten iframe dapat sisa maksimal.
+   Tab tunggal dilebarkan agar judul tidak ter-ellipsis. */
+@media (max-width: 320px) {
+  .safari__toolbar {
+    height: 30px;
+    gap: 3px;
+    padding: 0 5px;
+  }
+
+  .safari__dot {
+    width: 5px;
+    height: 5px;
+  }
+
+  .safari__address {
+    padding: 3px 6px;
+    border-radius: var(--radius-sm);
+  }
+
+  .safari__url {
+    font-size: var(--text-micro);
+  }
+
+  .safari__tablist {
+    height: 22px;
+  }
+
+  .safari__tab {
+    min-width: 72px;
+    max-width: 100px;
+    padding: 0 6px;
+    font-size: var(--text-micro);
+  }
+}
