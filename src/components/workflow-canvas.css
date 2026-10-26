@@ -17,11 +17,14 @@
   height: 100%;
 }
 
-/* ── Node tile ─────────────────────────────────────────────── */
+/* ── Node tile ───────────────────────────────────────────────
+   Ukuran diatur lewat CSS custom property di .wf-canvas
+   (di-set WorkflowCanvas.tsx dari lebar container terukur).
+   Nilai di bawah = default desktop (>560px). */
 .wf-tile {
   position: relative;
-  width: 84px;
-  height: 84px;
+  width: var(--wf-node-w, 84px);
+  height: var(--wf-node-h, 84px);
   border-radius: var(--radius-xl);
   background: var(--paper);
   border: 1px solid var(--ink-16);
@@ -34,26 +37,26 @@
 /* Hub: tile pusat — tanpa border elektrik, tanpa glow.
    Bentuk, border, dan bayangan identik dengan tile biasa. */
 .wf-tile--hub {
-  width: 116px;
-  height: 84px;
+  width: var(--wf-hub-w, 116px);
+  height: var(--wf-node-h, 84px);
   box-shadow: var(--shadow-wf-tile);
 }
 
 /* Tool: lebih kecil, di baris kedua. */
 .wf-tile--tool {
-  width: 80px;
-  height: 72px;
+  width: var(--wf-tool-w, 80px);
+  height: var(--wf-tool-h, 72px);
   border-radius: var(--radius-lg);
 }
 
 /* Label tool lebih sempit — dua kata tetap muat tanpa menyentuh tetangga. */
 .wf-tile--tool .wf-tile__label {
-  max-width: 96px;
+  max-width: var(--wf-label-max, 96px);
 }
 
 /* Node validasi & kirim: judul panjang dipaksa 2 baris agar proporsional. */
 .wf-node-2line .wf-tile__label {
-  max-width: 72px;
+  max-width: var(--wf-label-max-2, 72px);
 }
 
 /* Ikon di tengah tile — biru elektrik. */
@@ -89,11 +92,11 @@
    Tile biasa: selalu terlihat. */
 .wf-tile__label {
   position: absolute;
-  top: calc(100% + 10px);
+  top: calc(100% + var(--wf-label-gap, 10px));
   left: 50%;
   transform: translateX(-50%);
   font-family: var(--font-mono);
-  font-size: var(--text-eyebrow);
+  font-size: var(--wf-label-font, var(--text-eyebrow));
   font-weight: var(--weight-bold);
   letter-spacing: var(--tracking-caps);
   color: var(--paper);
@@ -101,7 +104,7 @@
   text-align: center;
   line-height: var(--leading-ui);
   width: max-content;
-  max-width: 104px;
+  max-width: var(--wf-label-max, 104px);
   /* Tanpa outline — teks polos, tajam di skala integer. */
   display: flex;
   flex-direction: column;
@@ -189,8 +192,8 @@
 
 /* ── Port penghubung ───────────────────────────────────────── */
 .wf-handle {
-  width: 7px;
-  height: 7px;
+  width: var(--wf-handle, 7px);
+  height: var(--wf-handle, 7px);
   border-radius: 50%;
   background: var(--electric);
   border: 2px solid var(--paper);
@@ -344,66 +347,35 @@
   }
 }
 
-/* ── Mobile: tile compact ───────────────────────────────────────
-   Layout graph dihitung di WorkflowCanvas.tsx (LAYOUT_MOBILE):
-   NODE 52, HUB 68, TOOL 48, GAP 8, ROW2_Y 104 → total 296px.
-   Ukuran tile di sini WAJIB sama dengan konstanta tsb, kalau tidak
-   node saling tumpuk dan konektor meleset dari handle.
+/* ── Mobile & small screens: tipografi & tooltip ──────────────
+   GEOMETRI tile (lebar/tinggi/gap) diatur lewat CSS custom property
+   di .wf-canvas — nilai di-hitung WorkflowCanvas.tsx dari lebar
+   container terukur (fluid, bukan tier diskret). Blok ini hanya
+   menyesuaikan label, tooltip, handle, dan edge agar tetap terbaca. */
 
-   Ikon 24px (dari 38px) karena tile 52px — ikon 38 menyentuh tepi. */
 @media (max-width: 560px) {
-  .wf-tile {
-    width: 52px;
-    height: 52px;
-    border-radius: var(--radius-lg);
-  }
-
-  .wf-tile--hub {
-    width: 68px;
-    height: 52px;
-  }
-
-  .wf-tile--tool {
-    width: 48px;
-    height: 44px;
-    border-radius: var(--radius-md);
-  }
-
-  /* Label: 8px, jarak 5px dari tile. max-width dijaga 56px supaya
-     dua kata tetap 2 baris tanpa menyentuh tile tetangga (gap 8px). */
+  /* Label: ukuran & jarak ikut var --wf-label-font / --wf-label-gap
+     (di-set JS). Jarak antar baris lebih rapat. */
   .wf-tile__label {
-    top: calc(100% + 5px);
-    font-size: var(--text-micro);
-    letter-spacing: 0;
-    max-width: 56px;
     line-height: var(--leading-ui);
+    gap: 1px;
+    /* Bayangan tipis agar teks krem tetap terbaca di atas foto ramai. */
+    text-shadow: 0 1px 2px var(--ink-900);
   }
 
-  .wf-tile--tool .wf-tile__label {
-    max-width: 56px;
-  }
-
-  .wf-node-2line .wf-tile__label {
-    max-width: 52px;
-  }
-
-  /* Tooltip hub: tile AI AGENT ada di baris paling atas (y=0), tooltip
-     muncul ke atas → keluar frame. Di mobile: sub-teks disembunyikan,
-     badge dipadatkan jadi satu baris, jarak 8px. Sisa ruang atas
-     dijamin oleh defaultViewport y minimum 38px (WorkflowCanvas.tsx). */
+  /* Tooltip hub: tile AI AGENT ada di baris paling atas, tooltip
+     muncul ke atas → ruang dijamin oleh defaultViewport y minimum. */
   .wf-tile--hub .wf-tile__label {
     bottom: calc(100% + 8px);
-    max-width: 160px;
     padding: 4px 7px;
-    font-size: var(--text-micro);
     letter-spacing: 0;
+    text-shadow: 0 1px 3px var(--ink-900);
   }
 
   .wf-tile--hub .wf-tile__sub {
     display: none;
   }
 
-  /* Ekor tooltip ikut mengecil agar proporsional dengan badge 8px. */
   .wf-tile--hub .wf-tile__label::before {
     bottom: -5px;
     border-left-width: 5px;
@@ -419,80 +391,10 @@
   }
 
   .wf-handle {
-    width: 6px;
-    height: 6px;
+    border-width: 1.5px;
   }
 
   .wf-edge {
-    stroke-width: 1.2;
-    stroke-dasharray: 4 3;
-  }
-}
-
-/* ── Tier 320px: tile lebih kecil lagi ─────────────────────────
-   Layout graph 218px (NODE 38, HUB 50, TOOL 38, GAP 4). Ikon 18px.
-   Dipisah dari blok 560px agar tidak menimpa ukuran 52px. */
-@media (max-width: 320px) {
-  .wf-tile {
-    width: 38px;
-    height: 38px;
-    border-radius: var(--radius-md);
-  }
-
-  .wf-tile--hub {
-    width: 50px;
-    height: 38px;
-  }
-
-  .wf-tile--tool {
-    width: 38px;
-    height: 34px;
-    border-radius: var(--radius-sm);
-  }
-
-  .wf-tile__label {
-    top: calc(100% + 4px);
-    font-size: var(--text-xs);
-    max-width: 44px;
-    gap: 1px;
-  }
-
-  .wf-tile--tool .wf-tile__label,
-  .wf-node-2line .wf-tile__label {
-    max-width: 44px;
-  }
-
-  .wf-tile--hub .wf-tile__label {
-    bottom: calc(100% + 6px);
-    max-width: 140px;
-    padding: 3px 6px;
-  }
-
-  .wf-tile--hub .wf-tile__sub {
-    display: none;
-  }
-
-  .wf-tile--hub .wf-tile__label::before {
-    bottom: -4px;
-    border-left-width: 4px;
-    border-right-width: 4px;
-    border-top-width: 4px;
-  }
-
-  .wf-tile--hub .wf-tile__label::after {
-    bottom: -3px;
-    border-left-width: 3px;
-    border-right-width: 3px;
-    border-top-width: 3px;
-  }
-
-  .wf-handle {
-    width: 5px;
-    height: 5px;
-  }
-
-  .wf-edge {
-    stroke-width: 1;
-    stroke-dasharray: 3 2;
+    stroke-opacity: 0.85;
   }
 }

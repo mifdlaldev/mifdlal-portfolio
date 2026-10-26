@@ -131,6 +131,20 @@
   --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --ease-in: cubic-bezier(0.4, 0, 1, 1);
 
+  /* --- geometri diagram alur kerja (fluid, di-set JS per lebar) ---
+     Nilai di sini = default desktop. WorkflowCanvas.tsx menimpa lewat
+     inline style pada .wf-canvas saat container < 561px. */
+  --wf-node-w: 84px;
+  --wf-node-h: 84px;
+  --wf-hub-w: 116px;
+  --wf-tool-w: 80px;
+  --wf-tool-h: 72px;
+  --wf-label-max: 104px;
+  --wf-label-max-2: 72px;
+  --wf-label-font: 0.75rem; /* = --text-eyebrow */
+  --wf-label-gap: 10px;
+  --wf-handle: 7px;
+
   /* --- radius (lokal diagram) ------------------------------ */
   --radius-xl: 22px;
   --radius-lg: 18px;

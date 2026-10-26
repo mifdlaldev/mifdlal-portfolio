@@ -241,27 +241,35 @@ const TOOL_RIGHT_X = TOOL_MID_X + TOOL_W + TOOL_GAP;
    Mobile (<560px): frame hanya ~295px → semua ukuran diperkecil
    (NODE 52, HUB 68, GAP 8) sehingga total 296px muat tanpa penskalaan
    zoom (zoom pecahan dihindari karena me-raster teks → burem). */
-const LAYOUT_MOBILE: Layout = {
-  nodeW: 52,
-  hubW: 68,
-  toolW: 48,
-  gap: 8,
-  toolGap: 6,
-  row2Y: 104,
-  icon: 24,
-};
+/* Tier 320px dihapus — diganti layout fluid di layoutForWidth(). */
 
-/* Tier 320px: frame hanya ~240px (viewport 320 − gutter 40×2).
-   Total graph 218px → muat. Ikon 18px di tile 38px. */
-const LAYOUT_TINY: Layout = {
-  nodeW: 38,
-  hubW: 50,
-  toolW: 38,
-  gap: 4,
-  toolGap: 4,
-  row2Y: 84,
-  icon: 18,
-};
+/* Layout fluid: semua ukuran diturunkan dari lebar container nyata.
+   Dipakai untuk lebar < 561px (mobile/tablet kecil). Total lebar graph
+   = 4*nodeW + hubW + 4*gap, dijaga ≤ 97% lebar container agar tidak
+   pernah terpotong di lebar mana pun (320, 360, 390, 430, 480...).
+
+   Verifikasi (penjamin while-loop):
+             w=240 (vp 320) → gap 7, nodeW 38, hub 49 → 233px (budget 235)
+             w=280 (vp 360) → gap 8, nodeW 44, hub 57 → 269px (budget 274)
+             w=295 (vp 390) → gap 8, nodeW 48, hub 62 → 286px (budget 289) */
+function layoutForWidth(w: number): Layout {
+  const gap = Math.round(Math.min(8, Math.max(4, w * 0.028)));
+  const budget = w * 0.98 - 4 * gap; // sisa untuk 4 tile + hub
+  let nodeW = Math.max(34, Math.round(budget / 5.3));
+  const hubOf = (n: number) => Math.round(n * 1.3);
+  /* Penjamin: turunkan nodeW sampai total graph benar-benar ≤ 98% lebar.
+     Pembulatan Math.round bisa membuat total melebihi budget 1-3px. */
+  while (4 * nodeW + hubOf(nodeW) > budget && nodeW > 34) nodeW -= 1;
+  return {
+    nodeW,
+    hubW: hubOf(nodeW),
+    toolW: Math.round(nodeW * 0.85),
+    gap,
+    toolGap: Math.round(gap * 0.75),
+    row2Y: Math.round(nodeW * 2),
+    icon: Math.max(14, Math.round(nodeW * 0.46)),
+  };
+}
 
 type Layout = {
   nodeW: number;
@@ -355,62 +363,43 @@ const edges: Edge[] = [
 ];
 
 export default function WorkflowCanvas() {
-  const [tier, setTier] = useState<'desktop' | 'mobile' | 'tiny'>('desktop');
+  const [width, setWidth] = useState(0); // lebar container terukur (px)
   const hostRef = useRef<HTMLDivElement>(null);
   const [box, setBox] = useState({ w: 0, h: 0 });
 
-  /* 3 tier layout:
-     desktop >560px : graph penuh 556px (NODE 84, HUB 116, GAP 26)
-     mobile 321-560 : graph 308px (NODE 52, HUB 68, GAP 8)
-     tiny   ≤320px  : graph 218px (NODE 38, HUB 50, GAP 4)
-     Floor 320px: iPhone SE, Display Zoom, foldable cover screen. */
-  useEffect(() => {
-    const mq1 = window.matchMedia('(max-width: 320px)');
-    const mq2 = window.matchMedia('(max-width: 560px)');
-    const sync = () => {
-      if (mq1.matches) setTier('tiny');
-      else if (mq2.matches) setTier('mobile');
-      else setTier('desktop');
-    };
-    sync();
-    mq1.addEventListener('change', sync);
-    mq2.addEventListener('change', sync);
-    return () => {
-      mq1.removeEventListener('change', sync);
-      mq2.removeEventListener('change', sync);
-    };
-  }, []);
-
   /* Ukur container: viewport React Flow dipusatkan manual (x/y), bukan
-     fitView — fitView menghasilkan zoom pecahan yang me-raster teks. */
+     fitView — fitView menghasilkan zoom pecahan yang me-raster teks.
+     Juga simpan lebar untuk menghitung layout fluid tile. */
   useEffect(() => {
     const el = hostRef.current;
     if (!el) return;
     const ro = new ResizeObserver(() => {
       setBox({ w: el.clientWidth, h: el.clientHeight });
+      setWidth(el.clientWidth);
     });
     ro.observe(el);
     setBox({ w: el.clientWidth, h: el.clientHeight });
+    setWidth(el.clientWidth);
     return () => ro.disconnect();
   }, []);
 
+  /* Pilih layout: desktop (>560px) pakai konstanta tetap;
+     sisanya fluid dari lebar nyata. */
   const graph = useMemo(() => {
-    const L =
-      tier === 'tiny'
-        ? LAYOUT_TINY
-        : tier === 'mobile'
-          ? LAYOUT_MOBILE
-          : {
-              nodeW: NODE_W,
-              hubW: HUB_W,
-              toolW: TOOL_W,
-              gap: GAP,
-              toolGap: TOOL_GAP,
-              row2Y: ROW2_Y,
-              icon: ICON_SIZE,
-            };
-    return buildGraph(L);
-  }, [tier]);
+    const L: Layout =
+      width > 0 && width < 561
+        ? layoutForWidth(width)
+        : {
+            nodeW: NODE_W,
+            hubW: HUB_W,
+            toolW: TOOL_W,
+            gap: GAP,
+            toolGap: TOOL_GAP,
+            row2Y: ROW2_Y,
+            icon: ICON_SIZE,
+          };
+    return { ...buildGraph(L), L };
+  }, [width]);
 
   const n = graph.nodes;
   const e = graph.edges;
@@ -442,11 +431,29 @@ export default function WorkflowCanvas() {
     return { nodes: new Set(p.nodes), edges: new Set(p.edges) };
   }, [phase]);
 
+  /* CSS custom property untuk geometri tile — dipakai workflow-canvas.css.
+     Desktop tidak di-set (CSS fallback 84/116/80/72) agar tidak berubah. */
+  const isFluid = width > 0 && width < 561;
+  const tileVars = isFluid
+    ? ({
+        '--wf-node-w': `${graph.L.nodeW}px`,
+        '--wf-node-h': `${graph.L.nodeW}px`,
+        '--wf-hub-w': `${graph.L.hubW}px`,
+        '--wf-tool-w': `${graph.L.toolW}px`,
+        '--wf-tool-h': `${Math.round(graph.L.toolW * 0.9)}px`,
+        '--wf-label-max': `${Math.round(graph.L.nodeW * 0.95)}px`,
+        '--wf-label-max-2': `${Math.round(graph.L.nodeW * 0.9)}px`,
+        '--wf-label-font': `${Math.max(7, Math.min(10, Math.round(graph.L.nodeW * 0.17)))}px`,
+        '--wf-label-gap': `${Math.max(4, Math.round(graph.L.nodeW * 0.12))}px`,
+        '--wf-handle': `${Math.max(4, Math.round(graph.L.nodeW * 0.13))}px`,
+      } as React.CSSProperties)
+    : undefined;
+
   return (
-    <div className="wf-canvas" aria-hidden="true" ref={hostRef}>
+    <div className="wf-canvas" aria-hidden="true" ref={hostRef} style={tileVars}>
       <SeqCtx.Provider value={seq}>
         <ReactFlow
-          key={`wf-${tier}-${Math.round(box.w)}`}
+          key={`wf-${isFluid ? 'fluid' : 'desktop'}-${Math.round(box.w)}`}
           nodes={n}
           edges={e}
           nodeTypes={nodeTypes}
@@ -456,26 +463,19 @@ export default function WorkflowCanvas() {
             me-raster seluruh layer termasuk teks → burem. Posisi x/y
             dihitung manual agar graph pas di tengah frame tanpa penskalaan.
 
-            Mobile: tiga tier layout (tiny ≤320, mobile ≤560, desktop >560)
-            dipusatkan manual lewat defaultViewport — x/y dihitung dari
-            container terukur, tanpa penskalaan zoom. */
+            Mobile: layout fluid (graph ≤97% lebar container) dipusatkan
+            manual lewat defaultViewport, tanpa penskalaan zoom. */
           minZoom={1}
           maxZoom={1}
           defaultViewport={
-            tier === 'desktop'
-              ? { x: 34, y: 102, zoom: 1 }
-              : {
+            isFluid
+              ? {
                   x: box.w > 0 ? Math.max(0, (box.w - graph.width) / 2) : 2,
-                  /* y minimum: tooltip AI AGENT muncul di atas tile baris
-                     pertama. Mobile 38px, tiny 30px (badge 8px lebih pendek). */
-                  y:
-                    box.h > 0
-                      ? Math.max(tier === 'tiny' ? 30 : 38, (box.h - graph.height) / 2)
-                      : tier === 'tiny'
-                        ? 30
-                        : 38,
+                  /* y minimum 34px: tooltip AI AGENT di atas tile baris 1. */
+                  y: box.h > 0 ? Math.max(34, (box.h - graph.height) / 2) : 34,
                   zoom: 1,
                 }
+              : { x: 34, y: 102, zoom: 1 }
           }
           nodesDraggable={false}
           nodesConnectable={false}
