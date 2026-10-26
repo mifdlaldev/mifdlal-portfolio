@@ -28,7 +28,7 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
             <span class="project-shot">
               {p.image ? (
                 <>
-                  {/* Latar parallax: versi buram dari tangkapan situs yang
+                  {/* Latar parallax: versi buram dari mockup browser yang
                       sama, bergerak mengikuti scroll — pola .service-photo-clip
                       di canvas layanan. */}
                   <span class="project-photo-clip" aria-hidden="true">
@@ -44,7 +44,7 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
                     class="project-shot-img"
                     src={p.image}
                     width="1000"
-                    height="612"
+                    height="653"
                     alt=""
                     draggable="false"
                     loading="lazy"
@@ -173,11 +173,18 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
     overflow: hidden;
     z-index: 0;
     pointer-events: none;
+    /* Panggung warna: mockup sumbernya transparan, jadi latar butuh
+       dasar sendiri. Gradien biru elektrik -> ink, senada canvas. */
+    background: linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--electric) 60%, var(--ink-900)) 0%,
+      var(--ink-900) 72%
+    );
   }
 
-  /* Foto latar parallax: versi BUAM dari tangkapan situs yang sama.
+  /* Foto latar parallax: versi buram dari mockup browser yang sama.
      Blur 16px + scale 1.12 (menutupi tepi blur), saturasi/contrast
-     diturunkan — sekarang ini cuma latar, bukan konten utama.
+     diturunkan — sekarang ini cuma cahaya lembut di belakang jendela.
      Tinggi 140%, tepi atas -20%: cadangan pergeseran ±20% tinggi frame. */
   .project-photo {
     position: absolute;
@@ -271,11 +278,12 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
     max-height: calc(100% - 2.5rem);
     object-fit: contain;
     z-index: var(--z-raise);
+    /* Tanpa isian latar: mockup transparan, area kosong di sekitar
+       jendela browser menunjukkan latar parallax buram di belakang. */
     border: 1px solid color-mix(in srgb, var(--paper) 60%, transparent);
     box-shadow:
       0 2px 8px color-mix(in srgb, var(--ink-900) 35%, transparent),
       0 12px 32px color-mix(in srgb, var(--ink-900) 25%, transparent);
-    background: var(--color-paper);
     transition: box-shadow var(--dur-fast) var(--ease);
   }
 
