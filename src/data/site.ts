@@ -13,6 +13,9 @@ export type Project = {
   live: string
   repo?: string
   note?: string
+  /** Tangkapan layar asli di public/projects/. Tanpa ini, kartu memakai
+      placeholder SVG bernomor. */
+  image?: string
 }
 
 export const projects: readonly Project[] = [
@@ -24,6 +27,7 @@ export const projects: readonly Project[] = [
       'Situs profil perusahaan logistik B2B: layanan general, project, dan retail cargo, visi misi, area jangkauan, serta formulir kontak.',
     stack: ['WordPress', 'Tema kustom'],
     live: 'https://lokalogistics.co.id/',
+    image: '/projects/loka-logistics.webp',
   },
   {
     no: '02',
