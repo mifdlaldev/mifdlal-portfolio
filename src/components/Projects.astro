@@ -28,17 +28,28 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
             <span class="project-shot">
               {p.image ? (
                 <>
-                  {/* Clip parallax: membungkus foto + overlay + gradien,
-                      sama persis pola dengan canvas layanan (.service-photo-clip).
-                      Foto tinggi 140%, tepi atas -20%: cadangan untuk pergeseran
-                      ±20% tinggi frame. overflow:hidden di sini aman karena
-                      tidak menyentuh bayangan kartu. */}
+                  {/* Latar parallax: versi buram dari tangkapan situs yang
+                      sama, bergerak mengikuti scroll — pola .service-photo-clip
+                      di canvas layanan. */}
                   <span class="project-photo-clip" aria-hidden="true">
                     <span
                       class="project-photo"
                       style={`background-image: url('${p.image}')`}
                     ></span>
                   </span>
+
+                  {/* Foto utama: TETAP di tengah, tidak bergerak, tidak
+                      di-crop. object-fit contain + margin auto. */}
+                  <img
+                    class="project-shot-img"
+                    src={p.image}
+                    width="1000"
+                    height="612"
+                    alt=""
+                    draggable="false"
+                    loading="lazy"
+                    decoding="async"
+                  />
 
                   {/* Penanda sudut gambar teknik — empat L-bracket tipis,
                       sama dengan sudut frame canvas layanan. */}
@@ -137,8 +148,9 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
     transition: border-color var(--dur-fast) var(--ease);
   }
 
-  /* Placeholder (SVG) memenuhi seluruh shot. */
-  .project-shot img {
+  /* Placeholder (SVG) memenuhi seluruh shot. Foto asli (.project-shot-img)
+     punya aturan sendiri di bawah — dikecualikan di sini karena contain. */
+  .project-shot > img:not(.project-shot-img) {
     display: block;
     width: 100%;
     height: 100%;
@@ -163,9 +175,10 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
     pointer-events: none;
   }
 
-  /* Foto lebih tinggi dari frame (140%) dengan tepi atas -20%: cadangan
-     20% di atas dan 20% di bawah. Rentang gerak parallax ±20% tinggi frame,
-     identik dengan canvas layanan. --parallax di-set JS saat scroll. */
+  /* Foto latar parallax: versi BUAM dari tangkapan situs yang sama.
+     Blur 16px + scale 1.12 (menutupi tepi blur), saturasi/contrast
+     diturunkan — sekarang ini cuma latar, bukan konten utama.
+     Tinggi 140%, tepi atas -20%: cadangan pergeseran ±20% tinggi frame. */
   .project-photo {
     position: absolute;
     top: -20%;
@@ -175,25 +188,21 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
     background-color: var(--ink-900);
     background-size: cover;
     background-position: top center;
-    /* Sedikit diturunkan saturasinya supaya tangkapan situs masuk palet
-       kertas-tinta, tidak terlalu mencolok. */
-    filter: saturate(0.9) contrast(1.02);
-    transform: translate3d(0, var(--parallax, 0px), 0);
+    filter: blur(16px) saturate(0.7) contrast(1.05) brightness(0.85);
+    transform: translate3d(0, var(--parallax, 0px), 0) scale(1.12);
     will-change: transform;
   }
 
-  /* Overlay biru elektrik — sama dengan canvas layanan, tapi opacity 0.4
-     (bukan 0.5) karena ini tangkapan situs asli yang harus tetap terbaca,
-     bukan foto dekoratif. */
+  /* Overlay biru elektrik — 0.55 karena latar buram boleh lebih pekat
+     tanpa menghilangkan identitas situs (foto asli ada di depannya). */
   .project-photo::after {
     content: '';
     position: absolute;
     inset: 0;
     background: var(--electric);
-    opacity: 0.4;
+    opacity: 0.55;
     mix-blend-mode: multiply;
     pointer-events: none;
-    transition: opacity var(--dur-fast) var(--ease);
   }
 
   /* Gradien bawah: judul + badge tetap terbaca di atas foto ramai. */
@@ -203,16 +212,11 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
     inset: 0;
     background: linear-gradient(
       to bottom,
-      transparent 50%,
-      color-mix(in srgb, var(--ink-900) 55%, transparent)
+      transparent 45%,
+      color-mix(in srgb, var(--ink-900) 45%, transparent)
     );
     pointer-events: none;
     z-index: var(--z-content);
-  }
-
-  /* Kartu disorot: overlay menipis sedikit, tangkapan situs lebih cerah. */
-  .project-card:hover .project-photo::after {
-    opacity: 0.3;
   }
 
   /* Penanda sudut gambar teknik — empat L-bracket tipis, sama dengan
@@ -254,6 +258,34 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
     border-right-width: 1.5px;
   }
 
+  /* Foto utama: TETAP di tengah, fixed, tidak di-crop. Contain penuh
+     dengan padding 1.25rem, bingkai tipis + bayangan lembut — terbaca
+     sebagai jendela situs mengambang di atas latar parallax. */
+  .project-shot-img {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: auto;
+    height: auto;
+    max-width: calc(100% - 2.5rem);
+    max-height: calc(100% - 2.5rem);
+    object-fit: contain;
+    z-index: var(--z-raise);
+    border: 1px solid color-mix(in srgb, var(--paper) 60%, transparent);
+    box-shadow:
+      0 2px 8px color-mix(in srgb, var(--ink-900) 35%, transparent),
+      0 12px 32px color-mix(in srgb, var(--ink-900) 25%, transparent);
+    background: var(--color-paper);
+    transition: box-shadow var(--dur-fast) var(--ease);
+  }
+
+  /* Kartu disorot: bayangan foto mengambang menipis. */
+  .project-card:hover .project-shot-img {
+    box-shadow:
+      0 4px 12px color-mix(in srgb, var(--ink-900) 40%, transparent),
+      0 18px 44px color-mix(in srgb, var(--ink-900) 30%, transparent);
+  }
+
   /* Nomor menempel di atas gambar seperti pelat nomor pada gambar teknik:
      bidang aksen penuh, satu-satunya bidang berwarna di kartu. */
   .project-no {
@@ -272,7 +304,7 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
   }
 
   @media (hover: hover) {
-    .project-link:hover .project-shot img {
+    .project-link:hover .project-shot > img:not(.project-shot-img) {
       transform: scale(1.025);
     }
   }
@@ -365,7 +397,7 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
 
   @media (prefers-reduced-motion: reduce) {
     .project-card,
-    .project-shot img,
+    .project-shot > img,
     .project-photo,
     .project-arrow {
       transition: none;
@@ -375,7 +407,7 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
       transform: none;
     }
 
-    .project-link:hover .project-shot img {
+    .project-link:hover .project-shot > img:not(.project-shot-img) {
       transform: none;
     }
   }
