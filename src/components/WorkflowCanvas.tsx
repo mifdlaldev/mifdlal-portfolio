@@ -430,11 +430,15 @@ export default function WorkflowCanvas() {
             compact
               ? {
                   x: box.w > 0 ? Math.max(0, (box.w - graph.width) / 2) : 2,
-                  y: box.h > 0 ? Math.max(0, (box.h - graph.height) / 2) : 24,
+                  /* y minimum 38px: tooltip AI AGENT muncul di atas tile
+                     baris pertama, butuh ~34px ruang (badge + ekor). */
+                  y: box.h > 0 ? Math.max(38, (box.h - graph.height) / 2) : 38,
                   zoom: 1,
                 }
               : { x: 34, y: 102, zoom: 1 }
           }
+          /* Mobile: y minimum 38px — tooltip AI AGENT muncul DI ATAS
+             tile baris pertama, butuh ruang agar tidak terpotong frame. */
           nodesDraggable={false}
           nodesConnectable={false}
           nodesFocusable={false}

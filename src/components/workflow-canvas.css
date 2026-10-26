@@ -387,10 +387,35 @@
     max-width: 52px;
   }
 
-  /* Tooltip hub: jangan sampai keluar frame 296px. */
+  /* Tooltip hub: tile AI AGENT ada di baris paling atas (y=0), tooltip
+     muncul ke atas → keluar frame. Di mobile: sub-teks disembunyikan,
+     badge dipadatkan jadi satu baris, jarak 8px. Sisa ruang atas
+     dijamin oleh defaultViewport y minimum 38px (WorkflowCanvas.tsx). */
   .wf-tile--hub .wf-tile__label {
-    bottom: calc(100% + 12px);
-    max-width: 200px;
+    bottom: calc(100% + 8px);
+    max-width: 160px;
+    padding: 4px 7px;
+    font-size: var(--text-micro);
+    letter-spacing: 0;
+  }
+
+  .wf-tile--hub .wf-tile__sub {
+    display: none;
+  }
+
+  /* Ekor tooltip ikut mengecil agar proporsional dengan badge 8px. */
+  .wf-tile--hub .wf-tile__label::before {
+    bottom: -5px;
+    border-left-width: 5px;
+    border-right-width: 5px;
+    border-top-width: 5px;
+  }
+
+  .wf-tile--hub .wf-tile__label::after {
+    bottom: -4px;
+    border-left-width: 4px;
+    border-right-width: 4px;
+    border-top-width: 4px;
   }
 
   .wf-handle {
