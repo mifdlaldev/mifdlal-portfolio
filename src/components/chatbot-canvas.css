@@ -763,40 +763,44 @@
 
 /* ── Mobile: kanvas sempit, rapatkan dua perangkat ──────────
    Label "satu basis data" disembunyikan; garis tetap ada sebagai
-   penghubung visual antara widget dan phone. */
+   penghubung visual antara widget dan phone.
+
+   Mobile fix (2026-10-27): widget disembunyikan, phone diubah jadi
+   fokus utama dengan ukuran penuh frame. Sebelumnya phone hanya
+   87px lebar → bubble terpotong, input ter-ellipsis, widget menumpuk. */
 @media (max-width: 560px) {
   .cb-canvas {
-    padding: 5% 6%;
+    padding: 4% 5%;
+    justify-content: center;
   }
 
-  .cb-widget {
-    width: 40%;
-  }
-
-  .cb-phone {
-    height: clamp(180px, 62%, 280px);
-  }
-
-  /* Browser disembunyikan di mobile — fokus ke phone. */
+  /* Browser dan widget disembunyikan: phone jadi satu-satunya
+     konten, mendapat seluruh lebar frame. */
   .cb-browser {
     display: none;
   }
 
-  .cb-canvas {
-    justify-content: center;
+  .cb-widget {
+    display: none;
   }
 
   .cb-chips {
     display: none;
   }
 
+  /* Phone mengisi seluruh tinggi frame (96%), bukan clamp 180-280px
+     yang membuatnya menciut di frame kecil. */
+  .cb-phone {
+    height: 96%;
+  }
+
   .cb-screen {
-    gap: 3px;
-    padding: 20% 6% 10%;
+    gap: 4px;
+    padding: 20% 6.5% 11%;
   }
 
   .cb-statusbar {
-    padding: 0 6%;
+    padding: 0 6.5%;
   }
 
   .cb-ico {
@@ -807,23 +811,38 @@
     gap: 2px;
   }
 
+  /* Bubble lebih besar (10px bukan 8px) karena ada ruang;
+     max-width 88% mencegah bubble mepet tepi layar. */
   .cb-bubble {
-    padding: 3px 6px;
-    line-height: var(--leading-relaxed);
+    padding: 4px 7px;
+    font-size: var(--text-cap);
+    max-width: 88%;
   }
 
-  .cb-bubble,
   .cb-handoff {
     font-size: var(--text-micro);
+    padding-top: 4px;
+    gap: 4px;
   }
 
-  .cb-monogram {
+  .cb-handoff-avatar {
     width: 14px;
     height: 14px;
   }
 
-  .cb-handoff {
-    padding-top: 2px;
+  /* Composer lebih tinggi: field 18px agar teks tidak terpotong. */
+  .cb-msgbar {
     gap: 4px;
+    padding: 3px 4px;
+  }
+
+  .cb-msgbar-field {
+    height: 18px;
+    font-size: var(--text-cap);
+  }
+
+  .cb-msgbar-send {
+    width: 18px;
+    height: 18px;
   }
 }

@@ -426,6 +426,15 @@ import { AsciiArtStatic } from './ui/ascii-art'
       font-size: var(--text-cap);
     }
   }
+
+  /* Canvas 02 (chatbot) di layar HP: frame portrait 4/5 supaya phone
+     mockup dapat tinggi. Tanpa ini phone hanya ~100px lebar dan bubble
+     terpotong. Hanya baris layanan ke-2 (chatbot) yang berubah. */
+  @media (max-width: 560px) {
+    .service-row:nth-child(2) .service-frame {
+      aspect-ratio: 4 / 5;
+    }
+  }
 </style>
 
 <!-- Larangan klik kanan (context menu) pada ketiga canvas layanan.
