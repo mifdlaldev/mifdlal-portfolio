@@ -47,8 +47,14 @@ const MIN_H = 180;
    - 1200 > 1100 sehingga nav horizontal tampil, container 1180px aktif,
      dan grid desktop penuh (bukan single-column).
    - 1280 tidak dipakai: skalanya jatuh terlalu kecil di window showcase.
-   Konsekuensi: skala tetap mengikuti lebar window (fit-to-width). */
+   Konsekuensi: skala tetap mengikuti lebar window (fit-to-width).
+
+   Layar kecil (<720px): resolusi turun ke 768px (layout tablet showcase,
+   nav hamburger) karena skala 1200->300px (0.25) membuat teks tak terbaca.
+   768 -> 0.4 tetap kecil tapi dapat dibaca, dan layout tablet showcase
+   memang dirancang untuk lebar tersebut. */
 const VIRTUAL_W = 1200; // desktop penuh: di atas breakpoint 1100px situs (nav horizontal)
+const VIRTUAL_W_MOBILE = 768;
 
 export default function SafariWindow({
   tabs,
@@ -90,12 +96,23 @@ export default function SafariWindow({
   // Astro membungkus client component di <astro-island> yang ukurannya
   // 0×0 (inline kosong, konten absolute keluar dari alur). Jika
   // parentElement dipakai, clientWidth host = 0 → window collapse.
+  //
+  // Layar kecil (<720px): window MENGISI frame (inset 8px), bukan 90%x80%.
+  // Alasannya toolbar 42px + tab bar 30px menyisakan ~80px konten pada
+  // frame 194px; window 90% membuat tab bar terpotong dan URL ter-ellipsis.
+  const isMobile = () =>
+    typeof window !== 'undefined' && window.matchMedia('(max-width: 719px)').matches;
+
   useEffect(() => {
     const host = rootRef.current?.closest('.service-frame');
     if (!host) return;
     const pw = host.clientWidth;
     const ph = host.clientHeight;
     if (pw <= 0 || ph <= 0) return;
+    if (isMobile()) {
+      setRect({ x: 8, y: 8, w: Math.max(MIN_W, pw - 16), h: Math.max(MIN_H, ph - 16) });
+      return;
+    }
     const w = Math.max(MIN_W, Math.min(pw - 16, Math.round(pw * 0.9)));
     const h = Math.max(MIN_H, Math.min(ph - 16, Math.round(ph * 0.8)));
     setRect({ x: Math.round((pw - w) / 2), y: Math.round((ph - h) / 2), w, h });
@@ -113,14 +130,16 @@ export default function SafariWindow({
       setRect((prev) => {
         if (!prev) {
           // Frame baru punya ukuran (mis. section belum terlihat saat mount).
+          if (isMobile()) {
+            return { x: 8, y: 8, w: Math.max(MIN_W, pw - 16), h: Math.max(MIN_H, ph - 16) };
+          }
           const w = Math.max(MIN_W, Math.min(pw - 16, Math.round(pw * 0.9)));
           const h = Math.max(MIN_H, Math.min(ph - 16, Math.round(ph * 0.8)));
-          return {
-            x: Math.round((pw - w) / 2),
-            y: Math.round((ph - h) / 2),
-            w,
-            h,
-          };
+          return { x: Math.round((pw - w) / 2), y: Math.round((ph - h) / 2), w, h };
+        }
+        // Mobile: window selalu mengisi frame (x/y tetap 8px).
+        if (isMobile()) {
+          return { x: 8, y: 8, w: Math.max(MIN_W, pw - 16), h: Math.max(MIN_H, ph - 16) };
         }
         const w = Math.max(MIN_W, Math.min(prev.w, pw));
         const h = Math.max(MIN_H, Math.min(prev.h, ph));
@@ -151,8 +170,10 @@ export default function SafariWindow({
     return () => ro.disconnect();
   }, []);
 
-  // Skala: lebar virtual 1024px diskalakan ke lebar viewport nyata.
-  const scale = vp.w > 0 ? vp.w / VIRTUAL_W : 1;
+  // Skala: lebar virtual diskalakan ke lebar viewport nyata.
+  // Layar kecil memakai 768px supaya teks iframe tetap terbaca.
+  const virtualW = vp.w > 0 && vp.w < 420 ? VIRTUAL_W_MOBILE : VIRTUAL_W;
+  const scale = vp.w > 0 ? vp.w / virtualW : 1;
   // Tinggi virtual: tinggi viewport dibagi skala -> iframe memenuhi area
   // konten, sama seperti mengubah tinggi window browser laptop.
   const virtualH = scale > 0 ? Math.round(vp.h / scale) : 0;
@@ -464,7 +485,7 @@ export default function SafariWindow({
               referrerPolicy="no-referrer-when-downgrade"
               sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
               style={{
-                width: `${VIRTUAL_W}px`,
+                width: `${virtualW}px`,
                 height: `${virtualH}px`,
                 transform: `scale(${scale})`,
               }}

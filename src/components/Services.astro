@@ -409,6 +409,23 @@ import { AsciiArtStatic } from './ui/ascii-art'
       order: 1;
     }
   }
+
+  /* Layar kecil: frame lebih tinggi (4/3) supaya toolbar + tab bar +
+     konten iframe punya ruang vertikal. Ketiga canvas (01 Safari, 02
+     chatbot, 03 workflow) memakai .service-frame yang sama. */
+  @media (max-width: 719px) {
+    .service-frame {
+      aspect-ratio: 4 / 3;
+    }
+
+    .service-bar {
+      padding: 0.5rem 0.75rem;
+    }
+
+    .service-bar-label {
+      font-size: var(--text-cap);
+    }
+  }
 </style>
 
 <!-- Larangan klik kanan (context menu) pada ketiga canvas layanan.

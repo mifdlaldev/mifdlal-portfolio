@@ -405,3 +405,75 @@ body.is-moving-safari {
 body.is-moving-safari .safari__frame {
   pointer-events: none;
 }
+
+/* ---------- layar kecil (<720px) ----------
+   Window mengisi frame (lihat isMobile() di safari-window.tsx). Toolbar
+   dikecilkan dan ikon aksi disembunyikan: 8 ikon x 24px tidak muat di
+   window ~300px, dan address bar jadi korban (URL ter-ellipsis di tengah
+   domain). Tab bar bisa digeser horizontal; tombol close disembunyikan
+   supaya label tab tidak terpotong. */
+@media (max-width: 719px) {
+  .safari__toolbar {
+    height: 34px;
+    gap: 4px;
+    padding: 0 6px;
+  }
+
+  .safari__traffic {
+    gap: 4px;
+    padding-right: 2px;
+  }
+
+  .safari__dot {
+    width: 6px;
+    height: 6px;
+  }
+
+  .safari__tools {
+    display: none;
+  }
+
+  .safari__address {
+    flex: 1 1 auto;
+    max-width: none;
+    padding: 4px 8px;
+    gap: 4px;
+  }
+
+  .safari__address svg {
+    width: 9px;
+    height: 9px;
+  }
+
+  .safari__url {
+    font-size: var(--text-cap);
+    text-align: left;
+  }
+
+  .safari__reload {
+    display: none;
+  }
+
+  .safari__tablist {
+    height: 26px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+  }
+
+  .safari__tablist::-webkit-scrollbar {
+    display: none;
+  }
+
+  .safari__tab {
+    min-width: 84px;
+    max-width: 120px;
+    gap: 4px;
+    padding: 0 8px;
+    font-size: var(--text-micro);
+  }
+
+  .safari__tab-x {
+    display: none;
+  }
+}
