@@ -277,9 +277,9 @@ import CodeComment from './CodeComment.astro'
     color: var(--color-muted);
     line-height: var(--leading-loose);
     margin: 0 0 1.25rem;
-    /* Ukuran lebih besar agar nyaman dibaca semua umur:
-       --sub = clamp(1.0625rem, 2.2vw, 1.25rem) = 17px sampai 20px. */
-    font-size: var(--text-sub);
+    /* Ukuran teks isi: 16px sampai 18px — lebih besar dari body 15px
+       untuk kenyamanan baca, tapi tidak sebesar --sub (17-20px). */
+    font-size: clamp(1rem, 2vw, 1.125rem);
     text-wrap: pretty;
   }
 
