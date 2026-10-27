@@ -47,6 +47,7 @@ export const projects: readonly Project[] = [
       'Landing page villa dua bahasa, Indonesia dan Inggris, dengan route per locale.',
     stack: ['Next.js', 'next-intl'],
     live: 'https://mahoni-house.vercel.app',
+    image: '/projects/mahoni-house.webp',
   },
   {
     no: '04',
