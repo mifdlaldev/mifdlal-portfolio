@@ -37,6 +37,7 @@ export const projects: readonly Project[] = [
       'Wizard enam langkah untuk memilih lokasi ujian Universitas Terbuka: identitas, wilayah, sekolah, detail, konfirmasi, lalu ringkasan pilihan.',
     stack: ['Vite', 'JavaScript'],
     live: 'https://simulasi-pemilihan-lokasi-ujian-ut.vercel.app/',
+    image: '/projects/ut-bandung-simulator.webp',
   },
   {
     no: '03',
