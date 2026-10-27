@@ -12,7 +12,7 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
   <div class="wrap">
     <div class="section-head">
       <span class="fig-label">fig. 03 · proyek</span>
-      <h2 class="section-headline">Hasil kerja<br />yang dapat<br />anda lihat.</h2>
+      <h2 class="section-headline">Hasil kerja yang dapat anda lihat.</h2>
     </div>
 
     <ul class="project-list">
@@ -98,11 +98,11 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
     max-width: 56ch;
   }
 
-  /* Header proyek: teks dipaksa 3 baris lewat <br> di markup.
-     max-width di sini cuma membatasi lebar keseluruhan header agar
-     tidak terlalu panjang, tidak mengatur pemecahan baris. */
+  /* Header proyek: batasi lebar agar teks pecah jadi 3 baris secara
+     natural (tanpa <br>). max-width 12ch — sedikit lebih besar dari
+     11ch agar baris pertama muat "Hasil kerja" penuh di font display. */
   .section-head .section-headline {
-    max-width: 14ch;
+    max-width: 12ch;
     text-wrap: balance;
   }
 
