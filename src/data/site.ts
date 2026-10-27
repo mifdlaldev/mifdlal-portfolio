@@ -49,34 +49,6 @@ export const projects: readonly Project[] = [
     live: 'https://mahoni-house.vercel.app',
     image: '/projects/mahoni-house.webp',
   },
-  {
-    no: '04',
-    name: 'conduit',
-    role: 'CLI tool',
-    description:
-      'Tool pengekstrak video berbasis Playwright, untuk otomasi scraping.',
-    stack: ['Rust', 'Playwright'],
-    live: 'https://conduit-iota-rust.vercel.app',
-    repo: 'https://github.com/mifdlaldev/conduit',
-  },
-  {
-    no: '05',
-    name: 'e-baso-ikan',
-    role: 'E-commerce',
-    description:
-      'Toko bakso online: katalog produk dan alur checkout sampai pembayaran.',
-    stack: ['Web app', 'Vercel'],
-    live: 'https://e-baso-ikan.vercel.app',
-  },
-  {
-    no: '06',
-    name: 'orbit-cli',
-    role: 'CLI tool',
-    description:
-      'CLI project generator untuk membuat kerangka proyek baru dari terminal.',
-    stack: ['Node.js'],
-    live: 'https://mifdlaldev.github.io/orbit-cli',
-  },
 ]
 
 /* Foto layanan: unduhan Unsplash, dipotong 16/10 oleh kanvas layanan.
