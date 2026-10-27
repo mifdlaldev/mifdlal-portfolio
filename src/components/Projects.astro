@@ -98,6 +98,14 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
     max-width: 56ch;
   }
 
+  /* Header proyek: batasi lebar agar teks pecah jadi 2 baris.
+     max-width 11ch -> baris 1: "Hasil kerja", baris 2: sisa teks.
+     text-wrap: balance meratakan kedua baris bila memungkinkan. */
+  .section-head .section-headline {
+    max-width: 11ch;
+    text-wrap: balance;
+  }
+
   /* Bentuk kartu mengikuti kartu sertifikasi: gambar di atas, keterangan di
      bawah, garis tipis sebagai satu-satunya pembatas. Bedanya, seluruh kartu
      adalah satu tautan hidup ke hasil kerja, jadi tidak ada dialog. */
