@@ -57,6 +57,61 @@ import EncryptedText from '../components/EncryptedText'
       <a href="#kontak" class="btn btn-primary">Ceritakan masalahnya</a>
       <a href="#proyek" class="btn btn-ghost">Lihat proyek</a>
     </div>
+
+    <!-- Diagram alur kerja bergaya blueprint: menjelaskan value prop
+         secara visual, mengisi area kosong bawah hero. fig. 02. -->
+    <div class="hero-flow" aria-label="Alur kerja">
+      <span class="fig-label">fig. 02 — alur kerja</span>
+
+      <div class="flow-track">
+        <!-- Node 01 -->
+        <div class="flow-node">
+          <span class="flow-no">01</span>
+          <h3 class="flow-title">Ceritakan masalahnya</h3>
+          <p class="flow-desc">Anda jelaskan proses manual yang ingin dihilangkan atau dipercepat.</p>
+          <span class="flow-corner flow-corner--tl" aria-hidden="true"></span>
+          <span class="flow-corner flow-corner--tr" aria-hidden="true"></span>
+          <span class="flow-corner flow-corner--bl" aria-hidden="true"></span>
+          <span class="flow-corner flow-corner--br" aria-hidden="true"></span>
+        </div>
+
+        <div class="flow-arrow" aria-hidden="true">
+          <svg viewBox="0 0 60 12" preserveAspectRatio="none" width="60" height="12">
+            <line x1="2" y1="6" x2="50" y2="6" stroke="currentColor" stroke-width="1" stroke-dasharray="4 3"/>
+            <polygon points="50,2 58,6 50,10" fill="currentColor"/>
+          </svg>
+        </div>
+
+        <!-- Node 02 (aksen) -->
+        <div class="flow-node flow-node--accent">
+          <span class="flow-no">02</span>
+          <h3 class="flow-title">Bangun sistem</h3>
+          <p class="flow-desc">Saya rancang otomasi, chatbot, atau web app sesuai kebutuhan.</p>
+          <span class="flow-corner flow-corner--tl" aria-hidden="true"></span>
+          <span class="flow-corner flow-corner--tr" aria-hidden="true"></span>
+          <span class="flow-corner flow-corner--bl" aria-hidden="true"></span>
+          <span class="flow-corner flow-corner--br" aria-hidden="true"></span>
+        </div>
+
+        <div class="flow-arrow" aria-hidden="true">
+          <svg viewBox="0 0 60 12" preserveAspectRatio="none" width="60" height="12">
+            <line x1="2" y1="6" x2="50" y2="6" stroke="currentColor" stroke-width="1" stroke-dasharray="4 3"/>
+            <polygon points="50,2 58,6 50,10" fill="currentColor"/>
+          </svg>
+        </div>
+
+        <!-- Node 03 -->
+        <div class="flow-node">
+          <span class="flow-no">03</span>
+          <h3 class="flow-title">Terima output</h3>
+          <p class="flow-desc">Sistem siap dipakai tim, dengan dukungan dan iterasi lanjutan.</p>
+          <span class="flow-corner flow-corner--tl" aria-hidden="true"></span>
+          <span class="flow-corner flow-corner--tr" aria-hidden="true"></span>
+          <span class="flow-corner flow-corner--bl" aria-hidden="true"></span>
+          <span class="flow-corner flow-corner--br" aria-hidden="true"></span>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -178,6 +233,133 @@ import EncryptedText from '../components/EncryptedText'
     justify-content: center;
     gap: 0.75rem;
     margin-top: 2.25rem;
+  }
+
+  /* ============================================================
+     DIAGRAM ALUR KERJA — fig. 02
+     Gaya blueprint: dot grid 26px, corner bracket L, garis putus-putus.
+     margin-top: auto -> dorong diagram ke dasar hero, isi area kosong.
+     ============================================================ */
+  .hero-flow {
+    margin-top: auto;
+    width: 100%;
+    max-width: 880px;
+    padding-top: clamp(2rem, 6vh, 4rem);
+    /* Dot grid tipis, skala sama dengan rail section (26px) */
+    background-image: radial-gradient(
+      color-mix(in srgb, var(--color-line) 70%, transparent) 1px,
+      transparent 1px
+    );
+    background-size: 26px 26px;
+    background-position: center 1.75rem;
+  }
+
+  .hero-flow .fig-label {
+    background: none;
+    padding: 0;
+    margin: 0 0 1.5rem;
+    justify-content: flex-start;
+    width: 100%;
+    max-width: 820px;
+    margin-inline: 0;
+  }
+
+  .flow-track {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: center;
+    gap: 0;
+    max-width: 820px;
+    margin: 0 auto;
+  }
+
+  .flow-node {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 1.25rem 1rem 1.375rem;
+    border: 1px solid var(--color-line);
+    background: color-mix(in srgb, var(--color-paper) 92%, white);
+    text-align: left;
+    --corner-color: var(--color-muted);
+  }
+
+  /* Corner bracket 4 sisi per node: gaya L 10px */
+  .flow-corner {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    pointer-events: none;
+  }
+  .flow-corner--tl { top: -1px; left: -1px; border-top: 1.5px solid var(--corner-color); border-left: 1.5px solid var(--corner-color); }
+  .flow-corner--tr { top: -1px; right: -1px; border-top: 1.5px solid var(--corner-color); border-right: 1.5px solid var(--corner-color); }
+  .flow-corner--bl { bottom: -1px; left: -1px; border-bottom: 1.5px solid var(--corner-color); border-left: 1.5px solid var(--corner-color); }
+  .flow-corner--br { bottom: -1px; right: -1px; border-bottom: 1.5px solid var(--corner-color); border-right: 1.5px solid var(--corner-color); }
+
+  .flow-node--accent {
+    border-color: color-mix(in srgb, var(--color-electric) 50%, var(--color-line));
+    background: color-mix(in srgb, var(--color-electric) 7%, var(--color-paper));
+    --corner-color: var(--color-electric);
+  }
+
+  .flow-no {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-caps);
+    color: var(--color-muted);
+    margin-bottom: 0.5rem;
+  }
+  .flow-node--accent .flow-no { color: var(--color-electric); }
+
+  .flow-title {
+    font-family: var(--font-display);
+    font-size: var(--text-sub);
+    font-weight: 600;
+    color: var(--color-ink);
+    margin: 0 0 0.375rem;
+    line-height: var(--leading-base);
+  }
+
+  .flow-desc {
+    font-size: var(--text-sm);
+    line-height: var(--leading-base);
+    color: var(--color-muted);
+    margin: 0;
+    max-width: 30ch;
+  }
+
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    color: var(--color-muted);
+    flex: 0 0 60px;
+    justify-content: center;
+  }
+
+  /* Layar kecil: stack vertikal, panah berputar 90° */
+  @media (max-width: 800px) {
+    .flow-track {
+      flex-direction: column;
+      gap: 0;
+    }
+    .flow-arrow {
+      flex: 0 0 24px;
+      transform: rotate(90deg);
+    }
+    .flow-node {
+      text-align: center;
+    }
+    .flow-desc {
+      margin-inline: auto;
+    }
+  }
+
+  /* Layar pendek: kurangi padding supaya diagram muat */
+  @media (max-height: 800px) {
+    .hero-flow { padding-top: 1.5rem; }
+    .hero-actions { margin-top: 1.5rem; }
   }
 
   @media (prefers-reduced-motion: reduce) {
