@@ -82,11 +82,16 @@ import EncryptedText from '../components/EncryptedText'
           </svg>
         </div>
 
-        <!-- Node 02 (aksen) -->
+        <!-- Node 02 (aksen) — pusat penampilan layanan -->
         <div class="flow-node flow-node--accent">
           <span class="flow-no">02</span>
           <h3 class="flow-title">Bangun sistem</h3>
-          <p class="flow-desc">Saya rancang otomasi, chatbot, atau web app sesuai kebutuhan.</p>
+          <p class="flow-desc">Saya rancang sesuai kebutuhan:</p>
+          <div class="flow-services">
+            <span class="flow-chip">Otomasi AI</span>
+            <span class="flow-chip">Web app</span>
+            <span class="flow-chip">Chatbot</span>
+          </div>
           <span class="flow-corner flow-corner--tl" aria-hidden="true"></span>
           <span class="flow-corner flow-corner--tr" aria-hidden="true"></span>
           <span class="flow-corner flow-corner--bl" aria-hidden="true"></span>
@@ -328,8 +333,28 @@ import EncryptedText from '../components/EncryptedText'
     font-size: var(--text-sm);
     line-height: var(--leading-base);
     color: var(--color-muted);
-    margin: 0;
+    margin: 0 0 0.75rem;
     max-width: 30ch;
+  }
+
+  /* Chip layanan: border putus-putus, monospace — selaras dengan
+     garis penghubung diagram. Tiga layanan menonjol di node aksen. */
+  .flow-services {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+  }
+
+  .flow-chip {
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-caps-tight);
+    color: var(--color-ink);
+    padding: 0.2rem 0.5rem;
+    border: 1px dashed color-mix(in srgb, var(--color-electric) 60%, var(--color-line));
+    background: color-mix(in srgb, var(--color-paper) 80%, transparent);
+    line-height: var(--leading-base);
+    white-space: nowrap;
   }
 
   .flow-arrow {
