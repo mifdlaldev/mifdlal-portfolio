@@ -150,10 +150,6 @@ export const stack = [
   { name: 'Vercel', logo: '/logos/vercel.svg' },
 ] as const
 
-/* Angka bukti untuk panel hero. Sumber: GitHub API user mifdlaldev,
-   dicek 18 Okt 2026 (public_repos: 21). Perbarui kalau berubah. */
-export const publicRepoCount = 21
-
 export const contact = {
   email: 'hello@mifdlal.com',
   github: 'https://github.com/mifdlaldev',
