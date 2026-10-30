@@ -55,15 +55,16 @@ import CodeComment from './CodeComment.astro'
           </h2>
         </div>
         <p>
-          Saya seorang AI Automation &amp; Vibe Engineering dengan pengalaman
-          lebih dari 2 tahun. Lulusan dari sekolah menengah kejuruan. Saya
-          menggunakan AI untuk membangun AI Automation &amp; Vibe Engineering
-          yang mempercepat pekerjaan saya, menghemat efisiensi, serta
-          menghasilkan output yang sesuai dengan yang anda berikan. Saya
-          bisa membantu anda membangun AI Automation, Chatbot, Web &amp;
-          Web app untuk segala bidang dengan kualitas terbaik, cepat, dan
-          hasilnya memuaskan. Saya memberikan konsultasi gratis, jadi ayo
-          tanpa ragu-ragu lagi langsung hubungi saya di kontak.
+          Saya seorang <strong>AI Automation &amp; Web Developer</strong> dengan
+          pengalaman lebih dari 2 tahun dan latar belakang Rekayasa Perangkat
+          Lunak. Saya membangun AI Automation, Chatbot, Website, dan Web
+          Application dengan memanfaatkan AI untuk membantu proses pengembangan
+          menjadi lebih efisien.
+        </p>
+        <p>
+          Saya senang mengeksplorasi teknologi baru dan mengubah ide menjadi
+          sesuatu yang benar-benar bisa digunakan. Punya ide atau proyek yang
+          ingin dibangun? Mari diskusikan melalui kontak yang tersedia.
         </p>
       </div>
     </div>
@@ -280,6 +281,19 @@ import CodeComment from './CodeComment.astro'
     /* Ukuran teks isi: 15,5px sampai 17px — sedikit di atas body 15px. */
     font-size: clamp(0.96875rem, 1.9vw, 1.0625rem);
     text-wrap: pretty;
+  }
+
+  /* Paragraf terakhir tidak perlu jarak bawah — menghindari ruang
+     kosong menggantung di dasar kolom teks. */
+  .about-copy p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Penekanan nama peran/keahlian. Warna tinta penuh (bukan muted)
+     agar terbaca sebagai penegasan, bukan tautan. */
+  .about-copy strong {
+    color: var(--color-ink);
+    font-weight: var(--weight-semibold);
   }
 
   @media (min-width: 800px) {
