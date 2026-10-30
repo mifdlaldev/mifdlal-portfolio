@@ -44,7 +44,7 @@ const liveCount = projects.length
            Teks asli tetap ada di HTML awal supaya terbaca crawler dan tanpa JS. -->
       <EncryptedText
         client:load
-        lines={['Dari kerja manual', 'menjadi sistem yang', 'benar-benar dipakai.']}
+        lines={['Dari kerja manual menjadi', 'sistem yang benar-benar dipakai.']}
         revealDelayMs={72}
         flipDelayMs={90}
       />
@@ -179,6 +179,16 @@ const liveCount = projects.length
     margin: 1rem 0 0;
     text-wrap: balance;
     color: var(--color-paper);
+    max-width: 100%;
+  }
+
+  /* Di layar kecil, baris hero kedua (32 karakter) tidak muat 1 baris
+     pada ukuran font hero yang tetap terbaca. Izinkan wrap natural,
+     jangan paksa nowrap — animasi ghost menyesuaikan lebar otomatis. */
+  @media (max-width: 560px) {
+    .hero-title .enc-line {
+      white-space: normal;
+    }
   }
 
   /* Sub-headline: weight 500 supaya tidak tenggelam di atas latar ASCII
