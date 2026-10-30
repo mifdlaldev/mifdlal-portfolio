@@ -5,6 +5,14 @@
 name = "mifdlal"
 compatibility_date = "2026-10-17"
 
+# Custom domain — mifdlal.com sudah terdaftar di akun Cloudflare ini.
+# Saat deploy, wrangler akan membuat/update route dan attach domain
+# ke worker ini secara otomatis.
+[[routes]]
+pattern = "mifdlal.com"
+custom_domain = true
+
+
 # Astro output: static -> langsung diserve dari ./dist
 [assets]
 directory = "./dist"
