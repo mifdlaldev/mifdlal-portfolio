@@ -17,7 +17,7 @@
     "check:tokens": "node scripts/check-tokens.mjs"
   },
   "devDependencies": {
-    "@astrojs/react": "^7.1.0",
+    "@astrojs/react": "^7.1.1",
     "@astrojs/sitemap": "^3.7.4",
     "@cloudflare/workers-types": "^5.20261021.1",
     "@tailwindcss/vite": "^4.3.3",
