@@ -1,8 +1,9 @@
-# Cloudflare Workers Static Assets — mifdlal.com
+# Cloudflare Workers — mifdlal.com
 # Deploy: npm run deploy  (= wrangler deploy)
 # Preview lokal: npm run preview
 
 name = "mifdlal"
+main = "worker/index.ts"
 compatibility_date = "2026-10-17"
 
 # Custom domain — mifdlal.com sudah terdaftar di akun Cloudflare ini.
@@ -16,14 +17,18 @@ custom_domain = true
 pattern = "www.mifdlal.com"
 custom_domain = true
 
+# API chat (POST /api/chat): streaming dari OpenRouter.
+# Kunci TIDAK di git — pasang dengan:
+#   npx wrangler secret put OPENROUTER_API_KEY
+# Model override (opsional):
+#   npx wrangler secret put CHAT_MODEL
+# [vars]
+# CHAT_MODEL = "google/gemini-2.5-flash"
 
-# Astro output: static -> langsung diserve dari ./dist
+# Static assets: dilayani env.ASSETS dari worker entry.
+# Semua non-/api/chat dioper ke assets — perilaku static
+# (404 page, _headers CSP) tidak berubah.
 [assets]
 directory = "./dist"
 not_found_handling = "404-page"
 run_worker_first = false
-
-# Catatan: route pattern dan zone_name dikonfigurasi di dashboard Cloudflare
-# atau via `wrangler deploy` setelah domain mifdlal.com sudah terhubung ke akun.
-# Redirect www -> apex dan HTTPS enforcement dikelola lewat Cloudflare SSL/TLS
-# settings (Flexible/Full) + Page Rules, bukan di sini.
