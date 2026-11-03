@@ -4,9 +4,13 @@
    Widget mengambang pojok kanan bawah, DI ATAS tombol .to-top.
    Tampil di semua section sejak awal — bukan hanya #kontak.
 
-   Fitur bergaya WhatsApp:
-   - Bubble IN (bot) / OUT (pengguna) dengan tail
-   - Timestamp mono di pojok bubble
+   Fitur bergaya mtadevworks.web.id:
+   - Quick questions (chip collapsible)
+   - Teks privasi (collapsible)
+   - Textarea dengan batas 1000 karakter + counter
+   - Tombol send biru kotak
+   - Bubble IN (bot) / OUT (pengguna), fully rounded tanpa tail
+   - Timestamp mono di ujung teks bubble
    - Status header: "online" -> "mengetik..." saat bot merespons
    - Typing indicator 3 titik di dalam log
 
@@ -27,13 +31,15 @@
   const log = root.querySelector('.chat-log')
   const form = root.querySelector('.chat-form')
   const input = root.querySelector('.chat-input')
-  const statusEl = root.querySelector('[data-chat-status]')
+  const sendBtn = root.querySelector('.chat-send')
+  const counterEl = root.querySelector('[data-counter]')
+  const MAX_CHARS = 1000
+  const WARN_AT = 800
 
   if (!launcher || !panel || !log || !form || !input) return
 
-  const sendBtn = form.querySelector('.chat-send')
-
   /* ── Status header: online / mengetik... ──────────────── */
+  const statusEl = root.querySelector('[data-chat-status]')
   const setStatus = (text, typing = false) => {
     if (!statusEl) return
     statusEl.textContent = text
@@ -87,6 +93,72 @@
   })
 
   if (closeBtn) closeBtn.addEventListener('click', closeChat)
+
+  /* ── Quick questions: toggle collapse ─────────────────── */
+  const quickSection = root.querySelector('[data-chat-quick]')
+  const quickToggle = root.querySelector('.chat-quick-toggle')
+
+  if (quickToggle && quickSection) {
+    quickToggle.addEventListener('click', () => {
+      const collapsed = quickSection.dataset.collapsed === 'true'
+      quickSection.dataset.collapsed = String(!collapsed)
+      quickToggle.setAttribute('aria-expanded', String(collapsed))
+    })
+  }
+
+  /* Klik chip -> isi textarea + kirim langsung */
+  const chips = root.querySelectorAll('.chat-chip')
+  chips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      const prompt = chip.dataset.prompt || ''
+      input.value = prompt.slice(0, MAX_CHARS)
+      updateCounter()
+      updateSendState()
+      /* Buka chat jika tertutup, lalu kirim */
+      if (root.dataset.open !== 'true') openChat()
+      form.requestSubmit()
+    })
+  })
+
+  /* ── Privasi: toggle collapse ─────────────────────────── */
+  const privacySection = root.querySelector('[data-chat-privacy]')
+  const privacyToggle = root.querySelector('.chat-privacy-toggle')
+
+  if (privacyToggle && privacySection) {
+    privacyToggle.addEventListener('click', () => {
+      const collapsed = privacySection.dataset.collapsed === 'true'
+      privacySection.dataset.collapsed = String(!collapsed)
+      privacyToggle.setAttribute('aria-expanded', String(collapsed))
+    })
+  }
+
+  /* ── Counter karakter ─────────────────────────────────── */
+  const updateCounter = () => {
+    if (!counterEl) return
+    const len = input.value.length
+    counterEl.textContent = `${len} / ${MAX_CHARS} Karakter`
+    counterEl.removeAttribute('data-warn')
+    counterEl.removeAttribute('data-over')
+    if (len >= MAX_CHARS) {
+      counterEl.setAttribute('data-over', 'true')
+    } else if (len >= WARN_AT) {
+      counterEl.setAttribute('data-warn', 'true')
+    }
+  }
+
+  const updateSendState = () => {
+    if (!sendBtn) return
+    sendBtn.disabled = input.value.trim().length === 0
+  }
+
+  input.addEventListener('input', () => {
+    /* Potong jika melebihi batas (defense in depth, maxlength juga diset) */
+    if (input.value.length > MAX_CHARS) {
+      input.value = input.value.slice(0, MAX_CHARS)
+    }
+    updateCounter()
+    updateSendState()
+  })
 
   /* ── Transkrip ────────────────────────────────────────── */
   const scrollLog = () => {
@@ -218,9 +290,11 @@
 
   form.addEventListener('submit', (event) => {
     event.preventDefault()
-    const text = input.value.trim().slice(0, 2000)
+    const text = input.value.trim().slice(0, MAX_CHARS)
     if (!text) return
     input.value = ''
+    updateCounter()
+    updateSendState()
     sendMessage(text)
   })
 

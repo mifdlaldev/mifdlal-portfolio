@@ -1,15 +1,14 @@
 ---
-// Widget chat mengambang bergaya WhatsApp — pojok kanan bawah, DI ATAS
-// tombol .to-top. Tampil sejak awal di semua section.
+// Widget chat mengambang bergaya mtadevworks.web.id — dark theme.
+// Pojok kanan bawah, DI ATAS tombol .to-top. Tampil sejak awal di semua section.
 // Vanilla JS same-origin di public/js/site-chat.js (CSP aman).
 //
-// Adaptasi WhatsApp Web ke blueprint editorial:
-// - Header: avatar bulat "M" + nama kontak + status (online/mengetik)
-// - Bubble IN (bot): putih, tail kiri bawah, avatar kecil opsional
-// - Bubble OUT (pengguna): electric biru, tail kanan bawah
-// - Timestamp mono kecil di pojok bubble
-// - Typing indicator: 3 titik melompat dengan tail
-// - Animasi bubble masuk: slide-up + fade
+// Struktur (sama persis dengan referensi mtadevworks.web.id):
+// 1. Header  — label "AI ASSISTANT" + judul + subtitle + tombol close
+// 2. Quick questions — section collapsible dengan chip chip
+// 3. Log pesan — bubble bot (kiri) / user (kanan), fully rounded
+// 4. Privasi — teks privasi + toggle
+// 5. Input — textarea + counter 0/1000 + tombol send biru
 ---
 
 <div class="site-chat" data-site-chat data-open="false">
@@ -22,12 +21,12 @@
     aria-label="Chat dengan asisten AI Mifdlal"
     aria-hidden="true"
   >
-    <!-- Header: avatar + nama + status (gaya WhatsApp) -->
+    <!-- ── 1. Header ─────────────────────────────────────── -->
     <header class="chat-head">
-      <div class="chat-avatar" aria-hidden="true">M</div>
-      <div class="chat-contact">
-        <span class="chat-name">Mifdlal Asisten</span>
-        <span class="chat-status" data-chat-status>online</span>
+      <div class="chat-head-info">
+        <span class="chat-head-label">AI ASSISTANT</span>
+        <h2 class="chat-head-title">Mifdlal Asisten</h2>
+        <p class="chat-head-sub">Tanya soal layanan, proyek, stack, atau estimasi timeline.</p>
       </div>
       <button class="chat-close" type="button" aria-label="Tutup chat">
         <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
@@ -36,32 +35,65 @@
       </button>
     </header>
 
-    <!-- Daftar pesan: role=log agar screen reader mengumumkan pesan baru -->
+    <!-- ── 2. Quick questions ────────────────────────────── -->
+    <div class="chat-quick" data-chat-quick data-collapsed="false">
+      <div class="chat-quick-head">
+        <span class="chat-section-label">Quick Questions</span>
+        <button class="chat-quick-toggle" type="button" aria-expanded="true" aria-controls="chat-quick-list" aria-label="Sembunyikan pertanyaan cepat">
+          <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" focusable="false">
+            <path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+      </div>
+      <div class="chat-quick-list" id="chat-quick-list" data-quick-list>
+        <button class="chat-chip" type="button" data-prompt="Layanan apa saja yang ditawarkan?">Layanan apa saja yang ditawarkan?</button>
+        <button class="chat-chip" type="button" data-prompt="Ceritakan proyek yang pernah dikerjakan">Proyek yang pernah dikerjakan</button>
+        <button class="chat-chip" type="button" data-prompt="Berapa biaya bikin website?">Estimasi biaya website</button>
+        <button class="chat-chip" type="button" data-prompt="Berapa lama pengerjaan website?">Estimasi timeline pengerjaan</button>
+        <button class="chat-chip" type="button" data-prompt="Stack teknologi apa yang digunakan?">Stack teknologi</button>
+        <button class="chat-chip" type="button" data-prompt="Bagaimana cara mulai proyek?">Cara mulai proyek</button>
+      </div>
+    </div>
+
+    <!-- ── 3. Log pesan ──────────────────────────────────── -->
     <div class="chat-log" role="log" aria-label="Percakapan" aria-live="polite"></div>
 
-    <!-- Input bar -->
+    <!-- ── 4. Privasi ────────────────────────────────────── -->
+    <div class="chat-privacy" data-chat-privacy data-collapsed="false">
+      <span class="chat-privacy-text" id="chat-privacy-text">Privasi: chat ini hanya disimpan di sesi browser Anda. Jangan kirim password, API key, atau data sensitif.</span>
+      <button class="chat-privacy-toggle" type="button" aria-expanded="true" aria-controls="chat-privacy-text" aria-label="Sembunyikan teks privasi">
+        <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" focusable="false">
+          <path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- ── 5. Input ──────────────────────────────────────── -->
     <form class="chat-form" autocomplete="off">
       <label class="sr-only" for="chat-field">Tulis pesan</label>
-      <input
+      <textarea
         id="chat-field"
         class="chat-input"
-        type="text"
         name="message"
-        placeholder="Ketik pesan..."
-        maxlength="2000"
+        placeholder="Tulis pertanyaan Anda..."
+        maxlength="1000"
+        rows="2"
         enterkeyhint="send"
-      />
-      <button class="chat-send" type="submit" aria-label="Kirim pesan">
+      ></textarea>
+      <button class="chat-send" type="submit" aria-label="Kirim pesan" disabled>
         <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
           <path d="M2.5 8h10M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" />
         </svg>
       </button>
     </form>
+    <div class="chat-counter">
+      <span class="chat-counter-text" data-counter>0 / 1000 Karakter</span>
+    </div>
 
     <span class="chat-status-sr sr-only" role="status" aria-live="polite"></span>
   </section>
 
-  <!-- Launcher: tombol lingkaran blueprint di atas .to-top -->
+  <!-- Launcher: tombol lingkaran dark dengan aksen electric -->
   <button class="chat-launcher" type="button" aria-expanded="false" aria-controls="chat-panel-aria" aria-label="Buka chat asisten AI">
     <svg class="chat-launcher-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
       <path
@@ -127,8 +159,6 @@
     position: relative;
     display: grid;
     place-items: center;
-    /* 44px = diameter .to-top: right sama -> pusat X identik,
-       satu kolom vertikal sempurna. */
     width: 44px;
     height: 44px;
     border-radius: 999px;
@@ -136,7 +166,7 @@
     color: var(--paper);
     border: 1px solid var(--ink-900);
     cursor: pointer;
-    box-shadow: 0 4px 16px color-mix(in srgb, var(--ink-900) 24%, transparent);
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--ink-900) 40%, transparent);
     transition:
       background-color var(--dur-base) var(--ease),
       border-color var(--dur-base) var(--ease),
@@ -177,17 +207,16 @@
     }
   }
 
-  /* ── Panel ────────────────────────────────────────────── */
+  /* ── Panel — dark theme ──────────────────────────────── */
   .chat-panel {
-    width: min(360px, calc(100vw - 2 * var(--grid-gutter)));
-    max-height: min(540px, calc(100dvh - 7rem - env(safe-area-inset-bottom, 0px)));
+    width: min(380px, calc(100vw - 2 * var(--grid-gutter)));
+    max-height: min(600px, calc(100dvh - 7rem - env(safe-area-inset-bottom, 0px)));
     display: flex;
     flex-direction: column;
-    background: var(--paper);
+    background: var(--ink-900);
     border: 1px solid var(--ink-16);
-    box-shadow: 0 12px 40px color-mix(in srgb, var(--ink-900) 18%, transparent);
+    box-shadow: 0 16px 48px color-mix(in srgb, var(--ink-900) 50%, transparent);
     overflow: hidden;
-    /* Sembunyi default; data-open=true membuka */
     visibility: hidden;
     opacity: 0;
     transform: translateY(8px) scale(0.98);
@@ -209,7 +238,7 @@
       visibility 0s linear 0s;
   }
 
-  /* Corner bracket blueprint 2 sudut panel (kiri atas, kanan bawah) */
+  /* Corner bracket blueprint — aksen electric di 2 sudut */
   .chat-panel::before,
   .chat-panel::after {
     content: '';
@@ -232,81 +261,46 @@
     border-right: 1.5px solid var(--electric);
   }
 
-  /* ── Header panel (gaya WhatsApp: avatar + nama + status) ── */
+  /* ── 1. Header ───────────────────────────────────────── */
   .chat-head {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.625rem;
-    padding: 0.625rem 0.75rem;
+    padding: 0.75rem 0.75rem 0.625rem;
     background: var(--ink-900);
-    color: var(--paper);
     border-bottom: 1px solid var(--ink-16);
     flex-shrink: 0;
   }
 
-  .chat-avatar {
-    display: grid;
-    place-items: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 999px;
-    background: var(--electric);
-    color: var(--paper);
-    font-family: var(--font-mono);
-    font-size: var(--text-body);
-    font-weight: 600;
-    flex-shrink: 0;
-    border: 1.5px solid color-mix(in srgb, var(--electric) 60%, var(--paper));
-  }
-
-  .chat-contact {
+  .chat-head-info {
     display: flex;
     flex-direction: column;
-    gap: 1px;
+    gap: 2px;
     min-width: 0;
+    flex: 1 1 auto;
   }
 
-  .chat-name {
+  .chat-head-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-cap);
+    letter-spacing: var(--tracking-caps-loose);
+    color: var(--electric);
+    line-height: var(--leading-ui);
+  }
+
+  .chat-head-title {
     font-size: var(--text-sm);
     font-weight: 600;
     line-height: var(--leading-ui);
     color: var(--paper);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    margin: 0;
   }
 
-  .chat-status {
-    font-family: var(--font-mono);
-    font-size: var(--text-cap);
-    letter-spacing: var(--tracking-caps-tight);
-    color: color-mix(in srgb, var(--lemon) 85%, var(--paper));
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
+  .chat-head-sub {
+    font-size: var(--text-data);
     line-height: var(--leading-ui);
-  }
-
-  /* Titik hijau di depan status "online" */
-  .chat-status::before {
-    content: '';
-    width: 6px;
-    height: 6px;
-    border-radius: 999px;
-    background: var(--lemon);
-    flex-shrink: 0;
-  }
-
-  /* Saat bot mengetik: dot berdenyut */
-  .chat-status[data-typing='true']::before {
-    animation: chat-status-pulse 1s var(--ease) infinite;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    @keyframes chat-status-pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.85); }
-    }
+    color: color-mix(in srgb, var(--paper) 60%, transparent);
+    margin: 0;
   }
 
   .chat-close {
@@ -315,52 +309,151 @@
     font: inherit;
     display: grid;
     place-items: center;
-    width: 28px;
-    height: 28px;
-    margin-left: auto;
-    border-radius: 999px;
+    width: 26px;
+    height: 26px;
+    border-radius: 4px;
     background: transparent;
-    color: var(--paper);
+    color: color-mix(in srgb, var(--paper) 60%, transparent);
     border: none;
     cursor: pointer;
-    opacity: 0.7;
-    transition: opacity var(--dur-fast) var(--ease), background-color var(--dur-fast) var(--ease);
     flex-shrink: 0;
+    transition: background-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
   }
 
   .chat-close:hover {
-    opacity: 1;
-    background: color-mix(in srgb, var(--paper) 15%, transparent);
+    background: color-mix(in srgb, var(--paper) 10%, transparent);
+    color: var(--paper);
   }
 
   .chat-close:focus-visible {
-    outline: 2px solid var(--lemon);
+    outline: 2px solid var(--electric);
     outline-offset: 1px;
   }
 
-  /* ── Log pesan: wallpaper dot-grid + bubble ───────────── */
+  /* ── 2. Quick questions ──────────────────────────────── */
+  .chat-quick {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--ink-16);
+    flex-shrink: 0;
+  }
+
+  .chat-quick-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.375rem;
+  }
+
+  .chat-section-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-cap);
+    letter-spacing: var(--tracking-caps-loose);
+    color: color-mix(in srgb, var(--paper) 50%, transparent);
+    line-height: var(--leading-ui);
+  }
+
+  .chat-quick-toggle {
+    appearance: none;
+    -webkit-appearance: none;
+    font: inherit;
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    background: transparent;
+    color: color-mix(in srgb, var(--paper) 50%, transparent);
+    border: none;
+    cursor: pointer;
+    transition: color var(--dur-fast) var(--ease), background-color var(--dur-fast) var(--ease);
+  }
+
+  .chat-quick-toggle:hover {
+    color: var(--paper);
+    background: color-mix(in srgb, var(--paper) 10%, transparent);
+  }
+
+  .chat-quick-toggle:focus-visible {
+    outline: 2px solid var(--electric);
+    outline-offset: 1px;
+  }
+
+  .chat-quick-toggle svg {
+    transition: transform var(--dur-fast) var(--ease);
+  }
+
+  .chat-quick[data-collapsed='true'] .chat-quick-toggle svg {
+    transform: rotate(-90deg);
+  }
+
+  .chat-quick-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    overflow: hidden;
+    transition: max-height var(--dur-base) var(--ease), opacity var(--dur-fast) var(--ease);
+    max-height: 200px;
+    opacity: 1;
+  }
+
+  .chat-quick[data-collapsed='true'] .chat-quick-list {
+    max-height: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .chat-chip {
+    appearance: none;
+    -webkit-appearance: none;
+    font: inherit;
+    font-size: var(--text-cap);
+    line-height: var(--leading-ui);
+    color: color-mix(in srgb, var(--paper) 75%, transparent);
+    background: transparent;
+    border: 1px solid var(--ink-16);
+    border-radius: 999px;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+      border-color var(--dur-fast) var(--ease),
+      color var(--dur-fast) var(--ease),
+      background-color var(--dur-fast) var(--ease);
+  }
+
+  .chat-chip:hover {
+    border-color: var(--electric);
+    color: var(--electric);
+    background: color-mix(in srgb, var(--electric) 10%, transparent);
+  }
+
+  .chat-chip:focus-visible {
+    outline: 2px solid var(--electric);
+    outline-offset: 1px;
+  }
+
+  /* ── 3. Log pesan ────────────────────────────────────── */
   .chat-log {
     flex: 1 1 auto;
-    min-height: 180px;
-    max-height: 340px;
+    min-height: 160px;
+    max-height: 280px;
     overflow-y: auto;
     padding: 0.875rem 0.75rem;
     display: flex;
     flex-direction: column;
     gap: 0.375rem;
-    background-color: var(--paper);
+    /* Latar gelap dengan dot-grid samar (gaya blueprint) */
+    background-color: color-mix(in srgb, var(--ink-900) 60%, var(--ink-70));
     background-image: radial-gradient(
       circle at 1px 1px,
-      var(--ink-07) 1.2px,
+      color-mix(in srgb, var(--paper) 6%, transparent) 1.2px,
       transparent 0
     );
     background-size: 22px 22px;
     overscroll-behavior: contain;
   }
 
-  /* ── Row pesan: posisi + animasi masuk ────────────────── */
-  /* :global() WAJIB: elemen dibuat dinamis via JS, tidak punya
-     data-astro-cid -> scoped CSS biasa tidak akan cocok. */
+  /* Row pesan */
   .site-chat :global(.chat-row) {
     display: flex;
     align-items: flex-end;
@@ -376,14 +469,14 @@
     justify-content: flex-end;
   }
 
-  /* Animasi masuk: slide-up + fade (dinonaktifkan reduced-motion) */
+  /* Animasi masuk */
   @media (prefers-reduced-motion: no-preference) {
     .site-chat :global(.chat-row) {
       animation: chat-row-in 0.28s var(--ease-out) both;
     }
   }
 
-  /* Keyframes global — dipakai elemen dinamis, tidak boleh di-scope */
+  /* Keyframes global — dipakai elemen dinamis */
   :global {
     @keyframes chat-row-in {
       0% { opacity: 0; transform: translateY(6px); }
@@ -391,7 +484,7 @@
     }
   }
 
-  /* ── Bubble ──────────────────────────────────────────── */
+  /* Bubble — fully rounded, tanpa tail */
   .site-chat :global(.chat-bubble) {
     position: relative;
     max-width: min(240px, 78%);
@@ -403,23 +496,24 @@
     white-space: pre-wrap;
   }
 
-  /* Tanpa tail: semua sudut sama-sama rounded */
+  /* Bubble IN (bot): kotak abu-abu gelap dengan border samar */
   .site-chat :global(.chat-bubble--in) {
     align-self: flex-start;
-    background: var(--white);
+    background: color-mix(in srgb, var(--paper) 8%, transparent);
     border: 1px solid var(--ink-16);
-    border-radius: 0.75rem;
-    color: var(--ink-900);
+    border-radius: 0.5rem;
+    color: color-mix(in srgb, var(--paper) 90%, transparent);
   }
 
+  /* Bubble OUT (user): electric biru */
   .site-chat :global(.chat-bubble--out) {
     align-self: flex-end;
     background: var(--electric);
     color: var(--paper);
-    border-radius: 0.75rem;
+    border-radius: 0.5rem;
   }
 
-  /* Timestamp di dalam bubble, pojok bawah kanan, font mono */
+  /* Timestamp inline di ujung teks */
   .site-chat :global(.chat-time) {
     display: inline-block;
     margin-left: 0.375rem;
@@ -431,34 +525,31 @@
     user-select: none;
   }
 
-  /* Bot: abu-abu muda di atas bubble putih */
   .site-chat :global(.chat-bubble--in .chat-time) {
-    color: var(--ink-70);
+    color: color-mix(in srgb, var(--paper) 40%, transparent);
   }
 
-  /* User: abu-blue pucat di atas bubble electric */
   .site-chat :global(.chat-bubble--out .chat-time) {
     color: color-mix(in srgb, var(--paper) 70%, transparent);
   }
 
-  /* ── Typing indicator (3 titik melompat, tanpa tail) ──── */
+  /* Typing indicator — kotak abu tanpa tail */
   .site-chat :global(.chat-typing) {
     align-self: flex-start;
     display: inline-flex;
     align-items: center;
     gap: 4px;
     padding: 0.5rem 0.625rem 0.375rem;
-    background: var(--white);
+    background: color-mix(in srgb, var(--paper) 8%, transparent);
     border: 1px solid var(--ink-16);
-    border-radius: 0.75rem;
-    position: relative;
+    border-radius: 0.5rem;
   }
 
   .site-chat :global(.chat-typing span) {
     width: 6px;
     height: 6px;
     border-radius: 999px;
-    background: var(--ink-70);
+    background: color-mix(in srgb, var(--paper) 50%, transparent);
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -477,14 +568,76 @@
     }
   }
 
-  /* ── Form + input ────────────────────────────────────── */
+  /* ── 4. Privasi ──────────────────────────────────────── */
+  .chat-privacy {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.375rem;
+    padding: 0.4375rem 0.75rem;
+    border-top: 1px solid var(--ink-16);
+    flex-shrink: 0;
+  }
+
+  .chat-privacy-text {
+    flex: 1 1 auto;
+    font-size: var(--text-cap);
+    line-height: var(--leading-ui);
+    color: color-mix(in srgb, var(--paper) 45%, transparent);
+    overflow: hidden;
+    transition: max-height var(--dur-base) var(--ease), opacity var(--dur-fast) var(--ease);
+    max-height: 60px;
+    opacity: 1;
+  }
+
+  .chat-privacy[data-collapsed='true'] .chat-privacy-text {
+    max-height: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .chat-privacy-toggle {
+    appearance: none;
+    -webkit-appearance: none;
+    font: inherit;
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    background: transparent;
+    color: color-mix(in srgb, var(--paper) 45%, transparent);
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: color var(--dur-fast) var(--ease), background-color var(--dur-fast) var(--ease);
+  }
+
+  .chat-privacy-toggle:hover {
+    color: var(--paper);
+    background: color-mix(in srgb, var(--paper) 10%, transparent);
+  }
+
+  .chat-privacy-toggle:focus-visible {
+    outline: 2px solid var(--electric);
+    outline-offset: 1px;
+  }
+
+  .chat-privacy-toggle svg {
+    transition: transform var(--dur-fast) var(--ease);
+  }
+
+  .chat-privacy[data-collapsed='true'] .chat-privacy-toggle svg {
+    transform: rotate(-90deg);
+  }
+
+  /* ── 5. Input ────────────────────────────────────────── */
   .chat-form {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     gap: 0.5rem;
-    padding: 0.5rem 0.625rem;
+    padding: 0.5rem 0.75rem;
     border-top: 1px solid var(--ink-16);
-    background: var(--paper);
+    background: var(--ink-900);
     flex-shrink: 0;
   }
 
@@ -494,22 +647,28 @@
     font: inherit;
     flex: 1 1 auto;
     min-width: 0;
-    height: 38px;
-    padding: 0 0.875rem;
+    height: 60px;
+    max-height: 60px;
+    padding: 0.5rem 0.75rem;
     font-size: var(--text-sm);
-    color: var(--ink-900);
-    background: var(--white);
+    line-height: var(--leading-ui);
+    color: var(--paper);
+    background: color-mix(in srgb, var(--paper) 6%, transparent);
     border: 1px solid var(--ink-16);
-    border-radius: 999px;
+    border-radius: 0.375rem;
+    resize: none;
+    overflow-y: auto;
+    font-family: inherit;
   }
 
   .chat-input::placeholder {
-    color: var(--ink-70);
+    color: color-mix(in srgb, var(--paper) 35%, transparent);
   }
 
   .chat-input:focus-visible {
     outline: 2px solid var(--electric);
     outline-offset: 1px;
+    border-color: var(--electric);
   }
 
   .chat-input:disabled {
@@ -525,12 +684,12 @@
     place-items: center;
     flex: 0 0 38px;
     height: 38px;
-    border-radius: 999px;
+    border-radius: 0.375rem;
     background: var(--electric);
     color: var(--paper);
     border: 1px solid var(--electric);
     cursor: pointer;
-    transition: background-color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease), opacity var(--dur-fast) var(--ease);
+    transition: background-color var(--dur-fast) var(--ease), opacity var(--dur-fast) var(--ease);
   }
 
   .chat-send:hover:not(:disabled) {
@@ -539,27 +698,51 @@
   }
 
   .chat-send:focus-visible {
-    outline: 2px solid var(--ink-900);
+    outline: 2px solid var(--paper);
     outline-offset: 2px;
   }
 
   .chat-send:disabled {
-    opacity: 0.4;
+    opacity: 0.3;
     cursor: not-allowed;
+  }
+
+  /* ── Counter ─────────────────────────────────────────── */
+  .chat-counter {
+    padding: 0 0.75rem 0.375rem;
+    background: var(--ink-900);
+    flex-shrink: 0;
+  }
+
+  .chat-counter-text {
+    font-family: var(--font-mono);
+    font-size: var(--text-cap);
+    letter-spacing: var(--tracking-caps-tight);
+    color: color-mix(in srgb, var(--paper) 40%, transparent);
+    line-height: var(--leading-ui);
+  }
+
+  /* Counter mendekati batas (>800): kuning lemon */
+  .chat-counter-text[data-warn='true'] {
+    color: var(--lemon);
+  }
+
+  /* Counter terlampaui: merah */
+  .chat-counter-text[data-over='true'] {
+    color: var(--danger);
   }
 
   /* ── Mobile ≤ 560px ──────────────────────────────────── */
   @media (max-width: 560px) {
-    /* Tetap rata dengan .to-top: right sama, bottom 5rem sama. */
     .site-chat {
       right: var(--grid-gutter);
       bottom: calc(5rem + env(safe-area-inset-bottom, 0px) + var(--to-top-lift, 0px));
     }
     .chat-panel {
-      width: min(calc(100vw - 2rem), 360px);
-      max-height: min(480px, calc(100dvh - 7rem - env(safe-area-inset-bottom, 0px)));
+      width: min(calc(100vw - 2rem), 380px);
+      max-height: min(520px, calc(100dvh - 7rem - env(safe-area-inset-bottom, 0px)));
     }
-    .chat-bubble {
+    .site-chat :global(.chat-bubble) {
       max-width: 82%;
     }
   }
