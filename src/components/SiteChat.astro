@@ -49,7 +49,7 @@
 
   <!-- Launcher: tombol lingkaran blueprint di atas .to-top -->
   <button class="chat-launcher" type="button" aria-expanded="false" aria-controls="chat-panel-aria" aria-label="Buka chat asisten AI">
-    <svg class="chat-launcher-icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false">
+    <svg class="chat-launcher-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
       <path
         d="M4 5.5h16v10.5H9.5L5.5 19.5v-3.5H4z"
         fill="none"
@@ -69,9 +69,14 @@
 
 <style>
   /* ============================================================
-     POSISI: pojok kanan bawah, di atas .to-top yang duduk di
-     bottom: calc(1.5rem + safe-area + lift). Widget chat 20px
-     lebih tinggi agar tidak pernah menimpa tombol ke atas.
+     POSISI: kolom tunggal rata dengan .to-top.
+     - right sama persis dengan .to-top (var(--grid-gutter))
+     - Launcher 44px = diameter .to-top -> pusat satu garis vertikal
+     - bottom: 1.5rem (to-top) + 44px (to-top) + 12px gap = 5rem di
+       atasnya — pas menempel di atas .to-top, tidak menimpa.
+     - --to-top-lift (diisi to-top.js saat footer terlihat) ikut
+       ditambahkan, jadi saat .to-top naik, chat naik bersamaan dan
+       jarak 12px antar tombol tidak pernah berubah.
      ============================================================ */
   .site-chat {
     position: fixed;
@@ -97,8 +102,11 @@
     position: relative;
     display: grid;
     place-items: center;
-    width: 52px;
-    height: 52px;
+    /* 44px, sama persis dengan .to-top di bawahnya: keduanya rata kanan
+       di right: var(--grid-gutter), diameter sama -> pusat keduanya
+       jatuh di satu garis vertikal (sejajar sempurna). */
+    width: 44px;
+    height: 44px;
     border-radius: 999px;
     background: var(--color-ink);
     color: var(--color-paper);
@@ -122,13 +130,13 @@
     outline-offset: 2px;
   }
 
-  /* Dot status kiri-atas: electric = online */
+  /* Dot status kanan-atas: lemon = online */
   .chat-badge-dot {
     position: absolute;
-    top: 6px;
-    right: 6px;
-    width: 9px;
-    height: 9px;
+    top: 4px;
+    right: 4px;
+    width: 8px;
+    height: 8px;
     border-radius: 999px;
     background: var(--color-lemon);
     border: 1px solid var(--color-ink);
@@ -357,11 +365,12 @@
      terbuka. JS men-toggle aria-hidden bersamaan dengan data-open. */
   @media (max-width: 560px) {
     .site-chat {
-      right: 1rem;
-      bottom: calc(4.75rem + env(safe-area-inset-bottom, 0px) + var(--to-top-lift, 0px));
+      /* Tetap rata dengan .to-top: right sama, bottom 5rem sama. */
+      right: var(--grid-gutter);
+      bottom: calc(5rem + env(safe-area-inset-bottom, 0px) + var(--to-top-lift, 0px));
     }
     .chat-panel {
-      width: calc(100vw - 2rem);
+      width: min(calc(100vw - 2rem), 360px);
     }
   }
 </style>
