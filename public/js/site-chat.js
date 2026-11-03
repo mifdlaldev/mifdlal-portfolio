@@ -4,10 +4,15 @@
    Widget mengambang pojok kanan bawah, DI ATAS tombol .to-top.
    Tampil di semua section sejak awal — bukan hanya #kontak.
 
+   Fitur bergaya WhatsApp:
+   - Bubble IN (bot) / OUT (pengguna) dengan tail
+   - Timestamp mono di pojok bubble
+   - Status header: "online" -> "mengetik..." saat bot merespons
+   - Typing indicator 3 titik di dalam log
+
    Aksesibilitas (WCAG 2.2 AA):
    - Launcher tombol asli dengan aria-expanded + aria-controls
-   - Panel: role="dialog" aria-modal="false" (bukan modal —
-     halaman tetap bisa digulir/dibaca saat chat terbuka)
+   - Panel: role="dialog" aria-modal="false"
    - Daftar pesan: role="log" aria-live="polite"
    - Esc menutup dan mengembalikan fokus ke launcher
    - prefers-reduced-motion: animasi dimatikan
@@ -22,15 +27,27 @@
   const log = root.querySelector('.chat-log')
   const form = root.querySelector('.chat-form')
   const input = root.querySelector('.chat-input')
-  const statusEl = root.querySelector('.chat-status')
+  const statusEl = root.querySelector('[data-chat-status]')
 
   if (!launcher || !panel || !log || !form || !input) return
 
   const sendBtn = form.querySelector('.chat-send')
 
-  /* Status aksesibel (untuk aria-live status region) */
-  const setStatus = (text) => {
-    if (statusEl) statusEl.textContent = text
+  /* ── Status header: online / mengetik... ──────────────── */
+  const setStatus = (text, typing = false) => {
+    if (!statusEl) return
+    statusEl.textContent = text
+    if (typing) {
+      statusEl.setAttribute('data-typing', 'true')
+    } else {
+      statusEl.removeAttribute('data-typing')
+    }
+  }
+
+  /* Timestamp HH:MM untuk bubble */
+  const nowTime = () => {
+    const d = new Date()
+    return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0')
   }
 
   /* ── Buka / tutup ─────────────────────────────────────── */
@@ -41,7 +58,6 @@
     launcher.setAttribute('aria-expanded', 'true')
     panel.setAttribute('aria-hidden', 'false')
     root.dataset.open = 'true'
-    /* Fokus masuk ke input — biarkan keyboard user langsung mengetik */
     input.focus({ preventScroll: true })
     document.addEventListener('keydown', onKeydown)
   }
@@ -51,7 +67,6 @@
     panel.setAttribute('aria-hidden', 'true')
     root.dataset.open = 'false'
     document.removeEventListener('keydown', onKeydown)
-    /* Fokus kembali ke pemanggil, bukan hilang ke <body> */
     if (lastFocused && document.contains(lastFocused)) {
       lastFocused.focus({ preventScroll: true })
     } else {
@@ -63,11 +78,7 @@
     if (event.key === 'Escape') {
       event.preventDefault()
       closeChat()
-      return
     }
-    /* Tab tidak perlu ditahan: panel bukan modal, halaman tetap
-       dijangkau. Hanya menjaga supaya klik di luar tidak menutup
-       karena kehilangan fokus paksa. */
   }
 
   launcher.addEventListener('click', () => {
@@ -82,17 +93,30 @@
     log.scrollTop = log.scrollHeight
   }
 
+  /* role: 'in' = bot (kiri), 'out' = pengguna (kanan) */
   const addBubble = (role, text) => {
+    const row = document.createElement('div')
+    row.className = `chat-row chat-row--${role}`
+
     const bubble = document.createElement('div')
     bubble.className = `chat-bubble chat-bubble--${role}`
-    bubble.textContent = text
-    log.appendChild(bubble)
+
+    const textNode = document.createTextNode(text)
+
+    const time = document.createElement('span')
+    time.className = 'chat-time'
+    time.textContent = nowTime()
+    time.setAttribute('aria-hidden', 'true')
+
+    bubble.appendChild(textNode)
+    bubble.appendChild(time)
+    row.appendChild(bubble)
+    log.appendChild(row)
     scrollLog()
     return bubble
   }
 
-  /* Indikator mengetik: 3 titik, di luar log (aria-hidden) supaya
-     tidak mengganggu live region tiap frame animasi. */
+  /* Indikator mengetik: 3 titik melompat, di dalam log */
   const typing = document.createElement('div')
   typing.className = 'chat-typing'
   typing.setAttribute('aria-hidden', 'true')
@@ -101,10 +125,12 @@
   const showTyping = () => {
     log.appendChild(typing)
     scrollLog()
+    setStatus('mengetik...', true)
   }
 
   const hideTyping = () => {
     typing.remove()
+    setStatus('online', false)
   }
 
   /* ── Kirim pesan ──────────────────────────────────────── */
@@ -112,10 +138,10 @@
   let busy = false
 
   const greet = () => {
-    /* Sapaan hanya sekali per halaman, ditambahkan sebelum dibuka */
+    /* Sapaan hanya sekali per halaman */
     if (log.childElementCount > 0) return
     addBubble(
-      'bot',
+      'in',
       'Halo! Saya asisten AI Mifdlal. Tanya soal layanan, proyek, atau stack — jawaban berdasarkan profil di situs ini.',
     )
   }
@@ -126,10 +152,9 @@
     if (sendBtn) sendBtn.disabled = true
     input.disabled = true
 
-    addBubble('user', text)
+    addBubble('out', text)
     history.push({ role: 'user', content: text })
     showTyping()
-    setStatus('Asisten sedang menulis...')
 
     try {
       const res = await fetch('/api/chat', {
@@ -148,13 +173,13 @@
         } catch {
           /* respons bukan JSON */
         }
-        addBubble('bot', message)
-        setStatus('Gagal mengirim. Coba lagi.')
+        addBubble('in', message)
+        setStatus('online', false)
         return
       }
 
-      /* Streaming teks pola: tanggap bubblenya tumbuh token demi token */
-      const bubble = addBubble('bot', '')
+      /* Streaming teks: bubble bot tumbuh token demi token */
+      const bubble = addBubble('in', '')
       const reader = res.body.getReader()
       const decoder = new TextDecoder()
       let acc = ''
@@ -163,7 +188,14 @@
         const { done, value } = await reader.read()
         if (done) break
         acc += decoder.decode(value, { stream: true })
-        bubble.textContent = acc
+        /* Hapus timestamp lama, set teks + timestamp baru */
+        bubble.lastChild.remove()
+        bubble.appendChild(document.createTextNode(acc))
+        const time = document.createElement('span')
+        time.className = 'chat-time'
+        time.textContent = nowTime()
+        time.setAttribute('aria-hidden', 'true')
+        bubble.appendChild(time)
         scrollLog()
       }
 
@@ -171,11 +203,11 @@
         bubble.textContent = 'Maaf, jawaban kosong. Coba tanya ulang.'
       }
       history.push({ role: 'assistant', content: acc })
-      setStatus('')
+      setStatus('online', false)
     } catch {
       hideTyping()
-      addBubble('bot', 'Koneksi terputus. Periksa internet dan coba lagi.')
-      setStatus('Koneksi gagal.')
+      addBubble('in', 'Koneksi terputus. Periksa internet dan coba lagi.')
+      setStatus('online', false)
     } finally {
       busy = false
       if (sendBtn) sendBtn.disabled = false
