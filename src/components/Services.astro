@@ -30,9 +30,9 @@ import { AsciiArtStatic } from './ui/ascii-art'
             <span class="service-no">{s.no}</span>
             <div class="service-title-row">
               <h3 class="service-title service-title--blue">{s.title}</h3>
-              {s.no === '01' && <ServiceBrowserIcon client:load />}
-              {s.no === '02' && <ServiceBotIcon client:load />}
-              {s.no === '03' && <ServiceWorkflowIcon client:load />}
+              {s.no === '01' && <ServiceBrowserIcon client:idle />}
+              {s.no === '02' && <ServiceBotIcon client:idle />}
+              {s.no === '03' && <ServiceWorkflowIcon client:idle />}
             </div>
             <p class="service-desc">{s.body}</p>
           </div>

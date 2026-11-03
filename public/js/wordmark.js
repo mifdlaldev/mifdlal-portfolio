@@ -535,11 +535,14 @@ const link = gl => {
     /* Hentikan loop selama user sedang scroll — aurora tidak terlihat
        jelas saat scroll, dan ini melepas beban GPU untuk compositor. */
     if (scrolling) return;
-    /* Saat pita sudah terlihat penuh (reveal selesai) dan pointer tidak
-       hover, aurora cukup 20fps — manusia tak bisa bedakan 20 vs 60 fps
-       pada gradien yang mengalang perlahan. Hemat ~66% GPU. */
+    /* Saat pita settled (reveal selesai) dan pointer tidak hover:
+       aurora berhenti TOTAL. Manusia tak bisa bedakan 20vs60 fps pada
+       gradien yang mengalang perlahan, dan saat diam tidak ada yang
+       berubah secara visual. Hemat 100% GPU saat diam. */
     const settled = state.reveal >= 1 && !pointer.inside;
-    if (settled && last && now - last < 50) {
+    if (settled) return;
+    /* Saat hover, throttle ke 20fps — responsif tapi hemat. */
+    if (last && now - last < 50) {
       raf = requestAnimationFrame(frame);
       return;
     }
@@ -610,13 +613,18 @@ const link = gl => {
   const onPointerMove = (event) => {
     if (scrolling) return; /* pointer move saat scroll tidak relevan */
     const rect = root.getBoundingClientRect();
-    pointer.x = event.clientX - rect.left;
-    pointer.y = event.clientY - rect.top;
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
     const wasInside = pointer.inside;
-    pointer.inside = pointer.x >= 0 && pointer.y >= 0 && pointer.x <= rect.width && pointer.y <= rect.height;
-    if (pointer.inside && !wasInside) {
-      state.px = (pointer.x - rect.width / 2) / Math.max(1, rect.height);
-      state.py = pointer.y / Math.max(1, rect.height);
+    const newInside = x >= 0 && y >= 0 && x <= rect.width && y <= rect.height;
+    /* Bangunkan aurora saat pointer pertama kali masuk area wordmark */
+    if (newInside && !wasInside) wake();
+    pointer.inside = newInside;
+    pointer.x = x;
+    pointer.y = y;
+    if (newInside) {
+      state.px = (x - rect.width / 2) / Math.max(1, rect.height);
+      state.py = y / Math.max(1, rect.height);
     }
     wake();
   };
