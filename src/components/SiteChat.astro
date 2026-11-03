@@ -107,7 +107,6 @@
       <circle cx="13" cy="11" r="1" fill="currentColor" />
       <circle cx="17" cy="11" r="1" fill="currentColor" />
     </svg>
-    <span class="chat-badge-dot" aria-hidden="true"></span>
   </button>
 </div>
 
@@ -194,29 +193,6 @@
   .chat-launcher:focus-visible {
     outline: 2px solid var(--electric);
     outline-offset: 2px;
-  }
-
-  /* Dot status kanan-atas: lemon = online */
-  .chat-badge-dot {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    width: 8px;
-    height: 8px;
-    border-radius: 999px;
-    background: var(--lemon);
-    border: 1px solid var(--ink-900);
-    box-sizing: border-box;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .chat-badge-dot {
-      animation: chat-pulse 2.4s var(--ease) infinite;
-    }
-    @keyframes chat-pulse {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(0.82); opacity: 0.75; }
-    }
   }
 
   /* ── Panel — dark theme ──────────────────────────────── */
