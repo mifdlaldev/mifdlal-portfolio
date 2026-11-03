@@ -359,40 +359,40 @@
   }
 
   /* ── Row pesan: posisi + animasi masuk ────────────────── */
-  .chat-row {
+  /* :global() WAJIB: elemen dibuat dinamis via JS, tidak punya
+     data-astro-cid -> scoped CSS biasa tidak akan cocok. */
+  .site-chat :global(.chat-row) {
     display: flex;
     align-items: flex-end;
     gap: 0.4rem;
     max-width: 100%;
   }
 
-  .chat-row--in {
+  .site-chat :global(.chat-row--in) {
     justify-content: flex-start;
   }
 
-  .chat-row--out {
+  .site-chat :global(.chat-row--out) {
     justify-content: flex-end;
   }
 
   /* Animasi masuk: slide-up + fade (dinonaktifkan reduced-motion) */
   @media (prefers-reduced-motion: no-preference) {
-    .chat-row {
+    .site-chat :global(.chat-row) {
       animation: chat-row-in 0.28s var(--ease-out) both;
     }
+  }
+
+  /* Keyframes global — dipakai elemen dinamis, tidak boleh di-scope */
+  :global {
     @keyframes chat-row-in {
-      from {
-        opacity: 0;
-        transform: translateY(6px);
-      }
-      to {
-        opacity: 1;
-        transform: none;
-      }
+      0% { opacity: 0; transform: translateY(6px); }
+      100% { opacity: 1; transform: none; }
     }
   }
 
   /* ── Bubble ──────────────────────────────────────────── */
-  .chat-bubble {
+  .site-chat :global(.chat-bubble) {
     position: relative;
     max-width: min(240px, 78%);
     padding: 0.4375rem 0.625rem 0.3125rem;
@@ -404,7 +404,7 @@
   }
 
   /* Tail bubble: clip-path sudut kecil menghadap pengirim */
-  .chat-bubble::after {
+  .site-chat :global(.chat-bubble)::after {
     content: '';
     position: absolute;
     width: 8px;
@@ -414,7 +414,7 @@
   }
 
   /* Bubble IN (bot): putih, tail kiri bawah */
-  .chat-bubble--in {
+  .site-chat :global(.chat-bubble--in) {
     align-self: flex-start;
     background: var(--white);
     border: 1px solid var(--ink-16);
@@ -422,7 +422,7 @@
     color: var(--ink-900);
   }
 
-  .chat-bubble--in::after {
+  .site-chat :global(.chat-bubble--in)::after {
     left: -5px;
     background: var(--white);
     border-left: 1px solid var(--ink-16);
@@ -431,21 +431,21 @@
   }
 
   /* Bubble OUT (pengguna): electric biru, tail kanan bawah */
-  .chat-bubble--out {
+  .site-chat :global(.chat-bubble--out) {
     align-self: flex-end;
     background: var(--electric);
     color: var(--paper);
     border-radius: 0.75rem 0.75rem 0.25rem 0.75rem;
   }
 
-  .chat-bubble--out::after {
+  .site-chat :global(.chat-bubble--out)::after {
     right: -5px;
     background: var(--electric);
     clip-path: polygon(0 0, 100% 100%, 0 100%);
   }
 
   /* Timestamp di dalam bubble, pojok bawah, font mono kecil */
-  .chat-time {
+  .site-chat :global(.chat-time) {
     display: inline-block;
     margin-left: 0.375rem;
     font-family: var(--font-mono);
@@ -457,12 +457,12 @@
     opacity: 0.65;
   }
 
-  .chat-bubble--out .chat-time {
+  .site-chat :global(.chat-bubble--out .chat-time) {
     color: color-mix(in srgb, var(--paper) 80%, transparent);
   }
 
   /* ── Typing indicator (3 titik melompat + tail) ──────── */
-  .chat-typing {
+  .site-chat :global(.chat-typing) {
     align-self: flex-start;
     display: inline-flex;
     align-items: center;
@@ -474,7 +474,7 @@
     position: relative;
   }
 
-  .chat-typing::after {
+  .site-chat :global(.chat-typing)::after {
     content: '';
     position: absolute;
     bottom: 0;
@@ -488,7 +488,7 @@
     transform: translateY(1px);
   }
 
-  .chat-typing span {
+  .site-chat :global(.chat-typing span) {
     width: 6px;
     height: 6px;
     border-radius: 999px;
@@ -496,11 +496,15 @@
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .chat-typing span {
+    .site-chat :global(.chat-typing span) {
       animation: chat-typing-bounce 1.2s infinite var(--ease);
     }
-    .chat-typing span:nth-child(2) { animation-delay: 0.15s; }
-    .chat-typing span:nth-child(3) { animation-delay: 0.3s; }
+    .site-chat :global(.chat-typing span:nth-child(2)) { animation-delay: 0.15s; }
+    .site-chat :global(.chat-typing span:nth-child(3)) { animation-delay: 0.3s; }
+  }
+
+  /* Keyframes global — dipakai elemen dinamis */
+  :global {
     @keyframes chat-typing-bounce {
       0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
       30% { transform: translateY(-3px); opacity: 1; }
