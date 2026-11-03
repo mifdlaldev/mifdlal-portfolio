@@ -429,11 +429,16 @@
     vertical-align: bottom;
     line-height: var(--leading-none);
     user-select: none;
-    opacity: 0.7;
   }
 
+  /* Bot: abu-abu muda di atas bubble putih */
+  .site-chat :global(.chat-bubble--in .chat-time) {
+    color: var(--ink-70);
+  }
+
+  /* User: abu-blue pucat di atas bubble electric */
   .site-chat :global(.chat-bubble--out .chat-time) {
-    color: color-mix(in srgb, var(--paper) 85%, transparent);
+    color: color-mix(in srgb, var(--paper) 70%, transparent);
   }
 
   /* ── Typing indicator (3 titik melompat, tanpa tail) ──── */
