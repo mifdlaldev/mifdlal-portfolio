@@ -2,74 +2,47 @@
 // Lenis smooth scroll — satu instance untuk seluruh halaman.
 // Dipasang di Layout.astro sebelum </body>.
 //
-// Optimasi performa:
-// - rAF loop HENTI saat velocity scroll = 0 (user tidak scroll)
-// - lerp naik 0.085 -> 0.1 (perangkat low-end tidak kesulitan mengejar)
-// - document.hidden di-skip
-// - prefers-reduced-motion: lerp 1 (native scroll, tanpa smoothing)
-//---
-
+// PERFORMA (riset 2026, lenis.dev + techpotions + aidxn):
+// - Lenis itself ringan: ~2KB, cuma lerp math + scrollTo per frame.
+//   Loop rAF yang terus berjalan BUKAN biang kerok — itu cara kerja
+//   inertia-nya. Menghentikan loop = glide hilang = scroll biasa.
+// - autoRaf: true -> Lenis mengelola loop sendiri, no race condition,
+//   no manual start/stop yang bisa memotong inertia di tengah jalan.
+// - smoothTouch: false -> iOS pakai momentum native (lebih halus).
+// - pointer: coarse -> smoothWheel off, karena touch sudah punya
+//   momentum native; menambahkan smoothing di touch justru membuat
+//   scroll terasa berat di perangkat low-end.
+// - prefers-reduced-motion -> lerp 1 (native scroll, no smoothing).
+// - Biang kerok frame drop sebenarnya: kerja main thread SAAT scroll
+//   (WebGL wordmark, reveal.js transform writes, content-visibility
+//   layout burst). Lenis bukan tersangka — dia cuma ~1-2% CPU.
+---
 <script>
   import Lenis from 'lenis';
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
 
   const lenis = new Lenis({
     anchors: true, // anchor link tetap berfungsi; default Lenis mematikannya
     lerp: reduceMotion ? 1 : 0.1, // 0.1 = responsif tapi tetap halus
-    smoothWheel: true,
-    smoothTouch: false, // iOS natives lebih baik
+    smoothWheel: !reduceMotion && !coarsePointer,
+    smoothTouch: false, // iOS momentum native lebih baik
     syncTouch: false,
     infinite: false,
+    autoRaf: true, // Lenis manages its own rAF loop — inertia intact
   });
 
   // Dipakai to-top.js dan komponen lain yang perlu scroll programatik.
   (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
 
-  /* rAF loop dengan auto-stop:
-     Lenis default memanggil raf setiap frame meskipun tidak ada scroll.
-     Kita hentikan loop saat velocity mendekati nol, resume saat ada input.
-     Ini melepas ~60 frame/work per detik dari main thread saat diam. */
-  let rafId = 0;
-  let running = false;
-
-  const loop = (time: number) => {
-    lenis.raf(time);
-    /* Hentikan loop saat velocity mendekati nol (Lenis selesai meluncur).
-       Epsilon 0.01 karena velocity adalah float, tidak pernah persis 0.
-       Melepas ~60 frame/detik dari main thread saat diam. */
-    if (Math.abs(lenis.velocity || 0) < 0.01) {
-      running = false;
-      return;
-    }
-    rafId = requestAnimationFrame(loop);
-  };
-
-  const start = () => {
-    if (running || document.hidden) return;
-    running = true;
-    rafId = requestAnimationFrame(loop);
-  };
-
-  const stop = () => {
-    if (rafId) cancelAnimationFrame(rafId);
-    rafId = 0;
-    running = false;
-  };
-
-  /* Resume saat ada input scroll dari user */
-  window.addEventListener('wheel', start, { passive: true });
-  window.addEventListener('touchmove', start, { passive: true });
-  window.addEventListener('keydown', start); /* arrow/page/home/end */
-
-  /* Hentikan saat tab tidak terlihat */
+  /* Hentikan Lenis saat tab tidak terlihat — hemat battery + CPU.
+     Lenos.stop()/start() menghentikan loop internal dengan benar,
+     tanpa memotong inertia yang sedang berjalan. */
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) stop();
-    else start();
+    if (document.hidden) lenis.stop();
+    else lenis.start();
   });
-
-  /* Start awal — Lenis perlu beberapa frame untuk stabil */
-  start();
 </script>
 
 <style is:global>
