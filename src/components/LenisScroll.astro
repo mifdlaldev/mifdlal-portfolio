@@ -2,18 +2,12 @@
 // Lenis smooth scroll — satu instance untuk seluruh halaman.
 // Dipasang di Layout.astro sebelum </body>.
 //
-// Lenis v1 memakai native scroll + interpolasi RAF: position:sticky,
-// anchor link, keyboard navigation, CMD+F, dan scroll restoration tetap
-// berfungsi. Tidak ada transform wrapper.
-//
-// Catatan integrasi:
-// - anchors:true  -> #main, #kontak, #proyek, #cert-dialog tetap melompat
-// - smoothTouch:false -> iOS pakai momentum native (lebih halus dari sintetis)
-// - data-lenis-prevent dipasang pada dialog sertifikat supaya wheel di
-//   dalam dialog tidak di-intercept instance halaman
-// - instance diekspos ke window.__lenis agar script lain (to-top.js)
-//   memakai jalur scroll yang sama, tidak menabrak smoothing
----
+// Optimasi performa:
+// - rAF loop HENTI saat velocity scroll = 0 (user tidak scroll)
+// - lerp naik 0.085 -> 0.1 (perangkat low-end tidak kesulitan mengejar)
+// - document.hidden di-skip
+// - prefers-reduced-motion: lerp 1 (native scroll, tanpa smoothing)
+//---
 
 <script>
   import Lenis from 'lenis';
@@ -22,7 +16,7 @@
 
   const lenis = new Lenis({
     anchors: true, // anchor link tetap berfungsi; default Lenis mematikannya
-    lerp: reduceMotion ? 1 : 0.085, // 0.05 sangat berat | 0.15 responsif
+    lerp: reduceMotion ? 1 : 0.1, // 0.1 = responsif tapi tetap halus
     smoothWheel: true,
     smoothTouch: false, // iOS natives lebih baik
     syncTouch: false,
@@ -32,14 +26,50 @@
   // Dipakai to-top.js dan komponen lain yang perlu scroll programatik.
   (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
 
-  const raf = (time: number) => {
-    lenis.raf(time);
-    requestAnimationFrame(raf);
-  };
-  requestAnimationFrame(raf);
+  /* rAF loop dengan auto-stop:
+     Lenis default memanggil raf setiap frame meskipun tidak ada scroll.
+     Kita hentikan loop saat velocity mendekati nol, resume saat ada input.
+     Ini melepas ~60 frame/work per detik dari main thread saat diam. */
+  let rafId = 0;
+  let running = false;
 
-  // Dialog sertifikat sudah diberi atribut data-lenis-prevent di markup,
-  // tidak perlu di-set dari sini.
+  const loop = (time: number) => {
+    lenis.raf(time);
+    /* Hentikan loop saat velocity mendekati nol (Lenis selesai meluncur).
+       Epsilon 0.01 karena velocity adalah float, tidak pernah persis 0.
+       Melepas ~60 frame/detik dari main thread saat diam. */
+    if (Math.abs(lenis.velocity || 0) < 0.01) {
+      running = false;
+      return;
+    }
+    rafId = requestAnimationFrame(loop);
+  };
+
+  const start = () => {
+    if (running || document.hidden) return;
+    running = true;
+    rafId = requestAnimationFrame(loop);
+  };
+
+  const stop = () => {
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = 0;
+    running = false;
+  };
+
+  /* Resume saat ada input scroll dari user */
+  window.addEventListener('wheel', start, { passive: true });
+  window.addEventListener('touchmove', start, { passive: true });
+  window.addEventListener('keydown', start); /* arrow/page/home/end */
+
+  /* Hentikan saat tab tidak terlihat */
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stop();
+    else start();
+  });
+
+  /* Start awal — Lenis perlu beberapa frame untuk stabil */
+  start();
 </script>
 
 <style is:global>
