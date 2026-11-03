@@ -94,7 +94,7 @@
   </section>
 
   <!-- Launcher: tombol lingkaran dark dengan aksen electric -->
-  <button class="chat-launcher" type="button" aria-expanded="false" aria-controls="chat-panel-aria" aria-label="Buka chat asisten AI">
+  <button class="chat-launcher" type="button" draggable="false" aria-expanded="false" aria-controls="chat-panel-aria" aria-label="Buka chat asisten AI">
     <svg class="chat-launcher-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
       <path
         d="M4 5.5h16v10.5H9.5L5.5 19.5v-3.5H4z"
@@ -175,6 +175,10 @@
     border: 1px solid var(--ink-900);
     cursor: pointer;
     box-shadow: 0 4px 16px color-mix(in srgb, var(--ink-900) 40%, transparent);
+    /* Anti-drag: icon tidak bisa di-seret user */
+    user-select: none;
+    -webkit-user-drag: none;
+    touch-action: manipulation;
     transition:
       background-color var(--dur-base) var(--ease),
       border-color var(--dur-base) var(--ease),
