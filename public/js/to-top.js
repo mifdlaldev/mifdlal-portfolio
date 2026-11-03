@@ -30,6 +30,10 @@
         window.innerHeight - footerTop + FOOTER_GAP - baseBottom
       );
       btn.style.setProperty('--to-top-lift', lift + 'px');
+      /* Juga set pada :root: widget chat adalah SIBLING tombol, bukan
+         child, jadi tidak mewarisi var() dari tombol. Dengan nilai di
+         :root, kedua tombol bergerak bersama saat footer muncul. */
+      document.documentElement.style.setProperty('--to-top-lift', lift + 'px');
     }
   };
 
