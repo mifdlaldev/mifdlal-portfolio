@@ -102,10 +102,9 @@ picture {
   padding-block-start: var(--space-section);
   /* Ruang bawah supaya konten terakhir tidak menempel garis section berikutnya. */
   padding-block-end: clamp(2.5rem, 5vw, 4rem);
-  /* Skip rendering saat off-screen: browser tidak layout/paint section ini
-     sampai mendekati viewport. Mengurangi beban paint saat scroll. */
-  content-visibility: auto;
-  contain-intrinsic-size: auto 600px;
+  /* Catatan: TIDAK pakai content-visibility: auto di sini — paint containment
+     memotong background section (pola diagonal pita komentar) saat section
+     di viewport. Performa section = static HTML, tidak ada JS berat per-section. */
 }
 
 .section:last-of-type {
