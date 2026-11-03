@@ -298,6 +298,41 @@
     sendMessage(text)
   })
 
+  /* ── Posisi launcher per section ────────────────────────
+     Hero + sertifikasi: launcher menutupi tepat tombol .to-top
+     (class --merged -> bottom 1.5rem, sama dengan to-top).
+     Kontak: launcher naik sedikit ke posisi normal (bottom 5rem).
+     Animasi perpindahan ditangani CSS transition bottom. */
+  const SECTION_ORDER = ['hero', 'sertifikasi', 'kontak']
+
+  const updateLauncherPosition = () => {
+    const visible = SECTION_ORDER.map((id) => document.getElementById(id)).filter(Boolean)
+    const intersecting = visible.filter((el) => el.getBoundingClientRect().bottom > 0 && el.getBoundingClientRect().top < window.innerHeight)
+    if (intersecting.length === 0) return
+    /* Ambil section paling bawah dalam urutan DOM yang sedang terlihat */
+    const active = intersecting.reduce((a, b) =>
+      SECTION_ORDER.indexOf(a.id) > SECTION_ORDER.indexOf(b.id) ? a : b
+    )
+    if (active.id === 'kontak') {
+      root.classList.remove('site-chat--merged')
+    } else {
+      root.classList.add('site-chat--merged')
+    }
+  }
+
+  let scrollTicking = false
+  window.addEventListener('scroll', () => {
+    if (!scrollTicking) {
+      window.requestAnimationFrame(() => {
+        updateLauncherPosition()
+        scrollTicking = false
+      })
+      scrollTicking = true
+    }
+  }, { passive: true })
+
+  updateLauncherPosition()
+
   /* ── Sapaan muncul saat launcher pertama kali dirender ── */
   greet()
 })()

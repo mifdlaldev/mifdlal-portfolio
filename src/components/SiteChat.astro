@@ -132,6 +132,14 @@
     align-items: flex-end;
     gap: 0.75rem;
     pointer-events: none;
+    /* Animasi perpindahan posisi saat ganti section */
+    transition: bottom 0.4s var(--ease-out);
+  }
+
+  /* Posisi merged: launcher tepat menutupi tombol .to-top.
+     Berlaku dari section hero sampai sebelum section kontak. */
+  .site-chat--merged {
+    bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px) + var(--to-top-lift, 0px));
   }
 
   .site-chat > * {
@@ -734,9 +742,13 @@
 
   /* ── Mobile ≤ 560px ──────────────────────────────────── */
   @media (max-width: 560px) {
-    .site-chat {
+    .site-chat:not(.site-chat--merged) {
       right: var(--grid-gutter);
       bottom: calc(5rem + env(safe-area-inset-bottom, 0px) + var(--to-top-lift, 0px));
+    }
+    .site-chat--merged {
+      right: var(--grid-gutter);
+      bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px) + var(--to-top-lift, 0px));
     }
     .chat-panel {
       width: min(calc(100vw - 2rem), 380px);
