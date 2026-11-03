@@ -290,6 +290,11 @@ const link = gl => {
   };
   const ink = parse(read('--color-ink'));
 
+  /* Precompute paleta SEKALI di init — toOklch + parse() memanggil
+     getImageData (GPU stall) dan math berat. Stops tidak berubah setelah init,
+     jadi tidak ada alasan hitung ulang tiap frame. */
+  const stopColors = settings.stops.map(value => toOklch(parse(value)));
+
   const view = { width: 1, height: 1 };
   const pointer = { x: 0, y: 0, inside: false };
   const state = { clock: 0, px: 0, py: 0.5, reach: 0, reveal: reduce ? 1 : 0 };
@@ -298,6 +303,31 @@ const link = gl => {
   let parity = 0;
   let last = 0;
   let visible = false;
+
+  /* Scroll-pause: hentikan loop WebGL saat user sedang scroll,
+     resume 200ms setelah scroll berhenti. Aurora tidak perlu 60fps saat scroll. */
+  let scrolling = false;
+  let scrollResumeTimer = 0;
+  const onScrollStart = () => {
+    scrolling = true;
+    if (raf) {
+      cancelAnimationFrame(raf);
+      raf = 0;
+    }
+    clearTimeout(scrollResumeTimer);
+  };
+  const onScrollEnd = () => {
+    clearTimeout(scrollResumeTimer);
+    scrollResumeTimer = window.setTimeout(() => {
+      scrolling = false;
+      last = 0;
+      wake();
+    }, 200);
+  };
+  window.addEventListener('scroll', onScrollStart, { passive: true });
+  /* Deteksi akhir scroll: scrollend tidak didukung semua browser,
+     jadi gunakan scroll + timeout fallback. */
+  window.addEventListener('scroll', onScrollEnd, { passive: true });
   let painted = { w: 0, h: 0 };
 
   /* ---------- mask: huruf MIFDLAL digambar dengan font halaman ---------- */
@@ -392,7 +422,9 @@ const link = gl => {
 
   const render = () => {
     const s = settings;
-    unwrapHues(s.stops.map(value => toOklch(parse(value)))).forEach((stop, index) => palette.set(stop, index * 3));
+    /* Pakai stopColors yang sudah di-precompute di init — tidak ada
+       getImageData atau toOklch per frame. */
+    unwrapHues(stopColors).forEach((stop, index) => palette.set(stop, index * 3));
     gl.viewport(0, 0, canvas.width, canvas.height);
     gl.useProgram(program);
     gl.bindVertexArray(vao);
@@ -456,7 +488,10 @@ const link = gl => {
   };
 
   const paint = () => {
-    const scale = Math.min(window.devicePixelRatio || 1, 2);
+    /* DPR cap 1.5 (dari 2): di layar retina, fragment shader 3-layer noise
+       memproses 4× piksel per 2× — potong ke 1.5× untuk hemat GPU signifikan
+       tanpa perubahan visual yang terlihat pada efek aurora. */
+    const scale = Math.min(window.devicePixelRatio || 1, 1.5);
     const mask = drawMask(scale);
     if (!mask) return;
     gl.activeTexture(gl.TEXTURE0);
@@ -497,6 +532,17 @@ const link = gl => {
   const frame = (now) => {
     raf = 0;
     if (!visible || document.hidden || band.dataset.awake === 'false') return;
+    /* Hentikan loop selama user sedang scroll — aurora tidak terlihat
+       jelas saat scroll, dan ini melepas beban GPU untuk compositor. */
+    if (scrolling) return;
+    /* Saat pita sudah terlihat penuh (reveal selesai) dan pointer tidak
+       hover, aurora cukup 20fps — manusia tak bisa bedakan 20 vs 60 fps
+       pada gradien yang mengalang perlahan. Hemat ~66% GPU. */
+    const settled = state.reveal >= 1 && !pointer.inside;
+    if (settled && last && now - last < 50) {
+      raf = requestAnimationFrame(frame);
+      return;
+    }
     /* Selama reveal, separuh frame dilewati: animasi aurora lambat, dan GPU
        sedang dipakai menggeser seluruh halaman. */
     if (band.dataset.revealing === 'true' && (parity = 1 - parity) === 1) {
@@ -525,22 +571,35 @@ const link = gl => {
   };
 
   const wake = () => {
-    if (!raf && visible && !document.hidden && band.dataset.awake !== 'false') {
-      raf = requestAnimationFrame(frame);
-    }
+    /* Tidak membangunkan saat scroll — frame() akan return early juga,
+       tapi ini mencegah rAF yang sia-sia masuk ke queue. */
+    if (scrolling || !visible || document.hidden || band.dataset.awake === 'false') return;
+    if (!raf) raf = requestAnimationFrame(frame);
   };
 
   /* Dipakai /js/reveal.js untuk membangunkan kanvas saat pita mulai terbuka. */
   band.__wake = wake;
 
+  /* Debounce resize: ResizeObserver dan mobile URL-bar show/hide bisa
+     memicu puluhan event per detik saat scroll. measureInk() melakukan
+     readPixels + loop pixel penuh (stall 50-100ms main thread),
+     jadi ditunda 100ms dan di-skip kalau ukuran praktis tidak berubah. */
+  let resizeTimer = 0;
   const resize = () => {
-    const ratio = Math.min(window.devicePixelRatio || 1, 2);
-    view.width = Math.max(1, root.clientWidth);
-    view.height = Math.max(1, root.clientHeight);
-    canvas.width = Math.max(1, Math.round(view.width * ratio));
-    canvas.height = Math.max(1, Math.round(view.height * ratio));
-    if (painted.w !== Math.round(view.width) || painted.h !== Math.round(view.height)) {
-      painted = { w: Math.round(view.width), h: Math.round(view.height) };
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(handleResize, 100);
+  };
+
+  const handleResize = () => {
+    const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
+    const newW = Math.max(1, Math.round(root.clientWidth));
+    const newH = Math.max(1, Math.round(root.clientHeight));
+    view.width = newW;
+    view.height = newH;
+    canvas.width = Math.max(1, Math.round(newW * ratio));
+    canvas.height = Math.max(1, Math.round(newH * ratio));
+    if (painted.w !== newW || painted.h !== newH) {
+      painted = { w: newW, h: newH };
       paint();
     } else {
       render();
@@ -549,6 +608,7 @@ const link = gl => {
   };
 
   const onPointerMove = (event) => {
+    if (scrolling) return; /* pointer move saat scroll tidak relevan */
     const rect = root.getBoundingClientRect();
     pointer.x = event.clientX - rect.left;
     pointer.y = event.clientY - rect.top;
