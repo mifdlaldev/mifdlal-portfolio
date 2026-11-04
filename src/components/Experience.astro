@@ -7,8 +7,8 @@ import CodeComment from './CodeComment.astro'
   <CodeComment text="// pengalaman" />
   <div class="wrap">
     <div class="section-head">
-      <span class="fig-label">fig. 05 · pengalaman</span>
-      <h2 class="section-headline">Pengalaman.</h2>
+      <span class="fig-label" data-i18n-en="fig. 05 · experience">fig. 05 · pengalaman</span>
+      <h2 class="section-headline" data-i18n-en="Experience.">Pengalaman.</h2>
     </div>
 
     <ul class="entry-list" aria-hidden={experience.length === 0 ? 'true' : undefined}>
@@ -54,7 +54,7 @@ import CodeComment from './CodeComment.astro'
               {e.points.map((pt) => <li>{pt}</li>)}
             </ul>
             {e.link && (
-              <a class="entry-link" href={e.link} target="_blank" rel="noopener noreferrer">Bukti ↗</a>
+              <a class="entry-link" href={e.link} target="_blank" rel="noopener noreferrer" data-i18n-en="Proof ↗">Bukti ↗</a>
             )}
           </li>
         ))
@@ -63,8 +63,8 @@ import CodeComment from './CodeComment.astro'
 
     {experience.length === 0 && (
       <>
-        <p class="empty-note">Belum diisi</p>
-        <p class="sr-only">Bagian pengalaman belum diisi.</p>
+        <p class="empty-note" data-i18n-en="Not filled in yet.">Belum diisi</p>
+        <p class="sr-only" data-i18n-en="The experience section has not been filled in yet.">Bagian pengalaman belum diisi.</p>
       </>
     )}
   </div>

@@ -19,12 +19,12 @@ const certAttrs = (c: (typeof featured)[number]) => ({
   <CodeComment text="// sertifikasi" />
   <div class="wrap">
     <div class="section-head">
-      <span class="fig-label">fig. 07 · sertifikasi</span>
-      <h2 class="section-headline">Sertifikasi.</h2>
-      <p class="section-sub">
-        {certTotals.total} sertifikat dari {certTotals.issuers} penerbit. Setiap ID dapat diperiksa
-        sendiri di halaman verifikasi penerbitnya. Klik gambar untuk membuka sertifikat penuh.
-      </p>
+      <span class="fig-label" data-i18n-en="fig. 07 · certifications">fig. 07 · sertifikasi</span>
+       <h2 class="section-headline" data-i18n-en="Certifications.">Sertifikasi.</h2>
+       <p class="section-sub" data-i18n-en={`${certTotals.total} certificates from ${certTotals.issuers} issuers. Each ID can be verified directly on the issuer's verification page. Click an image to open the full certificate.`}>
+       {certTotals.total} sertifikat dari {certTotals.issuers} penerbit. Setiap ID dapat diperiksa
+       sendiri di halaman verifikasi penerbitnya. Klik gambar untuk membuka sertifikat penuh.
+       </p>
     </div>
 
     <ul class="cert-grid">
@@ -69,13 +69,13 @@ const certAttrs = (c: (typeof featured)[number]) => ({
           aria-haspopup="dialog"
           aria-controls="cert-list"
         >
-          <span class="cert-more-btn-label">Lihat Lainnya</span>
+          <span class="cert-more-btn-label" data-i18n-en="View all">Lihat Lainnya</span>
           <span class="cert-more-btn-count" aria-hidden="true">{more.length}</span>
         </button>
-        <p class="cert-more-btn-note">
-          {certTotals.moreHackerrank} sertifikat keahlian HackerRank dan {certTotals.moreOther} kelas
-          dasar Dicoding.
-        </p>
+        <p class="cert-more-btn-note" data-i18n-en={`${certTotals.moreHackerrank} HackerRank skill certificates and ${certTotals.moreOther} Dicoding beginner classes.`}>
+         {certTotals.moreHackerrank} sertifikat keahlian HackerRank dan {certTotals.moreOther} kelas
+         dasar Dicoding.
+         </p>
 
         <noscript>
           <ul class="cert-fallback">
@@ -106,10 +106,10 @@ const certAttrs = (c: (typeof featured)[number]) => ({
       </div>
       <div class="cert-dialog-foot">
         <p class="cert-dialog-meta" data-dialog-meta></p>
-        <a class="cert-dialog-verify" data-dialog-verify target="_blank" rel="noopener noreferrer">
-          verifikasi di situs penerbit ↗
-        </a>
-        <button class="cert-dialog-close" type="button" data-dialog-close>Tutup</button>
+        <a class="cert-dialog-verify" data-dialog-verify target="_blank" rel="noopener noreferrer" data-i18n-en="verify on issuer site ↗">
+         verifikasi di situs penerbit ↗
+         </a>
+         <button class="cert-dialog-close" type="button" data-dialog-close data-i18n-en="Close">Tutup</button>
       </div>
     </div>
   </dialog>
@@ -117,14 +117,14 @@ const certAttrs = (c: (typeof featured)[number]) => ({
   <dialog class="cert-list" id="cert-list" aria-labelledby="cert-list-title">
     <div class="cert-list-box" data-lenis-prevent>
       <div class="cert-list-head">
-        <p class="cert-list-fig fig-label">fig. 07b · daftar lengkap</p>
-        <h3 class="cert-list-title" id="cert-list-title" tabindex="-1">
-          Sertifikat keahlian lainnya
-        </h3>
-        <p class="cert-list-meta">
-          {more.length} sertifikat · {certTotals.moreHackerrank} HackerRank · {certTotals.moreOther} Dicoding
-        </p>
-        <button class="cert-list-close" type="button" data-cert-list-close>Tutup</button>
+        <p class="cert-list-fig fig-label" data-i18n-en="fig. 07b · full list">fig. 07b · daftar lengkap</p>
+         <h3 class="cert-list-title" id="cert-list-title" tabindex="-1" data-i18n-en="Other skill certificates">
+         Sertifikat keahlian lainnya
+         </h3>
+         <p class="cert-list-meta" data-i18n-en={`${more.length} certificates · ${certTotals.moreHackerrank} HackerRank · ${certTotals.moreOther} Dicoding`}>
+         {more.length} sertifikat · {certTotals.moreHackerrank} HackerRank · {certTotals.moreOther} Dicoding
+         </p>
+         <button class="cert-list-close" type="button" data-cert-list-close data-i18n-en="Close">Tutup</button>
       </div>
 
       <ul class="cert-grid cert-grid--list">
