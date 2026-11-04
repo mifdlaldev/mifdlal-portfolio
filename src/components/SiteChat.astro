@@ -126,7 +126,6 @@
   .site-chat {
     position: fixed;
     right: var(--grid-gutter);
-    bottom: calc(5rem + env(safe-area-inset-bottom, 0px) + var(--to-top-lift, 0px));
     z-index: var(--z-raise);
     display: flex;
     flex-direction: column;
@@ -136,7 +135,7 @@
     /* Posisi dasar fixed bottom 5rem. Posisi merged dijalankan via
        transform (kompositor-only), BUKAN bottom — animasi bottom
        memicu layout+paint tiap frame = frame drop saat scroll. */
-    bottom: calc(5rem + env(safe-area-inset-bottom, 0px) + var(--to-top-lift, 0px));
+    bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
     transform: translateY(0);
     transition: transform 0.4s var(--ease-out);
   }

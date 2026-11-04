@@ -9,31 +9,40 @@
   const trigger = document.querySelector(btn.dataset.trigger || '#kontak');
   if (!trigger) return;
 
-  /* Footer: tombol tidak boleh masuk area footer. Posisi dasarnya dibaca
-     sekali di awal (sebelum ada lift), lalu lift dihitung supaya tepi bawah
-     tombol berhenti FOOTER_GAP px di atas tepi atas footer. */
+  /* Footer: tombol tidak boleh masuk area footer. Lift dihitung supaya tepi
+     bawah tombol berhenti FOOTER_GAP px di atas tepi atas footer.
+     PERFORMA: lift diterapkan lewat `translate` (individual transform
+     property = kompositor-only) pada ELEMEN INI SAJA. Versi lama menulis
+     custom property ke :root tiap frame, yang meng-invalidasi style seluruh
+     dokumen dan memicu layout+paint ulang penuh = frame drop. */
   const footer = document.querySelector('footer');
+  const chat = document.querySelector('.site-chat');
   const FOOTER_GAP = 16;
-  const baseBottom = parseFloat(getComputedStyle(btn).bottom);
+  let baseBottom = 0;
+  try { baseBottom = parseFloat(getComputedStyle(btn).bottom) || 0 } catch { baseBottom = 0 }
+  let lastLift = -1;
+  let lastShow = null;
 
   let ticking = false;
 
   const update = () => {
     ticking = false;
     const show = trigger.getBoundingClientRect().top < window.innerHeight;
-    btn.dataset.visible = show ? 'true' : 'false';
+    if (show !== lastShow) {
+      btn.dataset.visible = show ? 'true' : 'false';
+      lastShow = show;
+    }
 
-    if (footer) {
-      const footerTop = footer.getBoundingClientRect().top;
-      const lift = Math.max(
-        0,
-        window.innerHeight - footerTop + FOOTER_GAP - baseBottom
-      );
-      btn.style.setProperty('--to-top-lift', lift + 'px');
-      /* Juga set pada :root: widget chat adalah SIBLING tombol, bukan
-         child, jadi tidak mewarisi var() dari tombol. Dengan nilai di
-         :root, kedua tombol bergerak bersama saat footer muncul. */
-      document.documentElement.style.setProperty('--to-top-lift', lift + 'px');
+    if (!footer) return;
+    const footerTop = footer.getBoundingClientRect().top;
+    const lift = Math.max(0, Math.round(window.innerHeight - footerTop + FOOTER_GAP - baseBottom));
+    /* Tulis hanya kalau berubah — menghindari invalidasi style tiap frame */
+    if (lift !== lastLift) {
+      btn.style.translate = `0 ${-lift}px`
+      /* Chat widget adalah sibling, bukan child: pakai property `translate`
+         yang sama supaya ikut naik tanpa menyentuh transform merged-nya. */
+      if (chat) chat.style.translate = `0 ${-lift}px`
+      lastLift = lift;
     }
   };
 

@@ -32,11 +32,11 @@
   /* seleksi teks: elektrik 18% di atas permukaan */
   --selection-bg: color-mix(in srgb, var(--electric) 18%, transparent);
 
-  /* Hook runtime: diisi skrip tombol-ke-atas (public/js/to-top.js) sebesar
-     bagian footer yang sudah masuk viewport, supaya tombol naik dan tidak
-     menimpa hak cipta. Dideklarasikan di sini supaya penjaga token bisa
-     memverifikasi bahwa var(--to-top-lift) memang punya sumber. */
-  --to-top-lift: 0px;
+  /* Hook runtime lama --to-top-lift DIHAPUS: pengangkatan tombol saat footer
+     muncul sekarang memakai individual transform property `translate` yang
+     ditulis langsung ke elemen oleh to-top.js (kompositor-only). Menulis
+     custom property ke :root tiap frame meng-invalidasi style seluruh
+     dokumen dan menyebabkan frame drop saat footer terlihat. */
 
   /* Hook runtime: diisi skrip refleksi potret
      (public/js/portrait-reflect.js). Nol berarti bingkai tegak dan pita

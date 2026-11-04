@@ -51,9 +51,10 @@
     /* Pojok jendela, bukan tepi konten. Di layar lebar tombol duduk di
        gutter luar yang kosong, jadi tidak menimpa baris teks mana pun. */
     right: var(--grid-gutter);
-    /* --to-top-lift diisi skrip saat footer mulai terlihat, supaya tombol
-       naik dan tidak menimpa baris hak cipta. */
-    bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px) + var(--to-top-lift, 0px));
+    /* Posisi dasar. Lift footer diterapkan lewat transform (kompositor-only)
+       oleh to-top.js — bukan bottom, karena animasi bottom memicu layout
+       tiap frame dan invalidasi var di :root menggambar ulang seluruh dokumen. */
+    bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
     z-index: var(--z-raise);
 
     display: grid;
@@ -76,6 +77,10 @@
        tiap frame dan panahnya terlihat bergeser sendiri. Geser murni
        membuat ikon bergerak sebagai satu bitmap utuh. */
     transform: translateY(10px);
+    /* Lift footer diterapkan lewat `translate` (individual transform
+       property, kompositor-only) oleh to-top.js. Dipisah dari `transform`
+       supaya animasi enter/exit di bawah tidak saling menimpa. */
+    translate: 0 0;
     pointer-events: none;
     /* Satu lapisan kompositor: transform dijalankan GPU, bukan digambar
        ulang tiap frame. */
