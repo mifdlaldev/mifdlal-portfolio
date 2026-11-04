@@ -1,11 +1,21 @@
 ---
-/* Wordmark MIFDLAL — teks gradasi statis (tanpa WebGL).
-   Versi sebelumnya pakai Aurora WebGL2 (shader + canvas) yang berat.
-   Sekarang: teks biasa dengan background-clip gradient, animasi masuk
-   (translateY + fade) tetap dipertahankan, tanpa rAF loop sama sekali. */
+/* Wordmark MIFDLAL — teks gradasi statis + dekorasi blueprint lengkap.
+   Versi WebGL Aurora dihapus, diganti teks CSS gradient (background-clip).
+   Semua dekorasi blueprint dikembalikan: kotak plat, node sudut, garis
+   dimensi, label fig/spec. Posisi dekorasi diukur dari bounding box teks
+   via Canvas2D measureText (sekali jalan + resize, tanpa rAF loop). */
 ---
 
-<section class="wordmark" aria-hidden="true">
+<section class="wordmark" data-word="MIFDLAL" aria-hidden="true">
+  <span class="wm-anno wm-anno--fig">fig. 09 · wordmark</span>
+  <span class="wm-anno wm-anno--spec">grid 1180 · dot 26 · 7 glyph</span>
+  <span class="wm-anno wm-anno--dim" data-dim-value>1180</span>
+  <span class="wm-node wm-node--tl"></span>
+  <span class="wm-node wm-node--tr"></span>
+  <span class="wm-node wm-node--bl"></span>
+  <span class="wm-node wm-node--br"></span>
+  <span class="wm-dots" aria-hidden="true"></span>
+  <span class="wm-sheet" aria-hidden="true"></span>
   <span class="wordmark-text">MIFDLAL</span>
 </section>
 
@@ -13,6 +23,15 @@
   .wordmark {
     --wm-pad-y: clamp(0.75rem, 2.4vw, 1.75rem);
     --wm-pad-x: clamp(1rem, 4vw, 3.5rem);
+    /* Koordinat plat gambar: diisi oleh script ukur teks di bawah. */
+    --wm-f-left: 0px;
+    --wm-f-top: 0px;
+    --wm-f-w: 0px;
+    --wm-f-h: 0px;
+    /* Garis dimensi selebar tinta huruf. */
+    --wm-dim-left: 0px;
+    --wm-dim-w: 0px;
+    --wm-dim-y: 0px;
 
     position: relative;
     overflow: hidden;
@@ -22,11 +41,11 @@
     background-color: var(--color-paper);
   }
 
-  /* Dot grid pita: pola titik 26px, sama dengan section lain. */
-  .wordmark::before {
-    content: '';
+  /* ── Dot grid pita (dilubangi seukuran plat) ────────── */
+  .wm-dots {
     position: absolute;
     inset: 0;
+    z-index: 0;
     pointer-events: none;
     background-image: radial-gradient(
       circle at 1px 1px,
@@ -34,7 +53,145 @@
       transparent 0
     );
     background-size: 26px 26px;
+    clip-path: polygon(
+      evenodd,
+      0 0, 100% 0, 100% 100%, 0 100%, 0 0,
+      var(--wm-f-left) var(--wm-f-top),
+      var(--wm-f-left) calc(var(--wm-f-top) + var(--wm-f-h)),
+      calc(var(--wm-f-left) + var(--wm-f-w)) calc(var(--wm-f-top) + var(--wm-f-h)),
+      calc(var(--wm-f-left) + var(--wm-f-w)) var(--wm-f-top),
+      var(--wm-f-left) var(--wm-f-top)
+    );
   }
+
+  /* ── Lembar putih di dalam plat ─────────────────────── */
+  .wm-sheet {
+    display: none;
+    position: absolute;
+    z-index: 0;
+    left: calc(var(--wm-f-left) - 2px);
+    top: calc(var(--wm-f-top) - 2px);
+    width: calc(var(--wm-f-w) + 4px);
+    height: calc(var(--wm-f-h) + 4px);
+    background: var(--color-white);
+    pointer-events: none;
+  }
+
+  .wordmark[data-plate='true'] .wm-sheet {
+    display: block;
+  }
+
+  /* ── Kotak plat gambar ──────────────────────────────── */
+  .wordmark[data-plate='true']::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: var(--z-content);
+    pointer-events: none;
+    background-image:
+      linear-gradient(var(--color-line), var(--color-line)),
+      linear-gradient(var(--color-line), var(--color-line)),
+      linear-gradient(var(--color-line), var(--color-line)),
+      linear-gradient(var(--color-line), var(--color-line));
+    background-repeat: no-repeat;
+    background-size:
+      var(--wm-f-w) 1px,
+      var(--wm-f-w) 1px,
+      1px var(--wm-f-h),
+      1px var(--wm-f-h);
+    background-position:
+      var(--wm-f-left) var(--wm-f-top),
+      var(--wm-f-left) calc(var(--wm-f-top) + var(--wm-f-h)),
+      var(--wm-f-left) var(--wm-f-top),
+      calc(var(--wm-f-left) + var(--wm-f-w)) var(--wm-f-top);
+  }
+
+  /* ── Garis dimensi + tick ───────────────────────────── */
+  .wordmark[data-dim='true']::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: var(--z-content);
+    pointer-events: none;
+    background-image:
+      linear-gradient(var(--color-line), var(--color-line)),
+      linear-gradient(var(--color-line), var(--color-line)),
+      linear-gradient(var(--color-line), var(--color-line));
+    background-repeat: no-repeat;
+    background-size:
+      var(--wm-dim-w) 1px,
+      1px 9px,
+      1px 9px;
+    background-position:
+      var(--wm-dim-left) var(--wm-dim-y),
+      var(--wm-dim-left) calc(var(--wm-dim-y) - 4px),
+      calc(var(--wm-dim-left) + var(--wm-dim-w)) calc(var(--wm-dim-y) - 4px);
+  }
+
+  /* ── Label monospace ────────────────────────────────── */
+  .wm-anno {
+    display: none;
+    position: absolute;
+    z-index: var(--z-band);
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-caps);
+    line-height: var(--leading-ui);
+    color: color-mix(in srgb, var(--color-ink) 58%, transparent);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .wordmark[data-plate='true'] .wm-anno--fig,
+  .wordmark[data-plate='true'] .wm-anno--spec,
+  .wordmark[data-plate='true'] .wm-node {
+    display: block;
+  }
+
+  .wm-anno--fig {
+    left: var(--wm-f-left);
+    top: 0.6875rem;
+    color: var(--color-electric);
+  }
+
+  .wm-anno--spec {
+    left: calc(var(--wm-f-left) + var(--wm-f-w));
+    top: 0.6875rem;
+    transform: translateX(-100%);
+  }
+
+  .wordmark[data-dim='true'] .wm-anno--dim {
+    display: block;
+  }
+
+  .wm-anno--dim {
+    display: none;
+    left: calc(var(--wm-dim-left) + var(--wm-dim-w) / 2);
+    top: var(--wm-dim-y);
+    transform: translate(-50%, -50%);
+    padding: 0.25rem 0.5rem;
+    background: var(--color-paper);
+    color: color-mix(in srgb, var(--color-ink) 72%, transparent);
+  }
+
+  /* ── Node sudut plat ────────────────────────────────── */
+  .wm-node {
+    display: none;
+    position: absolute;
+    z-index: var(--z-band);
+    width: var(--node-size);
+    height: var(--node-size);
+    border: 1px solid var(--color-electric);
+    background: var(--color-electric);
+    box-sizing: border-box;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .wm-node--tl { left: var(--wm-f-left); top: var(--wm-f-top); }
+  .wm-node--tr { left: calc(var(--wm-f-left) + var(--wm-f-w)); top: var(--wm-f-top); }
+  .wm-node--bl { left: var(--wm-f-left); top: calc(var(--wm-f-top) + var(--wm-f-h)); }
+  .wm-node--br { left: calc(var(--wm-f-left) + var(--wm-f-w)); top: calc(var(--wm-f-top) + var(--wm-f-h)); }
 
   /* Teks wordmark: gradasi horizontal electric → cyan → green → lemon,
      sesuai palet situs. Pakai color langsung (bukan background-clip:text)
@@ -91,6 +248,20 @@
     }
   }
 
+  /* ── Responsif ───────────────────────────────────────── */
+  @media (max-width: 1228px) {
+    .wordmark[data-plate='true'] .wm-anno--fig,
+    .wordmark[data-plate='true'] .wm-anno--spec {
+      display: none;
+    }
+  }
+
+  @media (max-width: 899px) {
+    .wordmark[data-plate='true'] .wm-node {
+      display: none;
+    }
+  }
+
   /* Mode reveal (dipasang /js/reveal.js): pita keluar dari alur dan menempel
      di dasar viewport. z-index TETAP di bawah page-layer (--z-below = -1):
      lapis atas yang opak menutup pita selama scroll biasa, lalu terangkat
@@ -104,30 +275,84 @@
 </style>
 
 <script>
-  /* Tambah .is-in saat wordmark masuk viewport — menggantikan
-     IntersectionObserver yang tadinya ada di wordmark.js (WebGL).
-     rootMargin negatif bawah: wordmark kadim .is-fixed (position:fixed,
-     z-index:-1) di dasar viewport, jadi observer dijalankan sebelum
-     elemen benar-benar masuk viewport. Fallback 800ms: kalau observer
-     lambat, .is-in tetap ditambahkan. */
+  /* 1. IntersectionObserver: tambah .is-in saat wordmark masuk viewport.
+     2. Ukur bounding box teks (Canvas2D measureText) → isi CSS variables
+        --wm-f-* untuk kotak plat, node sudut, garis dimensi, label.
+        Sekali jalan + debounce resize. Tanpa rAF loop. */
   (() => {
     const band = document.querySelector('.wordmark');
-    if (!band) return;
-    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+    const text = band?.querySelector('.wordmark-text');
+    const dimValue = band?.querySelector('[data-dim-value]');
+    if (!band || !text) return;
+
+    // ── Reveal animasi ──
+    if (!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+      const addIn = () => band.classList.add('is-in');
+      const obs = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((e) => e.isIntersecting)) {
+            addIn();
+            obs.disconnect();
+          }
+        },
+        { threshold: 0.05 }
+      );
+      obs.observe(band);
+      setTimeout(addIn, 1200);
+    } else {
       band.classList.add('is-in');
-      return;
     }
-    const addIn = () => band.classList.add('is-in');
-    const obs = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          addIn();
-          obs.disconnect();
-        }
-      },
-      { threshold: 0.05 }
-    );
-    obs.observe(band);
-    setTimeout(addIn, 1200);
+
+    // ── Ukur teks → posisi dekorasi ──
+    const canvas = document.createElement('canvas').getContext('2d');
+
+    const measure = () => {
+      const cs = getComputedStyle(text);
+      const fontSize = parseFloat(cs.fontSize);
+      canvas.font = `${cs.fontWeight} ${fontSize}px ${cs.fontFamily}`;
+      try { canvas.letterSpacing = cs.letterSpacing; } catch (e) {}
+
+      const word = text.textContent.trim();
+      const m = canvas.measureText(word);
+      const w = m.width;
+      const ascent = m.actualBoundingBoxAscent || fontSize * 0.8;
+      const descent = m.actualBoundingBoxDescent || fontSize * 0.2;
+      const h = ascent + descent;
+
+      const bandRect = band.getBoundingClientRect();
+      // scale parallax/reveal transform via getBoundingClientRect
+      const padX = parseFloat(getComputedStyle(band).paddingLeft);
+      const padY = parseFloat(getComputedStyle(band).paddingTop);
+      const innerW = bandRect.width - padX * 2;
+      const innerH = bandRect.height - padY * 2;
+
+      const left = padX + (innerW - w) / 2;
+      const top = padY + (innerH - h) / 2;
+
+      band.style.setProperty('--wm-f-left', Math.round(left) + 'px');
+      band.style.setProperty('--wm-f-top', Math.round(top) + 'px');
+      band.style.setProperty('--wm-f-w', Math.round(w) + 'px');
+      band.style.setProperty('--wm-f-h', Math.round(h) + 'px');
+
+      band.style.setProperty('--wm-dim-left', Math.round(left) + 'px');
+      band.style.setProperty('--wm-dim-w', Math.round(w) + 'px');
+      band.style.setProperty('--wm-dim-y', Math.round(top + h + 14) + 'px');
+
+      if (dimValue) dimValue.textContent = Math.round(w);
+
+      band.setAttribute('data-plate', 'true');
+      band.setAttribute('data-dim', 'true');
+    };
+
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(measure).catch(measure);
+    }
+    setTimeout(measure, 100); // fallback
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(measure, 200);
+    }, { passive: true });
   })();
 </script>
