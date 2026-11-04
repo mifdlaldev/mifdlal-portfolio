@@ -321,38 +321,53 @@
 
   /* ── Posisi launcher per section ────────────────────────
      Hero + sertifikasi: launcher menutupi tepat tombol .to-top
-     (class --merged -> bottom 1.5rem, sama dengan to-top).
-     Kontak: launcher naik sedikit ke posisi normal (bottom 5rem).
-     Animasi perpindahan ditangani CSS transition bottom. */
+     (class --merged -> translateY turun 3.5rem).
+     Kontak: launcher di posisi normal (translateY 0).
+     Scroll listener dengan rAF throttle: maksimal 1 getBoundingClientRect
+     per frame = tidak ada layout thrash. Animasi via transform
+     (kompositor-only), bukan bottom. */
   const SECTION_ORDER = ['hero', 'sertifikasi', 'kontak']
 
-  const updateLauncherPosition = () => {
-    const visible = SECTION_ORDER.map((id) => document.getElementById(id)).filter(Boolean)
-    const intersecting = visible.filter((el) => el.getBoundingClientRect().bottom > 0 && el.getBoundingClientRect().top < window.innerHeight)
-    if (intersecting.length === 0) return
-    /* Ambil section paling bawah dalam urutan DOM yang sedang terlihat */
-    const active = intersecting.reduce((a, b) =>
-      SECTION_ORDER.indexOf(a.id) > SECTION_ORDER.indexOf(b.id) ? a : b
-    )
-    if (active.id === 'kontak') {
-      root.classList.remove('site-chat--merged')
-    } else {
-      root.classList.add('site-chat--merged')
+  const setMerged = (id) => {
+    if (id === 'kontak') root.classList.remove('site-chat--merged')
+    else root.classList.add('site-chat--merged')
+  }
+
+  /* Cek sinkron sekali saat load */
+  const initialCheck = () => {
+    const vh = window.innerHeight
+    const inBand = SECTION_ORDER.filter((id) => {
+      const el = document.getElementById(id)
+      if (!el) return false
+      const r = el.getBoundingClientRect()
+      return r.bottom > vh * 0.4 && r.top < vh * 0.6
+    })
+    if (inBand.length) {
+      setMerged(inBand.sort((a, b) => SECTION_ORDER.indexOf(a) - SECTION_ORDER.indexOf(b))[0])
     }
   }
 
   let scrollTicking = false
   window.addEventListener('scroll', () => {
-    if (!scrollTicking) {
-      window.requestAnimationFrame(() => {
-        updateLauncherPosition()
-        scrollTicking = false
-      })
-      scrollTicking = true
-    }
+    if (scrollTicking) return
+    scrollTicking = true
+    window.requestAnimationFrame(() => {
+      const vh = window.innerHeight
+      /* Ambil section TERBAWAH yang masih di band tengah viewport —
+         kalau dua section straddle, yang bawah menang (kontak > sertifikasi). */
+      let active = null
+      for (const id of SECTION_ORDER) {
+        const el = document.getElementById(id)
+        if (!el) continue
+        const r = el.getBoundingClientRect()
+        if (r.top < vh * 0.6 && r.bottom > vh * 0.4) active = id
+      }
+      if (active) setMerged(active)
+      scrollTicking = false
+    })
   }, { passive: true })
 
-  updateLauncherPosition()
+  initialCheck()
 
   /* ── Sapaan muncul saat launcher pertama kali dirender ── */
   greet()
