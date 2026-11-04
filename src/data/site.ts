@@ -7,9 +7,13 @@
 export type Project = {
   no: string
   name: string
+  nameEn?: string
   role: string
+  roleEn?: string
   description: string
+  descriptionEn?: string
   stack: readonly string[]
+  stackEn?: readonly string[]
   live: string
   repo?: string
   note?: string
@@ -23,19 +27,28 @@ export const projects: readonly Project[] = [
     no: '01',
     name: 'PT Loka Logistics',
     role: 'Website perusahaan',
+    roleEn: 'Company website',
     description:
       'Situs profil perusahaan logistik B2B: layanan general, project, dan retail cargo, visi misi, area jangkauan, serta formulir kontak.',
+    descriptionEn:
+      'B2B logistics company profile site: general, project, and retail cargo services, vision and mission, coverage areas, and a contact form.',
     stack: ['WordPress', 'Tema kustom'],
+    stackEn: ['WordPress', 'Custom theme'],
     live: 'https://lokalogistics.co.id/',
     image: '/projects/loka-logistics.webp',
   },
   {
     no: '02',
     name: 'Simulasi Lokasi Ujian UT Bandung',
+    nameEn: 'UT Bandung Exam Location Simulator',
     role: 'Aplikasi simulasi',
+    roleEn: 'Simulation app',
     description:
       'Wizard enam langkah untuk memilih lokasi ujian Universitas Terbuka: identitas, wilayah, sekolah, detail, konfirmasi, lalu ringkasan pilihan.',
+    descriptionEn:
+      'A six-step wizard for choosing an exam location at Universitas Terbuka: identity, region, school, details, confirmation, then a summary of your selection.',
     stack: ['Vite', 'JavaScript'],
+    stackEn: ['Vite', 'JavaScript'],
     live: 'https://simulasi-pemilihan-lokasi-ujian-ut.vercel.app/',
     image: '/projects/ut-bandung-simulator.webp',
   },
@@ -43,14 +56,17 @@ export const projects: readonly Project[] = [
     no: '03',
     name: 'Mahoni-House',
     role: 'Landing page',
+    roleEn: 'Landing page',
     description:
       'Landing page villa dua bahasa, Indonesia dan Inggris, dengan route per locale.',
+    descriptionEn:
+      'Two-language villa landing page, Indonesian and English, with per-locale routing.',
     stack: ['Next.js', 'next-intl'],
+    stackEn: ['Next.js', 'next-intl'],
     live: 'https://mahoni-house.vercel.app',
     image: '/projects/mahoni-house.webp',
   },
 ]
-
 /* Foto layanan: unduhan Unsplash, dipotong 16/10 oleh kanvas layanan.
    Berkas asli ada di public/services/layanan-0N.jpg (1600 px, sRGB).
    Rincian sumber dan status lisensi: ASSET-LICENSES.md. */
@@ -58,19 +74,25 @@ export const services = [
   {
     no: '01',
     title: 'Website dan web app',
+    titleEn: 'Websites and web apps',
     body: 'Landing page, profil perusahaan, e-commerce, sampai POS. Dari desain sampai rilis, bukan sekadar serah terima berkas.',
+    bodyEn: 'Landing pages, company profiles, e-commerce, up to POS systems. From design to launch, not just handing over files.',
     image: '/services/layanan-01.jpg',
   },
   {
     no: '02',
     title: 'Chatbot',
+    titleEn: 'Chatbots',
     body: 'Balas pelanggan secara otomatis dan jawab pertanyaan berdasarkan data bisnis Anda, bukan templat yang selalu sama.',
+    bodyEn: 'Automatically reply to customers and answer questions based on your business data, not the same old templates.',
     image: '/services/layanan-02.jpg',
   },
   {
     no: '03',
     title: 'Otomasi AI dan workflow',
+    titleEn: 'AI automation and workflow',
     body: 'AI menangani pesan masuk, merangkum konteks pelanggan, dan mengirim balasan otomatis — tim hanya turun saat benar-benar dibutuhkan.',
+    bodyEn: 'AI handles incoming messages, summarizes customer context, and sends automatic replies — your team only steps in when truly needed.',
     image: '/services/layanan-03.jpg',
   },
 ] as const
@@ -173,11 +195,16 @@ export const contact = {
 export type Experience = {
   no: string
   role: string
+  roleEn?: string
   org: string
+  orgEn?: string
   kind: 'Magang' | 'Kontrak' | 'Freelance' | 'Organisasi'
+  kindEn?: string
   location: string
   period: string
+  periodEn?: string
   points: readonly string[]
+  pointsEn?: readonly string[]
   link?: string
 }
 
@@ -185,14 +212,23 @@ export const experience: readonly Experience[] = [
   {
     no: '01',
     role: 'Pengembang Aplikasi PE-SMKK',
+    roleEn: 'PE-SMKK Application Developer',
     org: 'Dinas Pekerjaan Umum dan Penataan Ruang Kabupaten Sumedang',
+    orgEn: 'Public Works and Spatial Planning Office of Sumedang Regency',
     kind: 'Magang',
+    kindEn: 'Internship',
     location: 'Sumedang',
     period: 'Jun - Okt 2025',
+    periodEn: 'Jun - Oct 2025',
     points: [
       'Membangun aplikasi PE-SMKK (Pemantauan dan Evaluasi Sistem Manajemen Keselamatan Konstruksi) untuk mendata hasil pemeriksaan keselamatan pada proyek konstruksi yang sedang berjalan.',
       'Isinya mengikuti elemen evaluasi kinerja SMKK pada Permen PUPR 10/2021: menilai penerapan keselamatan oleh penyedia jasa per proyek, bukan mencatat insiden setelah kejadian.',
       'Dipakai petugas lapangan Bidang Bina Konstruksi saat pemeriksaan, sehingga hasil penilaian tiap proyek terkumpul di satu tempat.',
+    ],
+    pointsEn: [
+      'Built the PE-SMKK application (Construction Safety Management System Monitoring and Evaluation) to digitize safety inspection results for ongoing construction projects.',
+      'Follows the SMKK performance evaluation elements from Minister of PUPR Regulation 10/2021: assessing safety implementation by service provider per project, rather than logging incidents after they happen.',
+      'Used by field officers from the Construction Industry Division during inspections, so every project assessment is collected in one place.',
     ],
   },
 ]
@@ -200,21 +236,29 @@ export const experience: readonly Experience[] = [
 export type Education = {
   no: string
   institution: string
+  institutionEn?: string
   program: string
+  programEn?: string
   location: string
   period: string
   status: string
+  statusEn?: string
   note?: string
+  noteEn?: string
 }
 
 export const education: readonly Education[] = [
   {
     no: '01',
     institution: 'SMKN 1 Sumedang',
+    institutionEn: 'SMKN 1 Sumedang',
     program: 'Rekayasa Perangkat Lunak',
+    programEn: 'Software Engineering',
     location: 'Sumedang',
     period: '2023 - 2026',
     status: 'Lulus',
+    statusEn: 'Graduated',
     note: 'Materi kejuruan mencakup basis data relasional dan SQL, pemrograman web statis dan dinamis, aplikasi mobile dan desktop, IoT, dan cloud computing. Framework yang dipelajari: Laravel dan CodeIgniter untuk backend, React dan Next.js untuk frontend, Flutter untuk aplikasi mobile, serta Bootstrap dan Tailwind CSS untuk antarmuka.',
+    noteEn: 'Vocational coursework covers relational databases and SQL, static and dynamic web programming, mobile and desktop applications, IoT, and cloud computing. Frameworks studied: Laravel and CodeIgniter for backend, React and Next.js for frontend, Flutter for mobile apps, and Bootstrap and Tailwind CSS for interfaces.',
   },
 ]
