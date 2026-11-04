@@ -18,7 +18,7 @@
     class="chat-panel"
     role="dialog"
     aria-modal="false"
-    aria-label="Chat dengan asisten AI Mifdlal"
+    aria-label="Chat dengan asisten AI Mifdlal" data-i18n-aria="Chat with Mifdlal's AI assistant"
     aria-hidden="true"
   >
     <!-- ── 1. Header ─────────────────────────────────────── -->
@@ -28,7 +28,7 @@
         <h2 class="chat-head-title" data-i18n-en="AI Chatbot">Mifdlal Asisten</h2>
         <p class="chat-head-sub" data-i18n-en="Automatic replies from this site data">Tanya soal layanan, proyek, stack, atau estimasi timeline.</p>
       </div>
-      <button class="chat-close" type="button" aria-label="Tutup chat">
+      <button class="chat-close" type="button" aria-label="Tutup chat" data-i18n-aria="Close chat">
         <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
           <path d="M3.5 3.5l9 9M12.5 3.5l-9 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" />
         </svg>
@@ -39,7 +39,7 @@
     <div class="chat-quick" data-chat-quick data-collapsed="false">
       <div class="chat-quick-head">
         <span class="chat-section-label">Quick Questions</span>
-        <button class="chat-quick-toggle" type="button" aria-expanded="true" aria-controls="chat-quick-list" aria-label="Sembunyikan pertanyaan cepat">
+        <button class="chat-quick-toggle" type="button" aria-expanded="true" aria-controls="chat-quick-list" aria-label="Sembunyikan pertanyaan cepat" data-i18n-aria="Hide quick questions">
           <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" focusable="false">
             <path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
@@ -56,12 +56,12 @@
     </div>
 
     <!-- ── 3. Log pesan ──────────────────────────────────── -->
-    <div class="chat-log" role="log" aria-label="Percakapan" aria-live="polite"></div>
+    <div class="chat-log" role="log" aria-label="Percakapan" data-i18n-aria="Conversation" aria-live="polite"></div>
 
     <!-- ── 4. Privasi ────────────────────────────────────── -->
     <div class="chat-privacy" data-chat-privacy data-collapsed="false">
       <span class="chat-privacy-text" id="chat-privacy-text" data-i18n-en="Conversations are not stored.">Privasi: chat ini hanya disimpan di sesi browser Anda. Jangan kirim password, API key, atau data sensitif.</span>
-      <button class="chat-privacy-toggle" type="button" aria-expanded="true" aria-controls="chat-privacy-text" aria-label="Sembunyikan teks privasi">
+      <button class="chat-privacy-toggle" type="button" aria-expanded="true" aria-controls="chat-privacy-text" aria-label="Sembunyikan teks privasi" data-i18n-aria="Hide privacy text">
         <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" focusable="false">
           <path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
@@ -82,7 +82,7 @@
         rows="2"
         enterkeyhint="send"
       ></textarea>
-      <button class="chat-send" type="submit" aria-label="Kirim pesan" disabled>
+      <button class="chat-send" type="submit" aria-label="Kirim pesan" data-i18n-aria="Send message" disabled>
         <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
           <path d="M2.5 8h10M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" />
         </svg>
@@ -96,7 +96,7 @@
   </section>
 
   <!-- Launcher: tombol lingkaran dark dengan aksen electric -->
-  <button class="chat-launcher" type="button" draggable="false" aria-expanded="false" aria-controls="chat-panel-aria" aria-label="Buka chat asisten AI">
+  <button class="chat-launcher" type="button" draggable="false" aria-expanded="false" aria-controls="chat-panel-aria" aria-label="Buka chat asisten AI" data-i18n-aria="Open AI assistant chat">
     <svg class="chat-launcher-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
       <path
         d="M4 5.5h16v10.5H9.5L5.5 19.5v-3.5H4z"

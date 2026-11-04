@@ -70,7 +70,8 @@
 
     /* aria-label (ToTop, chat panel, tombol tanpa teks) */
     qsa('[data-i18n-aria]').forEach(function (el) {
-      el.setAttribute('aria-label', l === 'en' ? el.getAttribute('data-i18n-aria') : (el.getAttribute('data-i18n-aria-id') || el.getAttribute('data-i18n-aria')))
+      if (el.__i18nAriaId === undefined) el.__i18nAriaId = el.getAttribute('aria-label')
+      el.setAttribute('aria-label', l === 'en' ? el.getAttribute('data-i18n-aria') : el.__i18nAriaId)
     })
 
     /* label dropdown bahasa */

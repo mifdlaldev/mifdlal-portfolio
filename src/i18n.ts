@@ -240,7 +240,7 @@ export type DictKey = keyof typeof dict.id
 
 /** Ambil string terjemahan untuk locale + kunci. Mendukung placeholder {{name}}. */
 export function t(locale: Locale, key: DictKey, vars?: Record<string, string>): string {
-  let s = dict[locale][key] ?? dict.id[key] ?? key
+  let s: string = dict[locale][key] ?? dict.id[key] ?? key
   if (vars) {
     for (const [k, v] of Object.entries(vars)) {
       s = s.replaceAll(`{{${k}}}`, v)

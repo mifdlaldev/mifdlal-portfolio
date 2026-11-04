@@ -137,7 +137,7 @@
   const updateCounter = () => {
     if (!counterEl) return
     const len = input.value.length
-    counterEl.textContent = `${len} / ${MAX_CHARS} Karakter`
+    counterEl.textContent = `${len} / ${MAX_CHARS} ${str('counter')}`
     counterEl.removeAttribute('data-warn')
     counterEl.removeAttribute('data-over')
     if (len >= MAX_CHARS) {
@@ -223,10 +223,12 @@
     id: {
       greeting: 'Halo! Saya asisten AI Mifdlal. Tanya soal layanan, proyek, atau stack — jawaban berdasarkan profil di situs ini.',
       error: 'Gagal mengirim. Coba lagi.',
+      counter: 'Karakter',
     },
     en: {
       greeting: "Hi! I'm Mifdlal's AI assistant. Ask about services, projects, or stack — answers based on the profile on this site.",
       error: 'Failed to send. Try again.',
+      counter: 'Characters',
     },
   }
   const str = (k) => CHAT_STR[langOf()][k] || CHAT_STR.id[k]
