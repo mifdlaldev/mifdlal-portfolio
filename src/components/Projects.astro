@@ -24,6 +24,7 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
             rel="noopener noreferrer"
             class="project-link"
             aria-label={`Buka ${p.name} di tab baru`}
+            data-i18n-aria={`Open ${p.nameEn || p.name} in a new tab`}
           >
             <span class="project-shot">
               {p.image ? (
@@ -74,12 +75,12 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
             </span>
 
             <span class="project-body">
-              <span class="project-role">{p.role}</span>
+              <span class="project-role" data-i18n-en={p.roleEn}>{p.role}</span>
               <span class="project-name">{p.name}</span>
-              <span class="project-desc">{p.description}</span>
+              <span class="project-desc" data-i18n-en={p.descriptionEn}>{p.description}</span>
 
               <span class="project-foot">
-                <span class="project-stack">{p.stack.join(' · ')}</span>
+                <span class="project-stack" data-i18n-en={p.stackEn.join(' · ')}>{p.stack.join(' · ')}</span>
                 <span class="project-live">
                   live<span class="project-arrow" aria-hidden="true">↗</span>
                 </span>

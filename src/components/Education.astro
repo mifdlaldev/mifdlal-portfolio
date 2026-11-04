@@ -24,12 +24,12 @@ import CodeComment from './CodeComment.astro'
         education.map((e) => (
           <li class="edu-row">
             <div class="edu-main">
-              <h3 class="edu-title">{e.institution}</h3>
+              <h3 class="edu-title" data-i18n-en={e.institutionEn}>{e.institution}</h3>
               <p class="edu-program">
-                {e.program}
-                <span class="edu-status badge">{e.status}</span>
+                <span data-i18n-en={e.programEn}>{e.program}</span>
+                <span class="edu-status badge" data-i18n-en={e.statusEn}>{e.status}</span>
               </p>
-              {e.note && <p class="edu-note">{e.note}</p>}
+              {e.note && <p class="edu-note" data-i18n-en={e.noteEn}>{e.note}</p>}
             </div>
             <p class="edu-meta">
               <span>{e.period}</span>

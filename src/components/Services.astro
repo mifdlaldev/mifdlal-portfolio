@@ -29,12 +29,12 @@ import { AsciiArtStatic } from './ui/ascii-art'
           <div class="service-text">
             <span class="service-no">{s.no}</span>
             <div class="service-title-row">
-              <h3 class="service-title service-title--blue">{s.title}</h3>
+              <h3 class="service-title service-title--blue" data-i18n-en={s.titleEn}>{s.title}</h3>
               {s.no === '01' && <ServiceBrowserIcon client:idle />}
               {s.no === '02' && <ServiceBotIcon client:idle />}
               {s.no === '03' && <ServiceWorkflowIcon client:idle />}
             </div>
-            <p class="service-desc">{s.body}</p>
+            <p class="service-desc" data-i18n-en={s.bodyEn}>{s.body}</p>
           </div>
 
           <div class="service-panel">
@@ -56,7 +56,8 @@ import { AsciiArtStatic } from './ui/ascii-art'
                   style={`background-image: url('${s.image}')`}
                   role="img"
                   aria-label={`Foto layanan ${s.no}: ${s.title}`}
-                ></div>
+                  data-i18n-aria={`Photo of service ${s.no}: ${s.titleEn}`}
+                  ></div>
               </div>
 
               {/* ASCII tekstur — karakter elektrik samar, di atas overlay biru,

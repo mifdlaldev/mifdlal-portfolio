@@ -41,17 +41,17 @@ import CodeComment from './CodeComment.astro'
         experience.map((e) => (
           <li class="entry-row">
             <div class="entry-main">
-              <h3 class="entry-title">{e.role}</h3>
+              <h3 class="entry-title" data-i18n-en={e.roleEn}>{e.role}</h3>
               <p class="entry-org">
-                {e.org} <span class="entry-kind badge">{e.kind}</span>
+                {e.org} <span class="entry-kind badge" data-i18n-en={e.kindEn}>{e.kind}</span>
               </p>
             </div>
             <p class="entry-meta">
-              <span>{e.period}</span>
+              <span data-i18n-en={e.periodEn}>{e.period}</span>
               <span>{e.location}</span>
             </p>
             <ul class="entry-points">
-              {e.points.map((pt) => <li>{pt}</li>)}
+              {e.points.map((pt, i) => <li data-i18n-en={e.pointsEn[i]}>{pt}</li>)}
             </ul>
             {e.link && (
               <a class="entry-link" href={e.link} target="_blank" rel="noopener noreferrer" data-i18n-en="Proof ↗">Bukti ↗</a>
