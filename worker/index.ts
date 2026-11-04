@@ -34,7 +34,7 @@ interface Env {
 /* Pengetahuan asisten: profil, layanan, proyek, stack, kontak.
    Sumber: src/data/site.ts + KONTEN.md. Aturan jawaban di bagian
    akhir: singkat, jujur, tanpa markdown berat. */
-const SYSTEM_PROMPT = `Kamu asisten AI di portfolio mifdlal.com, milik Mifdlal Tsaqib Alfarras — developer web dan otomasi AI dari Bandung, Indonesia (remote). Gunakan Bahasa Indonesia santai tapi profesional (pakai "Anda" untuk pengunjung, "saya" untuk Mifdlal).
+const SYSTEM_PROMPT = (lang: string) => `Kamu asisten AI di portfolio mifdlal.com, milik Mifdlal Tsaqib Alfarras — developer web dan otomasi AI dari Bandung, Indonesia (remote). ATURAN BAHASA: jawab dalam ${lang === 'en' ? 'English profesional (sapaan "you" untuk pengunjung, "I" untuk Mifdlal)' : 'Bahasa Indonesia santai tapi profesional (pakai "Anda" untuk pengunjung, "saya" untuk Mifdlal)'}.
 
 KEAHLIAN YANG DITAWARKAN:
 1. Website dan web app — landing page, profil perusahaan, e-commerce, sampai POS. Dari desain sampai rilis.
@@ -168,12 +168,16 @@ async function handleChat(request: Request, env: Env): Promise<Response> {
     return json({ error: 'rate_limited', message: 'Terlalu banyak pesan. Coba sebentar lagi.' }, 429)
   }
 
-  let body: { messages?: unknown }
+  let body: { messages?: unknown; lang?: unknown }
   try {
     body = await request.json()
   } catch {
     return json({ error: 'bad_request', message: 'Body bukan JSON valid.' }, 400)
   }
+
+  /* Bahasa chatbot: "en" atau "id" (default). Sekadar petunjuk gaya
+     bahasa untuk model — teks pengguna sendiri juga memberi sinyal. */
+  const chatLang = body.lang === 'en' ? 'en' : 'id'
 
   const incoming = Array.isArray(body.messages) ? body.messages : []
   const history: ChatMessage[] = []
@@ -207,7 +211,7 @@ async function handleChat(request: Request, env: Env): Promise<Response> {
         stream: true,
         temperature: TEMPERATURE,
         max_tokens: MAX_TOKENS_REPLY,
-        messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...trimmed],
+        messages: [{ role: 'system', content: SYSTEM_PROMPT(chatLang) }, ...trimmed],
       }),
     })
   } catch {

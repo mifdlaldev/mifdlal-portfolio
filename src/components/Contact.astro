@@ -11,31 +11,31 @@ import CopyEmail from './CopyEmail'
   <div class="wrap">
     <div class="contact-grid">
       <div class="contact-left">
-        <span class="fig-label">fig. 08 · kontak</span>
-        <h2 class="section-headline">Ceritakan yang ingin Anda bangun.</h2>
-        <p class="contact-note">
+        <span class="fig-label" data-i18n-en="fig. 08 · contact">fig. 08 · kontak</span>
+        <h2 class="section-headline" data-i18n-en="Tell me what you want to build.">Ceritakan yang ingin Anda bangun.</h2>
+        <p class="contact-note" data-i18n-en="If you're not sure which service fits, just describe the problem. I'll help map out the solution.">
           Jika belum yakin harus mulai dari mana, tuliskan masalahnya.
         </p>
 
         <ul class="spec-list">
           <li>
-            <span class="spec-k">Balasan</span>
-            <span class="spec-v">1 hari kerja</span>
+            <span class="spec-k" data-i18n-en="Reply">Balasan</span>
+            <span class="spec-v" data-i18n-en="1 working day">1 hari kerja</span>
           </li>
           <li>
-            <span class="spec-k">Zona waktu</span>
-            <span class="spec-v">gmt+7 (wib)</span>
+            <span class="spec-k" data-i18n-en="Timezone">Zona waktu</span>
+            <span class="spec-v" data-i18n-en="WIB (UTC+7)">gmt+7 (wib)</span>
           </li>
           <li>
-            <span class="spec-k">Lokasi</span>
-            <span class="spec-v">bandung, id</span>
+            <span class="spec-k" data-i18n-en="Location">Lokasi</span>
+            <span class="spec-v" data-i18n-en="Bandung, ID">bandung, id</span>
           </li>
         </ul>
       </div>
 
       <div class="contact-panel">
         <div class="panel-block">
-          <p class="panel-label">Email</p>
+        <p class="panel-label" data-i18n-en="Email">Email</p>
           <div class="email-row">
             <a
               href={`mailto:${contact.email}?subject=${subject}`}
@@ -48,19 +48,19 @@ import CopyEmail from './CopyEmail'
         </div>
 
         <div class="panel-block">
-          <p class="panel-label">Yang mempercepat balasan</p>
+          <p class="panel-label" data-i18n-en="What speeds up my reply:">Yang mempercepat balasan</p>
           <ol class="brief-list">
-            <li><span class="brief-no" aria-hidden="true">01</span><span>Jenis usaha anda</span></li>
-            <li><span class="brief-no" aria-hidden="true">02</span><span>Yang ingin dibangun atau diperbaiki</span></li>
-            <li><span class="brief-no" aria-hidden="true">03</span><span>Target waktu atau tenggat</span></li>
-            <li><span class="brief-no" aria-hidden="true">04</span><span>Perkiraan anggaran, kalau sudah ada</span></li>
+            <li><span class="brief-no" aria-hidden="true">01</span><span data-i18n-en="Type of your business">Jenis usaha anda</span></li>
+            <li><span class="brief-no" aria-hidden="true">02</span><span data-i18n-en="What you want to build or fix">Yang ingin dibangun atau diperbaiki</span></li>
+            <li><span class="brief-no" aria-hidden="true">03</span><span data-i18n-en="Target time or deadline">Target waktu atau tenggat</span></li>
+            <li><span class="brief-no" aria-hidden="true">04</span><span data-i18n-en="Approximate budget, if any">Perkiraan anggaran, kalau sudah ada</span></li>
           </ol>
         </div>
       </div>
     </div>
 
     <div class="contact-social">
-      <p class="panel-label">Media sosial</p>
+      <p class="panel-label" data-i18n-en="Social media">Media sosial</p>
       <SocialIcons />
     </div>
   </div>

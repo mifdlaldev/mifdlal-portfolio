@@ -25,8 +25,8 @@
     <header class="chat-head">
       <div class="chat-head-info">
         <span class="chat-head-label">AI ASSISTANT</span>
-        <h2 class="chat-head-title">Mifdlal Asisten</h2>
-        <p class="chat-head-sub">Tanya soal layanan, proyek, stack, atau estimasi timeline.</p>
+        <h2 class="chat-head-title" data-i18n-en="AI Chatbot">Mifdlal Asisten</h2>
+        <p class="chat-head-sub" data-i18n-en="Automatic replies from this site data">Tanya soal layanan, proyek, stack, atau estimasi timeline.</p>
       </div>
       <button class="chat-close" type="button" aria-label="Tutup chat">
         <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
@@ -46,12 +46,12 @@
         </button>
       </div>
       <div class="chat-quick-list" id="chat-quick-list" data-quick-list>
-        <button class="chat-chip" type="button" data-prompt="Layanan apa saja yang ditawarkan?">Layanan apa saja yang ditawarkan?</button>
-        <button class="chat-chip" type="button" data-prompt="Ceritakan proyek yang pernah dikerjakan">Proyek yang pernah dikerjakan</button>
-        <button class="chat-chip" type="button" data-prompt="Berapa biaya bikin website?">Estimasi biaya website</button>
-        <button class="chat-chip" type="button" data-prompt="Berapa lama pengerjaan website?">Estimasi timeline pengerjaan</button>
-        <button class="chat-chip" type="button" data-prompt="Stack teknologi apa yang digunakan?">Stack teknologi</button>
-        <button class="chat-chip" type="button" data-prompt="Bagaimana cara mulai proyek?">Cara mulai proyek</button>
+        <button class="chat-chip" type="button" data-prompt="Layanan apa saja yang ditawarkan?" data-prompt-en="What services do you offer?" data-i18n-en="What services do you offer?">Layanan apa saja yang ditawarkan?</button>
+        <button class="chat-chip" type="button" data-prompt="Ceritakan proyek yang pernah dikerjakan" data-prompt-en="Tell me about your past projects" data-i18n-en="Tell me about your past projects">Ceritakan proyek yang pernah dikerjakan</button>
+        <button class="chat-chip" type="button" data-prompt="Berapa biaya bikin website?" data-prompt-en="How much does a website cost?" data-i18n-en="How much does a website cost?">Berapa biaya bikin website?</button>
+        <button class="chat-chip" type="button" data-prompt="Berapa lama pengerjaan website?" data-prompt-en="How long does it take?" data-i18n-en="How long does it take?">Berapa lama pengerjaan website?</button>
+        <button class="chat-chip" type="button" data-prompt="Stack teknologi apa yang digunakan?" data-prompt-en="What tech stack do you use?" data-i18n-en="What tech stack do you use?">Stack teknologi apa yang digunakan?</button>
+        <button class="chat-chip" type="button" data-prompt="Bagaimana cara mulai proyek?" data-prompt-en="How do I start a project?" data-i18n-en="How do I start a project?">Bagaimana cara mulai proyek?</button>
       </div>
     </div>
 
@@ -60,7 +60,7 @@
 
     <!-- ── 4. Privasi ────────────────────────────────────── -->
     <div class="chat-privacy" data-chat-privacy data-collapsed="false">
-      <span class="chat-privacy-text" id="chat-privacy-text">Privasi: chat ini hanya disimpan di sesi browser Anda. Jangan kirim password, API key, atau data sensitif.</span>
+      <span class="chat-privacy-text" id="chat-privacy-text" data-i18n-en="Conversations are not stored.">Privasi: chat ini hanya disimpan di sesi browser Anda. Jangan kirim password, API key, atau data sensitif.</span>
       <button class="chat-privacy-toggle" type="button" aria-expanded="true" aria-controls="chat-privacy-text" aria-label="Sembunyikan teks privasi">
         <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" focusable="false">
           <path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -70,12 +70,14 @@
 
     <!-- ── 5. Input ──────────────────────────────────────── -->
     <form class="chat-form" autocomplete="off">
-      <label class="sr-only" for="chat-field">Tulis pesan</label>
+      <label class="sr-only" for="chat-field" data-i18n-en="Type your message">Tulis pesan</label>
       <textarea
         id="chat-field"
         class="chat-input"
         name="message"
         placeholder="Tulis pertanyaan Anda..."
+      data-i18n-ph
+      data-i18n-en="Type your question..."
         maxlength="1000"
         rows="2"
         enterkeyhint="send"
@@ -87,7 +89,7 @@
       </button>
     </form>
     <div class="chat-counter">
-      <span class="chat-counter-text" data-counter>0 / 1000 Karakter</span>
+      <span class="chat-counter-text" data-counter data-i18n-en="0 / 1000 Characters">0 / 1000 Karakter</span>
     </div>
 
     <span class="chat-status-sr sr-only" role="status" aria-live="polite"></span>

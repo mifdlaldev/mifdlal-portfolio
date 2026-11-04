@@ -110,7 +110,8 @@
   const chips = root.querySelectorAll('.chat-chip')
   chips.forEach((chip) => {
     chip.addEventListener('click', () => {
-      const prompt = chip.dataset.prompt || ''
+      const lang = langOf()
+      const prompt = (lang === 'en' ? chip.dataset.promptEn : chip.dataset.prompt) || ''
       input.value = prompt.slice(0, MAX_CHARS)
       updateCounter()
       updateSendState()
@@ -209,13 +210,31 @@
   let history = []
   let busy = false
 
+  /* ── Bahasa aktif (sinkron dengan i18n.js) ─────────────── */
+  const langOf = () => {
+    try {
+      const p = JSON.parse(localStorage.getItem('mifdlal-prefs') || '{}')
+      return p.lang === 'en' ? 'en' : 'id'
+    } catch {
+      return 'id'
+    }
+  }
+  const CHAT_STR = {
+    id: {
+      greeting: 'Halo! Saya asisten AI Mifdlal. Tanya soal layanan, proyek, atau stack — jawaban berdasarkan profil di situs ini.',
+      error: 'Gagal mengirim. Coba lagi.',
+    },
+    en: {
+      greeting: "Hi! I'm Mifdlal's AI assistant. Ask about services, projects, or stack — answers based on the profile on this site.",
+      error: 'Failed to send. Try again.',
+    },
+  }
+  const str = (k) => CHAT_STR[langOf()][k] || CHAT_STR.id[k]
+
   const greet = () => {
     /* Sapaan hanya sekali per halaman */
     if (log.childElementCount > 0) return
-    addBubble(
-      'in',
-      'Halo! Saya asisten AI Mifdlal. Tanya soal layanan, proyek, atau stack — jawaban berdasarkan profil di situs ini.',
-    )
+    addBubble('in', str('greeting'))
   }
 
   const sendMessage = async (text) => {
@@ -232,7 +251,7 @@
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ messages: history }),
+        body: JSON.stringify({ messages: history, lang: langOf() }),
       })
 
       hideTyping()

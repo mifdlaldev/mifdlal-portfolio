@@ -22,6 +22,11 @@ import copyIcon from "react-useanimations/lib/copy";
 
 type CopyStatus = "idle" | "done" | "fail";
 
+const COPY_LABELS = {
+  id: { copy: (email: string) => `Salin alamat email ${email}`, done: "Tersalin", fail: "Salin manual" },
+  en: { copy: (email: string) => `Copy email address ${email}`, done: "Copied", fail: "Copy manually" },
+} as const;
+
 type CopyEmailProps = {
   email: string;
 };
@@ -29,9 +34,25 @@ type CopyEmailProps = {
 export default function CopyEmail({ email }: CopyEmailProps) {
   const [status, setStatus] = useState<CopyStatus>("idle");
   const [mounted, setMounted] = useState(false);
+  const [lang, setLang] = useState<"id" | "en">("id");
   const timer = useRef<number | null>(null);
 
   useEffect(() => setMounted(true), []);
+
+  useEffect(() => {
+    try {
+      const p = JSON.parse(localStorage.getItem("mifdlal-prefs") || "{}");
+      if (p.lang === "en") setLang("en");
+    } catch {
+      /* default id */
+    }
+    const onLang = (e: Event) => {
+      const v = (e as CustomEvent).detail;
+      if (v === "id" || v === "en") setLang(v);
+    };
+    window.addEventListener("mifdlal:lang", onLang);
+    return () => window.removeEventListener("mifdlal:lang", onLang);
+  }, []);
 
   useEffect(
     () => () => {
@@ -70,7 +91,7 @@ export default function CopyEmail({ email }: CopyEmailProps) {
     }
   }, [email, announce]);
 
-  const label = `Salin alamat email ${email}`;
+  const labels = COPY_LABELS[lang];
 
   return (
     <span className="copy-email">
@@ -89,7 +110,7 @@ export default function CopyEmail({ email }: CopyEmailProps) {
               /* Ukuran tombol diatur CSS. Lebar/tinggi bawaan player (18px)
                  dibuang supaya kotak sentuh tetap 44px. */
               style={{ ...animationProps.style, width: undefined, height: undefined }}
-              aria-label={label}
+              aria-label={labels.copy(email)}
               aria-hidden={undefined}
               onClick={(event) => {
                 void copy();
@@ -99,7 +120,7 @@ export default function CopyEmail({ email }: CopyEmailProps) {
           )}
         />
       ) : (
-        <button type="button" className="copy-email__btn" onClick={copy} aria-label={label}>
+        <button type="button" className="copy-email__btn" onClick={copy} aria-label={labels.copy(email)}>
           <svg
             viewBox="0 0 24 24"
             width={18}
@@ -118,7 +139,7 @@ export default function CopyEmail({ email }: CopyEmailProps) {
         </button>
       )}
       <span className="copy-email__status" role="status" aria-live="polite">
-        {status === "done" ? "Tersalin" : status === "fail" ? "Salin manual" : ""}
+        {status === "done" ? labels.done : status === "fail" ? labels.fail : ""}
       </span>
     </span>
   );
