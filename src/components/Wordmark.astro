@@ -1,11 +1,11 @@
 ---
-/* Wordmark MIFDLAL — teks gradasi statis + dekorasi blueprint lengkap.
-   Versi WebGL Aurora dihapus, diganti teks CSS gradient (background-clip).
-   Semua dekorasi blueprint dikembalikan: kotak plat, node sudut, garis
-   dimensi, label fig/spec. Posisi dekorasi diukur dari bounding box teks
-   via Canvas2D measureText (sekali jalan + resize, tanpa rAF loop). */
+/* Wordmark MIFDLAL — WebGL animated gradient text + dekorasi blueprint.
+   Teks MIFDLAL di-render sebagai alpha mask, fragment shader menggambar
+   gradasi animasi (electric → cyan → green → lemon) yang mengalir.
+   Keamanan performa: IntersectionObserver pause loop saat off-screen,
+   prefers-reduced-motion = statis, DPR cap 2, tanpa write ke :root per frame.
+   Dekorasi blueprint (plat, node, garis dimensi, label) tetap sama. */
 ---
-
 <section class="wordmark" data-word="MIFDLAL" aria-hidden="true">
   <span class="wm-anno wm-anno--fig">fig. 09 · wordmark</span>
   <span class="wm-anno wm-anno--spec">grid 1180 · dot 26 · 7 glyph</span>
@@ -16,19 +16,20 @@
   <span class="wm-node wm-node--br"></span>
   <span class="wm-dots" aria-hidden="true"></span>
   <span class="wm-sheet" aria-hidden="true"></span>
-  <span class="wordmark-text">MIFDLAL</span>
+  <!-- Teks statis: fallback (no WebGL / reduced motion) + sumber pengukuran dekorasi -->
+  <span class="wordmark-text" aria-hidden="true">MIFDLAL</span>
+  <!-- Kanvas WebGL: gradasi animasi, menutupi persis area teks -->
+  <canvas class="wordmark-gl" aria-hidden="true"></canvas>
 </section>
 
 <style>
   .wordmark {
     --wm-pad-y: clamp(0.75rem, 2.4vw, 1.75rem);
     --wm-pad-x: clamp(1rem, 4vw, 3.5rem);
-    /* Koordinat plat gambar: diisi oleh script ukur teks di bawah. */
     --wm-f-left: 0px;
     --wm-f-top: 0px;
     --wm-f-w: 0px;
     --wm-f-h: 0px;
-    /* Garis dimensi selebar tinta huruf. */
     --wm-dim-left: 0px;
     --wm-dim-w: 0px;
     --wm-dim-y: 0px;
@@ -41,7 +42,7 @@
     background-color: var(--color-paper);
   }
 
-  /* ── Dot grid pita (dilubangi seukuran plat) ────────── */
+  /* ── Dot grid pita ─────────────────────────────────── */
   .wm-dots {
     position: absolute;
     inset: 0;
@@ -64,7 +65,7 @@
     );
   }
 
-  /* ── Lembar putih di dalam plat ─────────────────────── */
+  /* ── Lembar putih di dalam plat ────────────────────── */
   .wm-sheet {
     display: none;
     position: absolute;
@@ -81,7 +82,7 @@
     display: block;
   }
 
-  /* ── Kotak plat gambar ──────────────────────────────── */
+  /* ── Kotak plat gambar ─────────────────────────────── */
   .wordmark[data-plate='true']::before {
     content: '';
     position: absolute;
@@ -106,7 +107,7 @@
       calc(var(--wm-f-left) + var(--wm-f-w)) var(--wm-f-top);
   }
 
-  /* ── Garis dimensi + tick ───────────────────────────── */
+  /* ── Garis dimensi + tick ──────────────────────────── */
   .wordmark[data-dim='true']::after {
     content: '';
     position: absolute;
@@ -128,7 +129,7 @@
       calc(var(--wm-dim-left) + var(--wm-dim-w)) calc(var(--wm-dim-y) - 4px);
   }
 
-  /* ── Label monospace ────────────────────────────────── */
+  /* ── Label monospace ───────────────────────────────── */
   .wm-anno {
     display: none;
     position: absolute;
@@ -174,7 +175,7 @@
     color: color-mix(in srgb, var(--color-ink) 72%, transparent);
   }
 
-  /* ── Node sudut plat ────────────────────────────────── */
+  /* ── Node sudut plat ───────────────────────────────── */
   .wm-node {
     display: none;
     position: absolute;
@@ -193,10 +194,10 @@
   .wm-node--bl { left: var(--wm-f-left); top: calc(var(--wm-f-top) + var(--wm-f-h)); }
   .wm-node--br { left: calc(var(--wm-f-left) + var(--wm-f-w)); top: calc(var(--wm-f-top) + var(--wm-f-h)); }
 
-  /* Teks wordmark: gradasi horizontal electric → cyan → green → lemon,
-     sesuai palet situs. Pakai color langsung (bukan background-clip:text)
-     karena kombinasi background-clip + scoped CSS Astro + inline style
-     memberikan hasil computed opacity yang tidak akurat di beberapa browser. */
+  /* ── Teks wordmark: fallback statis (CSS gradient) ───
+     Visible by default; disembunyikan saat WebGL berhasil dimuat
+     (class .has-gl di .wordmark). Dipakai juga untuk pengukuran
+     dekorasi blueprint. */
   .wordmark-text {
     position: absolute;
     inset: 0;
@@ -209,7 +210,6 @@
     line-height: var(--leading-wordmark);
     letter-spacing: var(--tracking-display);
     white-space: nowrap;
-    /* Gradasi: electric (kiri) → cyan → green → lemon (kanan) */
     background: linear-gradient(
       90deg,
       var(--color-electric) 0%,
@@ -218,13 +218,11 @@
       var(--grad-green) 65%,
       var(--color-lemon) 100%
     );
-    /* Simpel: gradasi di background section, teks transparan di atasnya.
-       Elemen ::after memotong background menjadi bentuk tulisan. */
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
-    /* Animasi masuk: naik dari bawah + fade, identik dengan mode lama. */
+    /* Animasi masuk: naik dari bawah + fade */
     transform: translateY(18%);
     opacity: 0;
     transition:
@@ -233,22 +231,49 @@
     will-change: transform, opacity;
   }
 
-  .wordmark.is-in .wordmark-text,
-  .wordmark.is-in {
+  .wordmark.is-in .wordmark-text {
     transform: none;
     opacity: 1;
   }
 
-  /* Reduced motion: langsung tampil tanpa animasi. */
+  /* Saat WebGL aktif, teks statis disembunyikan */
+  .wordmark.has-gl .wordmark-text {
+    display: none;
+  }
+
+  /* ── Kanvas WebGL ──────────────────────────────────── */
+  .wordmark-gl {
+    position: absolute;
+    /* Menutupi persis area teks yang diukur (--wm-f-*) */
+    left: var(--wm-f-left);
+    top: var(--wm-f-top);
+    width: var(--wm-f-w);
+    height: var(--wm-f-h);
+    z-index: var(--z-band);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 600ms var(--ease);
+    will-change: opacity;
+  }
+
+  .wordmark.has-gl .wordmark-gl {
+    opacity: 1;
+    transition-delay: 300ms;
+  }
+
+  /* Reduced motion: WebGL tidak beranimasi, gradasi statis cukup */
   @media (prefers-reduced-motion: reduce) {
     .wordmark-text {
       transform: none;
       opacity: 1;
       transition: none;
     }
+    .wordmark-gl {
+      transition: none;
+    }
   }
 
-  /* ── Responsif ───────────────────────────────────────── */
+  /* ── Responsif ─────────────────────────────────────── */
   @media (max-width: 1228px) {
     .wordmark[data-plate='true'] .wm-anno--fig,
     .wordmark[data-plate='true'] .wm-anno--spec {
@@ -263,9 +288,7 @@
   }
 
   /* Mode reveal (dipasang /js/reveal.js): pita keluar dari alur dan menempel
-     di dasar viewport. z-index TETAP di bawah page-layer (--z-below = -1):
-     lapis atas yang opak menutup pita selama scroll biasa, lalu terangkat
-     saat reveal. Wordmark menimpa semua section kalau z-index dinaikkan. */
+     di dasar viewport. z-index TETAP di bawah page-layer (--z-below = -1). */
   .wordmark.is-fixed {
     position: fixed;
     inset: auto 0 0 0;
@@ -278,15 +301,21 @@
   /* 1. IntersectionObserver: tambah .is-in saat wordmark masuk viewport.
      2. Ukur bounding box teks (Canvas2D measureText) → isi CSS variables
         --wm-f-* untuk kotak plat, node sudut, garis dimensi, label.
-        Sekali jalan + debounce resize. Tanpa rAF loop. */
+        Sekali jalan + debounce resize. Tanpa rAF loop.
+     3. WebGL: render teks MIFDLAL sebagai alpha mask, fragment shader
+        menggambar gradasi animasi (electric → cyan → green → lemon)
+        yang mengalir di atas mask. Loop berhenti saat wordmark off-screen
+        atau tab tidak terlihat. */
   (() => {
     const band = document.querySelector('.wordmark');
     const text = band?.querySelector('.wordmark-text');
-    const dimValue = band?.querySelector('[data-dim-value]');
-    if (!band || !text) return;
+    const canvas = band?.querySelector('.wordmark-gl');
+    if (!band || !text || !canvas) return;
 
-    // ── Reveal animasi ──
-    if (!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+    const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+
+    // ── Reveal animasi (sama seperti versi statis) ─────
+    if (!reduceMotion) {
       const addIn = () => band.classList.add('is-in');
       const obs = new IntersectionObserver(
         (entries) => {
@@ -303,28 +332,26 @@
       band.classList.add('is-in');
     }
 
-    // ── Ukur teks → posisi dekorasi ──
-    const canvas = document.createElement('canvas').getContext('2d');
+    // ── Ukur teks → posisi dekorasi ────────────────────
+    const measureCanvas = document.createElement('canvas').getContext('2d');
 
     const measure = () => {
       const cs = getComputedStyle(text);
       const fontSize = parseFloat(cs.fontSize);
-      canvas.font = `${cs.fontWeight} ${fontSize}px ${cs.fontFamily}`;
-      try { canvas.letterSpacing = cs.letterSpacing; } catch (e) {}
+      measureCanvas.font = `${cs.fontWeight} ${fontSize}px ${cs.fontFamily}`;
+      try { measureCanvas.letterSpacing = cs.letterSpacing; } catch (e) {}
 
       const word = text.textContent.trim();
-      const m = canvas.measureText(word);
+      const m = measureCanvas.measureText(word);
       const w = m.width;
       const ascent = m.actualBoundingBoxAscent || fontSize * 0.8;
       const descent = m.actualBoundingBoxDescent || fontSize * 0.2;
       const h = ascent + descent;
 
-      const bandRect = band.getBoundingClientRect();
-      // scale parallax/reveal transform via getBoundingClientRect
       const padX = parseFloat(getComputedStyle(band).paddingLeft);
       const padY = parseFloat(getComputedStyle(band).paddingTop);
-      const innerW = bandRect.width - padX * 2;
-      const innerH = bandRect.height - padY * 2;
+      const innerW = band.clientWidth - padX * 2;
+      const innerH = band.clientHeight - padY * 2;
 
       const left = padX + (innerW - w) / 2;
       const top = padY + (innerH - h) / 2;
@@ -333,26 +360,287 @@
       band.style.setProperty('--wm-f-top', Math.round(top) + 'px');
       band.style.setProperty('--wm-f-w', Math.round(w) + 'px');
       band.style.setProperty('--wm-f-h', Math.round(h) + 'px');
-
       band.style.setProperty('--wm-dim-left', Math.round(left) + 'px');
       band.style.setProperty('--wm-dim-w', Math.round(w) + 'px');
       band.style.setProperty('--wm-dim-y', Math.round(top + h + 14) + 'px');
 
+      const dimValue = band.querySelector('[data-dim-value]');
       if (dimValue) dimValue.textContent = Math.round(w);
 
       band.setAttribute('data-plate', 'true');
       band.setAttribute('data-dim', 'true');
+
+      // Redraw WebGL text texture jika ukuran teks berubah
+      const redrawFn = canvas?.__redraw;
+      if (typeof redrawFn === 'function') redrawFn();
     };
 
     if (document.fonts?.ready) {
       document.fonts.ready.then(measure).catch(measure);
     }
-    setTimeout(measure, 100); // fallback
+    setTimeout(measure, 100);
 
     let resizeTimer;
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(measure, 200);
     }, { passive: true });
+
+    // ── WebGL animated gradient text ───────────────────
+    const initGL = () => {
+      const gl = canvas.getContext('webgl2', { alpha: true, antialias: true })
+              || canvas.getContext('webgl', { alpha: true, antialias: true });
+      if (!gl) return false; // fallback: teks CSS gradient tetap tampil
+
+      // Baca warna dari CSS variables
+      const cssVar = (name) => getComputedStyle(band).getPropertyValue(name).trim();
+      const hex = (h) => {
+        h = h.replace('#', '');
+        return [
+          parseInt(h.slice(0, 2), 16) / 255,
+          parseInt(h.slice(2, 4), 16) / 255,
+          parseInt(h.slice(4, 6), 16) / 255,
+        ];
+      };
+      const c0 = hex(cssVar('--color-electric'));
+      const c1 = hex(cssVar('--grad-cyan'));
+      const c2 = hex(cssVar('--grad-green'));
+      const c3 = hex(cssVar('--color-lemon'));
+
+      // ── Shaders ──────────────────────────────────────
+      const vsrc = `
+        attribute vec2 a_pos;
+        attribute vec2 a_uv;
+        varying vec2 v_uv;
+        void main() {
+          v_uv = a_uv;
+          gl_Position = vec4(a_pos, 0.0, 1.0);
+        }
+      `;
+
+      const fsrc = `
+        precision mediump float;
+        uniform sampler2D u_text;
+        uniform float u_time;
+        uniform vec3 u_c0;
+        uniform vec3 u_c1;
+        uniform vec3 u_c2;
+        uniform vec3 u_c3;
+        varying vec2 v_uv;
+
+        vec3 grad(float p) {
+          if (p < 0.3) return mix(u_c0, u_c1, smoothstep(0.0, 0.3, p));
+          if (p < 0.45) return mix(u_c1, u_c2, smoothstep(0.3, 0.45, p));
+          return mix(u_c2, u_c3, smoothstep(0.45, 1.0, p));
+        }
+
+        void main() {
+          float a = texture2D(u_text, v_uv).a;
+          if (a < 0.005) discard;
+          /* Gradasi mengalir kanan → kiri, loop seamless */
+          float x = fract(v_uv.x * 1.5 - u_time * 0.1);
+          vec3 col = grad(x);
+          /* Kilau halus berdenyut */
+          col *= 0.92 + 0.08 * sin(u_time * 1.5 + v_uv.x * 6.28318);
+          gl_FragColor = vec4(col, a);
+        }
+      `;
+
+      const compile = (type, src) => {
+        const s = gl.createShader(type);
+        gl.shaderSource(s, src);
+        gl.compileShader(s);
+        if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+          gl.deleteShader(s);
+          return null;
+        }
+        return s;
+      };
+
+      const vs = compile(gl.VERTEX_SHADER, vsrc);
+      const fs = compile(gl.FRAGMENT_SHADER, fsrc);
+      if (!vs || !fs) return false;
+
+      const prog = gl.createProgram();
+      gl.attachShader(prog, vs);
+      gl.attachShader(prog, fs);
+      gl.linkProgram(prog);
+      if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return false;
+      gl.useProgram(prog);
+
+      // ── Quad geometry ────────────────────────────────
+      const buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(
+        gl.ARRAY_BUFFER,
+        new Float32Array([
+          -1, -1, 0, 0,
+           1, -1, 1, 0,
+          -1,  1, 0, 1,
+           1,  1, 1, 1,
+        ]),
+        gl.STATIC_DRAW
+      );
+
+      const aPos = gl.getAttribLocation(prog, 'a_pos');
+      const aUv = gl.getAttribLocation(prog, 'a_uv');
+      gl.enableVertexAttribArray(aPos);
+      gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 16, 0);
+      gl.enableVertexAttribArray(aUv);
+      gl.vertexAttribPointer(aUv, 2, gl.FLOAT, false, 16, 8);
+
+      // ── Text mask texture ────────────────────────────
+      const tex = gl.createTexture();
+      gl.bindTexture(gl.TEXTURE_2D, tex);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+
+      // ── Uniform locations ────────────────────────────
+      const uText = gl.getUniformLocation(prog, 'u_text');
+      const uTime = gl.getUniformLocation(prog, 'u_time');
+      const uC0 = gl.getUniformLocation(prog, 'u_c0');
+      const uC1 = gl.getUniformLocation(prog, 'u_c1');
+      const uC2 = gl.getUniformLocation(prog, 'u_c2');
+      const uC3 = gl.getUniformLocation(prog, 'u_c3');
+
+      gl.uniform1i(uText, 0);
+      gl.uniform3fv(uC0, c0);
+      gl.uniform3fv(uC1, c1);
+      gl.uniform3fv(uC2, c2);
+      gl.uniform3fv(uC3, c3);
+
+      // ── Gambar teks ke offscreen canvas → texture ────
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const tctx = document.createElement('canvas').getContext('2d');
+
+      const drawText = () => {
+        const fw = parseFloat(getComputedStyle(band).getPropertyValue('--wm-f-w')) || 1;
+        const fh = parseFloat(getComputedStyle(band).getPropertyValue('--wm-f-h')) || 1;
+        const cs = getComputedStyle(text);
+        const fontSize = parseFloat(cs.fontSize);
+
+        const w = Math.max(1, Math.round(fw * dpr));
+        const h = Math.max(1, Math.round(fh * dpr));
+
+        if (tctx.canvas.width !== w || tctx.canvas.height !== h) {
+          tctx.canvas.width = w;
+          tctx.canvas.height = h;
+        }
+
+        tctx.clearRect(0, 0, w, h);
+        tctx.fillStyle = '#ffffff';
+        tctx.font = `${cs.fontWeight} ${fontSize * dpr}px ${cs.fontFamily}`;
+        try { tctx.letterSpacing = `${parseFloat(cs.letterSpacing) * dpr}px`; } catch (e) {}
+        tctx.textAlign = 'center';
+        tctx.textBaseline = 'middle';
+        tctx.fillText('MIFDLAL', w / 2, h / 2);
+
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, tctx.canvas);
+      };
+
+      // Gambar teks setelah measure selesai + saat resize
+      const drawOnce = () => drawText();
+      if (document.fonts?.ready) {
+        document.fonts.ready.then(drawOnce).catch(drawOnce);
+      }
+      setTimeout(drawOnce, 150);
+
+      // ── Resize handling ──────────────────────────────
+      const resizeGL = () => {
+        const w = canvas.clientWidth;
+        const h = canvas.clientHeight;
+        const dw = Math.max(1, Math.round(w * dpr));
+        const dh = Math.max(1, Math.round(h * dpr));
+        if (canvas.width !== dw || canvas.height !== dh) {
+          canvas.width = dw;
+          canvas.height = dh;
+          gl.viewport(0, 0, dw, dh);
+          drawText();
+        }
+      };
+      window.addEventListener('resize', resizeGL);
+      // initial sizing
+      resizeGL();
+
+      // ── Render loop dengan pause saat off-screen ─────
+      let running = false;
+      let rafId = null;
+      let elapsed = 0;
+      let lastTs = 0;
+
+      const frame = (ts) => {
+        if (!running) return;
+        const dt = lastTs ? (ts - lastTs) / 1000 : 0;
+        lastTs = ts;
+        elapsed += dt;
+
+        gl.uniform1f(uTime, elapsed);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        rafId = requestAnimationFrame(frame);
+      };
+
+      const start = () => {
+        if (running || reduceMotion) return;
+        running = true;
+        lastTs = 0;
+        rafId = requestAnimationFrame(frame);
+      };
+
+      const stop = () => {
+        running = false;
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = null;
+      };
+
+      // Render sekali untuk reduced motion (statis)
+      if (reduceMotion) {
+        gl.uniform1f(uTime, 0);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      }
+
+      // Pause saat wordmark off-screen atau tab tidak terlihat
+      const io = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) start();
+        else stop();
+      }, { threshold: 0.01 });
+      io.observe(band);
+
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) stop();
+        else if (band.getBoundingClientRect().bottom > 0 && band.getBoundingClientRect().top < innerHeight) start();
+      });
+
+      // Blend
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+      // Beri sinyal: WebGL berhasil, sembunyikan teks statis
+      band.classList.add('has-gl');
+
+      // Expose redraw untuk measure script (saat teks berukuran berubah)
+      canvas.__redraw = drawText;
+
+      return true;
+    };
+
+    // Init GL setelah measure pertama (butuh --wm-f-* sudah terisi)
+    const initWhenReady = () => {
+      // Cek apakah --wm-f-* sudah terisi
+      const fw = getComputedStyle(band).getPropertyValue('--wm-f-w');
+      if (fw && fw !== '0px') {
+        initGL();
+      } else {
+        setTimeout(initWhenReady, 50);
+      }
+    };
+
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(initWhenReady).catch(initWhenReady);
+    }
+    setTimeout(initWhenReady, 200);
   })();
 </script>
