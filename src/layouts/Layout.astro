@@ -61,9 +61,27 @@ const { title, description } = Astro.props
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32-light.png" media="(prefers-color-scheme: light)" />
     <link rel="icon" type="image/png" sizes="64x64" href="/favicon-64-light.png" media="(prefers-color-scheme: light)" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    <!-- Anti-FOUC tema: set data-theme sebelum paint pertama.
+         light = tanpa atribut, dark = data-theme="dark",
+         system = data-theme="system" (CSS media query yang memetakan). -->
+    <script is:inline>
+      (function () {
+        try {
+          var s = localStorage.getItem('mifdlal-prefs')
+          var mode = 'system'
+          if (s) {
+            var p = JSON.parse(s)
+            if (p.theme === 'light' || p.theme === 'dark' || p.theme === 'system') mode = p.theme
+            if (p.lang === 'id' || p.lang === 'en') window.__mifdlalLang = p.lang
+          }
+          if (mode !== 'light') document.documentElement.setAttribute('data-theme', mode)
+        } catch (e) {}
+      })()
+    </script>
   </head>
   <body>
-    <a href="#main" class="skip-link">Lewati ke konten</a>
+    <a href="#main" class="skip-link" data-i18n-en="Skip to content">Lewati ke konten</a>
     <SiteNav />
     <div class="page-track" data-track>
     <div class="page-layer" data-page>
@@ -88,6 +106,7 @@ const { title, description } = Astro.props
     <LenisScroll />
     <script is:inline src="/js/image-guard.js" defer></script>
     <script is:inline src="/js/reveal.js" defer></script>
+    <script src="/js/i18n.js" defer></script>
   </body>
 </html>
 
