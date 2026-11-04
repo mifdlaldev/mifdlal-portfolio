@@ -25,6 +25,17 @@
   --danger: #e74c3c;
   --white: #ffffff;
 
+  /* --- palet dark (diaktifkan [data-theme="dark"] di html) ---
+     Blueprint malam: kertas biru tua, tinta pucat. Aksen electric
+     diterangkan agar kontras di atas kertas gelap; lemon tetap. */
+  --ink-dark-bg: #12121d;
+  --ink-dark-surface: #1a1a28;
+  --ink-dark-line: rgba(253, 252, 241, 0.14);
+  --ink-dark-text: #efeeff;
+  --ink-dark-muted: rgba(239, 238, 255, 0.64);
+  --electric-bright: #7d74ff;
+  --lemon-bright: #f4f79a;
+
   /* Tiga titik jendela di panel gelap. Monokrom: kertas dengan tiga tingkat
      opasitas, bukan merah/kuning/hijau. Panelnya bertinta penuh, jadi titik
      harus terang supaya terbaca. */
@@ -188,11 +199,53 @@
      scripts/check-tokens.mjs (CI gagal kalau ada nilai lain).
 
        560px   pita logo & grid kartu sempit
-       620px   dua kolom kartu layanan
-       720px   navbar mulai memuat link
-       800px   grid dua kolom (tentang, kontak)
-       860px   navbar penuh + CTA
-       900px   footer satu baris
-       980px   grid proyek
-       1228px  batas lebar konten maksimum                          */
+      620px   dua kolom kartu layanan
+      720px   navbar mulai memuat link
+      800px   grid dua kolom (tentang, kontak)
+      860px   navbar penuh + CTA
+      900px   footer satu baris
+      980px   grid proyek
+      1228px  batas lebar konten maksimum                           */
+}
+
+/* ============================================================
+   TEMA GELAP — primitif ditimpa di bawah [data-theme="dark"].
+   Semantic layer (--color-*) menunjuk ke primitif ini, jadi
+   seluruh halaman ikut berubah tanpa menyentuh komponen.
+   ============================================================ */
+[data-theme='dark'] {
+  --paper: var(--ink-dark-bg);
+  --ink-900: var(--ink-dark-text);
+  --ink-70: var(--ink-dark-muted);
+  --ink-16: var(--ink-dark-line);
+  --ink-07: rgba(253, 252, 241, 0.07);
+  --electric: var(--electric-bright);
+  --lemon: var(--lemon-bright);
+  --white: var(--ink-dark-surface);
+  --dot-close: var(--ink-dark-bg);
+  --dot-min: rgba(239, 238, 255, 0.65);
+  --dot-max: rgba(239, 238, 255, 0.28);
+  --selection-bg: color-mix(in srgb, var(--electric-bright) 30%, transparent);
+  --safari-chrome: #23233a;
+  --safari-field: #2b2b45;
+}
+
+/* Mode "system": ikut preferensi peramban. */
+@media (prefers-color-scheme: dark) {
+  :root[data-theme='system'] {
+    --paper: var(--ink-dark-bg);
+    --ink-900: var(--ink-dark-text);
+    --ink-70: var(--ink-dark-muted);
+    --ink-16: var(--ink-dark-line);
+    --ink-07: rgba(253, 252, 241, 0.07);
+    --electric: var(--electric-bright);
+    --lemon: var(--lemon-bright);
+    --white: var(--ink-dark-surface);
+    --dot-close: var(--ink-dark-bg);
+    --dot-min: rgba(239, 238, 255, 0.65);
+    --dot-max: rgba(239, 238, 255, 0.28);
+    --selection-bg: color-mix(in srgb, var(--electric-bright) 30%, transparent);
+    --safari-chrome: #23233a;
+    --safari-field: #2b2b45;
+  }
 }
