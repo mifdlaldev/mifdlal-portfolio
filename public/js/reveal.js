@@ -92,16 +92,36 @@
     }
   };
 
-  /* Promosi compositor dinyalakan sebelum reveal mulai, supaya raster ulang
-     tidak terjadi tepat saat animasi berjalan. */
+  /* Promosi compositor dilakukan SEKALI di interaksi scroll pertama,
+     jauh sebelum zona reveal. Tanpa ini, browser mem-promote .page-layer
+     (elemen setinggi seluruh halaman) tepat saat animasi reveal mulai:
+     rasterisasi full-page sinkron di frame tersebut = frame drop di semua
+     section di atas, persis gejala yang dilaporkan. */
   const promote = () => {
-    if (cssMode) return;
-    const near = window.scrollY >= maxScroll - reveal * 1.6;
-    if (near !== promoted) {
-      promoted = near;
-      layer.classList.toggle('is-lifting', near);
+    if (promoted) return;
+    const near = window.scrollY >= maxScroll - reveal * 2.0;
+    if (near) {
+      promoted = true;
+      layer.classList.add('is-lifting');
     }
   };
+
+  /* Fallback: promosi paling awal — bayar biaya raster saat user mulai
+     scroll, bukan di batas reveal. Sekali jalan untuk sesi ini. */
+  const promoteOnInteract = () => {
+    if (!promoted) {
+      promoted = true;
+      layer.classList.add('is-lifting');
+    }
+  };
+  window.addEventListener('wheel', promoteOnInteract, { passive: true });
+  window.addEventListener('touchmove', promoteOnInteract, { passive: true });
+  window.addEventListener('keydown', promoteOnInteract, { once: true });
+
+  /* Lepas layer saat page di-unload untuk bebaskan memory GPU. */
+  window.addEventListener('pagehide', () => {
+    layer.classList.remove('is-lifting');
+  }, { once: true });
 
   const update = () => {
     ticking = false;
