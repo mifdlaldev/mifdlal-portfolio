@@ -76,10 +76,9 @@ const sections = [
         </ul>
       </div>
     </div>
-
-    <p class="footer-copy" data-i18n-en="Hand-built in Bandung. Blueprint diagrams, not templates.">Dibangun dengan tangan di Bandung. Diagram blueprint, bukan template.</p>
   </div>
-</footer>
+
+  </footer>
 
 <style>
   .footer {
@@ -100,6 +99,11 @@ const sections = [
     flex-wrap: wrap;
     gap: 0.25rem 1.25rem;
     order: 1;
+    font-family: var(--font-display);
+    font-size: var(--text-sub);
+    font-weight: 600;
+    line-height: var(--leading-heading);
+    letter-spacing: var(--tracking-heading);
   }
 
   /* ---- kontrol tema + bahasa ---- */
@@ -234,14 +238,6 @@ const sections = [
     opacity: 1;
   }
 
-  .footer-copy {
-    margin: 0;
-    order: 3;
-    font-family: var(--font-mono);
-    font-size: var(--text-label);
-    color: var(--color-muted);
-  }
-
   @media (min-width: 900px) {
     .footer-inner {
       grid-template-columns: minmax(0, 1fr) auto;
@@ -254,13 +250,6 @@ const sections = [
 
     .footer-controls {
       order: 2;
-    }
-
-    .footer-copy {
-      grid-column: 1 / -1;
-      order: 3;
-      justify-self: start;
-      text-align: left;
     }
   }
 

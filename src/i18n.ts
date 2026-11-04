@@ -92,8 +92,6 @@ export const dict = {
     'contact.social': 'Media sosial',
     'contact.fig': 'fig. 07 · kontak',
 
-    'footer.copy': 'Dibangun dengan tangan di Bandung. Diagram blueprint, bukan template.',
-    'footer.rights': 'Hak cipta dilindungi.',
 
     'chat.title': 'Chatbot AI',
     'chat.sub': 'Balasan otomatis dari data situs ini',
@@ -204,9 +202,6 @@ export const dict = {
     'contact.fast3': 'Timeline and rough budget',
     'contact.social': 'Social media',
     'contact.fig': 'fig. 07 · contact',
-
-    'footer.copy': 'Hand-built in Bandung. Blueprint diagrams, not templates.',
-    'footer.rights': 'All rights reserved.',
 
     'chat.title': 'AI Chatbot',
     'chat.sub': 'Automatic replies from this site’s data',
