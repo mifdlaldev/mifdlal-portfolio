@@ -406,19 +406,6 @@ html {
 /* Bayangan tepi bawah lapis. Bukan box-shadow: box-shadow pada elemen setinggi
    seluruh halaman harus digambar ulang setiap frame saat kekuatannya berubah.
    Strip kecil dengan opacity yang dianimasikan cuma disentuh compositor. */
-.page-shadow {
-  position: absolute;
-  inset: 100% 0 auto 0;
-  height: 64px;
-  pointer-events: none;
-  background: linear-gradient(
-    to bottom,
-    color-mix(in srgb, var(--color-ink) 22%, transparent),
-    transparent
-  );
-  opacity: 1;
-}
-
 /* Promosi compositor hanya selama reveal berlangsung: tanpa ini transform pada
    elemen setinggi dokumen memaksa raster ulang tiap frame. */
 .page-layer.is-lifting {
