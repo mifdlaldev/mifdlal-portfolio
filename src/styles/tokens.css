@@ -19,6 +19,9 @@
   --paper: #fdfcf1;
   --electric: #2a1eff;
   --lemon: #eef17c;
+  /* Gradasi wordmark: jembatan electric → lemon (lokal, dipakai Wordmark.astro) */
+  --grad-cyan: #00d4d4;
+  --grad-green: #2dd466;
   --danger: #e74c3c;
   --white: #ffffff;
 
