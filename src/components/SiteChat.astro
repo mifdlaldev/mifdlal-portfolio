@@ -141,9 +141,12 @@
   }
 
   /* Posisi merged: launcher turun menutupi tombol .to-top.
-     Hanya translateY yang berubah — bottom tetap konstan. */
+     Hanya translateY yang berubah — bottom tetap konstan.
+     Arah POSITIF (turun): base bottom 5rem, target 1.5rem → selisih
+     3.5rem ke bawah. translateY negatif justru mengangkat launcher
+     menjauh dari to-top (bug lama). */
   .site-chat--merged {
-    transform: translateY(-3.5rem);
+    transform: translateY(3.5rem);
   }
 
   .site-chat > * {
