@@ -4,13 +4,15 @@ import EncryptedText from './EncryptedText'
 type Props = {
   /** Isi komentar gaya kode, misal "// proyek". */
   text: string
+  /** Varian Inggris; dipakai saat bahasa = en. */
+  textEn?: string
 }
 
-const { text } = Astro.props
+const { text, textEn } = Astro.props
 ---
 
 {/* Komentar dekoratif: mengisi ruang kosong di atas section, dibuka dengan
     animasi decrypt. aria-hidden karena hanya pengulangan nama section. */}
 <p class="section-comment" aria-hidden="true">
-  <EncryptedText client:visible lines={[text]} revealDelayMs={110} flipDelayMs={85} />
+  <EncryptedText client:visible lines={[text]} linesEn={textEn ? [textEn] : undefined} revealDelayMs={110} flipDelayMs={85} />
 </p>

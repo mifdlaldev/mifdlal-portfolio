@@ -15,6 +15,8 @@ import { useEffect, useRef, useState } from "react";
 type EncryptedTextProps = {
   /** Satu entri = satu baris. Baris dipisah eksplisit supaya tidak ada reflow. */
   lines: readonly string[];
+  /** Varian Inggris dari `lines`; dipakai saat bahasa = en. */
+  linesEn?: readonly string[];
   /** Jeda per karakter yang dibuka (ms). Kecil = cepat. */
   revealDelayMs?: number;
   /** Jeda per giliran acak karakter yang belum terbuka (ms). */
@@ -33,6 +35,7 @@ function randomChar(charset: string): string {
 
 export default function EncryptedText({
   lines,
+  linesEn,
   revealDelayMs = 36,
   flipDelayMs = 48,
   charset = DEFAULT_CHARSET,
@@ -40,13 +43,35 @@ export default function EncryptedText({
   encryptedClassName = "enc-scrambled",
   revealedClassName,
 }: EncryptedTextProps) {
-  const full = lines.join(" ");
+  const [lang, setLang] = useState<"id" | "en">("id");
+
+  useEffect(() => {
+    try {
+      const p = JSON.parse(localStorage.getItem("mifdlal-prefs") || "{}");
+      if (p.lang === "en") setLang("en");
+    } catch {
+      /* default id */
+    }
+    const onLang = (e: Event) => {
+      const v = (e as CustomEvent).detail;
+      if (v === "id" || v === "en") setLang(v);
+    };
+    window.addEventListener("mifdlal:lang", onLang);
+    document.addEventListener("mifdlal:lang", onLang);
+    return () => {
+      window.removeEventListener("mifdlal:lang", onLang);
+      document.removeEventListener("mifdlal:lang", onLang);
+    };
+  }, []);
+
+  const activeLines = lang === "en" && linesEn ? linesEn : lines;
+  const full = activeLines.join(" ");
 
   /* Indeks awal tiap baris di dalam `full`, supaya hitungan reveal konsisten
      walau tiap baris dirender terpisah. */
   const offsets: number[] = [];
   let cursor = 0;
-  for (const line of lines) {
+  for (const line of activeLines) {
     offsets.push(cursor);
     cursor += line.length + 1;
   }
@@ -142,7 +167,7 @@ export default function EncryptedText({
        span ini: span generik tidak punya role sehingga aria-label diabaikan.
        Semua isi visual di bawah ini aria-hidden. */
     <span ref={rootRef} className={className} data-state={phase}>
-      {lines.map((line, lineIndex) => {
+      {activeLines.map((line, lineIndex) => {
         const offset = offsets[lineIndex];
         return (
           <span className="enc-line" key={line}>
