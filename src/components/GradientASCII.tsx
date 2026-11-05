@@ -166,12 +166,15 @@ vec3 encode(vec3 c) {
 vec3 horizon(vec2 p, float time, out float order) {
   float span = 0.5 * max(uAspect, 1.0);
   float x = p.x / span;
+  /* Geser seluruh pita biru ke bawah sedikit: naikkan p.y supaya tepi biru
+     (rim) bergerak turun; massa biru lebih rendah, tepi atas sedikit terang. */
+  float y = p.y + 0.10;
   float arch = -0.17 - 0.2 * x * x + 0.02 * sin(time * 0.6);
   float soft = mix(0.05, 0.22, uSoftness);
-  float edge = p.y - arch;
+  float edge = y - arch;
   float rim = 0.38 * smoothstep(-soft, 0.42, edge);
   vec2 sun = vec2(0.08 * sin(time * 0.31) * span, 0.58);
-  float spread = length((p - sun) / vec2(0.95 * span, 0.75));
+  float spread = length((vec2(p.x, y) - sun) / vec2(0.95 * span, 0.75));
   float sky = mix(0.55, 1.0, smoothstep(0.2, 0.95, spread));
   order = clamp(edge * 1.3, 0.0, 1.0);
   return vec3(rim, sky, smoothstep(0.18, 0.62, edge));
