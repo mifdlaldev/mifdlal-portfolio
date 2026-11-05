@@ -69,6 +69,32 @@ export default function SafariWindow({
   const [reloadKey, setReloadKey] = useState(0);
   const reload = () => setReloadKey((k) => k + 1);
 
+  /* Bahasa runtime — React island client:visible: patch DOM dari
+   * public/js/i18n.js akan terhapus saat React render ulang. Simpan
+   * bahasa sebagai state native, baca dari localStorage, dan dengar
+   * event mifdlal:lang yang di-dispatch oleh public/js/i18n.js. */
+  const [lang, setLang] = useState<'id' | 'en'>('id');
+  useEffect(() => {
+    const read = () => {
+      let v: 'id' | 'en' = 'id';
+      try {
+        const p = JSON.parse(localStorage.getItem('mifdlal-prefs') || '{}');
+        v = p && p.lang === 'en' ? 'en' : 'id';
+      } catch {
+        v = document.documentElement.lang === 'en' ? 'en' : 'id';
+      }
+      setLang(v);
+    };
+    read();
+    const onLang = (e: Event) => {
+      const v = (e as CustomEvent).detail;
+      if (v === 'en' || v === 'id') setLang(v);
+    };
+    document.addEventListener('mifdlal:lang', onLang);
+    return () => document.removeEventListener('mifdlal:lang', onLang);
+  }, []);
+  const t = (id: string, en: string) => (lang === 'en' ? en : id);
+
   // Drag pindah posisi window (dari toolbar), clamp ke batas canvas.
   const moveRef = useRef<
     | { startX: number; startY: number; rect: Rect; maxW: number; maxH: number }
@@ -364,7 +390,7 @@ export default function SafariWindow({
             className="safari__icon"
             aria-disabled="true"
             tabIndex={-1}
-            title="Tidak tersedia"
+            title={t('Tidak tersedia', 'Unavailable')}
           >
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <rect x="3" y="4" width="18" height="16" rx="2.5" />
@@ -377,7 +403,7 @@ export default function SafariWindow({
             className="safari__icon"
             aria-disabled="true"
             tabIndex={-1}
-            title="Tidak tersedia"
+            title={t('Tidak tersedia', 'Unavailable')}
           >
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M15 5l-7 7 7 7" />
@@ -389,7 +415,7 @@ export default function SafariWindow({
             className="safari__icon is-muted"
             aria-disabled="true"
             tabIndex={-1}
-            title="Tidak tersedia"
+            title={t('Tidak tersedia', 'Unavailable')}
           >
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M9 5l7 7-7 7" />
@@ -407,8 +433,8 @@ export default function SafariWindow({
           <button
             type="button"
             className="safari__reload"
-            title="Muat ulang"
-            aria-label="Muat ulang halaman"
+            title={t('Muat ulang', 'Reload')}
+            aria-label={t('Muat ulang halaman', 'Reload page')}
             onPointerDown={(e) => e.stopPropagation()}
             onClick={reload}
           >
@@ -426,7 +452,7 @@ export default function SafariWindow({
             className="safari__icon"
             aria-disabled="true"
             tabIndex={-1}
-            title="Tidak tersedia"
+            title={t('Tidak tersedia', 'Unavailable')}
           >
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 5v14" />
@@ -439,7 +465,7 @@ export default function SafariWindow({
             className="safari__icon"
             aria-disabled="true"
             tabIndex={-1}
-            title="Tidak tersedia"
+            title={t('Tidak tersedia', 'Unavailable')}
           >
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M4 7h16" />
@@ -454,7 +480,7 @@ export default function SafariWindow({
       <div
         className="safari__tablist"
         role="tablist"
-        aria-label="Showcase website"
+        aria-label={t('Showcase website', 'Website showcase')}
         onPointerDown={startMove}
         onDoubleClick={toggleZoom}
       >
@@ -487,7 +513,7 @@ export default function SafariWindow({
               key={`${current.url}#${reloadKey}`}
               className="safari__frame"
               src={current.url}
-              title={`Pratinjau ${current.label}`}
+              title={t(`Pratinjau ${current.label}`, `Preview ${current.label}`)}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
@@ -500,10 +526,9 @@ export default function SafariWindow({
           </div>
         ) : (
           <div className="safari__empty">
-            <span className="safari__empty-label">Slot showcase</span>
+            <span className="safari__empty-label">{t('Slot showcase', 'Showcase slot')}</span>
             <p className="safari__empty-text">
-              Isi <code>url</code> di <code>src/data/site.ts</code> untuk
-              menampilkan website di tab ini.
+              {t('Isi', 'Fill in')} <code>url</code> {t('di', 'in')} <code>src/data/site.ts</code> {t('untuk menampilkan website di tab ini.', 'to display a website in this tab.')}
             </p>
           </div>
         )}
