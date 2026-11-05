@@ -59,6 +59,7 @@ const reduceMotion = () =>
 
 type TileData = {
   label: string;
+  labelEn: string;
   icon: 'message' | 'database' | 'brain' | 'shield-check' | 'send' | 'claude' | 'book' | 'headset';
   tone: 'node' | 'hub' | 'tool';
   order?: number;
@@ -66,6 +67,9 @@ type TileData = {
      52px, ikon 38 akan menyentuh tepi. */
   iconSize?: number;
 };
+
+/* Bahasa aktif untuk label node — mockup ikut bahasa situs. */
+const LangCtx = createContext<'id' | 'en'>('id');
 
 const ICON_SIZE = 38;
 
@@ -116,6 +120,8 @@ const TileIcon = memo(function TileIcon({
 const TileNode = memo(({ id, data }: NodeProps) => {
   const d = data as unknown as TileData;
   const active = useContext(SeqCtx).nodes.has(id);
+  const lang = useContext(LangCtx);
+  const label = lang === 'en' ? d.labelEn : d.label;
   const cls =
     d.tone === 'hub' ? 'wf-tile wf-tile--hub' : d.tone === 'tool' ? 'wf-tile wf-tile--tool' : 'wf-tile';
 
@@ -141,7 +147,7 @@ const TileNode = memo(({ id, data }: NodeProps) => {
         transition={{ duration: 0.5, delay: order * 0.09, ease: [0.25, 0.46, 0.45, 0.94] }}
         tabIndex={d.tone === 'hub' ? 0 : undefined}
         role={d.tone === 'hub' ? 'button' : undefined}
-        aria-label={d.tone === 'hub' ? `${d.label}, klasifikasi intent dan draf balasan` : undefined}
+        aria-label={d.tone === 'hub' ? (lang === 'en' ? `${label}, intent classification and reply drafting` : `${label}, klasifikasi intent dan draf balasan`) : undefined}
       >
         <span className="wf-tile__icon">
           <TileIcon kind={d.icon} active={active} size={d.iconSize} />
@@ -151,8 +157,8 @@ const TileNode = memo(({ id, data }: NodeProps) => {
       {/* Label di bawah tile untuk SEMUA tile — konsisten.
           Ikon tepat di tengah tile, konektor melintang menyeberang ikon. */}
       <span className="wf-tile__label">
-        {d.label}
-        {d.tone === 'hub' && <span className="wf-tile__sub">klasifikasi intent + draf balasan</span>}
+        {label}
+        {d.tone === 'hub' && <span className="wf-tile__sub">{lang === 'en' ? 'intent classification + reply drafting' : 'klasifikasi intent + draf balasan'}</span>}
       </span>
 
       <Handle type="target" position={Position.Left} className="wf-handle" />
@@ -294,6 +300,7 @@ function buildGraph(L: Layout) {
     x: number,
     y: number,
     label: string,
+    labelEn: string,
     icon: TileData['icon'],
     tone: TileData['tone'],
     order: number,
@@ -303,20 +310,20 @@ function buildGraph(L: Layout) {
     id,
     type: 'tile',
     position: { x, y },
-    data: { label, icon, tone, order, iconSize: L.icon } as TileData,
+    data: { label, labelEn, icon, tone, order, iconSize: L.icon } as TileData,
     ...(width ? { width } : {}),
     ...(className ? { className } : {}),
   });
 
   const nodes: Node[] = [
-    mkNode('trigger', 0, 0, 'PESAN MASUK', 'message', 'node', 0),
-    mkNode('koleksi', nodeW + gap, 0, 'KONTEKS PELANGGAN', 'database', 'node', 1),
-    mkNode('agent', (nodeW + gap) * 2, 0, 'AI AGENT', 'brain', 'hub', 2, hubW),
-    mkNode('validasi', (nodeW + gap) * 2 + hubW + gap, 0, 'CEK KEBIJAKAN', 'shield-check', 'node', 3, undefined, 'wf-node-2line'),
-    mkNode('kirim', (nodeW + gap) * 2 + hubW + gap + nodeW + gap, 0, 'KIRIM BALASAN', 'send', 'node', 4, undefined, 'wf-node-2line'),
-    mkNode('t-model', toolLeftX, row2Y, 'MODEL LLM', 'claude', 'tool', 5),
-    mkNode('t-dokumen', toolMidX, row2Y, 'KNOWLEDGE BASE', 'book', 'tool', 6),
-    mkNode('t-api', toolRightX, row2Y, 'CRM HELPDESK', 'headset', 'tool', 7),
+    mkNode('trigger', 0, 0, 'PESAN MASUK', 'INCOMING MESSAGE', 'message', 'node', 0),
+    mkNode('koleksi', nodeW + gap, 0, 'KONTEKS PELANGGAN', 'CUSTOMER CONTEXT', 'database', 'node', 1),
+    mkNode('agent', (nodeW + gap) * 2, 0, 'AI AGENT', 'AI AGENT', 'brain', 'hub', 2, hubW),
+    mkNode('validasi', (nodeW + gap) * 2 + hubW + gap, 0, 'CEK KEBIJAKAN', 'POLICY CHECK', 'shield-check', 'node', 3, undefined, 'wf-node-2line'),
+    mkNode('kirim', (nodeW + gap) * 2 + hubW + gap + nodeW + gap, 0, 'KIRIM BALASAN', 'SEND REPLY', 'send', 'node', 4, undefined, 'wf-node-2line'),
+    mkNode('t-model', toolLeftX, row2Y, 'MODEL LLM', 'LLM MODEL', 'claude', 'tool', 5),
+    mkNode('t-dokumen', toolMidX, row2Y, 'KNOWLEDGE BASE', 'KNOWLEDGE BASE', 'book', 'tool', 6),
+    mkNode('t-api', toolRightX, row2Y, 'CRM HELPDESK', 'CRM HELPDESK', 'headset', 'tool', 7),
   ];
 
   const edges: Edge[] = [
@@ -366,6 +373,28 @@ export default function WorkflowCanvas() {
   const [width, setWidth] = useState(0); // lebar container terukur (px)
   const hostRef = useRef<HTMLDivElement>(null);
   const [box, setBox] = useState({ w: 0, h: 0 });
+
+  /* Bahasa runtime — React island: label node ikut bahasa situs. */
+  const [lang, setLang] = useState<'id' | 'en'>('id');
+  useEffect(() => {
+    const read = () => {
+      let v: 'id' | 'en' = 'id';
+      try {
+        const p = JSON.parse(localStorage.getItem('mifdlal-prefs') || '{}');
+        v = p && p.lang === 'en' ? 'en' : 'id';
+      } catch {
+        v = document.documentElement.lang === 'en' ? 'en' : 'id';
+      }
+      setLang(v);
+    };
+    read();
+    const onLang = (e: Event) => {
+      const v = (e as CustomEvent).detail;
+      if (v === 'en' || v === 'id') setLang(v);
+    };
+    document.addEventListener('mifdlal:lang', onLang);
+    return () => document.removeEventListener('mifdlal:lang', onLang);
+  }, []);
 
   /* Ukur container: viewport React Flow dipusatkan manual (x/y), bukan
      fitView — fitView menghasilkan zoom pecahan yang me-raster teks.
@@ -451,6 +480,7 @@ export default function WorkflowCanvas() {
 
   return (
     <div className="wf-canvas" aria-hidden="true" ref={hostRef} style={tileVars}>
+      <LangCtx.Provider value={lang}>
       <SeqCtx.Provider value={seq}>
         <ReactFlow
           key={`wf-${isFluid ? 'fluid' : 'desktop'}-${Math.round(box.w)}`}
@@ -495,6 +525,7 @@ export default function WorkflowCanvas() {
           proOptions={{ hideAttribution: true }}
           />
         </SeqCtx.Provider>
+      </LangCtx.Provider>
     </div>
   );
 }
