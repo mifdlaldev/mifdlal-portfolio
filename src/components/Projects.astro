@@ -12,7 +12,7 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
   <div class="wrap">
     <div class="section-head">
       <span class="fig-label" data-i18n-en="fig. 03 · work">fig. 03 · proyek</span>
-      <h2 class="section-headline" data-i18n-en="Work you can look at">Hasil kerja yang dapat anda lihat.</h2>
+      <h2 class="section-headline" data-i18n-en="Work you can browse">Hasil kerja yang dapat Anda lihat.</h2>
     </div>
 
     <ul class="project-list">
@@ -76,7 +76,7 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
 
             <span class="project-body">
               <span class="project-role" data-i18n-en={p.roleEn}>{p.role}</span>
-              <span class="project-name">{p.name}</span>
+              <span class="project-name" data-i18n-en={p.nameEn}>{p.name}</span>
               <span class="project-desc" data-i18n-en={p.descriptionEn}>{p.description}</span>
 
               <span class="project-foot">

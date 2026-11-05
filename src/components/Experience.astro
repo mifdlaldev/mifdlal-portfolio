@@ -43,7 +43,7 @@ import CodeComment from './CodeComment.astro'
             <div class="entry-main">
               <h3 class="entry-title" data-i18n-en={e.roleEn}>{e.role}</h3>
               <p class="entry-org">
-                {e.org} <span class="entry-kind badge" data-i18n-en={e.kindEn}>{e.kind}</span>
+                <span data-i18n-en={e.orgEn}>{e.org}</span> <span class="entry-kind badge" data-i18n-en={e.kindEn}>{e.kind}</span>
               </p>
             </div>
             <p class="entry-meta">
