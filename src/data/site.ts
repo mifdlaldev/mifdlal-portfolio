@@ -32,8 +32,8 @@ export const projects: readonly Project[] = [
       'Situs profil perusahaan logistik B2B: layanan general, project, dan retail cargo, visi misi, area jangkauan, serta formulir kontak.',
     descriptionEn:
       'B2B logistics company profile site: general, project, and retail cargo services, vision and mission, coverage areas, and a contact form.',
-    stack: ['WordPress', 'Tema kustom'],
-    stackEn: ['WordPress', 'Custom theme'],
+    stack: ['WordPress'],
+    stackEn: ['WordPress'],
     live: 'https://lokalogistics.co.id/',
     image: '/projects/loka-logistics.webp',
   },
@@ -47,8 +47,8 @@ export const projects: readonly Project[] = [
       'Wizard enam langkah untuk memilih lokasi ujian Universitas Terbuka: identitas, wilayah, sekolah, detail, konfirmasi, lalu ringkasan pilihan.',
     descriptionEn:
       'A six-step wizard for choosing an exam location at Universitas Terbuka: identity, region, school, details, confirmation, then a summary of your selection.',
-    stack: ['Vite', 'JavaScript'],
-    stackEn: ['Vite', 'JavaScript'],
+    stack: ['Vite'],
+    stackEn: ['Vite'],
     live: 'https://simulasi-pemilihan-lokasi-ujian-ut.vercel.app/',
     image: '/projects/ut-bandung-simulator.webp',
   },
@@ -61,8 +61,8 @@ export const projects: readonly Project[] = [
       'Landing page villa dua bahasa, Indonesia dan Inggris, dengan route per locale.',
     descriptionEn:
       'Two-language villa landing page, Indonesian and English, with per-locale routing.',
-    stack: ['Next.js', 'next-intl'],
-    stackEn: ['Next.js', 'next-intl'],
+    stack: ['Next.js'],
+    stackEn: ['Next.js'],
     live: 'https://mahoni-house.vercel.app',
     image: '/projects/mahoni-house.webp',
   },
