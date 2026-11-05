@@ -1,6 +1,5 @@
 ---
 import GradientASCII from '../components/GradientASCII'
-import EncryptedText from '../components/EncryptedText'
 
 ---
 
@@ -37,15 +36,9 @@ import EncryptedText from '../components/EncryptedText'
   <div class="wrap hero-inner">
     <p class="fig-label" data-i18n-en="Open for projects">Terbuka untuk proyek</p>
 
-    <h1 class="hero-title" aria-label="Dari kerja manual menjadi sistem yang benar-benar dipakai.">
-      <!-- Teks hero dibuka dengan animasi decrypt (Aceternity EncryptedText).
-           Teks asli tetap ada di HTML awal supaya terbaca crawler dan tanpa JS. -->
-      <EncryptedText
-        client:load
-        lines={['Dari kerja manual menjadi', 'sistem yang benar-benar dipakai.']}
-        revealDelayMs={72}
-        flipDelayMs={90}
-      />
+    <h1 class="hero-title">
+      <span class="hero-line" data-i18n-en="Build What You Need,">Bangun Kebutuhanmu</span>
+      <span class="hero-line" data-i18n-en="Fast.">Disini Dengan Cepat</span>
     </h1>
 
     <p class="hero-sub" data-i18n-en="Websites, web apps, chatbots, and AI automation that turn business needs into ready-to-use digital solutions.">
@@ -150,11 +143,16 @@ import EncryptedText from '../components/EncryptedText'
     max-width: 100%;
   }
 
-  /* Di layar kecil, baris hero kedua (32 karakter) tidak muat 1 baris
-     pada ukuran font hero yang tetap terbaca. Izinkan wrap natural,
-     jangan paksa nowrap — animasi ghost menyesuaikan lebar otomatis. */
+  /* Tiap baris judul jadi blok sendiri supaya pemenggalan baris tetap
+     persis seperti dua baris yang diminta, bukan wrap otomatis. */
+  .hero-line {
+    display: block;
+  }
+
+  /* Di layar kecil, baris hero kedua tidak muat 1 baris pada ukuran font
+     hero yang tetap terbaca. Izinkan wrap natural. */
   @media (max-width: 560px) {
-    .hero-title .enc-line {
+    .hero-line {
       white-space: normal;
     }
   }
