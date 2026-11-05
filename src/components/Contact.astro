@@ -1,6 +1,7 @@
 ---
 import { contact } from '../data/site'
 const subject = encodeURIComponent('Diskusi proyek web atau otomasi AI')
+const subjectEn = encodeURIComponent('Web project or AI automation discussion')
 import CodeComment from './CodeComment.astro'
 import SocialIcons from './SocialIcons.astro'
 import CopyEmail from './CopyEmail'
@@ -40,6 +41,9 @@ import CopyEmail from './CopyEmail'
             <a
               href={`mailto:${contact.email}?subject=${subject}`}
               class="contact-email"
+              data-mailto={contact.email}
+              data-subject-id={subject}
+              data-subject-en={subjectEn}
             >
               {contact.email}
             </a>

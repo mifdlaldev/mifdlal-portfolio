@@ -89,6 +89,13 @@
       if (el.__i18nMeta === undefined) el.__i18nMeta = el.getAttribute('content')
       el.setAttribute('content', l === 'en' ? (el.getAttribute('data-i18n-meta') || '') : el.__i18nMeta)
     })
+
+    /* mailto subject mengikuti bahasa */
+    qsa('[data-mailto]').forEach(function (el) {
+      var idSub = el.getAttribute('data-subject-id') || ''
+      var enSub = el.getAttribute('data-subject-en') || idSub
+      el.setAttribute('href', 'mailto:' + el.getAttribute('data-mailto') + '?subject=' + (l === 'en' ? enSub : idSub))
+    })
   }
 
   /* ---------- kontrol ---------- */
