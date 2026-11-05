@@ -142,7 +142,7 @@ export const featured: readonly Certificate[] = [
   {
     slug: 'hactiv8-ai',
     title: 'AI Productivity and AI API Integration for Developers',
-    issuer: 'Hactiv8',
+    issuer: 'Hacktiv8',
     date: '2026-08-09',
     dateLabel: '9 Agu 2026',
     credentialId: '09392/H8/CSR/MBA2/VIII/2026',

@@ -48,7 +48,7 @@ sendiri, bukan klaim.
 
 - **9 kartu unggulan** (`src/data/certificates.ts` → `featured`): empat sertifikat
   peran/level atas HackerRank, freeCodeCamp x Microsoft, tiga kelas Dicoding,
-  satu pelatihan Hactiv8. Masing-masing punya gambar, satu baris konteks, tanggal,
+  satu pelatihan Hacktiv8. Masing-masing punya gambar, satu baris konteks, tanggal,
   ID, dan tautan verifikasi.
 - **18 kartu di modal** (`more`): 17 sertifikat keahlian HackerRank + 1 kelas
   dasar Dicoding. Tidak memenuhi halaman sebagai grid kedua; dibuka lewat tombol
@@ -105,7 +105,7 @@ gambar penuh.
 Semua ID HackerRank diuji ke `https://www.hackerrank.com/certificates/<ID>`:
 21 balas 200, ID palsu balas 404. Dicoding memakai
 `https://www.dicoding.com/certificates/<ID>`, freeCodeCamp memakai URL
-sertifikasi publik, Hactiv8 hanya nomor sertifikat (tidak ada halaman publik).
+sertifikasi publik, Hacktiv8 hanya nomor sertifikat (tidak ada halaman publik).
 
 ## Struktur
 
