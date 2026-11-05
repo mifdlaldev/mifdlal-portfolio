@@ -18,10 +18,12 @@ import LenisScroll from '../components/LenisScroll.astro'
 
 interface Props {
   title: string
+  titleEn?: string
   description: string
+  descriptionEn?: string
 }
 
-const { title, description } = Astro.props
+const { title, titleEn, description, descriptionEn } = Astro.props
 ---
 
 <!doctype html>
@@ -34,22 +36,22 @@ const { title, description } = Astro.props
     <!-- Font: self-hosted via @fontsource (nol CDN eksternal, nol CSP hole) -->
 
     <!-- SEO dasar -->
-    <title>{title}</title>
-    <meta name="description" content={description} />
+    <title data-i18n-en={titleEn}>{title}</title>
+    <meta name="description" content={description} data-i18n-meta={descriptionEn} />
     <link rel="canonical" href={Astro.url} />
     <meta name="robots" content="index, follow" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:title" content={title} data-i18n-meta={titleEn} />
+    <meta property="og:description" content={description} data-i18n-meta={descriptionEn} />
     <meta property="og:url" content={Astro.url} />
     <meta property="og:site_name" content="Mifdlal Tsaqib Alfarras" />
 
     <!-- Twitter card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
+    <meta name="twitter:title" content={title} data-i18n-meta={titleEn} />
+    <meta name="twitter:description" content={description} data-i18n-meta={descriptionEn} />
 
     <!-- Favicon: monogram, dua versi warna mengikuti tema sistem.
          Latar transparan supaya menyatu dengan tab bar terang maupun gelap.

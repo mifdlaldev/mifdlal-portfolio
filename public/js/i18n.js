@@ -83,6 +83,12 @@
       if (el.__i18nPh === undefined) el.__i18nPh = el.getAttribute('placeholder')
       el.setAttribute('placeholder', l === 'en' ? (el.getAttribute('data-i18n-en') || '') : el.__i18nPh)
     })
+
+    /* meta content (description, og:*, twitter:*) */
+    qsa('[data-i18n-meta]').forEach(function (el) {
+      if (el.__i18nMeta === undefined) el.__i18nMeta = el.getAttribute('content')
+      el.setAttribute('content', l === 'en' ? (el.getAttribute('data-i18n-meta') || '') : el.__i18nMeta)
+    })
   }
 
   /* ---------- kontrol ---------- */
