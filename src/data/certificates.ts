@@ -29,6 +29,7 @@ export type Certificate = {
   credentialId: string
   verifyUrl?: string
   note?: string
+  noteEn?: string
   width: number
   height: number
   thumbWidth?: number
@@ -49,6 +50,7 @@ export const featured: readonly Certificate[] = [
     credentialId: '8873F79BFF80',
     verifyUrl: hr('8873F79BFF80'),
     note: 'Sertifikasi peran, bukan satu skill: satu ujian mencakup beberapa kompetensi sekaligus.',
+    noteEn: 'A role certification, not a single skill: one exam covers several competencies at once.',
     width: 1400,
     height: 1067,
     thumbWidth: 640,
@@ -63,6 +65,7 @@ export const featured: readonly Certificate[] = [
     credentialId: '1178C273AA93',
     verifyUrl: hr('1178C273AA93'),
     note: 'Sertifikasi peran untuk jalur frontend dengan React.',
+    noteEn: 'A role certification for the frontend track with React.',
     width: 1400,
     height: 1067,
     thumbWidth: 640,
@@ -77,6 +80,7 @@ export const featured: readonly Certificate[] = [
     credentialId: '534F8AEB6350',
     verifyUrl: hr('534F8AEB6350'),
     note: 'Level tertinggi dari tiga level SQL: join, subquery, sampai optimasi query.',
+    noteEn: 'The highest of three SQL levels: joins, subqueries, up to query optimization.',
     width: 1400,
     height: 1067,
     thumbWidth: 640,
@@ -91,6 +95,7 @@ export const featured: readonly Certificate[] = [
     credentialId: '03DE9A17CAED',
     verifyUrl: hr('03DE9A17CAED'),
     note: 'Struktur data di luar array dan string: hash map, stack, queue.',
+    noteEn: 'Data structures beyond arrays and strings: hash maps, stacks, queues.',
     width: 1400,
     height: 1067,
     thumbWidth: 640,
@@ -106,6 +111,7 @@ export const featured: readonly Certificate[] = [
     verifyUrl:
       'https://www.freecodecamp.org/certification/mifdlaldev/foundational-c-sharp-with-microsoft',
     note: 'Kurikulum freeCodeCamp, diuji dan ditandatangani Microsoft Developer Division.',
+    noteEn: 'freeCodeCamp curriculum, tested and signed by the Microsoft Developer Division.',
     width: 1097,
     height: 737,
     thumbWidth: 640,
@@ -120,6 +126,7 @@ export const featured: readonly Certificate[] = [
     credentialId: '98XW0DN90XM3',
     verifyUrl: dicoding('98XW0DN90XM3'),
     note: 'Siklus spec, design, task, implementasi memakai Kiro. Berlaku sampai 25 Jul 2029.',
+    noteEn: 'Spec, design, task, and implementation cycle using Kiro. Valid until 25 Jul 2029.',
     width: 1400,
     height: 991,
     thumbWidth: 640,
@@ -134,6 +141,7 @@ export const featured: readonly Certificate[] = [
     credentialId: 'L4PQ9NKO7PO1',
     verifyUrl: dicoding('L4PQ9NKO7PO1'),
     note: 'Pola prompt untuk aktivitas software development, bukan prompt umum.',
+    noteEn: 'Prompt patterns for software development work, not generic prompting.',
     width: 1400,
     height: 991,
     thumbWidth: 640,
@@ -147,6 +155,7 @@ export const featured: readonly Certificate[] = [
     dateLabel: '9 Agu 2026',
     credentialId: '09392/H8/CSR/MBA2/VIII/2026',
     note: '10 jam pelatihan, 1-6 Agustus 2026. Nomor sertifikat dipakai untuk verifikasi.',
+    noteEn: '10 hours of training, 1-6 August 2026. The certificate number is used for verification.',
     width: 1400,
     height: 991,
     thumbWidth: 640,
@@ -161,6 +170,7 @@ export const featured: readonly Certificate[] = [
     credentialId: '1RXYW586MZVM',
     verifyUrl: dicoding('1RXYW586MZVM'),
     note: 'Dasar AWS Cloud: layanan komputasi, infrastruktur global, model biaya. Berlaku sampai 25 Jul 2029.',
+    noteEn: 'AWS Cloud fundamentals: compute services, global infrastructure, cost model. Valid until 25 Jul 2029.',
     width: 1400,
     height: 991,
     thumbWidth: 640,

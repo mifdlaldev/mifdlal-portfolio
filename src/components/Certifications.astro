@@ -35,7 +35,8 @@ const certAttrs = (c: (typeof featured)[number]) => ({
             href="#cert-dialog"
             {...certAttrs(c)}
             aria-label={`Buka sertifikat ${c.title} dari ${c.issuer}`}
-          >
+            data-i18n-aria={`Open certificate ${c.title} from ${c.issuer}`}
+            >
             <span class="cert-shot">
               <img
                 src={`/certs/${c.slug}-thumb.webp`}
@@ -47,12 +48,12 @@ const certAttrs = (c: (typeof featured)[number]) => ({
                 decoding="async"
               />
               <CertMark id={c.slug} />
-              <span class="cert-zoom" aria-hidden="true">buka</span>
+              <span class="cert-zoom" aria-hidden="true" data-i18n-en="open">buka</span>
             </span>
             <span class="cert-body">
               <span class="cert-issuer">{c.issuer}</span>
               <span class="cert-name">{c.title}</span>
-              {c.note && <span class="cert-note">{c.note}</span>}
+              {c.note && <span class="cert-note" data-i18n-en={c.noteEn}>{c.note}</span>}
               <span class="cert-meta">{c.dateLabel} · ID {c.credentialId}</span>
             </span>
           </a>
@@ -135,7 +136,8 @@ const certAttrs = (c: (typeof featured)[number]) => ({
               href="#cert-dialog"
               {...certAttrs(c)}
               aria-label={`Buka sertifikat ${c.title} dari ${c.issuer}`}
-            >
+              data-i18n-aria={`Open certificate ${c.title} from ${c.issuer}`}
+              >
               <span class="cert-shot">
                 <img
                   src={`/certs/${c.slug}-thumb.webp`}
@@ -144,9 +146,9 @@ const certAttrs = (c: (typeof featured)[number]) => ({
                   alt=""
                   loading="lazy"
                   decoding="async"
-                 draggable="false" />
+                  draggable="false" />
                 <CertMark id={c.slug} />
-                <span class="cert-zoom" aria-hidden="true">buka</span>
+                <span class="cert-zoom" aria-hidden="true" data-i18n-en="open">buka</span>
               </span>
               <span class="cert-body">
                 <span class="cert-issuer">{c.issuer}</span>
