@@ -23,9 +23,11 @@
 export type Certificate = {
   slug: string
   title: string
+  titleEn?: string
   issuer: string
   date: string
   dateLabel: string
+  dateLabelEn?: string
   credentialId: string
   verifyUrl?: string
   note?: string
@@ -120,6 +122,7 @@ export const featured: readonly Certificate[] = [
   {
     slug: 'kiro-spec-driven',
     title: 'Spec-Driven Development dengan Kiro',
+    titleEn: 'Spec-Driven Development with Kiro',
     issuer: 'Dicoding',
     date: '2026-07-25',
     dateLabel: '25 Jul 2026',
@@ -135,6 +138,7 @@ export const featured: readonly Certificate[] = [
   {
     slug: 'prompt-engineering',
     title: 'Prompt Engineering untuk Software Developer',
+    titleEn: 'Prompt Engineering for Software Developers',
     issuer: 'Dicoding',
     date: '2026-07-25',
     dateLabel: '25 Jul 2026',
@@ -153,6 +157,7 @@ export const featured: readonly Certificate[] = [
     issuer: 'Hacktiv8',
     date: '2026-08-09',
     dateLabel: '9 Agu 2026',
+    dateLabelEn: '9 Aug 2026',
     credentialId: '09392/H8/CSR/MBA2/VIII/2026',
     note: '10 jam pelatihan, 1-6 Agustus 2026. Nomor sertifikat dipakai untuk verifikasi.',
     noteEn: '10 hours of training, 1-6 August 2026. The certificate number is used for verification.',
@@ -164,6 +169,7 @@ export const featured: readonly Certificate[] = [
   {
     slug: 'aws-cloud-genai',
     title: 'Belajar Dasar Cloud dan Gen AI di AWS',
+    titleEn: 'Cloud and Gen AI Fundamentals on AWS',
     issuer: 'Dicoding',
     date: '2026-07-25',
     dateLabel: '25 Jul 2026',
@@ -196,7 +202,7 @@ export const more: readonly Certificate[] = [
   { slug: 'python-basic', title: 'Python (Basic)', issuer: HACKERRANK, date: '2026-07-28', dateLabel: '28 Jul 2026', credentialId: 'DDF74F42663D', verifyUrl: hr('DDF74F42663D'), width: 1400, height: 1067, thumbWidth: 640, thumbHeight: 488 },
   { slug: 'react-basic', title: 'React (Basic)', issuer: HACKERRANK, date: '2026-07-28', dateLabel: '28 Jul 2026', credentialId: '439BE1075951', verifyUrl: hr('439BE1075951'), width: 1400, height: 1067, thumbWidth: 640, thumbHeight: 488 },
   { slug: 'sql-basic', title: 'SQL (Basic)', issuer: HACKERRANK, date: '2026-07-28', dateLabel: '28 Jul 2026', credentialId: 'FE050284A5F1', verifyUrl: hr('FE050284A5F1'), width: 1400, height: 1067, thumbWidth: 640, thumbHeight: 488 },
-  { slug: 'dicoding-python', title: 'Memulai Pemrograman dengan Python', issuer: 'Dicoding', date: '2026-07-25', dateLabel: '25 Jul 2026', credentialId: '2VX30GD9QXYQ', verifyUrl: dicoding('2VX30GD9QXYQ'), width: 1400, height: 991, thumbWidth: 640, thumbHeight: 453 },
+  { slug: 'dicoding-python', title: 'Memulai Pemrograman dengan Python', titleEn: 'Getting Started with Python', issuer: 'Dicoding', date: '2026-07-25', dateLabel: '25 Jul 2026', credentialId: '2VX30GD9QXYQ', verifyUrl: dicoding('2VX30GD9QXYQ'), width: 1400, height: 991, thumbWidth: 640, thumbHeight: 453 },
 ]
 
 export const certTotals = {

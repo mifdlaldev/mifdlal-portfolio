@@ -7,8 +7,10 @@ const certAttrs = (c: (typeof featured)[number]) => ({
   'data-cert': '',
   'data-src': `/certs/${c.slug}.webp`,
   'data-title': c.title,
+  'data-title-en': c.titleEn ?? c.title,
   'data-issuer': c.issuer,
   'data-meta': `${c.dateLabel} · ID ${c.credentialId}`,
+  'data-meta-en': `${c.dateLabelEn ?? c.dateLabel} · ID ${c.credentialId}`,
   'data-verify': c.verifyUrl ?? '',
   'data-w': String(c.width),
   'data-h': String(c.height),
@@ -35,8 +37,8 @@ const certAttrs = (c: (typeof featured)[number]) => ({
             href="#cert-dialog"
             {...certAttrs(c)}
             aria-label={`Buka sertifikat ${c.title} dari ${c.issuer}`}
-            data-i18n-aria={`Open certificate ${c.title} from ${c.issuer}`}
-            >
+            data-i18n-aria={`Open certificate ${c.titleEn ?? c.title} from ${c.issuer}`}
+          >
             <span class="cert-shot">
               <img
                 src={`/certs/${c.slug}-thumb.webp`}
@@ -52,9 +54,9 @@ const certAttrs = (c: (typeof featured)[number]) => ({
             </span>
             <span class="cert-body">
               <span class="cert-issuer">{c.issuer}</span>
-              <span class="cert-name">{c.title}</span>
+              <span class="cert-name" data-i18n-en={c.titleEn}>{c.title}</span>
               {c.note && <span class="cert-note" data-i18n-en={c.noteEn}>{c.note}</span>}
-              <span class="cert-meta">{c.dateLabel} · ID {c.credentialId}</span>
+              <span class="cert-meta" data-i18n-en={`${c.dateLabelEn ?? c.dateLabel} · ID ${c.credentialId}`}>{c.dateLabel} · ID {c.credentialId}</span>
             </span>
           </a>
         </li>
@@ -136,7 +138,7 @@ const certAttrs = (c: (typeof featured)[number]) => ({
               href="#cert-dialog"
               {...certAttrs(c)}
               aria-label={`Buka sertifikat ${c.title} dari ${c.issuer}`}
-              data-i18n-aria={`Open certificate ${c.title} from ${c.issuer}`}
+              data-i18n-aria={`Open certificate ${c.titleEn ?? c.title} from ${c.issuer}`}
               >
               <span class="cert-shot">
                 <img
@@ -152,10 +154,10 @@ const certAttrs = (c: (typeof featured)[number]) => ({
               </span>
               <span class="cert-body">
                 <span class="cert-issuer">{c.issuer}</span>
-                <span class="cert-name">{c.title}</span>
-                <span class="cert-meta">{c.dateLabel} · ID {c.credentialId}</span>
+                <span class="cert-name" data-i18n-en={c.titleEn}>{c.title}</span>
+                <span class="cert-meta" data-i18n-en={`${c.dateLabelEn ?? c.dateLabel} · ID ${c.credentialId}`}>{c.dateLabel} · ID {c.credentialId}</span>
               </span>
-            </a>
+              </a>
           </li>
         ))}
       </ul>
@@ -637,17 +639,33 @@ const certAttrs = (c: (typeof featured)[number]) => ({
     const verifyEl = dialog.querySelector<HTMLAnchorElement>('[data-dialog-verify]')
     const closeEl = dialog.querySelector<HTMLButtonElement>('[data-dialog-close]')
 
+    const getLang = (): 'id' | 'en' => {
+      try {
+        const raw = localStorage.getItem('mifdlal-prefs')
+        if (raw) {
+          const p = JSON.parse(raw)
+          if (p && p.lang === 'en') return 'en'
+        }
+      } catch {}
+      return 'id'
+    }
+
     const open = (trigger: HTMLElement) => {
       const d = trigger.dataset
+      const en = getLang() === 'en'
+      const title = (en ? d.titleEn : d.title) ?? d.title ?? ''
+      const meta = (en ? d.metaEn : d.meta) ?? d.meta ?? ''
       if (img) {
         img.src = d.src ?? ''
         img.width = Number(d.w ?? 0)
         img.height = Number(d.h ?? 0)
-        img.alt = `Sertifikat ${d.title ?? ''} dari ${d.issuer ?? ''}`
+        img.alt = en
+          ? `Certificate ${title} from ${d.issuer ?? ''}`
+          : `Sertifikat ${title} dari ${d.issuer ?? ''}`
       }
-      if (titleEl) titleEl.textContent = d.title ?? ''
+      if (titleEl) titleEl.textContent = title
       if (issuerEl) issuerEl.textContent = d.issuer ?? ''
-      if (metaEl) metaEl.textContent = d.meta ?? ''
+      if (metaEl) metaEl.textContent = meta
       if (verifyEl) {
         if (d.verify) {
           verifyEl.href = d.verify
