@@ -49,6 +49,7 @@ export interface LogoLoopProps {
   intro?: boolean;
   renderItem?: (item: LogoItem, key: React.Key) => React.ReactNode;
   ariaLabel?: string;
+  ariaLabelEn?: string;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -1098,6 +1099,7 @@ export const LogoLoop = memo<LogoLoopProps>(
     intro = true,
     renderItem,
     ariaLabel = 'Partner logos',
+    ariaLabelEn,
     className,
     style
   }) => {
@@ -1106,6 +1108,24 @@ export const LogoLoop = memo<LogoLoopProps>(
     const engineRef = useRef<ReturnType<typeof createEngine> | null>(null);
     const [{ copies, primary }, setLayout] = useState<LoopLayout>({ copies: 3, primary: 1 });
     const [introPending] = useState(intro);
+    const [lang, setLang] = useState<'id' | 'en'>('id');
+
+    useEffect(() => {
+      try {
+        const p = JSON.parse(localStorage.getItem('mifdlal-prefs') || '{}');
+        if (p.lang === 'en') setLang('en');
+      } catch {
+        /* default id */
+      }
+      const onLang = (e: Event) => {
+        const v = (e as CustomEvent).detail;
+        if (v === 'id' || v === 'en') setLang(v);
+      };
+      window.addEventListener('mifdlal:lang', onLang);
+      return () => window.removeEventListener('mifdlal:lang', onLang);
+    }, []);
+
+    const regionLabel = lang === 'en' ? (ariaLabelEn ?? ariaLabel) : ariaLabel;
 
     const vertical = direction === 'up' || direction === 'down';
     const config = useRef<LoopConfig>({} as LoopConfig);
@@ -1322,7 +1342,7 @@ export const LogoLoop = memo<LogoLoopProps>(
         className={rootClassName}
         style={containerStyle}
         role="region"
-        aria-label={ariaLabel}
+        aria-label={regionLabel}
         data-intro={introPending ? '' : undefined}
         data-draggable={draggable ? '' : undefined}
         data-muted={amount > 0 ? '' : undefined}
