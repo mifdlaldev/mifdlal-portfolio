@@ -198,12 +198,12 @@
   const showTyping = () => {
     log.appendChild(typing)
     scrollLog()
-    setStatus('mengetik...', true)
+    setStatus(str('typing'), true)
   }
 
   const hideTyping = () => {
     typing.remove()
-    setStatus('online', false)
+    setStatus(str('online'), false)
   }
 
   /* ── Kirim pesan ──────────────────────────────────────── */
@@ -224,11 +224,21 @@
       greeting: 'Halo! Saya asisten AI Mifdlal. Tanya soal layanan, proyek, atau stack — jawaban berdasarkan profil di situs ini.',
       error: 'Gagal mengirim. Coba lagi.',
       counter: 'Karakter',
+      typing: 'mengetik...',
+      online: 'online',
+      errGeneric: 'Maaf, terjadi gangguan. Coba lagi sebentar.',
+      errEmpty: 'Maaf, jawaban kosong. Coba tanya ulang.',
+      errConn: 'Koneksi terputus. Periksa internet dan coba lagi.',
     },
     en: {
       greeting: "Hi! I'm Mifdlal's AI assistant. Ask about services, projects, or stack — answers based on the profile on this site.",
       error: 'Failed to send. Try again.',
       counter: 'Characters',
+      typing: 'typing...',
+      online: 'online',
+      errGeneric: 'Sorry, something went wrong. Try again in a moment.',
+      errEmpty: 'Sorry, the answer was empty. Try asking again.',
+      errConn: 'Connection lost. Check your internet and try again.',
     },
   }
   const str = (k) => CHAT_STR[langOf()][k] || CHAT_STR.id[k]
@@ -259,7 +269,7 @@
       hideTyping()
 
       if (!res.ok || !res.body) {
-        let message = 'Maaf, terjadi gangguan. Coba lagi sebentar.'
+        let message = str('errGeneric')
         try {
           const data = await res.json()
           if (data && data.message) message = data.message
@@ -267,7 +277,7 @@
           /* respons bukan JSON */
         }
         addBubble('in', message)
-        setStatus('online', false)
+        setStatus(str('online'), false)
         return
       }
 
@@ -293,14 +303,14 @@
       }
 
       if (!acc.trim()) {
-        bubble.textContent = 'Maaf, jawaban kosong. Coba tanya ulang.'
+        bubble.textContent = str('errEmpty')
       }
       history.push({ role: 'assistant', content: acc })
-      setStatus('online', false)
+      setStatus(str('online'), false)
     } catch {
       hideTyping()
-      addBubble('in', 'Koneksi terputus. Periksa internet dan coba lagi.')
-      setStatus('online', false)
+      addBubble('in', str('errConn'))
+      setStatus(str('online'), false)
     } finally {
       busy = false
       if (sendBtn) sendBtn.disabled = false
