@@ -4,13 +4,13 @@ const year = new Date().getFullYear()
 /* Urut mengikuti urutan section di halaman, supaya klik tidak pernah melompat
    ke belakang. "stack" tidak dimasukkan: itu pita logo, tanpa judul. */
 const sections = [
-  { href: '#tentang', label: 'tentang' },
-  { href: '#proyek', label: 'proyek' },
-  { href: '#layanan', label: 'layanan' },
-  { href: '#pengalaman', label: 'pengalaman' },
-  { href: '#pendidikan', label: 'pendidikan' },
-  { href: '#sertifikasi', label: 'sertifikasi' },
-  { href: '#kontak', label: 'kontak' },
+  { href: '#tentang', label: 'Tentang', en: 'About' },
+  { href: '#proyek', label: 'Proyek', en: 'Work' },
+  { href: '#layanan', label: 'Layanan', en: 'Services' },
+  { href: '#pengalaman', label: 'Pengalaman', en: 'Experience' },
+  { href: '#pendidikan', label: 'Pendidikan', en: 'Education' },
+  { href: '#sertifikasi', label: 'Sertifikasi', en: 'Certifications' },
+  { href: '#kontak', label: 'Kontak', en: 'Contact' },
 ]
 ---
 
@@ -18,7 +18,7 @@ const sections = [
   <div class="wrap footer-inner">
     <nav class="footer-nav" aria-label="Navigasi halaman">
       {sections.map((s) => (
-        <a href={s.href} data-i18n-en={s.label === 'tentang' ? 'About' : s.label === 'proyek' ? 'Work' : s.label === 'layanan' ? 'Services' : s.label === 'pengalaman' ? 'Experience' : s.label === 'pendidikan' ? 'Education' : s.label === 'sertifikasi' ? 'Certifications' : 'Contact'}>{s.label}</a>
+        <a href={s.href} data-i18n-en={s.en}>{s.label}</a>
       ))}
     </nav>
 
@@ -94,16 +94,54 @@ const sections = [
     align-items: center;
   }
 
+  /* Link footer: font style/size sama seperti .nav-link navbar (mono
+     kecil, weight 500, tracking caps-tight, warna muted, garis bawah
+     animasi) tetapi teks tetap Title Case (Tentang, Proyek), bukan
+     dipaksa uppercase seperti navbar. */
   .footer-nav {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.25rem 1.25rem;
+    gap: 0.5rem 1.25rem;
     order: 1;
-    font-family: var(--font-display);
-    font-size: var(--text-sub);
-    font-weight: 600;
-    line-height: var(--leading-heading);
-    letter-spacing: var(--tracking-heading);
+    justify-self: start;
+  }
+
+  .footer-nav a {
+    font-family: var(--font-mono);
+    font-size: var(--text-nav);
+    font-weight: 500;
+    letter-spacing: var(--tracking-caps-tight);
+    text-transform: none;
+    color: var(--color-muted);
+    text-decoration: none;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    transition: color var(--dur-fast) var(--ease);
+  }
+
+  /* Garis bawah animasi: tumbuh dari tengah, sama seperti .nav-link. */
+  .footer-nav a::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: calc(50% + 0.7em);
+    width: 0;
+    height: 2px;
+    background: currentColor;
+    transform: translateX(-50%);
+    transition: width var(--dur-base) var(--ease);
+    pointer-events: none;
+  }
+
+  .footer-nav a:hover {
+    color: var(--color-ink);
+  }
+
+  .footer-nav a:hover::after,
+  .footer-nav a:focus-visible::after {
+    width: 100%;
   }
 
   /* ---- kontrol tema + bahasa ---- */
