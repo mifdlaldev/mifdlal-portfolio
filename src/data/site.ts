@@ -25,7 +25,7 @@ export type Project = {
 export const projects: readonly Project[] = [
   {
     no: '01',
-    name: 'PT Loka Logistics',
+    name: 'PT Loka Logistics Solution',
     role: 'Website perusahaan',
     roleEn: 'Company website',
     description:
