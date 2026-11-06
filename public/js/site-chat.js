@@ -161,6 +161,15 @@
     updateSendState()
   })
 
+  /* Enter = kirim pesan, Shift+Enter = baris baru. Tanpa Shift, newline
+     default textarea akan mencegah pengiriman yang diharapkan. */
+  input.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' && !event.shiftKey && !event.isComposing) {
+      event.preventDefault()
+      form.requestSubmit()
+    }
+  })
+
   /* ── Transkrip ────────────────────────────────────────── */
   const scrollLog = () => {
     log.scrollTop = log.scrollHeight
