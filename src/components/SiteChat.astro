@@ -55,7 +55,7 @@
     </div>
 
     <!-- ── 3. Log pesan ──────────────────────────────────── -->
-    <div class="chat-log" role="log" aria-label="Percakapan" data-i18n-aria="Conversation" aria-live="polite"></div>
+    <div class="chat-log" role="log" aria-label="Percakapan" data-i18n-aria="Conversation" aria-live="polite" data-lenis-prevent></div>
 
     <!-- ── 4. Privasi ────────────────────────────────────── -->
     <div class="chat-privacy" data-chat-privacy data-collapsed="false">
@@ -80,6 +80,7 @@
         maxlength="1000"
         rows="2"
         enterkeyhint="send"
+        data-lenis-prevent
       ></textarea>
       <button class="chat-send" type="submit" aria-label="Kirim pesan" data-i18n-aria="Send message" disabled>
         <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
