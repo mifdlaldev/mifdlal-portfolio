@@ -40,7 +40,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: quality
     # Hanya deploy saat push ke main, bukan saat PR (PR tak boleh deploy).
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # workflow_dispatch juga diizinkan untuk deploy manual darurat.
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'workflow_dispatch'
     environment: production
     steps:
       - name: Checkout
