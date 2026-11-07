@@ -10,14 +10,14 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
 <section id="proyek" class="section">
   <CodeComment text="// proyek" textEn="// work" />
   <div class="wrap">
-    <div class="section-head reveal">
+    <div class="section-head rise">
       <span class="fig-label" data-i18n-en="fig. 03 · work">fig. 03 · proyek</span>
       <h2 class="section-headline" data-i18n-en="Work you can browse">Hasil kerja yang dapat Anda lihat.</h2>
     </div>
 
     <ul class="project-list">
       {projects.map((p, i) => (
-        <li class="project-card reveal" style={`--reveal-delay:${i * 140}ms`}>
+        <li class="project-card rise" data-rise="scale" style={`--rise-delay:${i * 120}ms`}>
           <a
             href={p.live}
             target="_blank"
@@ -121,34 +121,6 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
      Pakai `animation` + `translate` (bukan transition + transform) supaya
      tidak bentrok dengan transisi hover .project-card (transform lift).
      Tanpa JS (html.js absen) atau reduced-motion: elemen langsung tampil. */
-  /* Delay reveal: default 0; tiap kartu menimpa lewat inline style.
-     Dideklarasikan supaya checker token mengenalinya (var lokal). */
-  .reveal {
-    --reveal-delay: 0ms;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    :global(html.js) .reveal {
-      opacity: 0;
-    }
-
-    :global(html.js) .reveal.is-in {
-      animation: project-reveal var(--dur-reveal) var(--ease-out) both;
-      animation-delay: var(--reveal-delay, 0ms);
-    }
-  }
-
-  @keyframes project-reveal {
-    from {
-      opacity: 0;
-      translate: 0 26px;
-    }
-    to {
-      opacity: 1;
-      translate: 0 0;
-    }
-  }
-
   .project-list {
     list-style: none;
     margin: 0;
@@ -526,29 +498,5 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
       clearTimeout(rt);
       rt = setTimeout(kick, 150);
     });
-  }
-
-  /* Reveal saat scroll: header section + tiap kartu masuk halus begitu
-     menyentuh viewport, sekali saja. Stagger via --reveal-delay. Hormati
-     prefers-reduced-motion (langsung tampil); tanpa JS, CSS tak menyembunyikan
-     apa pun. */
-  const reduceReveal = window.matchMedia('(prefers-reduced-motion: reduce)');
-  if (!reduceReveal.matches && document.documentElement.classList.contains('js')) {
-    const revealEls = Array.from(document.querySelectorAll<HTMLElement>('#proyek .reveal'));
-    if ('IntersectionObserver' in window) {
-      const io = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            if (!entry.isIntersecting) continue;
-            entry.target.classList.add('is-in');
-            io.unobserve(entry.target);
-          }
-        },
-        { rootMargin: '0px 0px -12% 0px', threshold: 0.08 },
-      );
-      revealEls.forEach((el) => io.observe(el));
-    } else {
-      revealEls.forEach((el) => el.classList.add('is-in'));
-    }
   }
 </script>

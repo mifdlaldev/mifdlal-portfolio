@@ -13,7 +13,7 @@ import { AsciiArtStatic } from './ui/ascii-art'
 <section id="layanan" class="section">
   <CodeComment text="// layanan" textEn="// services" />
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head rise">
       <span class="fig-label" data-i18n-en="fig. 04 · services">fig. 04 · layanan</span>
       <h2 class="section-headline" data-i18n-en="What I can build for you.">Yang dapat saya kerjakan untuk bisnis Anda.</h2>
       <p class="service-intro" data-i18n-en="Each service has its own panel. The panel shows how it works, so you see the mechanism — not just a list of capabilities.">
@@ -25,7 +25,7 @@ import { AsciiArtStatic } from './ui/ascii-art'
 
     <ol class="service-list">
       {services.map((s) => (
-        <li class="service-row">
+        <li class="service-row rise" data-rise="up">
           <div class="service-text">
             <span class="service-no">{s.no}</span>
             <div class="service-title-row">

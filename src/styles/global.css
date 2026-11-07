@@ -721,3 +721,97 @@ body {
     padding-inline: var(--wrap-gutter-mobile); /* 40px, jarak 16px dari rail */
   }
 }
+
+/* ============================================================
+   REVEAL SAAT SCROLL — semua section kecuali hero
+   Elemen .rise disembunyikan (opacity 0) HANYA saat JS aktif dan
+   pengguna tidak meminta reduced-motion. Saat menyentuh viewport,
+   /js/rise.js menambahkan .is-in dan animasi masuk berjalan sekali.
+   Tanpa JS, tak ada yang disembunyikan (html.js tidak pernah di-set).
+   Varian lewat data-rise: up (default) | left | right | scale | wipe.
+   Animasi memakai properti individual (translate/scale) supaya tidak
+   bentrok dengan transform milik parallax/hover elemen.
+   ============================================================ */
+.rise {
+  --rise-delay: 0ms;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html.js .rise {
+    opacity: 0;
+  }
+
+  html.js .rise.is-in {
+    animation: rise-up var(--dur-reveal) var(--ease-out) both;
+    animation-delay: var(--rise-delay, 0ms);
+  }
+
+  html.js .rise[data-rise='left'].is-in {
+    animation-name: rise-left;
+  }
+
+  html.js .rise[data-rise='right'].is-in {
+    animation-name: rise-right;
+  }
+
+  html.js .rise[data-rise='scale'].is-in {
+    animation-name: rise-scale;
+  }
+
+  html.js .rise[data-rise='wipe'].is-in {
+    animation-name: rise-wipe;
+  }
+}
+
+@keyframes rise-up {
+  from {
+    opacity: 0;
+    translate: 0 30px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes rise-left {
+  from {
+    opacity: 0;
+    translate: -28px 0;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes rise-right {
+  from {
+    opacity: 0;
+    translate: 28px 0;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes rise-scale {
+  from {
+    opacity: 0;
+    scale: 0.93;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@keyframes rise-wipe {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}

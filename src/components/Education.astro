@@ -6,7 +6,7 @@ import CodeComment from './CodeComment.astro'
 <section id="pendidikan" class="section">
   <CodeComment text="// pendidikan" textEn="// education" />
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head rise">
       <span class="fig-label" data-i18n-en="fig. 06 · education">fig. 06 · pendidikan</span>
       <h2 class="section-headline" data-i18n-en="Formal education.">Pendidikan formal.</h2>
     </div>
@@ -22,7 +22,7 @@ import CodeComment from './CodeComment.astro'
         </li>
       ) : (
         education.map((e) => (
-          <li class="edu-row">
+          <li class="edu-row rise" data-rise="left">
             <div class="edu-main">
               <h3 class="edu-title" data-i18n-en={e.institutionEn}>{e.institution}</h3>
               <p class="edu-program">

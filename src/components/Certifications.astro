@@ -20,7 +20,7 @@ const certAttrs = (c: (typeof featured)[number]) => ({
 <section id="sertifikasi" class="section">
   <CodeComment text="// sertifikasi" textEn="// certifications" />
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head rise">
       <span class="fig-label" data-i18n-en="fig. 07 · certifications">fig. 07 · sertifikasi</span>
        <h2 class="section-headline" data-i18n-en="Certifications.">Sertifikasi.</h2>
        <p class="section-sub" data-i18n-en={`${certTotals.total} certificates from ${certTotals.issuers} issuers. Each ID can be verified directly on the issuer's verification page. Click an image to open the full certificate.`}>
@@ -30,8 +30,8 @@ const certAttrs = (c: (typeof featured)[number]) => ({
     </div>
 
     <ul class="cert-grid">
-      {featured.map((c) => (
-        <li class="cert-card">
+      {featured.map((c, i) => (
+        <li class="cert-card rise" data-rise="up" style={`--rise-delay:${i * 70}ms`}>
           <a
             class="cert-trigger"
             href="#cert-dialog"
@@ -64,7 +64,7 @@ const certAttrs = (c: (typeof featured)[number]) => ({
     </ul>
 
     {more.length > 0 && (
-      <div class="cert-cta">
+      <div class="cert-cta rise">
         <button
           class="cert-more-btn"
           type="button"
