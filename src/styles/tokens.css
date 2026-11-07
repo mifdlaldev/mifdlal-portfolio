@@ -148,6 +148,9 @@
      terbaca, elemen yang pergi tidak boleh menahan pandangan. */
   --dur-enter: 260ms;
   --dur-exit: 160ms;
+  /* Animasi reveal saat scroll (kartu proyek): sengaja lambat + santai,
+     beda dari transisi UI biasa. */
+  --dur-reveal: 700ms;
   --ease: ease;
   --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --ease-in: cubic-bezier(0.4, 0, 1, 1);
