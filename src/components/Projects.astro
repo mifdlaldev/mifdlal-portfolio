@@ -107,6 +107,13 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
     text-wrap: balance;
   }
 
+  /* Versi Inggris "Work you can browse" cukup satu baris; bahasa
+     Indonesia tetap dibatasi 12ch supaya pecah dua baris seperti desain.
+     Hook: i18n.js men-set <html lang="en"> saat bahasa Inggris aktif. */
+  :global(html[lang='en']) .section-head .section-headline {
+    max-width: none;
+  }
+
   /* Bentuk kartu mengikuti kartu sertifikasi: gambar di atas, keterangan di
      bawah, garis tipis sebagai satu-satunya pembatas. Bedanya, seluruh kartu
      adalah satu tautan hidup ke hasil kerja, jadi tidak ada dialog. */
