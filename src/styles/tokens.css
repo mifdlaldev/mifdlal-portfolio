@@ -54,7 +54,7 @@
      11px dipakai 25 kali untuk label mono. Tier display
      memakai clamp() supaya fluid.                              */
   --text-root: 16px;
-  --text-hero: clamp(2rem, 5.5vw, 3.75rem);
+  --text-hero: clamp(2.5rem, 7vw, 5rem);
   --text-h2: clamp(1.5rem, 3.5vw, 2.125rem);
   --text-h3: clamp(1.375rem, 3.2vw, 2rem);
   --text-lede: clamp(1.25rem, 2.5vw, 1.625rem);
