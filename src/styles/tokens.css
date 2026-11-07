@@ -96,6 +96,9 @@
   /* Teks di atas accent (electric): LATAR terang di tema terang,
      dan gelap di tema gelap — ikut --paper supaya kontras terjaga. */
   --chat-on-accent: var(--paper);
+  /* Ikon launcher saat hover (latar berubah jadi electric/biru): putih
+     di kedua tema supaya terbaca di atas biru. */
+  --chat-icon-hover: #ffffff;
 
   /* --- tipografi: tracking --------------------------------
      Positif untuk huruf kapital mono, negatif untuk display.   */
