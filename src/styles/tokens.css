@@ -93,6 +93,9 @@
   --leading-wordmark: 0.74; /* wordmark raksasa: huruf menempel ke tepi pita */
   --leading-none: 1; /* status bar: angka jam tidak terpotong */
   --chat-wall: #e8e7e1; /* background area chat HP (abu-abu, ganti wallpaper) */
+  /* Teks di atas accent (electric): LATAR terang di tema terang,
+     dan gelap di tema gelap — ikut --paper supaya kontras terjaga. */
+  --chat-on-accent: var(--paper);
 
   /* --- tipografi: tracking --------------------------------
      Positif untuk huruf kapital mono, negatif untuk display.   */
