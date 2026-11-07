@@ -10,7 +10,6 @@
    - Textarea dengan batas 1000 karakter + counter
    - Tombol send biru kotak
    - Bubble IN (bot) / OUT (pengguna), fully rounded tanpa tail
-   - Timestamp mono di ujung teks bubble
    - Status header: "online" -> "mengetik..." saat bot merespons
    - Typing indicator 3 titik di dalam log
 
@@ -48,12 +47,6 @@
     } else {
       statusEl.removeAttribute('data-typing')
     }
-  }
-
-  /* Timestamp HH:MM untuk bubble */
-  const nowTime = () => {
-    const d = new Date()
-    return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0')
   }
 
   /* ── Buka / tutup ─────────────────────────────────────── */
@@ -185,13 +178,7 @@
 
     const textNode = document.createTextNode(text)
 
-    const time = document.createElement('span')
-    time.className = 'chat-time'
-    time.textContent = nowTime()
-    time.setAttribute('aria-hidden', 'true')
-
     bubble.appendChild(textNode)
-    bubble.appendChild(time)
     row.appendChild(bubble)
     log.appendChild(row)
     scrollLog()
@@ -300,14 +287,8 @@
         const { done, value } = await reader.read()
         if (done) break
         acc += decoder.decode(value, { stream: true })
-        /* Hapus timestamp lama, set teks + timestamp baru */
-        bubble.lastChild.remove()
-        bubble.appendChild(document.createTextNode(acc))
-        const time = document.createElement('span')
-        time.className = 'chat-time'
-        time.textContent = nowTime()
-        time.setAttribute('aria-hidden', 'true')
-        bubble.appendChild(time)
+        /* Set teks akumulasi */
+        bubble.textContent = acc
         scrollLog()
       }
 

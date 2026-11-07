@@ -504,27 +504,6 @@
     border-radius: 0.5rem;
   }
 
-  /* Timestamp inline di ujung teks */
-  .site-chat :global(.chat-time) {
-    display: inline-block;
-    margin-left: 0.375rem;
-    font-family: var(--font-mono);
-    font-size: var(--text-cap);
-    font-weight: var(--weight-medium);
-    letter-spacing: var(--tracking-caps-tight);
-    vertical-align: bottom;
-    line-height: var(--leading-none);
-    user-select: none;
-  }
-
-  .site-chat :global(.chat-bubble--in .chat-time) {
-    color: color-mix(in srgb, var(--ink-900) 40%, transparent);
-  }
-
-  .site-chat :global(.chat-bubble--out .chat-time) {
-    color: color-mix(in srgb, var(--ink-900) 70%, transparent);
-  }
-
   /* Typing indicator — kotak abu tanpa tail */
   .site-chat :global(.chat-typing) {
     align-self: flex-start;
