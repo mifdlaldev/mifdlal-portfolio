@@ -58,7 +58,7 @@
   --text-h2: clamp(1.5rem, 3.5vw, 2.125rem);
   --text-h3: clamp(1.375rem, 3.2vw, 2rem);
   --text-lede: clamp(1.25rem, 2.5vw, 1.625rem);
-  --text-sub: clamp(1.0625rem, 2.2vw, 1.25rem);
+  --text-sub: clamp(1.1875rem, 2.6vw, 1.4375rem);
   --text-title: 1.25rem;
   --text-title-sm: 1.125rem;
   --text-brand: 1.0625rem; /* wordmark nav, off-scale by design */
