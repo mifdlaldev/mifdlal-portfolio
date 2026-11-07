@@ -78,6 +78,7 @@ const { title, titleEn, description, descriptionEn } = Astro.props
             if (p.lang === 'id' || p.lang === 'en') window.__mifdlalLang = p.lang
           }
           if (mode !== 'light') document.documentElement.setAttribute('data-theme', mode)
+          document.documentElement.classList.add('js')
         } catch (e) {}
       })()
     </script>
