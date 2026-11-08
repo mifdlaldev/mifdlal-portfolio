@@ -79,6 +79,13 @@ const { title, titleEn, description, descriptionEn } = Astro.props
           }
           if (mode !== 'light') document.documentElement.setAttribute('data-theme', mode)
           document.documentElement.classList.add('js')
+          /* Failsafe: kalau script reveal (motion) tidak sempat menandai
+             elemen dalam 4 detik, cabut kelas js supaya konten tetap tampil. */
+          setTimeout(function () {
+            if (document.documentElement.dataset.riseReady !== '1') {
+              document.documentElement.classList.remove('js')
+            }
+          }, 4000)
         } catch (e) {}
       })()
     </script>
@@ -109,8 +116,97 @@ const { title, titleEn, description, descriptionEn } = Astro.props
     <LenisScroll />
     <script is:inline src="/js/image-guard.js" defer></script>
     <script is:inline src="/js/reveal.js" defer></script>
-    <script is:inline src="/js/rise.js" defer></script>
     <script src="/js/i18n.js" defer></script>
+
+    {/* Reveal saat scroll — Framer Motion. Astro membundel ini jadi modul
+        eksternal ('self'), jadi aman terhadap CSP ketat. Tiap elemen .rise
+        dianimasikan HANYA saat ±separuh masuk viewport, sekali saja, lalu
+        inline style dibersihkan supaya hover CSS elemen tetap hidup. */}
+    <script>
+      import { animate, inView } from 'motion'
+
+      const root = document.documentElement
+
+      /* Tandai siap lebih dulu: failsafe di <head> hanya mencabut kelas js
+         kalau script ini benar-benar gagal dimuat/di-setup. */
+      const done = (el: HTMLElement) => {
+        el.style.removeProperty('opacity')
+        el.style.removeProperty('transform')
+        el.style.removeProperty('translate')
+        el.style.removeProperty('scale')
+        el.style.removeProperty('left')
+        el.style.removeProperty('top')
+        el.style.removeProperty('clipPath')
+        el.classList.add('is-in')
+      }
+
+      try {
+        const els = Array.from(document.querySelectorAll<HTMLElement>('.rise'))
+        root.dataset.riseReady = '1'
+
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+        if (reduce) {
+          els.forEach(done)
+        } else {
+          const FROM: Record<string, Record<string, number | string>> = {
+            up: { y: 34 },
+            left: { x: -30 },
+            right: { x: 30 },
+            scale: { scale: 0.93 },
+            wipe: { clipPath: 'inset(0 100% 0 0)' },
+          }
+
+          els.forEach((el) => {
+            const variant = el.dataset.rise || 'up'
+            const from = FROM[variant] ?? FROM.up
+            const raw = getComputedStyle(el).getPropertyValue('--rise-delay')
+            const delay = (parseFloat(raw) || 0) / 1000
+
+            /* Ambang trigger adaptif: elemen kecil menunggu ±separuh tampil,
+               elemen tinggi (lebih tinggi dari viewport) menunggu ±75% tinggi
+               viewport supaya tetap "kelihatan penuh dulu" sebelum beranimasi
+               dan tidak pernah gagal trigger. */
+            const vh = window.innerHeight
+            const h = el.getBoundingClientRect().height || 1
+            const amount = Math.max(0.2, Math.min(0.5, (vh * 0.75) / h))
+
+            /* Keyframes: nilai awal -> nilai akhir. */
+            const to: Record<string, unknown> = { opacity: [0, 1] }
+            for (const [key, value] of Object.entries(from)) {
+              if (typeof value === 'number') to[key] = [value, key === 'scale' ? 1 : 0]
+              else to[key] = [value, variant === 'wipe' ? 'inset(0 0 0 0)' : value]
+            }
+
+            let played = false
+            let stop: () => void = () => {}
+            stop = inView(
+              el,
+              () => {
+                if (played) return
+                played = true
+                animate(el, to as never, {
+                  duration: 0.75,
+                  delay,
+                  ease: [0.22, 0.61, 0.36, 1],
+                  onComplete: () => {
+                    /* Motion menulis gaya akhir ke inline style SETELAH
+                       onComplete; bersihkan di frame berikut supaya hover CSS
+                       elemen tidak tertutup inline transform:motion. */
+                    window.requestAnimationFrame(() => window.requestAnimationFrame(() => done(el)))
+                    stop()
+                  },
+                })
+              },
+              { amount, margin: '0px 0px -8% 0px' },
+            )
+          })
+        }
+      } catch {
+        /* Gagal setup: cabut kelas js supaya semua konten tampil. */
+        root.classList.remove('js')
+      }
+    </script>
   </body>
 </html>
 
