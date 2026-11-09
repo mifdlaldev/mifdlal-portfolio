@@ -20,10 +20,10 @@ custom_domain = true
 # API chat (POST /api/chat): streaming dari OpenRouter.
 # Kunci TIDAK di git — pasang dengan:
 #   npx wrangler secret put OPENROUTER_API_KEY
-# Model override (opsional):
-#   npx wrangler secret put CHAT_MODEL
-# [vars]
-# CHAT_MODEL = "google/gemini-2.5-flash"
+# Model gratis (biaya nol), urutan fallback dipisah koma.
+# Kalau satu model kena limit/penuh, worker coba model berikutnya.
+[vars]
+CHAT_MODEL = "google/gemma-4-31b-it:free,nvidia/nemotron-3-ultra-550b-a55b:free,dots-studio/dots-3-note-preview:free,openrouter/free"
 
 # Static assets: dilayani env.ASSETS dari worker entry.
 # Semua non-/api/chat dioper ke assets — perilaku static

@@ -31,6 +31,10 @@ interface Env {
   ASSETS: { fetch(request: Request): Promise<Response> }
 }
 
+/* Model default: gratis di OpenRouter (biaya nol). Urutan fallback
+   diatur lewat var CHAT_MODEL di wrangler.toml (dipisah koma). */
+const DEFAULT_MODEL = 'google/gemma-4-31b-it:free'
+
 /* Pengetahuan asisten: profil, layanan, proyek, stack, kontak.
    Sumber: src/data/site.ts + KONTEN.md. Aturan jawaban di bagian
    akhir: singkat, jujur, tanpa markdown berat. */
@@ -271,11 +275,19 @@ async function handleChat(request: Request, env: Env): Promise<Response> {
     return json({ error: 'bad_request', message: 'Tidak ada pesan pengguna.' }, 400)
   }
 
-  const model = env.CHAT_MODEL || 'google/gemini-2.5-flash'
+  /* Daftar model dipisah koma. Model gratis sering kena limit atau penuh,
+     jadi kalau satu gagal worker otomatis coba model berikutnya. */
+  const models = (env.CHAT_MODEL || DEFAULT_MODEL)
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean)
 
-  let upstream: Response
-  try {
-    upstream = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+  let upstream: Response | null = null
+  let upstreamStatus = 0
+
+  for (const model of models) {
+    try {
+      upstream = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
         authorization: `Bearer ${env.OPENROUTER_API_KEY}`,
@@ -290,12 +302,21 @@ async function handleChat(request: Request, env: Env): Promise<Response> {
         max_tokens: MAX_TOKENS_REPLY,
         messages: [{ role: 'system', content: SYSTEM_PROMPT(chatLang) }, ...trimmed],
       }),
-    })
-  } catch {
-    return json({ error: 'upstream_unreachable', message: 'Gagal menghubungi layanan AI.' }, 502)
+      })
+      if (upstream.ok && upstream.body) break
+      upstreamStatus = upstream.status
+      await upstream.body?.cancel()
+      upstream = null
+    } catch {
+      upstreamStatus = 0
+      upstream = null
+    }
   }
 
-  if (!upstream.ok || !upstream.body) {
+  if (!upstream || !upstream.body) {
+    if (upstreamStatus === 429) {
+      return json({ error: 'busy', message: 'Asisten sedang sibuk. Coba lagi sebentar.' }, 503)
+    }
     return json({ error: 'upstream_error', message: 'Layanan AI sedang gagal. Coba lagi sebentar.' }, 502)
   }
 
