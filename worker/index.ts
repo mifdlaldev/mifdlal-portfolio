@@ -119,21 +119,40 @@ function rateLimited(ip: string): boolean {
 export const LEAK_REFUSAL =
   'Maaf, saya tidak bisa menampilkan detail konfigurasi internal saya. Ada yang bisa saya bantu soal layanan Mifdlal?'
 const GUARD_PREFIX_CHARS = 220
+
+/* Preamble khas dump prompt: hanya muncul kalau model membocorkan instruksi. */
+const PROMPT_PREAMBLES = [
+  'KAMU ASISTEN AI DI PORTFOLIO MIFDLAL.COM',
+  'ANDA ADALAH ASISTEN AI DI PORTFOLIO MIFDLAL.COM',
+  'YOU ARE AN AI ASSISTANT FOR MIFDLAL.COM',
+  'YOU ARE THE AI ASSISTANT FOR MIFDLAL.COM',
+]
+
+/* Header bagian prompt. Wajib bentuk panjang (dengan titik dua/kurung) supaya
+   jawaban sah yang menyebut "Proyek Bukti" atau "Stack" tidak ikut dipotong. */
 const PROMPT_DUMP_MARKERS = [
-  'ATURAN BAHASA',
-  'ATURAN MENJAWAB',
-  'KEAHLIAN YANG DITAWARKAN',
-  'PROYEK BUKTI',
-  'STACK YANG DIKUASAI',
-  'LANGUAGE RULES',
-  'OFFERED EXPERTISE',
-  'PROOF PROJECTS',
-  'TECH STACK',
+  'ATURAN MENJAWAB:',
+  'ATURAN BAHASA:',
+  'KEAHLIAN YANG DITAWARKAN:',
+  'PROYEK BUKTI (',
+  'STACK YANG DIKUASAI (',
+  'LANGUAGE RULES:',
+  'OFFERED EXPERTISE:',
+  'PROOF PROJECTS (',
+  'TECH STACK (',
 ]
 
 export function looksLikePromptDump(text: string): boolean {
   const up = text.toUpperCase()
-  return PROMPT_DUMP_MARKERS.some((marker) => up.includes(marker))
+  if (PROMPT_PREAMBLES.some((preamble) => up.includes(preamble))) return true
+  let hits = 0
+  for (const marker of PROMPT_DUMP_MARKERS) {
+    if (up.includes(marker)) {
+      hits += 1
+      if (hits >= 2) return true
+    }
+  }
+  return false
 }
 
 /* Ubah SSE OpenRouter (data: {...} per baris, [DONE] penutup) menjadi
