@@ -8,6 +8,8 @@ dist/
 # env & secrets — JANGAN pernah commit
 .env
 .env.*
+.dev.vars
+.dev.vars.*
 !.env.example
 *.pem
 *.key
