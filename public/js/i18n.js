@@ -3,8 +3,8 @@
  *
  * Pola terjemahan: teks Indonesia sebagai default (textContent node),
  * versi Inggris di atribut data-i18n-en. Saat bahasa = en, runtime
- * menimpa textContent. Tidak ada duplikasi kamus di sini — sumber
- * kebenaran teks ada di src/i18n.ts (untuk Astro/TS).
+ * menimpa textContent. Tidak ada kamus terpusat di sini: teks Indonesia
+ * ditulis langsung di markup Astro, versi Inggris di atribut data-i18n-en.
  *
  * Tema: data-theme="light|dark" di <html>, default "system" →
  * di-resolve via prefers-color-scheme. Preferensi disimpan di

@@ -211,11 +211,9 @@ satu siklus penuh 108 detik dan tiap logo berada di layar sekitar 1,5 detik.
 Pengunjung hanya melihat sebagian daftar. Kalau seluruh 74 harus terbaca,
 naikkan `speed` di `StackLoop.astro` atau pecah pita jadi dua baris.
 
-Dua sel memakai wordmark teks, bukan ikon: `hermes.svg` dan `rag.svg`. Keduanya
-SVG lokal berisi `<text>` mono 600 dengan tinggi kapital yang sama, karena
-Hermes Agent tidak punya mark datar resmi (aset resminya berupa ilustrasi
-potret dan stempel detail yang jadi kabur di 34px) dan RAG adalah teknik, bukan
-produk. Logo brand diambil dari `cdn.simpleicons.org/<slug>` yang sudah membawa
+Satu sel memakai glyph lokal di luar simple-icons: `hermes.svg`, mark Hermes Agent
+dari LobeHub Icons (MIT), karena merek ini tidak punya mark datar resmi. Aset
+resminya berupa ilustrasi potret dan stempel detail yang jadi kabur di 34px. Logo brand diambil dari `cdn.simpleicons.org/<slug>` yang sudah membawa
 warna brand; CSS pita memaksa hitam saat diam (`filter: brightness(0)`) lalu
 menampilkan warna asli saat hover.
 
@@ -255,9 +253,10 @@ Tiga kartu horizontal (`grid`, `gap: 1.5rem`, tiga kolom mulai 860px, satu kolom
 bawahnya). Tiap kartu punya border sendiri, jadi tidak ada border luar bersama.
 Bagian atas kartu berisi gambar 16:10, bagian bawah nomor, judul, dan deskripsi.
 
-Gambar saat ini placeholder: `public/services/layanan-01.svg` sampai `-03.svg`,
-path-nya ada di field `image` pada `services` di `src/data/site.ts`. Ganti isi file
-atau arahkan field `image` ke gambar asli; `alt` dibentuk dari judul layanan.
+Gambar kartu diambil dari `public/services/layanan-0N.jpg` (foto Unsplash, lihat
+`ASSET-LICENSES.md`), path-nya ada di field `image` pada `services` di
+`src/data/site.ts`. Ganti isi file atau arahkan field `image` ke gambar asli;
+`alt` dibentuk dari judul layanan.
 Gambar memakai `loading="lazy"` supaya tidak menahan render awal.
 
 ## Komentar kode per section
@@ -398,27 +397,26 @@ elemen tambahan, nol biaya per frame.
 
 ### Ukuran diambil dari huruf, bukan dari container
 
-`paint()` di `public/js/wordmark.js` membaca bbox tinta langsung dari
-framebuffer (`gl.readPixels`) setelah satu frame digambar, lalu menulis
+Script inline di `src/components/Wordmark.astro` mengukur teks lewat
+`Canvas2D measureText` (`actualBoundingBoxAscent/Descent`), lalu menulis
 `--wm-f-left/-top/-w/-h` dan `--wm-dim-*`. Kotak jadi selalu selebar dan
-setinggi huruf yang benar-benar tampil.
+setinggi huruf yang benar-benar tampil, tanpa menebak tinggi baris atau
+padding.
 
-Ini bukan kemewahan: bbox kanvas mask **tidak** sama dengan huruf di layar.
-Shader menyampel mask 1:1, tapi tepi glyph yang tipis bisa jatuh di bawah
-ambang alpha, dan aurora bisa membuat sebagian huruf kembali ke warna tinta.
-Mengukur dari output nyata menghapus seluruh selisih itu — terukur, jarak kotak
-ke huruf 20/20/19/20 px di 1366, 12/12/13/11 px di 768.
+`measure()` jalan sekali setelah `document.fonts.ready` (ditambah fallback
+`setTimeout` 100ms), lalu diulang dengan debounce 200ms saat resize. Tidak ada
+loop `requestAnimationFrame`.
 
-Jarak kotak `clamp(12px, 1.5vw, 24px)`, jadi huruf tidak pernah tersentuh garis,
-di lebar layar mana pun.
+Jarak kotak ke huruf nol: garis plat menempel di tepi bbox. Lembar putih di
+dalamnya (`.wm-sheet`) melebar 2px keluar dari bbox supaya tepi huruf tidak
+terpotong garis.
 
 ### Angka di layar tidak boleh bohong
 
-- `data-plate` baru dipasang setelah kanvas berhasil mengukur huruf. Tanpa
-  WebGL, tanpa JS, atau font belum siap: pita tampil sebagai kertas + dot grid.
-- `data-dim` hanya `true` kalau garis dimensi muat di dalam pita. Di layar
-  sempit garis dan angkanya hilang, bukan dipaksa tampil terpotong.
-- Label dimensi berisi lebar tinta terukur (mis. `1218`), bukan angka karangan.
+- `data-plate` baru dipasang setelah pengukuran teks berhasil. Tanpa JS atau
+  font belum siap: pita tampil sebagai kertas + dot grid.
+- `data-dim` dipasang bersamaan dengan `data-plate`; label dimensi berisi lebar
+  teks terukur (mis. `1218`), bukan angka karangan.
 
 Di bawah 1229px label disembunyikan, di bawah 900px node disembunyikan; kotak
 dan garis dimensi tetap karena posisinya dihitung dari huruf.
@@ -462,9 +460,6 @@ Detail lain:
 
 - Bayangan tepi turun dari 1 ke 0 menjelang akhir: hilang tepat saat menyatu.
 - Pita naik dari `0.3 x tinggi pita` ke 0, opacity 0.7 ke 1.
-- `border-top` pita dibuat transparan dalam mode fixed supaya tidak ada jahitan.
-- Kanvas aurora turun ke separuh frame selama reveal (`data-revealing`), karena GPU
-  saat itu sedang dipakai menggeser seluruh halaman.
 
 ### Kenapa scroll-timeline, bukan rAF
 
@@ -477,8 +472,8 @@ kecepatan scroll, jadi selisih satu frame itu terasa.
 Sekarang `animation-timeline: scroll(root block)` + `animation-range: calc(100% -
 var(--reveal-distance)) 100%` menggerakkan `transform` dan `opacity` langsung di
 compositor. Skrip hanya menyiapkan tiga variabel (`--reveal-distance`,
-`--reveal-lift`, `--wm-band-h`) sekali saat ukur, lalu menyalakan/mematikan kanvas.
-Tidak ada lagi tulis gaya per frame.
+`--reveal-lift`, `--wm-band-h`) sekali saat ukur. Tidak ada lagi tulis gaya per
+frame.
 
 Browser tanpa `animation-timeline` (dan tanpa `@supports` itu) jatuh ke jalur lama:
 `transform` inline dari rAF. Kedua jalur diuji dan menghasilkan geometri identik
@@ -487,45 +482,35 @@ Browser tanpa `animation-timeline` (dan tanpa `@supports` itu) jatuh ke jalur la
 Bayangan juga bukan `box-shadow` lagi: `box-shadow` pada elemen setinggi dokumen harus
 digambar ulang setiap kali kekuatannya berubah. Sekarang strip gradien 64px dengan
 `opacity` yang dianimasikan — cuma disentuh compositor.
-- Kanvas berhenti menggambar selama pita masih tertutup (`data-awake="false"`), dibangunkan
-  lewat `band.__wake()` saat mulai terbuka.
 - Tanpa JS atau `prefers-reduced-motion: reduce`: mode reveal tidak dipasang, pita tetap
   di alur normal setelah footer seperti sebelumnya.
 
 ## Wordmark setelah footer
 
-`src/components/Wordmark.astro` + `public/js/wordmark.js`. Pita penuh selebar halaman di
-bawah footer berisi `MIFDLAL` raksasa, diisi Aurora (React Bits) yang bergerak dan
-mengikuti kursor.
+`src/components/Wordmark.astro`. Pita penuh selebar halaman di bawah footer berisi
+`MIFDLAL` raksasa dengan gradasi palet situs.
 
-Cara kerjanya: huruf tidak ditulis sebagai teks, tapi digambar ke kanvas 2D sebagai mask,
-lalu shader Aurora memotong cahayanya dengan alpha mask itu. Jadi warna hanya hidup di
-dalam huruf, latar tetap kertas.
+Cara kerjanya: teks ditulis sebagai `<span class="wordmark-text">MIFDLAL</span>`, lalu
+gradasi horizontal dipasang sebagai `background-image` dan dipotong ke bentuk huruf
+lewat `background-clip: text` + `-webkit-text-fill-color: transparent`. Warna hanya
+hidup di dalam huruf, latar tetap kertas.
 
 | Bagian | Nilai |
 |---|---|
-| Tinggi pita | `clamp(5rem, 22vw, 32rem)` |
+| Tinggi pita | `clamp(6rem, 24.5vw, 34rem)` |
 | Padding | `clamp(0.75rem, 2.4vw, 1.75rem)` vertikal, `clamp(1rem, 4vw, 3.5rem)` horizontal |
-| Dasar huruf | `--color-ink` |
-| Stop Aurora | `--color-electric` → `--color-lemon` (kiri ke kanan) |
-| Huruf | Inter 700, tracking `-0.035em`, `ctx.letterSpacing` supaya kerning utuh |
-| Reveal | `.is-armed` → `.is-in` (IntersectionObserver 18%), geser 18% + fade 1100ms |
+| Huruf | Inter Variable 700, `clamp(2.6rem, 21vw, 30rem)`, tracking `-0.02em`, `line-height` 0.74 |
+| Stop gradasi | `--color-electric` 0% → cyan 45% → `--grad-green` 65% → `--color-lemon` 100% |
+| Reveal | `.is-in` (IntersectionObserver ambang 5%), `translateY(18%)` + fade, 1100ms transform / 700ms opacity |
 
-Kenapa mask Canvas2D, bukan `clip-path` atau SVG `<text>`: SVG yang dimuat sebagai mask
-tidak mewarisi webfont halaman, dan `clip-path` userSpaceOnUse tidak ikut skala viewBox.
-Canvas2D memakai font yang sudah dimuat dokumen, dan ukuran huruf dihitung ulang setiap
-resize dari lebar pita dikurangi padding — jadi huruf selalu pas, tidak pernah menempel
-tepi.
+Pengukuran teks dan penempatan plat gambar dijelaskan di bagian sebelumnya. Script
+inline mengukur lewat Canvas2D karena `measureText` memakai font yang sudah dimuat
+dokumen dan memberi `actualBoundingBoxAscent/Descent` langsung, tanpa menebak
+metrik baris.
 
-Kontras terukur di dalam huruf: 5,20 (tengah) sampai 6,61 (ujung kanan) terhadap kertas —
-di atas ambang 4,5 untuk teks besar.
-
-Tanpa JavaScript atau tanpa WebGL2, `<span class="wordmark-fallback">` tampil sebagai huruf
-tinta biasa dengan padding yang sama. Tanpa JS pita tidak pernah kosong, dan tidak ada
-kontrol mati. `prefers-reduced-motion`: waktu shader berhenti, intro langsung selesai.
-
-Shader berjalan hanya saat pita terlihat (`IntersectionObserver`) dan tab aktif
-(`document.hidden`), dpr dibatasi 2.
+Tanpa JavaScript: teks tetap tampil (atribut `data-plate`/`data-dim` tidak pernah
+dipasang, jadi hanya kotak/garis/label yang absen). `prefers-reduced-motion`:
+transisi dimatikan dan teks langsung pada posisi akhir.
 
 ## Navbar (frosted glass, dua state)
 
