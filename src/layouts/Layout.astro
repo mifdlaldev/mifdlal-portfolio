@@ -18,6 +18,11 @@ interface Props {
 }
 
 const { title, titleEn, description, descriptionEn, noindex = false } = Astro.props
+
+/* Basis URL kanonik. og:image wajib absolut, jadi nilainya dihitung dari sini,
+   bukan dari Astro.url yang mengikuti URL permintaan. */
+const SITE = 'https://mifdlal.com/'
+const OG_IMAGE = `${SITE}og-image.png`
 ---
 
 <!doctype html>
@@ -60,11 +65,28 @@ const { title, titleEn, description, descriptionEn, noindex = false } = Astro.pr
     <meta property="og:description" content={description} data-i18n-meta={descriptionEn} />
     <meta property="og:url" content={Astro.url} />
     <meta property="og:site_name" content="Mifdlal Tsaqib Alfarras" />
+    {/* og:image wajib absolut. Kartunya digambar ulang dari palet dan fonta
+        situs sendiri lewat scripts/og-image.mjs, bukan berkas stok. */}
+    <meta property="og:image" content={OG_IMAGE} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Kartu mifdlal.com: nama Mifdlal Tsaqib Alfarras, web app, chatbot, dan otomasi alur kerja."
+      data-i18n-meta="mifdlal.com card: Mifdlal Tsaqib Alfarras, web app, chatbot, and workflow automation."
+    />
 
     <!-- Twitter card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} data-i18n-meta={titleEn} />
     <meta name="twitter:description" content={description} data-i18n-meta={descriptionEn} />
+    <meta name="twitter:image" content={OG_IMAGE} />
+    <meta
+      name="twitter:image:alt"
+      content="Kartu mifdlal.com: nama Mifdlal Tsaqib Alfarras, web app, chatbot, dan otomasi alur kerja."
+      data-i18n-meta="mifdlal.com card: Mifdlal Tsaqib Alfarras, web app, chatbot, and workflow automation."
+    />
 
     <!-- Favicon: monogram, dua versi warna mengikuti tema sistem.
          Latar transparan supaya menyatu dengan tab bar terang maupun gelap.
