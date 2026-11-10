@@ -43,9 +43,14 @@ tag = "v1"
 new_sqlite_classes = ["ChatGuard"]
 
 # Static assets: dilayani env.ASSETS dari worker entry.
-# Semua non-/api/chat dioper ke assets — perilaku static
-# (404 page, _headers CSP) tidak berubah.
+# binding = "ASSETS" WAJIB: tanpa ini env.ASSETS undefined dan worker
+# melempar TypeError pada path yang bukan file statis (path tak dikenal),
+# Cloudflare membalas error 1101 / HTTP 500.
+# run_worker_first = false: aset yang ada dilayani langsung oleh layer
+# assets (nol invokasi worker, CSP/_headers tetap berlaku); worker hanya
+# jalan untuk path yang tidak cocok dengan file apa pun.
 [assets]
 directory = "./dist"
+binding = "ASSETS"
 not_found_handling = "404-page"
 run_worker_first = false
