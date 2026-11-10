@@ -8,7 +8,8 @@
 //   inertia-nya. Menghentikan loop = glide hilang = scroll biasa.
 // - autoRaf: true -> Lenis mengelola loop sendiri, no race condition,
 //   no manual start/stop yang bisa memotong inertia di tengah jalan.
-// - smoothTouch: false -> iOS pakai momentum native (lebih halus).
+// - syncTouch: false -> touch pakai geser native (default Lenis 1.x;
+//   opsi lama `smoothTouch` sudah dihapus dari API sejak 1.1).
 // - pointer: coarse -> smoothWheel off, karena touch sudah punya
 //   momentum native; menambahkan smoothing di touch justru membuat
 //   scroll terasa berat di perangkat low-end.
@@ -27,7 +28,6 @@
     anchors: true, // anchor link tetap berfungsi; default Lenis mematikannya
     lerp: reduceMotion ? 1 : 0.1, // 0.1 = responsif tapi tetap halus
     smoothWheel: !reduceMotion && !coarsePointer,
-    smoothTouch: false, // iOS momentum native lebih baik
     syncTouch: false,
     infinite: false,
     autoRaf: true, // Lenis manages its own rAF loop — inertia intact
