@@ -26,6 +26,11 @@ for (const file of htmlFiles) {
   const re = /<script(?![^>]*\bsrc=)([^>]*)>([\s\S]*?)<\/script>/gi
   let m
   while ((m = re.exec(html)) !== null) {
+    const attrs = m[1]
+    /* Blok data seperti application/ld+json tidak dieksekusi peramban, jadi
+       script-src tidak berlaku untuknya. Kalau ikut dihash, setiap perubahan
+       isi schema mengubah hash CSP tanpa alasan. */
+    if (/application\/ld\+json/i.test(attrs)) continue
     const body = m[2]
     if (!body.trim()) continue
     // CSP hash dihitung dari isi elemen script apa adanya.
