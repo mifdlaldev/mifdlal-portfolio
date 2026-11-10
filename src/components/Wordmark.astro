@@ -283,12 +283,26 @@
   /* Mode reveal (dipasang /js/reveal.js): pita keluar dari alur dan menempel
      di dasar viewport. z-index TETAP di bawah page-layer (--z-below = -1):
      lapis atas yang opak menutup pita selama scroll biasa, lalu terangkat
-     saat reveal. Wordmark menimpa semua section kalau z-index dinaikkan. */
-  .wordmark.is-fixed {
-    position: fixed;
-    inset: auto 0 0 0;
-    z-index: var(--z-below);
-    will-change: transform, opacity;
+     saat reveal. Wordmark menimpa semua section kalau z-index dinaikkan.
+
+     Keadaan fixed sengaja diikat ke html.js, bukan hanya ke .is-fixed.
+     html.js dipasang skrip head sebelum paint pertama, sedangkan .is-fixed
+     baru dipasang reveal.js setelah paint. Perpindahan pita dari alur normal
+     ke position fixed itu sendiri tercatat sebagai layout shift: audit
+     layout-shifts Lighthouse desktop menunjuk node .wordmark.is-fixed dengan
+     skor 0.247. Dengan html.js, pita sudah fixed sejak paint pertama dan
+     .is-fixed tidak lagi memindahkan apa pun.
+
+     prefers-reduced-motion dikecualikan: reveal.js berhenti lebih awal pada
+     mode itu, jadi pita harus tetap di alur normal seperti sebelumnya. */
+  @media (prefers-reduced-motion: no-preference) {
+    html.js .wordmark,
+    .wordmark.is-fixed {
+      position: fixed;
+      inset: auto 0 0 0;
+      z-index: var(--z-below);
+      will-change: transform, opacity;
+    }
   }
 </style>
 
