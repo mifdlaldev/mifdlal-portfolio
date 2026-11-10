@@ -1,5 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro'
+import Hero from '../components/Hero.astro'
+import About from '../components/About.astro'
+import StackLoop from '../components/StackLoop.astro'
+import Projects from '../components/Projects.astro'
+import Services from '../components/Services.astro'
+import Experience from '../components/Experience.astro'
+import Education from '../components/Education.astro'
+import Certifications from '../components/Certifications.astro'
+import Contact from '../components/Contact.astro'
 import { projects } from '../data/site'
 
 const count = projects.length
@@ -11,4 +20,13 @@ const count = projects.length
   description={`Bangun kebutuhanmu di sini dengan cepat. Web app, chatbot, dan otomasi alur kerja. ${count} proyek yang dapat dibuka. Remote dari Bandung.`}
   descriptionEn={`Build what you need here, fast. Web apps, chatbots, and workflow automation. ${count} projects you can browse. Remote from Bandung.`}
 >
+  <Hero />
+  <About />
+  <StackLoop />
+  <Projects />
+  <Services />
+  <Experience />
+  <Education />
+  <Certifications />
+  <Contact />
 </Layout>

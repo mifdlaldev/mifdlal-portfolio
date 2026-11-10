@@ -1,15 +1,6 @@
 ---
 import '../styles/global.css'
 import SiteNav from '../components/SiteNav.astro'
-import Hero from '../components/Hero.astro'
-import About from '../components/About.astro'
-import StackLoop from '../components/StackLoop.astro'
-import Projects from '../components/Projects.astro'
-import Services from '../components/Services.astro'
-import Experience from '../components/Experience.astro'
-import Education from '../components/Education.astro'
-import Certifications from '../components/Certifications.astro'
-import Contact from '../components/Contact.astro'
 import Wordmark from '../components/Wordmark.astro'
 import Footer from '../components/Footer.astro'
 import ToTop from '../components/ToTop.astro'
@@ -21,9 +12,12 @@ interface Props {
   titleEn?: string
   description: string
   descriptionEn?: string
+  /* Halaman non-indeks (mis. 404): keluar dari indeks mesin pencari dan
+     jangan pasang canonical ke URL permintaan yang salah. */
+  noindex?: boolean
 }
 
-const { title, titleEn, description, descriptionEn } = Astro.props
+const { title, titleEn, description, descriptionEn, noindex = false } = Astro.props
 ---
 
 <!doctype html>
@@ -38,8 +32,8 @@ const { title, titleEn, description, descriptionEn } = Astro.props
     <!-- SEO dasar -->
     <title data-i18n-en={titleEn}>{title}</title>
     <meta name="description" content={description} data-i18n-meta={descriptionEn} />
-    <link rel="canonical" href={Astro.url} />
-    <meta name="robots" content="index, follow" />
+    {!noindex && <link rel="canonical" href={Astro.url} />}
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow'} />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -96,15 +90,7 @@ const { title, titleEn, description, descriptionEn } = Astro.props
     <div class="page-track" data-track>
     <div class="page-layer" data-page>
     <main id="main">
-      <Hero />
-      <About />
-      <StackLoop />
-      <Projects />
-      <Services />
-      <Experience />
-      <Education />
-      <Certifications />
-      <Contact />
+      <slot />
     </main>
     <Footer />
     <div class="page-shadow" data-sheet-shadow aria-hidden="true"></div>
