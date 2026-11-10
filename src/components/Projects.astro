@@ -1,10 +1,6 @@
 ---
 import { projects } from '../data/site'
 import CodeComment from './CodeComment.astro'
-
-/* Gambar asli: proyek dengan field `image` memakai tangkapan layar asli
-   di public/projects/. Proyek lain tetap memakai placeholder SVG bernomor. */
-const thumb = (no: string) => `/projects/proj-${no}.svg`
 ---
 
 <section id="proyek" class="section">
@@ -27,49 +23,35 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
             data-i18n-aria={`Open ${p.nameEn || p.name} in a new tab`}
           >
             <span class="project-shot">
-              {p.image ? (
-                <>
-                  {/* Latar parallax: versi buram dari mockup browser yang
-                      sama, bergerak mengikuti scroll — pola .service-photo-clip
-                      di canvas layanan. */}
-                  <span class="project-photo-clip" aria-hidden="true">
-                    <span
-                      class="project-photo"
-                      style={`background-image: url('${p.image}')`}
-                    ></span>
-                  </span>
+              {/* Latar parallax: versi buram dari mockup browser yang
+                  sama, bergerak mengikuti scroll — pola .service-photo-clip
+                  di canvas layanan. */}
+              <span class="project-photo-clip" aria-hidden="true">
+                <span
+                  class="project-photo"
+                  style={`background-image: url('${p.image}')`}
+                ></span>
+              </span>
 
-                  {/* Foto utama: TETAP di tengah, tidak bergerak, tidak
-                      di-crop. object-fit contain + margin auto. */}
-                  <img
-                    class="project-shot-img"
-                    src={p.image}
-                    width="1000"
-                    height="563"
-                    alt=""
-                    draggable="false"
-                    loading="lazy"
-                    decoding="async"
-                  />
+              {/* Foto utama: TETAP di tengah, tidak bergerak, tidak
+                  di-crop. object-fit contain + margin auto. */}
+              <img
+                class="project-shot-img"
+                src={p.image}
+                width="1000"
+                height="563"
+                alt=""
+                draggable="false"
+                loading="lazy"
+                decoding="async"
+              />
 
-                  {/* Penanda sudut gambar teknik — empat L-bracket tipis,
-                      sama dengan sudut frame canvas layanan. */}
-                  <span class="project-corner project-corner--tl" aria-hidden="true"></span>
-                  <span class="project-corner project-corner--tr" aria-hidden="true"></span>
-                  <span class="project-corner project-corner--bl" aria-hidden="true"></span>
-                  <span class="project-corner project-corner--br" aria-hidden="true"></span>
-                </>
-              ) : (
-                <img
-                  src={thumb(p.no)}
-                  width="1600"
-                  height="1000"
-                  alt=""
-                  draggable="false"
-                  loading="lazy"
-                  decoding="async"
-                />
-              )}
+              {/* Penanda sudut gambar teknik — empat L-bracket tipis,
+                  sama dengan sudut frame canvas layanan. */}
+              <span class="project-corner project-corner--tl" aria-hidden="true"></span>
+              <span class="project-corner project-corner--tr" aria-hidden="true"></span>
+              <span class="project-corner project-corner--bl" aria-hidden="true"></span>
+              <span class="project-corner project-corner--br" aria-hidden="true"></span>
 
               <span class="project-no" aria-hidden="true">{p.no}</span>
             </span>
@@ -166,17 +148,6 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
     background: var(--color-line-soft);
     aspect-ratio: 16 / 10;
     transition: border-color var(--dur-fast) var(--ease);
-  }
-
-  /* Placeholder (SVG) memenuhi seluruh shot. Foto asli (.project-shot-img)
-     punya aturan sendiri di bawah — dikecualikan di sini karena contain. */
-  .project-shot > img:not(.project-shot-img) {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: top center;
-    transition: transform 600ms var(--ease);
   }
 
   /* Garis bawah gambar menjadi aksen saat kartu disorot: penanda halus bahwa
@@ -331,12 +302,6 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
     z-index: var(--z-tooltip);
   }
 
-  @media (hover: hover) {
-    .project-link:hover .project-shot > img:not(.project-shot-img) {
-      transform: scale(1.025);
-    }
-  }
-
   /* --- keterangan ----------------------------------------- */
 
   .project-body {
@@ -425,17 +390,13 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
 
   @media (prefers-reduced-motion: reduce) {
     .project-card,
-    .project-shot > img,
+    .project-shot-img,
     .project-photo,
     .project-arrow {
       transition: none;
     }
 
     .project-card:hover {
-      transform: none;
-    }
-
-    .project-link:hover .project-shot > img:not(.project-shot-img) {
       transform: none;
     }
   }

@@ -17,9 +17,9 @@ export type Project = {
   live: string
   repo?: string
   note?: string
-  /** Tangkapan layar asli di public/projects/. Tanpa ini, kartu memakai
-      placeholder SVG bernomor. */
-  image?: string
+  /** Tangkapan layar asli di public/projects/. Wajib: kartu proyek harus
+      memuat bukti visual, bukan placeholder. */
+  image: string
 }
 
 export const projects: readonly Project[] = [
