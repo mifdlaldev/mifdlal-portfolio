@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   quality:
-    name: Build, typecheck, token check, dependency audit
+    name: Build, Astro check, typecheck, token check, dependency audit
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -26,6 +26,10 @@ jobs:
         run: npm ci
       - name: Production build
         run: npm run build
+      - name: Astro check (.astro + .tsx)
+        # astro check menutup celah tsc: error di frontmatter .astro dan
+        # tipe JSX island tidak pernah dilihat `tsc -p tsconfig.json`.
+        run: npm run check
       - name: Typecheck
         run: npm run typecheck
       - name: Token check
