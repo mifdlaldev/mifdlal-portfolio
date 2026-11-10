@@ -136,13 +136,15 @@ const certAttrs = (c: (typeof featured)[number]) => ({
       </div>
       <div class="cert-dialog-foot">
         <p class="cert-dialog-meta" data-dialog-meta></p>
-        {/* hidden sejak markup: sebelum dialog dibuka atribut href belum ada,
-            dan <a> tanpa href dianggap tautan tak bisa dirayapi (audit
-            crawlable-anchors skor 0). Skrip dialog yang membuka atribut ini
-            saat kredensial punya verifyUrl. */}
+        {/* Tautan ini baru punya href setelah dialog dibuka untuk kredensial
+            yang menyediakan verifyUrl. Sebelum itu href menunjuk ke seksi
+            sertifikasi sendiri, supaya markup statis tidak menyisakan <a> tanpa
+            href (audit crawlable-anchors skor 0). Elemennya tetap hidden, jadi
+            yang tampil hanya setelah skrip mengisi href yang sebenarnya. */}
         <a
           class="cert-dialog-verify"
           data-dialog-verify
+          href="#sertifikasi"
           hidden
           target="_blank"
           rel="noopener noreferrer"
