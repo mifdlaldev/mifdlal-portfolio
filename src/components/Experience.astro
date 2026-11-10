@@ -51,7 +51,7 @@ import CodeComment from './CodeComment.astro'
               <span>{e.location}</span>
             </p>
             <ul class="entry-points">
-              {e.points.map((pt, i) => <li data-i18n-en={e.pointsEn[i]}>{pt}</li>)}
+              {e.points.map((pt, i) => <li data-i18n-en={e.pointsEn?.[i]}>{pt}</li>)}
             </ul>
             {e.link && (
               <a class="entry-link" href={e.link} target="_blank" rel="noopener noreferrer" data-i18n-en="Proof ↗">Bukti ↗</a>

@@ -280,9 +280,9 @@
         --wm-f-* untuk kotak plat, node sudut, garis dimensi, label.
         Sekali jalan + debounce resize. Tanpa rAF loop. */
   (() => {
-    const band = document.querySelector('.wordmark');
-    const text = band?.querySelector('.wordmark-text');
-    const dimValue = band?.querySelector('[data-dim-value]');
+    const band = document.querySelector<HTMLElement>('.wordmark');
+    const text = band?.querySelector<HTMLElement>('.wordmark-text');
+    const dimValue = band?.querySelector<HTMLElement>('[data-dim-value]');
     if (!band || !text) return;
 
     // ── Reveal animasi ──
@@ -307,6 +307,7 @@
     const canvas = document.createElement('canvas').getContext('2d');
 
     const measure = () => {
+      if (!canvas) return;
       const cs = getComputedStyle(text);
       const fontSize = parseFloat(cs.fontSize);
       canvas.font = `${cs.fontWeight} ${fontSize}px ${cs.fontFamily}`;
@@ -338,7 +339,7 @@
       band.style.setProperty('--wm-dim-w', Math.round(w) + 'px');
       band.style.setProperty('--wm-dim-y', Math.round(top + h + 14) + 'px');
 
-      if (dimValue) dimValue.textContent = Math.round(w);
+      if (dimValue) dimValue.textContent = String(Math.round(w));
 
       band.setAttribute('data-plate', 'true');
       band.setAttribute('data-dim', 'true');
@@ -349,7 +350,7 @@
     }
     setTimeout(measure, 100); // fallback
 
-    let resizeTimer;
+    let resizeTimer: ReturnType<typeof setTimeout>;
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(measure, 200);

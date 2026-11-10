@@ -27,11 +27,8 @@ interface ChatMessage {
 
 import {
   DAILY_MAX_DEFAULT,
-  GUARD_PREFIX_CHARS,
-  LEAK_REFUSAL,
   SESSION_MAX_DEFAULT,
   checkQuota,
-  looksLikePromptDump,
   resolveSession,
   sseToText,
 } from './lib'

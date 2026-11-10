@@ -256,7 +256,7 @@ const project = (m: number[], depth: number, px: number, py: number): [number, n
 const createEngine = (
   root: HTMLDivElement,
   track: HTMLDivElement,
-  config: React.MutableRefObject<LoopConfig>,
+  config: React.RefObject<LoopConfig>,
   setLayout: (layout: LoopLayout) => void
 ) => {
   const query = typeof window.matchMedia === 'function' ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;

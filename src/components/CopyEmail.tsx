@@ -81,7 +81,10 @@ export default function CopyEmail({ email }: CopyEmailProps) {
         field.style.opacity = "0";
         document.body.appendChild(field);
         field.select();
-        const copied = document.execCommand("copy");
+        /* execCommand masih satu-satunya salinan sinkron di konteks tidak aman
+           (navigator.clipboard tidak tersedia di http/WebView lama). Deprecated
+           di tipe DOM, jadi dipanggil lewat cast bertipe agar hint tsc bersih. */
+        const copied = (document as unknown as { execCommand(cmd: string): boolean }).execCommand("copy");
         document.body.removeChild(field);
         if (!copied) throw new Error("execCommand copy gagal");
       }

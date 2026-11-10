@@ -80,7 +80,7 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
               <span class="project-desc" data-i18n-en={p.descriptionEn}>{p.description}</span>
 
               <span class="project-foot">
-                <span class="project-stack" data-i18n-en={p.stackEn.join(' · ')}>{p.stack.join(' · ')}</span>
+                <span class="project-stack" data-i18n-en={p.stackEn?.join(' · ')}>{p.stack.join(' · ')}</span>
                 <span class="project-live">
                   live<span class="project-arrow" aria-hidden="true">↗</span>
                 </span>
@@ -493,7 +493,7 @@ const thumb = (no: string) => `/projects/proj-${no}.svg`
 
     // Kartu berganti jumlah kolom saat resize (1 -> 2 -> 3 kolom) —
     // rect berubah, jadi hitung ulang posisi.
-    let rt: number;
+    let rt: ReturnType<typeof setTimeout>;
     window.addEventListener('resize', () => {
       clearTimeout(rt);
       rt = setTimeout(kick, 150);
