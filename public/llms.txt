@@ -1,0 +1,31 @@
+# mifdlal.com
+
+> Portofolio dan halaman jasa Mifdlal Tsaqib Alfarras: freelance web developer dan spesialis otomasi AI, remote dari Bandung, Indonesia. Bahasa utama situs adalah Indonesia, dengan versi Inggris pada halaman yang sama.
+
+## Halaman
+
+- [Beranda dan portofolio](https://mifdlal.com/): profil singkat, tiga proyek yang bisa dibuka, tiga layanan, pengalaman kerja, pendidikan, sertifikasi, dan kontak.
+
+## Layanan
+
+- Website dan web app: landing page, profil perusahaan, e-commerce, sampai POS. Dikerjakan dari desain sampai rilis.
+- Chatbot: balasan otomatis dan jawaban berbasis data bisnis, bukan templat tetap.
+- Otomasi AI dan workflow: AI menangani pesan masuk, merangkum konteks pelanggan, dan mengirim balasan otomatis.
+
+## Proyek
+
+- PT Loka Logistics Solution, situs profil perusahaan logistik, WordPress: https://lokalogistics.co.id/
+- Simulasi Lokasi Ujian UT Bandung, aplikasi wizard enam langkah, Vite: https://simulasi-pemilihan-lokasi-ujian-ut.vercel.app/
+- Mahoni-House, landing page villa dua bahasa, Next.js: https://mahoni-house.vercel.app
+
+## Kontak
+
+- Email: hello@mifdlal.com
+- GitHub: https://github.com/mifdlaldev
+- LinkedIn: https://www.linkedin.com/in/mifdlal-tsaqib-alfarras/
+
+## Catatan teknis
+
+- Situs statis Astro, dilayani Cloudflare Workers di mifdlal.com.
+- Satu halaman utama; konten utama tetap terbaca tanpa JavaScript.
+- Peta situs: https://mifdlal.com/sitemap-index.xml
