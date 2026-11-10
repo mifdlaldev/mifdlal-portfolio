@@ -70,3 +70,9 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: 32c06f32e612106d913a301c68888b10
         run: npx wrangler deploy
+      - name: Ping IndexNow
+        # Dijalankan setelah deploy supaya berkas kunci sudah benar-benar live;
+        # skripnya sendiri memeriksa hal itu sebelum mengirim. Kalau IndexNow
+        # sedang gangguan, deploy yang sudah sukses tidak boleh ikut merah.
+        continue-on-error: true
+        run: npm run indexnow
