@@ -619,16 +619,24 @@ npm install          # pasang dependency
 npm run dev          # dev server
 npm run build        # build statis ke dist/
 npm run preview      # serve hasil build lokal
+npm run check        # astro check: tipe frontmatter .astro + JSX island
 npm run typecheck    # tsc --noEmit
+npm run check:tokens # aturan token (warna/font-size/z-index mentah)
 npm run audit        # npm audit --omit=dev
 npm run lh           # Lighthouse (perlu CHROME_PATH)
 npm run deploy       # wrangler deploy (perlu auth Cloudflare)
 ```
 
+`npm run check` dan `npm run typecheck` saling melengkapi: `tsc` hanya melihat
+file `.ts`/`.tsx` yang masuk `tsconfig.json include`, sedangkan `astro check`
+menambahkan frontmatter `.astro` dan tipe island React. Keduanya jalan di CI.
+
 ## Validasi (hasil terakhir)
 
 - `npm run build` | sukses
+- `npm run check` | 0 errors, 0 warnings, 0 hints (38 file)
 - `npm run typecheck` | bersih
+- `npm run check:tokens` | bersih (27 file, 152 token)
 - `npm audit --omit=dev` | 0 vulnerabilities
 - Lighthouse | mobile 100/100/100/100, desktop 100/100/100/100 (FCP 1.0s/0.3s, CLS 0)
 - Output: 0 script tag, CSS 21.6 KB (5 KB gzip), 0 em dash
