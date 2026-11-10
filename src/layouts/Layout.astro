@@ -6,6 +6,7 @@ import Footer from '../components/Footer.astro'
 import ToTop from '../components/ToTop.astro'
 import SiteChat from '../components/SiteChat.astro'
 import LenisScroll from '../components/LenisScroll.astro'
+import { contact, services, stack } from '../data/site'
 
 interface Props {
   title: string
@@ -19,10 +20,65 @@ interface Props {
 
 const { title, titleEn, description, descriptionEn, noindex = false } = Astro.props
 
-/* Basis URL kanonik. og:image wajib absolut, jadi nilainya dihitung dari sini,
-   bukan dari Astro.url yang mengikuti URL permintaan. */
+/* Satu sumber kebenaran untuk schema: semua nilai diambil dari data situs,
+   tidak ada yang diketik ulang dari ingatan.
+   - name/url/email/sameAs/address: src/data/site.ts (contact) dan teks halaman
+     yang sudah live (Bandung, ID).
+   - sameAs: Fiverr sengaja tidak dimasukkan; tautannya ada di situs tetapi
+     keberadaan profil itu belum bisa diverifikasi, jadi jangan diklaim.
+   - knowsAbout: nama layanan + nama teknologi dari data situs. */
 const SITE = 'https://mifdlal.com/'
 const OG_IMAGE = `${SITE}og-image.png`
+const PERSON_ID = `${SITE}#person`
+
+const jsonld = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Person',
+      '@id': PERSON_ID,
+      name: 'Mifdlal Tsaqib Alfarras',
+      url: SITE,
+      email: `mailto:${contact.email}`,
+      jobTitle: 'Freelance web developer dan spesialis otomasi AI',
+      sameAs: contact.socials.filter((s) => s.id !== 'fiverr').map((s) => s.href),
+      knowsAbout: [...services.map((s) => s.title), ...stack.map((s) => s.name)],
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Bandung',
+        addressCountry: 'ID',
+      },
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${SITE}#website`,
+      url: SITE,
+      name: 'Mifdlal Tsaqib Alfarras',
+      inLanguage: ['id', 'en'],
+      publisher: { '@id': PERSON_ID },
+    },
+    {
+      '@type': 'ProfilePage',
+      '@id': `${SITE}#webpage`,
+      url: SITE,
+      name: title,
+      description,
+      inLanguage: 'id',
+      isPartOf: { '@id': `${SITE}#website` },
+      mainEntity: { '@id': PERSON_ID },
+      primaryImageOfPage: { '@type': 'ImageObject', url: OG_IMAGE, width: 1200, height: 630 },
+    },
+    ...services.map((s) => ({
+      '@type': 'Service',
+      name: s.title,
+      description: s.body,
+      serviceType: s.title,
+      url: `${SITE}#layanan`,
+      areaServed: { '@type': 'Country', name: 'Indonesia' },
+      provider: { '@id': PERSON_ID },
+    })),
+  ],
+})
 ---
 
 <!doctype html>
@@ -58,6 +114,11 @@ const OG_IMAGE = `${SITE}og-image.png`
     <meta name="description" content={description} data-i18n-meta={descriptionEn} />
     {!noindex && <link rel="canonical" href={Astro.url} />}
     <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow'} />
+
+    {/* Schema.org JSON-LD. Tipe application/ld+json tidak dieksekusi
+        peramban, jadi tidak butuh hash CSP. Halaman noindex tidak memasang
+        schema karena tidak ada yang perlu diindeks. */}
+    {!noindex && <script type="application/ld+json" set:html={jsonld} />}
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
