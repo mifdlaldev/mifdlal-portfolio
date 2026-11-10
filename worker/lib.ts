@@ -48,8 +48,8 @@ export interface Env {
    global supaya hitungannya lintas data center, bukan per isolate.
    Semua jalur gagal bersikap fail-open: chat tetap jalan. */
 
-export const SESSION_COOKIE = 'mfc_sid'
-export const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000
+const SESSION_COOKIE = 'mfc_sid'
+const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000
 export const DAILY_MAX_DEFAULT = 300
 export const SESSION_MAX_DEFAULT = 40
 const sessionEncoder = new TextEncoder()
@@ -152,9 +152,9 @@ export async function checkQuota(
    (dump verbatim atau terjemahannya), stream dipotong dan diganti penolakan
    sebelum seluruh isi terbaca. Prefix 220 karakter pertama ditahan dulu;
    begitu aman, sisanya diteruskan streaming seperti biasa. */
-export const LEAK_REFUSAL =
+const LEAK_REFUSAL =
   'Maaf, saya tidak bisa menampilkan detail konfigurasi internal saya. Ada yang bisa saya bantu soal layanan Mifdlal?'
-export const GUARD_PREFIX_CHARS = 220
+const GUARD_PREFIX_CHARS = 220
 
 /* Preamble khas dump prompt: hanya muncul kalau model membocorkan instruksi. */
 const PROMPT_PREAMBLES = [
