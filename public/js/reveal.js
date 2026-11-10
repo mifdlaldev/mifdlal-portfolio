@@ -30,7 +30,7 @@
 
   const root = document.documentElement;
   /* Kalau browser punya scroll-timeline, seluruh animasi reveal dijalankan CSS
-     di compositor. Skrip cuma menyiapkan angka dan menyalakan/mematikan kanvas. */
+     di compositor. Skrip cuma menyiapkan angka dan memasang mode. */
   const cssMode = typeof CSS !== 'undefined' && CSS.supports?.('animation-timeline: scroll()');
   const REVEAL_RATIO = 2.0;
   const REVEAL_MIN = 260;
@@ -44,7 +44,6 @@
   let lastPx = null;
   let lastShadow = null;
   let promoted = false;
-  let revealing = false;
 
   const measure = () => {
     bandHeight = band.offsetHeight;
@@ -78,17 +77,6 @@
 
       band.style.transform = `translateY(${Math.round((1 - p) * bandHeight * 0.3)}px)`;
       band.style.opacity = `${(0.7 + 0.3 * p).toFixed(2)}`;
-    }
-
-    /* Kanvas berhenti menggambar selama pita masih tertutup. */
-    band.dataset.awake = p > 0.01 ? 'true' : 'false';
-    if (p > 0.01 && typeof band.__wake === 'function') band.__wake();
-
-    /* Selama reveal berjalan, aurora diturunkan ke separuh frame. */
-    const nowRevealing = p > 0 && p < 1;
-    if (nowRevealing !== revealing) {
-      revealing = nowRevealing;
-      band.dataset.revealing = nowRevealing ? 'true' : 'false';
     }
   };
 
