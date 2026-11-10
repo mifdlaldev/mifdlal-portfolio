@@ -232,15 +232,8 @@ const GAP = 26;
 const TOOL_GAP = 24;
 const ROW2_Y = 150;
 
-/* Kolom hub: node 1 dan 2 lebar NODE_W, jadi hub mulai di (NODE_W+GAP)*2. */
-const HUB_X = (NODE_W + GAP) * 2;
-const HUB_CX = HUB_X + HUB_W / 2;
-
-/* Baris tool: berpusat di bawah hub, jarak TOOL_GAP, tanpa tumpang tindih.
-   Tile tengah tepat di sumbu hub; kiri/kanan digeser satu lebar + jarak. */
-const TOOL_MID_X = HUB_CX - TOOL_W / 2;
-const TOOL_LEFT_X = TOOL_MID_X - TOOL_W - TOOL_GAP;
-const TOOL_RIGHT_X = TOOL_MID_X + TOOL_W + TOOL_GAP;
+/* Kolom hub & baris tool tidak butuh konstanta modul: seluruh geometri
+   dihitung buildGraph() dari Layout, supaya satu sumber kebenaran. */
 
 /* ── Layout responsif ─────────────────────────────────────────
    Desktop: graph penuh 556px lebar (lihat konstanta di atas).
@@ -288,7 +281,7 @@ type Layout = {
 };
 
 function buildGraph(L: Layout) {
-  const { nodeW, hubW, toolW, gap, toolGap, row2Y, icon } = L;
+  const { nodeW, hubW, toolW, gap, toolGap, row2Y } = L;
   const hubX = (nodeW + gap) * 2;
   const hubCx = hubX + hubW / 2;
   const toolMidX = hubCx - toolW / 2;
@@ -345,29 +338,6 @@ function buildGraph(L: Layout) {
   const height = row2Y + toolW + 24; // tile tool + label
   return { nodes, edges, width, height };
 }
-
-/* Layout desktop (konstanta lama) — tetap dipakai >= 561px */
-const nodes: Node[] = buildGraph({
-  nodeW: NODE_W,
-  hubW: HUB_W,
-  toolW: TOOL_W,
-  gap: GAP,
-  toolGap: TOOL_GAP,
-  row2Y: ROW2_Y,
-  icon: ICON_SIZE,
-}).nodes;
-const edges: Edge[] = [
-  { id: 'e1', source: 'trigger', target: 'koleksi', type: 'flow' },
-  { id: 'e2', source: 'koleksi', target: 'agent', type: 'flow' },
-  { id: 'e3', source: 'agent', target: 'validasi', type: 'flow' },
-  { id: 'e4', source: 'validasi', target: 'kirim', type: 'flow' },
-  { id: 'b1', source: 'agent', sourceHandle: 'b1', target: 't-model', targetHandle: 'in', type: 'flow' },
-  { id: 'b2', source: 'agent', sourceHandle: 'b2', target: 't-dokumen', targetHandle: 'in', type: 'flow' },
-  { id: 'b3', source: 'agent', sourceHandle: 'b3', target: 't-api', targetHandle: 'in', type: 'flow' },
-  { id: 'r1', source: 't-model', sourceHandle: 'out', target: 'agent', targetHandle: 'rb1', type: 'flow', data: { ret: true } },
-  { id: 'r2', source: 't-dokumen', sourceHandle: 'out', target: 'agent', targetHandle: 'rb2', type: 'flow', data: { ret: true } },
-  { id: 'r3', source: 't-api', sourceHandle: 'out', target: 'agent', targetHandle: 'rb3', type: 'flow', data: { ret: true } },
-];
 
 export default function WorkflowCanvas() {
   const [width, setWidth] = useState(0); // lebar container terukur (px)
