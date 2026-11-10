@@ -2,7 +2,11 @@
 import LogoLoop from './LogoLoop'
 import { stack } from '../data/site'
 
-const logos = stack.map((s) => ({ src: s.logo, alt: s.name, title: s.name }))
+/* Semua berkas di public/logos/ memakai viewBox 0 0 24 24 (diperiksa per
+   berkas), jadi rasio aslinya persegi. width/height wajib ditulis supaya
+   peramban memesan ruang sebelum SVG selesai dimuat; tanpa itu Lighthouse
+   menandai unsized-images dan CLS ikut naik. */
+const logos = stack.map((s) => ({ src: s.logo, alt: s.name, title: s.name, width: 24, height: 24 }))
 ---
 
 <section id="stack" class="section section--band">
