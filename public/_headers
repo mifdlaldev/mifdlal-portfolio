@@ -11,4 +11,11 @@
   # frame-src: kanvas layanan 01 memuat situs showcase lewat iframe.
   #   Tambah domain di sini setiap kali menambah URL baru di showcaseSites
   #   (src/data/site.ts), kalau tidak iframe-nya diblokir CSP.
-  Content-Security-Policy: default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self'; frame-src https://lokalogistics.co.id https://mahoni-house.vercel.app https://mifdlaldev.github.io; frame-ancestors 'none'; base-uri 'self'; form-action 'none';
+  # script-src: googletagmanager.com untuk container GTM-T4TCVQP8, plus
+  #   static.cloudflareinsights.com untuk Cloudflare Web Analytics.
+  # connect-src: wajib eksplisit. Tanpa directive ini beacon GA4 jatuh ke
+  #   default-src 'self' lalu diblokir diam-diam (nol data, tanpa error terlihat).
+  #   region1 adalah endpoint GA4 untuk trafik Eropa.
+  # frame-src: googletagmanager.com untuk iframe noscript GTM.
+  #   Hash inline script tetap disuntik otomatis oleh scripts/csp-hash.mjs.
+  Content-Security-Policy: default-src 'self'; img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self' https://www.googletagmanager.com https://static.cloudflareinsights.com; connect-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com https://cloudflareinsights.com; frame-src https://lokalogistics.co.id https://mahoni-house.vercel.app https://mifdlaldev.github.io https://www.googletagmanager.com; frame-ancestors 'none'; base-uri 'self'; form-action 'none';

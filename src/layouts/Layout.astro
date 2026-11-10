@@ -27,6 +27,25 @@ const { title, titleEn, description, descriptionEn, noindex = false } = Astro.pr
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="generator" content={Astro.generator} />
 
+    {/* Google Tag Manager: container GTM-T4TCVQP8.
+        Bootstrap GTM standar (bukan pola gtag.js) supaya dataLayer menerima
+        event 'gtm.start' dan trigger Initialization jalan benar.
+        is:inline wajib: hash sha256 script ini dihitung scripts/csp-hash.mjs
+        saat postbuild dan disuntik ke CSP, sehingga CSP tetap tanpa
+        'unsafe-inline'. Atribut async membuatnya tidak memblokir render. */}
+    <script is:inline>
+      ;(function (w, d, s, l, i) {
+        w[l] = w[l] || []
+        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' })
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : ''
+        j.async = true
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl
+        f.parentNode.insertBefore(j, f)
+      })(window, document, 'script', 'dataLayer', 'GTM-T4TCVQP8')
+    </script>
+
     <!-- Font: self-hosted via @fontsource (nol CDN eksternal, nol CSP hole) -->
 
     <!-- SEO dasar -->
@@ -109,6 +128,16 @@ const { title, titleEn, description, descriptionEn, noindex = false } = Astro.pr
     </script>
   </head>
   <body>
+    {/* Fallback GTM untuk pengunjung tanpa JavaScript. Ukuran nol, tak terlihat,
+        butuh googletagmanager.com di frame-src (sudah ditambahkan). */}
+    <noscript>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-T4TCVQP8"
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"
+      ></iframe>
+    </noscript>
     <a href="#main" class="skip-link" data-i18n-en="Skip to content">
       Lewati ke konten
     </a>
