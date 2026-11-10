@@ -183,6 +183,10 @@ const jsonld = JSON.stringify({
       media="(prefers-color-scheme: light)"
     />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    {/* /favicon.ico diambil otomatis oleh peramban dan Googlebot-Image tanpa
+        melihat deklarasi di atas (12 permintaan tercatat di edge, semuanya 404).
+        Berkas ini membawa 48, 32, dan 16 px dalam satu ICO. */}
+    <link rel="icon" href="/favicon.ico" sizes="48x48 32x32 16x16" />
 
     <!-- Anti-FOUC tema: set data-theme sebelum paint pertama.
          light = tanpa atribut, dark = data-theme="dark",
