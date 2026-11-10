@@ -67,7 +67,9 @@ export const projects: readonly Project[] = [
   },
 ]
 /* Foto layanan: unduhan Unsplash, dipotong 16/10 oleh kanvas layanan.
-   Berkas asli ada di public/services/layanan-0N.jpg (1600 px, sRGB).
+   Berkas WebP di public/services/layanan-0N.webp (1280 px, sRGB, kualitas 80;
+   total 339 KB dari aslinya 772 KB). Sumber asli JPEG 1600 px dihapus dari
+   repo, jejak sumbernya tetap tercatat di ASSET-LICENSES.md.
    Rincian sumber dan status lisensi: ASSET-LICENSES.md. */
 export const services = [
   {
@@ -77,7 +79,7 @@ export const services = [
     body: 'Landing page, profil perusahaan, e-commerce, sampai POS. Dari desain sampai rilis, bukan sekadar serah terima berkas.',
     bodyEn:
       'Landing pages, company profiles, e-commerce, up to POS systems. From design to launch, not just handing over files.',
-    image: '/services/layanan-01.jpg',
+    image: '/services/layanan-01.webp',
   },
   {
     no: '02',
@@ -86,7 +88,7 @@ export const services = [
     body: 'Balas pelanggan secara otomatis dan jawab pertanyaan berdasarkan data bisnis Anda, bukan templat yang selalu sama.',
     bodyEn:
       'Automatically reply to customers and answer questions based on your business data, not the same old templates.',
-    image: '/services/layanan-02.jpg',
+    image: '/services/layanan-02.webp',
   },
   {
     no: '03',
@@ -95,7 +97,7 @@ export const services = [
     body: 'AI menangani pesan masuk, merangkum konteks pelanggan, dan mengirim balasan otomatis — tim hanya turun saat benar-benar dibutuhkan.',
     bodyEn:
       'AI handles incoming messages, summarizes customer context, and sends automatic replies — your team only steps in when truly needed.',
-    image: '/services/layanan-03.jpg',
+    image: '/services/layanan-03.webp',
   },
 ] as const
 

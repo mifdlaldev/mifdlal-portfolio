@@ -253,10 +253,10 @@ Tiga kartu horizontal (`grid`, `gap: 1.5rem`, tiga kolom mulai 860px, satu kolom
 bawahnya). Tiap kartu punya border sendiri, jadi tidak ada border luar bersama.
 Bagian atas kartu berisi gambar 16:10, bagian bawah nomor, judul, dan deskripsi.
 
-Gambar kartu diambil dari `public/services/layanan-0N.jpg` (foto Unsplash, lihat
-`ASSET-LICENSES.md`), path-nya ada di field `image` pada `services` di
-`src/data/site.ts`. Ganti isi file atau arahkan field `image` ke gambar asli;
-`alt` dibentuk dari judul layanan.
+Gambar kartu diambil dari `public/services/layanan-0N.webp` (foto Unsplash, dikonversi
+ke WebP 1280 px kualitas 80; lihat `ASSET-LICENSES.md`), path-nya ada di field `image`
+pada `services` di `src/data/site.ts`. Ganti isi file atau arahkan field `image` ke
+gambar asli; `alt` dibentuk dari judul layanan.
 Gambar memakai `loading="lazy"` supaya tidak menahan render awal.
 
 ## Komentar kode per section
