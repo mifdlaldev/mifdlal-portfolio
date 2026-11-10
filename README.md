@@ -636,7 +636,7 @@ menambahkan frontmatter `.astro` dan tipe island React. Keduanya jalan di CI.
 - `npm run build` | sukses
 - `npm run check` | 0 errors, 0 warnings, 0 hints (38 file)
 - `npm run typecheck` | bersih
-- `npm run check:tokens` | bersih (27 file, 152 token)
+- `npm run check:tokens` | bersih (27 file, 151 token)
 - `npm audit --omit=dev` | 0 vulnerabilities
 - Lighthouse | mobile 100/100/100/100, desktop 100/100/100/100 (FCP 1.0s/0.3s, CLS 0)
 - Output: 0 script tag, CSS 21.6 KB (5 KB gzip), 0 em dash

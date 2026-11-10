@@ -503,18 +503,6 @@ body {
   white-space: nowrap;
 }
 
-.tag {
-  display: inline-block;
-  font-family: var(--font-mono);
-  font-size: var(--text-label);
-  letter-spacing: var(--tracking-caps-tight);
-  text-transform: lowercase;
-  padding: 0.15rem 0.5rem;
-  border: 1px solid var(--color-line);
-  color: var(--color-muted);
-  white-space: nowrap;
-}
-
 /* Heading section: 34px, tight, grotesque */
 .section-headline {
   font-family: var(--font-display);
@@ -573,38 +561,11 @@ body {
   border-color: var(--color-ink);
 }
 
-/* Link teks dengan underline animasi */
-.link-underline {
-  color: var(--color-ink);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  text-decoration-thickness: 1px;
-  text-decoration-color: var(--color-line);
-  transition: text-decoration-color var(--dur-fast) var(--ease);
-}
-
-.link-underline:hover {
-  text-decoration-color: var(--color-electric);
-}
-
-/* Hairline divider gaya blueprint */
-.rule {
-  border: 0;
-  border-top: 1px solid var(--color-line);
-  margin: 0;
-}
-
 /* Mono data text */
 .mono {
   font-family: var(--font-mono);
   font-size: var(--text-nav);
   letter-spacing: var(--tracking-caps-tight);
-}
-
-/* Serif aksen untuk hero quote/emphasis */
-.serif-accent {
-  font-family: var(--font-serif);
-  font-style: italic;
 }
 
 /* ── empty state: section yang datanya belum diisi ───────────── */
