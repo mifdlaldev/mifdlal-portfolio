@@ -57,8 +57,7 @@ export const projects: readonly Project[] = [
     name: 'Mahoni-House',
     role: 'Landing page',
     roleEn: 'Landing page',
-    description:
-      'Landing page villa dua bahasa, Indonesia dan Inggris, dengan route per locale.',
+    description: 'Landing page villa dua bahasa, Indonesia dan Inggris, dengan route per locale.',
     descriptionEn:
       'Two-language villa landing page, Indonesian and English, with per-locale routing.',
     stack: ['Next.js'],
@@ -76,7 +75,8 @@ export const services = [
     title: 'Website dan web app',
     titleEn: 'Websites and web apps',
     body: 'Landing page, profil perusahaan, e-commerce, sampai POS. Dari desain sampai rilis, bukan sekadar serah terima berkas.',
-    bodyEn: 'Landing pages, company profiles, e-commerce, up to POS systems. From design to launch, not just handing over files.',
+    bodyEn:
+      'Landing pages, company profiles, e-commerce, up to POS systems. From design to launch, not just handing over files.',
     image: '/services/layanan-01.jpg',
   },
   {
@@ -84,7 +84,8 @@ export const services = [
     title: 'Chatbot',
     titleEn: 'Chatbots',
     body: 'Balas pelanggan secara otomatis dan jawab pertanyaan berdasarkan data bisnis Anda, bukan templat yang selalu sama.',
-    bodyEn: 'Automatically reply to customers and answer questions based on your business data, not the same old templates.',
+    bodyEn:
+      'Automatically reply to customers and answer questions based on your business data, not the same old templates.',
     image: '/services/layanan-02.jpg',
   },
   {
@@ -92,7 +93,8 @@ export const services = [
     title: 'Otomasi AI dan workflow',
     titleEn: 'AI automation and workflow',
     body: 'AI menangani pesan masuk, merangkum konteks pelanggan, dan mengirim balasan otomatis — tim hanya turun saat benar-benar dibutuhkan.',
-    bodyEn: 'AI handles incoming messages, summarizes customer context, and sends automatic replies — your team only steps in when truly needed.',
+    bodyEn:
+      'AI handles incoming messages, summarizes customer context, and sends automatic replies — your team only steps in when truly needed.',
     image: '/services/layanan-03.jpg',
   },
 ] as const
@@ -183,7 +185,11 @@ export const contact = {
       href: 'https://www.linkedin.com/in/mifdlal-tsaqib-alfarras/',
     },
     { id: 'fiverr', label: 'Fiverr', href: 'https://www.fiverr.com/mifdlal_afs' },
-    { id: 'upwork', label: 'Upwork', href: 'https://www.upwork.com/freelancers/~01d0da0382e9693426' },
+    {
+      id: 'upwork',
+      label: 'Upwork',
+      href: 'https://www.upwork.com/freelancers/~01d0da0382e9693426',
+    },
   ],
 } as const
 
@@ -259,6 +265,7 @@ export const education: readonly Education[] = [
     status: 'Lulus',
     statusEn: 'Graduated',
     note: 'Materi kejuruan mencakup basis data relasional dan SQL, pemrograman web statis dan dinamis, aplikasi mobile dan desktop, IoT, dan cloud computing. Framework yang dipelajari: Laravel dan CodeIgniter untuk backend, React dan Next.js untuk frontend, Flutter untuk aplikasi mobile, serta Bootstrap dan Tailwind CSS untuk antarmuka.',
-    noteEn: 'Vocational coursework covers relational databases and SQL, static and dynamic web programming, mobile and desktop applications, IoT, and cloud computing. Frameworks studied: Laravel and CodeIgniter for backend, React and Next.js for frontend, Flutter for mobile apps, and Bootstrap and Tailwind CSS for interfaces.',
+    noteEn:
+      'Vocational coursework covers relational databases and SQL, static and dynamic web programming, mobile and desktop applications, IoT, and cloud computing. Frameworks studied: Laravel and CodeIgniter for backend, React and Next.js for frontend, Flutter for mobile apps, and Bootstrap and Tailwind CSS for interfaces.',
   },
 ]

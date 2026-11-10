@@ -14,12 +14,18 @@ import { AsciiArtStatic } from './ui/ascii-art'
   <CodeComment text="// layanan" textEn="// services" />
   <div class="wrap">
     <div class="section-head rise">
-      <span class="fig-label" data-i18n-en="fig. 04 · services">fig. 04 · layanan</span>
-      <h2 class="section-headline" data-i18n-en="What I can build for you.">Yang dapat saya kerjakan untuk bisnis Anda.</h2>
-      <p class="service-intro" data-i18n-en="Each service has its own panel. The panel shows how it works, so you see the mechanism — not just a list of capabilities.">
-        Tiap layanan punya panelnya sendiri. Panel itu tempat alur kerjanya
-        digambarkan, supaya Anda melihat mekanismenya, bukan hanya membaca
-        daftar kemampuan.
+      <span class="fig-label" data-i18n-en="fig. 04 · services">
+        fig. 04 · layanan
+      </span>
+      <h2 class="section-headline" data-i18n-en="What I can build for you.">
+        Yang dapat saya kerjakan untuk bisnis Anda.
+      </h2>
+      <p
+        class="service-intro"
+        data-i18n-en="Each service has its own panel. The panel shows how it works, so you see the mechanism — not just a list of capabilities."
+      >
+        Tiap layanan punya panelnya sendiri. Panel itu tempat alur kerjanya digambarkan, supaya Anda
+        melihat mekanismenya, bukan hanya membaca daftar kemampuan.
       </p>
     </div>
 
@@ -29,18 +35,24 @@ import { AsciiArtStatic } from './ui/ascii-art'
           <div class="service-text">
             <span class="service-no">{s.no}</span>
             <div class="service-title-row">
-              <h3 class="service-title service-title--blue" data-i18n-en={s.titleEn}>{s.title}</h3>
+              <h3 class="service-title service-title--blue" data-i18n-en={s.titleEn}>
+                {s.title}
+              </h3>
               {s.no === '01' && <ServiceBrowserIcon client:idle />}
               {s.no === '02' && <ServiceBotIcon client:idle />}
               {s.no === '03' && <ServiceWorkflowIcon client:idle />}
             </div>
-            <p class="service-desc" data-i18n-en={s.bodyEn}>{s.body}</p>
+            <p class="service-desc" data-i18n-en={s.bodyEn}>
+              {s.body}
+            </p>
           </div>
 
           <div class="service-panel">
             <div class="service-bar">
               <span class="service-dots" aria-hidden="true">
-                <span></span><span></span><span></span>
+                <span></span>
+                <span></span>
+                <span></span>
               </span>
               <span class="service-bar-label">fig. 04.{s.no}</span>
             </div>
@@ -57,7 +69,7 @@ import { AsciiArtStatic } from './ui/ascii-art'
                   role="img"
                   aria-label={`Foto layanan ${s.no}: ${s.title}`}
                   data-i18n-aria={`Photo of service ${s.no}: ${s.titleEn}`}
-                  ></div>
+                ></div>
               </div>
 
               {/* ASCII tekstur — karakter elektrik samar, di atas overlay biru,
@@ -448,13 +460,13 @@ import { AsciiArtStatic } from './ui/ascii-art'
   document.addEventListener(
     'contextmenu',
     (e) => {
-      const frame = (e.target as HTMLElement | null)?.closest('.service-frame');
-      if (!frame) return;
-      e.preventDefault();
-      e.stopPropagation();
+      const frame = (e.target as HTMLElement | null)?.closest('.service-frame')
+      if (!frame) return
+      e.preventDefault()
+      e.stopPropagation()
     },
     true
-  );
+  )
 
   /* Parallax foto canvas layanan — versi clip: foto tidak pernah meluber.
      Foto di dalam .service-photo-clip (overflow:hidden). Pergeseran dibatasi
@@ -463,54 +475,54 @@ import { AsciiArtStatic } from './ui/ascii-art'
      besar agar ilusi kedalaman terasa jelas, bukan sekadar geseran kecil.
      Lerp 0.12 membuat pergerakan mulus, tidak patah-patah di tiap scroll.
      Dimatikan saat prefers-reduced-motion: reduce. */
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
   if (!reduceMotion.matches) {
-    const clips = Array.from(document.querySelectorAll<HTMLElement>('.service-photo-clip'));
-    const SHIFT_MAX = 0.2; // ±20% tinggi frame (pas dengan headroom foto 140%)
+    const clips = Array.from(document.querySelectorAll<HTMLElement>('.service-photo-clip'))
+    const SHIFT_MAX = 0.2 // ±20% tinggi frame (pas dengan headroom foto 140%)
     // LERP 1 (tanpa penghalusan): Lenis sudah me-smoothing input scroll,
     // jadi parallax mengikuti scroll yang sudah halus 1:1. Menambah lerp di
     // sini berarti dua lapis easing -> gerakan terasa lembab/mushy.
-    const LERP = 1;
-    const current = new Map<HTMLElement, number>();
-    let running = false;
+    const LERP = 1
+    const current = new Map<HTMLElement, number>()
+    let running = false
 
     const tick = () => {
-      const vh = window.innerHeight;
-      let animating = false;
+      const vh = window.innerHeight
+      let animating = false
 
       for (const clip of clips) {
-        const rect = clip.getBoundingClientRect();
-        const inView = rect.bottom > -vh * 0.2 && rect.top < vh * 1.2;
-        if (!inView) continue;
+        const rect = clip.getBoundingClientRect()
+        const inView = rect.bottom > -vh * 0.2 && rect.top < vh * 1.2
+        if (!inView) continue
 
         // p: 0 = frame baru masuk dari bawah, 1 = frame hampir keluar di atas
-        const p = (vh - rect.top) / (vh + rect.height);
+        const p = (vh - rect.top) / (vh + rect.height)
         // target: +20% (foto turun, masuk dari bawah) -> -20% (foto naik penuh)
-        const target = (SHIFT_MAX - p * 2 * SHIFT_MAX) * rect.height;
-        const prev = current.get(clip) ?? target;
-        const next = prev + (target - prev) * LERP;
+        const target = (SHIFT_MAX - p * 2 * SHIFT_MAX) * rect.height
+        const prev = current.get(clip) ?? target
+        const next = prev + (target - prev) * LERP
 
-        current.set(clip, next);
-        clip.style.setProperty('--parallax', `${next.toFixed(1)}px`);
+        current.set(clip, next)
+        clip.style.setProperty('--parallax', `${next.toFixed(1)}px`)
 
-        if (Math.abs(target - next) > 0.5) animating = true;
+        if (Math.abs(target - next) > 0.5) animating = true
       }
 
       if (animating) {
-        window.requestAnimationFrame(tick);
+        window.requestAnimationFrame(tick)
       } else {
-        running = false;
+        running = false
       }
-    };
+    }
 
     const kick = () => {
-      if (running) return;
-      running = true;
-      window.requestAnimationFrame(tick);
-    };
+      if (running) return
+      running = true
+      window.requestAnimationFrame(tick)
+    }
 
-    kick();
-    window.addEventListener('scroll', kick, { passive: true });
-    window.addEventListener('resize', kick, { passive: true });
+    kick()
+    window.addEventListener('scroll', kick, { passive: true })
+    window.addEventListener('resize', kick, { passive: true })
   }
 </script>

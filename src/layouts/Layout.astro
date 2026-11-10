@@ -52,17 +52,41 @@ const { title, titleEn, description, descriptionEn, noindex = false } = Astro.pr
          Urutan: versi gelap dulu, versi terang terakhir, supaya peramban yang
          mengabaikan atribut media tetap memakai glyph hitam (default aman di
          tab bar terang). -->
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32-dark.png" media="(prefers-color-scheme: dark)" />
-    <link rel="icon" type="image/png" sizes="64x64" href="/favicon-64-dark.png" media="(prefers-color-scheme: dark)" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32-light.png" media="(prefers-color-scheme: light)" />
-    <link rel="icon" type="image/png" sizes="64x64" href="/favicon-64-light.png" media="(prefers-color-scheme: light)" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/favicon-32-dark.png"
+      media="(prefers-color-scheme: dark)"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="64x64"
+      href="/favicon-64-dark.png"
+      media="(prefers-color-scheme: dark)"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/favicon-32-light.png"
+      media="(prefers-color-scheme: light)"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="64x64"
+      href="/favicon-64-light.png"
+      media="(prefers-color-scheme: light)"
+    />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
     <!-- Anti-FOUC tema: set data-theme sebelum paint pertama.
          light = tanpa atribut, dark = data-theme="dark",
          system = data-theme="system" (CSS media query yang memetakan). -->
     <script is:inline>
-      (function () {
+      ;(function () {
         try {
           var s = localStorage.getItem('mifdlal-prefs')
           var mode = 'system'
@@ -85,16 +109,18 @@ const { title, titleEn, description, descriptionEn, noindex = false } = Astro.pr
     </script>
   </head>
   <body>
-    <a href="#main" class="skip-link" data-i18n-en="Skip to content">Lewati ke konten</a>
+    <a href="#main" class="skip-link" data-i18n-en="Skip to content">
+      Lewati ke konten
+    </a>
     <SiteNav />
     <div class="page-track" data-track>
-    <div class="page-layer" data-page>
-    <main id="main">
-      <slot />
-    </main>
-    <Footer />
-    <div class="page-shadow" data-sheet-shadow aria-hidden="true"></div>
-    </div>
+      <div class="page-layer" data-page>
+        <main id="main">
+          <slot />
+        </main>
+        <Footer />
+        <div class="page-shadow" data-sheet-shadow aria-hidden="true"></div>
+      </div>
     </div>
     <Wordmark />
     <ToTop />
@@ -184,7 +210,7 @@ const { title, titleEn, description, descriptionEn, noindex = false } = Astro.pr
                   },
                 })
               },
-              { amount, margin: '0px 0px -8% 0px' },
+              { amount, margin: '0px 0px -8% 0px' }
             )
           })
         }

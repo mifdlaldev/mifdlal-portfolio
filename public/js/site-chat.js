@@ -20,7 +20,7 @@
    - Esc menutup dan mengembalikan fokus ke launcher
    - prefers-reduced-motion: animasi dimatikan
    ============================================================ */
-(() => {
+;(() => {
   const root = document.querySelector('[data-site-chat]')
   if (!root) return
 
@@ -217,7 +217,8 @@
   }
   const CHAT_STR = {
     id: {
-      greeting: 'Halo! Saya asisten AI Mifdlal. Tanya soal layanan, proyek, atau stack — jawaban berdasarkan profil di situs ini.',
+      greeting:
+        'Halo! Saya asisten AI Mifdlal. Tanya soal layanan, proyek, atau stack — jawaban berdasarkan profil di situs ini.',
       error: 'Gagal mengirim. Coba lagi.',
       counter: 'Karakter',
       typing: 'mengetik...',
@@ -227,7 +228,8 @@
       errConn: 'Koneksi terputus. Periksa internet dan coba lagi.',
     },
     en: {
-      greeting: "Hi! I'm Mifdlal's AI assistant. Ask about services, projects, or stack — answers based on the profile on this site.",
+      greeting:
+        "Hi! I'm Mifdlal's AI assistant. Ask about services, projects, or stack — answers based on the profile on this site.",
       error: 'Failed to send. Try again.',
       counter: 'Characters',
       typing: 'typing...',
@@ -348,24 +350,28 @@
   }
 
   let scrollTicking = false
-  window.addEventListener('scroll', () => {
-    if (scrollTicking) return
-    scrollTicking = true
-    window.requestAnimationFrame(() => {
-      const vh = window.innerHeight
-      /* Ambil section TERBAWAH yang masih di band tengah viewport —
+  window.addEventListener(
+    'scroll',
+    () => {
+      if (scrollTicking) return
+      scrollTicking = true
+      window.requestAnimationFrame(() => {
+        const vh = window.innerHeight
+        /* Ambil section TERBAWAH yang masih di band tengah viewport —
          kalau dua section straddle, yang bawah menang (kontak > sertifikasi). */
-      let active = null
-      for (const id of SECTION_ORDER) {
-        const el = document.getElementById(id)
-        if (!el) continue
-        const r = el.getBoundingClientRect()
-        if (r.top < vh * 0.6 && r.bottom > vh * 0.4) active = id
-      }
-      if (active) setMerged(active)
-      scrollTicking = false
-    })
-  }, { passive: true })
+        let active = null
+        for (const id of SECTION_ORDER) {
+          const el = document.getElementById(id)
+          if (!el) continue
+          const r = el.getBoundingClientRect()
+          if (r.top < vh * 0.6 && r.bottom > vh * 0.4) active = id
+        }
+        if (active) setMerged(active)
+        scrollTicking = false
+      })
+    },
+    { passive: true }
+  )
 
   initialCheck()
 

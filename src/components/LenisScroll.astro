@@ -18,11 +18,12 @@
 //   (WebGL wordmark, reveal.js transform writes, content-visibility
 //   layout burst). Lenis bukan tersangka — dia cuma ~1-2% CPU.
 ---
-<script>
-  import Lenis from 'lenis';
 
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
+<script>
+  import Lenis from 'lenis'
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const coarsePointer = window.matchMedia('(pointer: coarse)').matches
 
   const lenis = new Lenis({
     anchors: true, // anchor link tetap berfungsi; default Lenis mematikannya
@@ -31,18 +32,18 @@
     syncTouch: false,
     infinite: false,
     autoRaf: true, // Lenis manages its own rAF loop — inertia intact
-  });
+  })
 
   // Dipakai to-top.js dan komponen lain yang perlu scroll programatik.
-  (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
+  ;(window as unknown as { __lenis?: Lenis }).__lenis = lenis
 
   /* Hentikan Lenis saat tab tidak terlihat — hemat battery + CPU.
      Lenos.stop()/start() menghentikan loop internal dengan benar,
      tanpa memotong inertia yang sedang berjalan. */
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) lenis.stop();
-    else lenis.start();
-  });
+    if (document.hidden) lenis.stop()
+    else lenis.start()
+  })
 </script>
 
 <style is:global>

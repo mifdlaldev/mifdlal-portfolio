@@ -10,12 +10,16 @@
  * di-resolve via prefers-color-scheme. Preferensi disimpan di
  * localStorage (mifdlal-prefs).
  */
-(function () {
+;(function () {
   'use strict'
 
   var LS_KEY = 'mifdlal-prefs'
-  var qs = function (s, r) { return (r || document).querySelector(s) }
-  var qsa = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)) }
+  var qs = function (s, r) {
+    return (r || document).querySelector(s)
+  }
+  var qsa = function (s, r) {
+    return Array.prototype.slice.call((r || document).querySelectorAll(s))
+  }
 
   /* ---------- state ---------- */
 
@@ -23,15 +27,22 @@
   try {
     var saved = JSON.parse(localStorage.getItem(LS_KEY) || '{}')
     if (saved && typeof saved === 'object') {
-      if (saved.theme === 'system' || saved.theme === 'light' || saved.theme === 'dark') prefs.theme = saved.theme
+      if (saved.theme === 'system' || saved.theme === 'light' || saved.theme === 'dark')
+        prefs.theme = saved.theme
       if (saved.lang === 'id' || saved.lang === 'en') prefs.lang = saved.lang
     }
-  } catch (e) { /* abaikan */ }
+  } catch (e) {
+    /* abaikan */
+  }
 
   var mqlDark = window.matchMedia('(prefers-color-scheme: dark)')
 
   function save() {
-    try { localStorage.setItem(LS_KEY, JSON.stringify(prefs)) } catch (e) { /* abaikan */ }
+    try {
+      localStorage.setItem(LS_KEY, JSON.stringify(prefs))
+    } catch (e) {
+      /* abaikan */
+    }
   }
 
   /* ---------- tema ---------- */
@@ -50,10 +61,14 @@
   }
 
   /* Saat mode system dan pengguna mengganti preferensi OS, ikutkan. */
-  if (mqlDark.addEventListener) mqlDark.addEventListener('change', function () {
-    if (prefs.theme === 'system') applyTheme()
-  })
-  else if (mqlDark.addListener) mqlDark.addListener(function () { if (prefs.theme === 'system') applyTheme() })
+  if (mqlDark.addEventListener)
+    mqlDark.addEventListener('change', function () {
+      if (prefs.theme === 'system') applyTheme()
+    })
+  else if (mqlDark.addListener)
+    mqlDark.addListener(function () {
+      if (prefs.theme === 'system') applyTheme()
+    })
 
   /* ---------- i18n ---------- */
 
@@ -71,7 +86,10 @@
     /* aria-label (ToTop, chat panel, tombol tanpa teks) */
     qsa('[data-i18n-aria]').forEach(function (el) {
       if (el.__i18nAriaId === undefined) el.__i18nAriaId = el.getAttribute('aria-label')
-      el.setAttribute('aria-label', l === 'en' ? el.getAttribute('data-i18n-aria') : el.__i18nAriaId)
+      el.setAttribute(
+        'aria-label',
+        l === 'en' ? el.getAttribute('data-i18n-aria') : el.__i18nAriaId
+      )
     })
 
     /* label dropdown bahasa */
@@ -81,20 +99,29 @@
     /* placeholder input chat */
     qsa('[data-i18n-ph]').forEach(function (el) {
       if (el.__i18nPh === undefined) el.__i18nPh = el.getAttribute('placeholder')
-      el.setAttribute('placeholder', l === 'en' ? (el.getAttribute('data-i18n-en') || '') : el.__i18nPh)
+      el.setAttribute(
+        'placeholder',
+        l === 'en' ? el.getAttribute('data-i18n-en') || '' : el.__i18nPh
+      )
     })
 
     /* meta content (description, og:*, twitter:*) */
     qsa('[data-i18n-meta]').forEach(function (el) {
       if (el.__i18nMeta === undefined) el.__i18nMeta = el.getAttribute('content')
-      el.setAttribute('content', l === 'en' ? (el.getAttribute('data-i18n-meta') || '') : el.__i18nMeta)
+      el.setAttribute(
+        'content',
+        l === 'en' ? el.getAttribute('data-i18n-meta') || '' : el.__i18nMeta
+      )
     })
 
     /* mailto subject mengikuti bahasa */
     qsa('[data-mailto]').forEach(function (el) {
       var idSub = el.getAttribute('data-subject-id') || ''
       var enSub = el.getAttribute('data-subject-en') || idSub
-      el.setAttribute('href', 'mailto:' + el.getAttribute('data-mailto') + '?subject=' + (l === 'en' ? enSub : idSub))
+      el.setAttribute(
+        'href',
+        'mailto:' + el.getAttribute('data-mailto') + '?subject=' + (l === 'en' ? enSub : idSub)
+      )
     })
   }
 

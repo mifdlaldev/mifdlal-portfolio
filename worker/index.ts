@@ -34,7 +34,6 @@ import {
 } from './lib'
 import type { DurableObjectState, Env } from './lib'
 
-
 /* Endpoint default: OpenRouter. Bisa diarahkan ke gateway lain
    (mis. 9router) lewat var CHAT_BASE_URL. */
 const OPENROUTER_ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions'
@@ -46,7 +45,9 @@ const DEFAULT_MODEL = 'cx/gpt-5.6-luna'
 /* Pengetahuan asisten: profil, layanan, proyek, stack, kontak.
    Sumber: src/data/site.ts + KONTEN.md. Aturan jawaban di bagian
    akhir: singkat, jujur, tanpa markdown berat. */
-const SYSTEM_PROMPT = (lang: string) => `Kamu asisten AI di portfolio mifdlal.com, milik Mifdlal Tsaqib Alfarras — developer web dan otomasi AI dari Bandung, Indonesia (remote). ATURAN BAHASA: jawab dalam ${lang === 'en' ? 'English profesional (sapaan "you" untuk pengunjung, "I" untuk Mifdlal)' : 'Bahasa Indonesia santai tapi profesional (pakai "Anda" untuk pengunjung, "saya" untuk Mifdlal)'}.
+const SYSTEM_PROMPT = (
+  lang: string
+) => `Kamu asisten AI di portfolio mifdlal.com, milik Mifdlal Tsaqib Alfarras — developer web dan otomasi AI dari Bandung, Indonesia (remote). ATURAN BAHASA: jawab dalam ${lang === 'en' ? 'English profesional (sapaan "you" untuk pengunjung, "I" untuk Mifdlal)' : 'Bahasa Indonesia santai tapi profesional (pakai "Anda" untuk pengunjung, "saya" untuk Mifdlal)'}.
 
 KEAHLIAN YANG DITAWARKAN:
 1. Website dan web app — landing page, profil perusahaan, e-commerce, sampai POS. Dari desain sampai rilis.
@@ -162,7 +163,8 @@ export class ChatGuard {
     const used = sessions[sessionId] ?? 0
 
     if (used >= sessionMax) return json({ allowed: false, reason: 'session', total: store.total })
-    if (store.total >= dailyMax) return json({ allowed: false, reason: 'daily', total: store.total })
+    if (store.total >= dailyMax)
+      return json({ allowed: false, reason: 'daily', total: store.total })
 
     /* Batasi ukuran map: sesi hari ini saja yang perlu disimpan. */
     const keys = Object.keys(sessions)
@@ -184,7 +186,10 @@ async function handleChat(request: Request, env: Env): Promise<Response> {
 
   const ip = request.headers.get('cf-connecting-ip') ?? '0.0.0.0'
   if (rateLimited(ip)) {
-    return json({ error: 'rate_limited', message: 'Terlalu banyak pesan. Coba sebentar lagi.' }, 429)
+    return json(
+      { error: 'rate_limited', message: 'Terlalu banyak pesan. Coba sebentar lagi.' },
+      429
+    )
   }
 
   /* Sesi pengunjung: cookie bertanda tangan HMAC. Tanpa cookie sah,
@@ -216,7 +221,8 @@ async function handleChat(request: Request, env: Env): Promise<Response> {
   const history: ChatMessage[] = []
   for (const raw of incoming as unknown[]) {
     const item = raw as { role?: string; content?: string }
-    if ((item.role !== 'user' && item.role !== 'assistant') || typeof item.content !== 'string') continue
+    if ((item.role !== 'user' && item.role !== 'assistant') || typeof item.content !== 'string')
+      continue
     const content = item.content.trim().slice(0, MAX_CHARS_PER_MSG)
     if (content) history.push({ role: item.role, content })
   }
@@ -232,13 +238,16 @@ async function handleChat(request: Request, env: Env): Promise<Response> {
   const quota = await checkQuota(env, session.id)
   if (!quota.allowed) {
     return attachSession(
-      json({
-        error: quota.reason === 'session' ? 'session_limit' : 'daily_limit',
-        message:
-          quota.reason === 'session'
-            ? 'Batas pesan harian untuk sesi ini tercapai. Coba lagi besok atau hubungi hello@mifdlal.com.'
-            : 'Asisten sedang penuh hari ini. Coba lagi besok atau hubungi hello@mifdlal.com.',
-      }, 429)
+      json(
+        {
+          error: quota.reason === 'session' ? 'session_limit' : 'daily_limit',
+          message:
+            quota.reason === 'session'
+              ? 'Batas pesan harian untuk sesi ini tercapai. Coba lagi besok atau hubungi hello@mifdlal.com.'
+              : 'Asisten sedang penuh hari ini. Coba lagi besok atau hubungi hello@mifdlal.com.',
+        },
+        429
+      )
     )
   }
 
@@ -258,20 +267,20 @@ async function handleChat(request: Request, env: Env): Promise<Response> {
   for (const model of models) {
     try {
       upstream = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        authorization: `Bearer ${apiKey}`,
-        'content-type': 'application/json',
-        'HTTP-Referer': 'https://mifdlal.com',
-        'X-Title': 'mifdlal.com asisten',
-      },
-      body: JSON.stringify({
-        model,
-        stream: true,
-        temperature: TEMPERATURE,
-        max_tokens: MAX_TOKENS_REPLY,
-        messages: [{ role: 'system', content: SYSTEM_PROMPT(chatLang) }, ...trimmed],
-      }),
+        method: 'POST',
+        headers: {
+          authorization: `Bearer ${apiKey}`,
+          'content-type': 'application/json',
+          'HTTP-Referer': 'https://mifdlal.com',
+          'X-Title': 'mifdlal.com asisten',
+        },
+        body: JSON.stringify({
+          model,
+          stream: true,
+          temperature: TEMPERATURE,
+          max_tokens: MAX_TOKENS_REPLY,
+          messages: [{ role: 'system', content: SYSTEM_PROMPT(chatLang) }, ...trimmed],
+        }),
       })
       if (upstream.ok && upstream.body) break
       upstreamStatus = upstream.status
@@ -285,21 +294,29 @@ async function handleChat(request: Request, env: Env): Promise<Response> {
 
   if (!upstream || !upstream.body) {
     if (upstreamStatus === 429) {
-      return attachSession(json({ error: 'busy', message: 'Asisten sedang sibuk. Coba lagi sebentar.' }, 503))
+      return attachSession(
+        json({ error: 'busy', message: 'Asisten sedang sibuk. Coba lagi sebentar.' }, 503)
+      )
     }
-    return attachSession(json({ error: 'upstream_error', message: 'Layanan AI sedang gagal. Coba lagi sebentar.' }, 502))
+    return attachSession(
+      json(
+        { error: 'upstream_error', message: 'Layanan AI sedang gagal. Coba lagi sebentar.' },
+        502
+      )
+    )
   }
 
-  return attachSession(new Response(sseToText(upstream), {
-    status: 200,
-    headers: {
-      'content-type': 'text/plain; charset=utf-8',
-      'cache-control': 'no-store',
-      'x-content-type-options': 'nosniff',
-    },
-  }))
+  return attachSession(
+    new Response(sseToText(upstream), {
+      status: 200,
+      headers: {
+        'content-type': 'text/plain; charset=utf-8',
+        'cache-control': 'no-store',
+        'x-content-type-options': 'nosniff',
+      },
+    })
+  )
 }
-
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {

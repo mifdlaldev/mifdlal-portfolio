@@ -44,9 +44,9 @@
   --dot-max: #fdfcf147;
 
   /* --- tipografi: keluarga -------------------------------- */
-  --font-display: "Inter Variable", system-ui, sans-serif;
-  --font-body: "Inter Variable", system-ui, -apple-system, sans-serif;
-  --font-mono: "Geist Mono Variable", ui-monospace, "SFMono-Regular", monospace;
+  --font-display: 'Inter Variable', system-ui, sans-serif;
+  --font-body: 'Inter Variable', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Geist Mono Variable', ui-monospace, 'SFMono-Regular', monospace;
 
   /* --- tipografi: ukuran ---------------------------------
      Dense 1px steps di rentang UI (10-15px) itu disengaja:
@@ -66,9 +66,9 @@
   --text-data: 0.8125rem;
   --text-nav: 0.75rem;
   --text-label: 0.6875rem;
-  --text-hero-1: 1rem;       /* h1 hero di mockup browser canvas 02 */
-  --text-hero-2: 0.75rem;    /* sub hero di mockup browser canvas 02 */
-  --text-btn-mini: 0.6875rem;/* tombol di mockup browser canvas 02 */
+  --text-hero-1: 1rem; /* h1 hero di mockup browser canvas 02 */
+  --text-hero-2: 0.75rem; /* sub hero di mockup browser canvas 02 */
+  --text-btn-mini: 0.6875rem; /* tombol di mockup browser canvas 02 */
   --text-cap: 0.625rem;
   --text-micro: 0.5rem; /* metadata di dalam kanvas mini (timestamp, monogram) */
   --text-nano: 0.3125rem; /* jam + ikon status bar di mockup phone (5px) */
@@ -113,8 +113,8 @@
      yang mengatur posisi rail section. Rail tetap 24px di semua ukuran;
      konten digeser lebih jauh agar tidak menempel garis. Desktop
      (>=1229px) tetap memakai --grid-gutter apa adanya. */
-  --wrap-gutter-tablet: 2.25rem;   /* 36px di 720–1228px, jarak 12px dari rail */
-  --wrap-gutter-mobile: 2.5rem;   /* 40px di <720px, jarak 16px dari rail */
+  --wrap-gutter-tablet: 2.25rem; /* 36px di 720–1228px, jarak 12px dari rail */
+  --wrap-gutter-mobile: 2.5rem; /* 40px di <720px, jarak 16px dari rail */
   --space-section: clamp(5rem, 10vw, 8rem);
   --nav-h: 64px;
   --node-size: 12px;

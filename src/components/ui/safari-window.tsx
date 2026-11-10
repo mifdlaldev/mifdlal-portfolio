@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import './safari-window.css';
+import { useEffect, useRef, useState } from 'react'
+import './safari-window.css'
 
 /* Showcase browser window — dipakai di canvas layanan 01.
  *
@@ -29,14 +29,14 @@ import './safari-window.css';
  *   di laptop — bukan layout tablet (800px) atau teks 6px (1280px).
  */
 
-type ShowcaseTab = { label: string; url: string };
-type Rect = { x: number; y: number; w: number; h: number };
-type Dir = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw';
+type ShowcaseTab = { label: string; url: string }
+type Rect = { x: number; y: number; w: number; h: number }
+type Dir = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw'
 
-const DIRS: readonly Dir[] = ['n', 's', 'e', 'w', 'ne', 'nw', 'se', 'sw'];
+const DIRS: readonly Dir[] = ['n', 's', 'e', 'w', 'ne', 'nw', 'se', 'sw']
 
-const MIN_W = 240;
-const MIN_H = 180;
+const MIN_W = 240
+const MIN_H = 180
 
 /* Resolusi virtual tetap 1200px.
    Kenapa 1200, bukan 1024 atau 1280:
@@ -53,70 +53,66 @@ const MIN_H = 180;
    nav hamburger) karena skala 1200->300px (0.25) membuat teks tak terbaca.
    768 -> 0.4 tetap kecil tapi dapat dibaca, dan layout tablet showcase
    memang dirancang untuk lebar tersebut. */
-const VIRTUAL_W = 1200; // desktop penuh: di atas breakpoint 1100px situs (nav horizontal)
-const VIRTUAL_W_MOBILE = 768; // 420-719px: tablet/ponsel besar
-const VIRTUAL_W_TINY = 480; // ≤320px: iPhone SE, Display Zoom, layar lipat (floor 320px)
+const VIRTUAL_W = 1200 // desktop penuh: di atas breakpoint 1100px situs (nav horizontal)
+const VIRTUAL_W_MOBILE = 768 // 420-719px: tablet/ponsel besar
+const VIRTUAL_W_TINY = 480 // ≤320px: iPhone SE, Display Zoom, layar lipat (floor 320px)
 
-export default function SafariWindow({
-  tabs,
-}: {
-  tabs: readonly ShowcaseTab[];
-}) {
-  const rootRef = useRef<HTMLDivElement>(null);
-  const [rect, setRect] = useState<Rect | null>(null);
-  const [active, setActive] = useState(0);
+export default function SafariWindow({ tabs }: { tabs: readonly ShowcaseTab[] }) {
+  const rootRef = useRef<HTMLDivElement>(null)
+  const [rect, setRect] = useState<Rect | null>(null)
+  const [active, setActive] = useState(0)
   // Kenaikkan nilai ini memaksa iframe di-mount ulang = reload halaman.
-  const [reloadKey, setReloadKey] = useState(0);
-  const reload = () => setReloadKey((k) => k + 1);
+  const [reloadKey, setReloadKey] = useState(0)
+  const reload = () => setReloadKey((k) => k + 1)
 
   /* Bahasa runtime — React island client:visible: patch DOM dari
    * public/js/i18n.js akan terhapus saat React render ulang. Simpan
    * bahasa sebagai state native, baca dari localStorage, dan dengar
    * event mifdlal:lang yang di-dispatch oleh public/js/i18n.js. */
-  const [lang, setLang] = useState<'id' | 'en'>('id');
+  const [lang, setLang] = useState<'id' | 'en'>('id')
   useEffect(() => {
     const read = () => {
-      let v: 'id' | 'en' = 'id';
+      let v: 'id' | 'en' = 'id'
       try {
-        const p = JSON.parse(localStorage.getItem('mifdlal-prefs') || '{}');
-        v = p && p.lang === 'en' ? 'en' : 'id';
+        const p = JSON.parse(localStorage.getItem('mifdlal-prefs') || '{}')
+        v = p && p.lang === 'en' ? 'en' : 'id'
       } catch {
-        v = document.documentElement.lang === 'en' ? 'en' : 'id';
+        v = document.documentElement.lang === 'en' ? 'en' : 'id'
       }
-      setLang(v);
-    };
-    read();
+      setLang(v)
+    }
+    read()
     const onLang = (e: Event) => {
-      const v = (e as CustomEvent).detail;
-      if (v === 'en' || v === 'id') setLang(v);
-    };
-    document.addEventListener('mifdlal:lang', onLang);
-    return () => document.removeEventListener('mifdlal:lang', onLang);
-  }, []);
-  const t = (id: string, en: string) => (lang === 'en' ? en : id);
+      const v = (e as CustomEvent).detail
+      if (v === 'en' || v === 'id') setLang(v)
+    }
+    document.addEventListener('mifdlal:lang', onLang)
+    return () => document.removeEventListener('mifdlal:lang', onLang)
+  }, [])
+  const t = (id: string, en: string) => (lang === 'en' ? en : id)
 
   // Drag pindah posisi window (dari toolbar), clamp ke batas canvas.
-  const moveRef = useRef<
-    | { startX: number; startY: number; rect: Rect; maxW: number; maxH: number }
-    | null
-  >(null);
+  const moveRef = useRef<{
+    startX: number
+    startY: number
+    rect: Rect
+    maxW: number
+    maxH: number
+  } | null>(null)
 
   // Resize: HANYA boleh memperbesar. floorW/floorH = ukuran default
   // (90% x 80% frame), sehingga drag ke arah dalam tidak mengecilkan
   // window di bawah ukuran desain awal. Ceiling = frame canvas.
-  const resizeRef = useRef<
-    | {
-        startX: number;
-        startY: number;
-        dir: Dir;
-        rect: Rect;
-        floorW: number;
-        floorH: number;
-        maxW: number;
-        maxH: number;
-      }
-    | null
-  >(null);
+  const resizeRef = useRef<{
+    startX: number
+    startY: number
+    dir: Dir
+    rect: Rect
+    floorW: number
+    floorH: number
+    maxW: number
+    maxH: number
+  } | null>(null)
 
   // Ukuran awal: 90% x 80% dari frame canvas, rata tengah.
   // PENTING: pakai closest('.service-frame'), BUKAN parentElement —
@@ -128,190 +124,184 @@ export default function SafariWindow({
   // Alasannya toolbar 42px + tab bar 30px menyisakan ~80px konten pada
   // frame 194px; window 90% membuat tab bar terpotong dan URL ter-ellipsis.
   const isMobile = () =>
-    typeof window !== 'undefined' && window.matchMedia('(max-width: 719px)').matches;
+    typeof window !== 'undefined' && window.matchMedia('(max-width: 719px)').matches
 
   useEffect(() => {
-    const host = rootRef.current?.closest('.service-frame');
-    if (!host) return;
-    const pw = host.clientWidth;
-    const ph = host.clientHeight;
-    if (pw <= 0 || ph <= 0) return;
+    const host = rootRef.current?.closest('.service-frame')
+    if (!host) return
+    const pw = host.clientWidth
+    const ph = host.clientHeight
+    if (pw <= 0 || ph <= 0) return
     if (isMobile()) {
-      setRect({ x: 8, y: 8, w: Math.max(MIN_W, pw - 16), h: Math.max(MIN_H, ph - 16) });
-      return;
+      setRect({ x: 8, y: 8, w: Math.max(MIN_W, pw - 16), h: Math.max(MIN_H, ph - 16) })
+      return
     }
-    const w = Math.max(MIN_W, Math.min(pw - 16, Math.round(pw * 0.9)));
-    const h = Math.max(MIN_H, Math.min(ph - 16, Math.round(ph * 0.8)));
-    setRect({ x: Math.round((pw - w) / 2), y: Math.round((ph - h) / 2), w, h });
+    const w = Math.max(MIN_W, Math.min(pw - 16, Math.round(pw * 0.9)))
+    const h = Math.max(MIN_H, Math.min(ph - 16, Math.round(ph * 0.8)))
+    setRect({ x: Math.round((pw - w) / 2), y: Math.round((ph - h) / 2), w, h })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])
 
   // Clamp otomatis saat frame canvas berubah ukuran (resize browser).
   useEffect(() => {
-    const host = rootRef.current?.closest('.service-frame');
-    if (!host) return;
+    const host = rootRef.current?.closest('.service-frame')
+    if (!host) return
     const ro = new ResizeObserver(() => {
-      const pw = host.clientWidth;
-      const ph = host.clientHeight;
-      if (pw <= 0 || ph <= 0) return;
+      const pw = host.clientWidth
+      const ph = host.clientHeight
+      if (pw <= 0 || ph <= 0) return
       setRect((prev) => {
         if (!prev) {
           // Frame baru punya ukuran (mis. section belum terlihat saat mount).
           if (isMobile()) {
-            return { x: 8, y: 8, w: Math.max(MIN_W, pw - 16), h: Math.max(MIN_H, ph - 16) };
+            return { x: 8, y: 8, w: Math.max(MIN_W, pw - 16), h: Math.max(MIN_H, ph - 16) }
           }
-          const w = Math.max(MIN_W, Math.min(pw - 16, Math.round(pw * 0.9)));
-          const h = Math.max(MIN_H, Math.min(ph - 16, Math.round(ph * 0.8)));
-          return { x: Math.round((pw - w) / 2), y: Math.round((ph - h) / 2), w, h };
+          const w = Math.max(MIN_W, Math.min(pw - 16, Math.round(pw * 0.9)))
+          const h = Math.max(MIN_H, Math.min(ph - 16, Math.round(ph * 0.8)))
+          return { x: Math.round((pw - w) / 2), y: Math.round((ph - h) / 2), w, h }
         }
         // Mobile: window selalu mengisi frame (x/y tetap 8px).
         if (isMobile()) {
-          return { x: 8, y: 8, w: Math.max(MIN_W, pw - 16), h: Math.max(MIN_H, ph - 16) };
+          return { x: 8, y: 8, w: Math.max(MIN_W, pw - 16), h: Math.max(MIN_H, ph - 16) }
         }
-        const w = Math.max(MIN_W, Math.min(prev.w, pw));
-        const h = Math.max(MIN_H, Math.min(prev.h, ph));
+        const w = Math.max(MIN_W, Math.min(prev.w, pw))
+        const h = Math.max(MIN_H, Math.min(prev.h, ph))
         return {
           w,
           h,
           x: Math.max(0, Math.min(prev.x, Math.max(0, pw - w))),
           y: Math.max(0, Math.min(prev.y, Math.max(0, ph - h))),
-        };
-      });
-    });
-    ro.observe(host);
-    return () => ro.disconnect();
-  }, []);
+        }
+      })
+    })
+    ro.observe(host)
+    return () => ro.disconnect()
+  }, [])
 
   // Ukuran viewport untuk menghitung skala render iframe.
-  const viewportRef = useRef<HTMLDivElement>(null);
-  const [vp, setVp] = useState({ w: 0, h: 0 });
+  const viewportRef = useRef<HTMLDivElement>(null)
+  const [vp, setVp] = useState({ w: 0, h: 0 })
 
   useEffect(() => {
-    const el = viewportRef.current;
-    if (!el) return;
-    const ro = new ResizeObserver(() =>
-      setVp({ w: el.clientWidth, h: el.clientHeight }),
-    );
-    ro.observe(el);
-    setVp({ w: el.clientWidth, h: el.clientHeight });
-    return () => ro.disconnect();
-  }, []);
+    const el = viewportRef.current
+    if (!el) return
+    const ro = new ResizeObserver(() => setVp({ w: el.clientWidth, h: el.clientHeight }))
+    ro.observe(el)
+    setVp({ w: el.clientWidth, h: el.clientHeight })
+    return () => ro.disconnect()
+  }, [])
 
   // Skala: lebar virtual diskalakan ke lebar viewport nyata.
   // 3 tier: ≤320px pakai 480 (teks 2x lebih besar dari 768 pada frame 224px),
   // <420px pakai 768, sisanya 1200.
   const virtualW =
-    vp.w > 0 && vp.w <= 240
-      ? VIRTUAL_W_TINY
-      : vp.w > 0 && vp.w < 420
-        ? VIRTUAL_W_MOBILE
-        : VIRTUAL_W;
-  const scale = vp.w > 0 ? vp.w / virtualW : 1;
+    vp.w > 0 && vp.w <= 240 ? VIRTUAL_W_TINY : vp.w > 0 && vp.w < 420 ? VIRTUAL_W_MOBILE : VIRTUAL_W
+  const scale = vp.w > 0 ? vp.w / virtualW : 1
   // Tinggi virtual: tinggi viewport dibagi skala -> iframe memenuhi area
   // konten, sama seperti mengubah tinggi window browser laptop.
-  const virtualH = scale > 0 ? Math.round(vp.h / scale) : 0;
+  const virtualH = scale > 0 ? Math.round(vp.h / scale) : 0
 
   // Pointer drag: pindahkan window (toolbar) atau perbesar (handle).
   useEffect(() => {
     const onMove = (e: PointerEvent) => {
-      const r = resizeRef.current;
+      const r = resizeRef.current
       if (r) {
-        const dx = e.clientX - r.startX;
-        const dy = e.clientY - r.startY;
-        const b = r.rect;
-        let x = b.x;
-        let y = b.y;
-        let w = b.w;
-        let h = b.h;
+        const dx = e.clientX - r.startX
+        const dy = e.clientY - r.startY
+        const b = r.rect
+        let x = b.x
+        let y = b.y
+        let w = b.w
+        let h = b.h
 
-        if (r.dir.includes('e')) w = b.w + dx;
-        if (r.dir.includes('s')) h = b.h + dy;
+        if (r.dir.includes('e')) w = b.w + dx
+        if (r.dir.includes('s')) h = b.h + dy
         if (r.dir.includes('w')) {
-          w = b.w - dx;
-          x = b.x + dx;
+          w = b.w - dx
+          x = b.x + dx
         }
         if (r.dir.includes('n')) {
-          h = b.h - dy;
-          y = b.y + dy;
+          h = b.h - dy
+          y = b.y + dy
         }
 
         // Hanya membesar: floor = ukuran default, ceiling = canvas.
-        w = Math.min(Math.max(w, r.floorW), r.maxW);
-        h = Math.min(Math.max(h, r.floorH), r.maxH);
+        w = Math.min(Math.max(w, r.floorW), r.maxW)
+        h = Math.min(Math.max(h, r.floorH), r.maxH)
 
         // Sisi kiri/atas dijangkarkan: tepi kanan/bawah tetap.
-        if (r.dir.includes('w')) x = b.x + b.w - w;
-        if (r.dir.includes('n')) y = b.y + b.h - h;
+        if (r.dir.includes('w')) x = b.x + b.w - w
+        if (r.dir.includes('n')) y = b.y + b.h - h
 
         // Tetap utuh di dalam canvas.
-        x = Math.max(0, Math.min(x, Math.max(0, r.maxW - w)));
-        y = Math.max(0, Math.min(y, Math.max(0, r.maxH - h)));
-        w = Math.min(w, r.maxW - x);
-        h = Math.min(h, r.maxH - y);
+        x = Math.max(0, Math.min(x, Math.max(0, r.maxW - w)))
+        y = Math.max(0, Math.min(y, Math.max(0, r.maxH - h)))
+        w = Math.min(w, r.maxW - x)
+        h = Math.min(h, r.maxH - y)
 
-        setRect({ x, y, w, h });
-        return;
+        setRect({ x, y, w, h })
+        return
       }
 
-      const m = moveRef.current;
-      if (!m) return;
-      const dx = e.clientX - m.startX;
-      const dy = e.clientY - m.startY;
+      const m = moveRef.current
+      if (!m) return
+      const dx = e.clientX - m.startX
+      const dy = e.clientY - m.startY
       // Clamp: window selalu utuh di dalam canvas.
-      const maxX = Math.max(0, m.maxW - m.rect.w);
-      const maxY = Math.max(0, m.maxH - m.rect.h);
-      const x = Math.min(Math.max(0, m.rect.x + dx), maxX);
-      const y = Math.min(Math.max(0, m.rect.y + dy), maxY);
-      setRect({ x, y, w: m.rect.w, h: m.rect.h });
-    };
+      const maxX = Math.max(0, m.maxW - m.rect.w)
+      const maxY = Math.max(0, m.maxH - m.rect.h)
+      const x = Math.min(Math.max(0, m.rect.x + dx), maxX)
+      const y = Math.min(Math.max(0, m.rect.y + dy), maxY)
+      setRect({ x, y, w: m.rect.w, h: m.rect.h })
+    }
 
     const onUp = () => {
       if (moveRef.current) {
-        moveRef.current = null;
-        document.body.classList.remove('is-moving-safari');
+        moveRef.current = null
+        document.body.classList.remove('is-moving-safari')
       }
       if (resizeRef.current) {
-        resizeRef.current = null;
-        document.body.classList.remove('is-resizing-safari');
+        resizeRef.current = null
+        document.body.classList.remove('is-resizing-safari')
       }
-    };
+    }
 
-    window.addEventListener('pointermove', onMove);
-    window.addEventListener('pointerup', onUp);
+    window.addEventListener('pointermove', onMove)
+    window.addEventListener('pointerup', onUp)
     return () => {
-      window.removeEventListener('pointermove', onMove);
-      window.removeEventListener('pointerup', onUp);
-      onUp();
-    };
+      window.removeEventListener('pointermove', onMove)
+      window.removeEventListener('pointerup', onUp)
+      onUp()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])
 
   // Mulai pindah window: dari area kosong toolbar/tab bar.
   const startMove = (e: React.PointerEvent) => {
-    const target = e.target as HTMLElement;
-    if (target.closest('button') || target.closest('.safari__dot')) return;
-    const host = rootRef.current?.closest('.service-frame') as HTMLElement | null;
-    if (!host || !rect) return;
-    const maxW = host.clientWidth;
-    const maxH = host.clientHeight;
-    if (maxW <= 0 || maxH <= 0) return;
-    e.preventDefault();
-    moveRef.current = { startX: e.clientX, startY: e.clientY, rect, maxW, maxH };
-    document.body.classList.add('is-moving-safari');
-  };
+    const target = e.target as HTMLElement
+    if (target.closest('button') || target.closest('.safari__dot')) return
+    const host = rootRef.current?.closest('.service-frame') as HTMLElement | null
+    if (!host || !rect) return
+    const maxW = host.clientWidth
+    const maxH = host.clientHeight
+    if (maxW <= 0 || maxH <= 0) return
+    e.preventDefault()
+    moveRef.current = { startX: e.clientX, startY: e.clientY, rect, maxW, maxH }
+    document.body.classList.add('is-moving-safari')
+  }
 
   // Mulai resize dari salah satu handle. Hanya memperbesar.
   const startResize = (e: React.PointerEvent, dir: Dir) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const host = rootRef.current?.closest('.service-frame') as HTMLElement | null;
-    if (!host || !rect) return;
-    const maxW = host.clientWidth;
-    const maxH = host.clientHeight;
-    if (maxW <= 0 || maxH <= 0) return;
+    e.preventDefault()
+    e.stopPropagation()
+    const host = rootRef.current?.closest('.service-frame') as HTMLElement | null
+    if (!host || !rect) return
+    const maxW = host.clientWidth
+    const maxH = host.clientHeight
+    if (maxW <= 0 || maxH <= 0) return
     // Floor = ukuran desain default, sama dengan ukuran awal window.
-    const floorW = Math.max(MIN_W, Math.min(maxW, Math.round(maxW * 0.9)));
-    const floorH = Math.max(MIN_H, Math.min(maxH, Math.round(maxH * 0.8)));
+    const floorW = Math.max(MIN_W, Math.min(maxW, Math.round(maxW * 0.9)))
+    const floorH = Math.max(MIN_H, Math.min(maxH, Math.round(maxH * 0.8)))
     resizeRef.current = {
       startX: e.clientX,
       startY: e.clientY,
@@ -321,47 +311,47 @@ export default function SafariWindow({
       floorH,
       maxW,
       maxH,
-    };
-    document.body.classList.add('is-resizing-safari');
-  };
+    }
+    document.body.classList.add('is-resizing-safari')
+  }
 
   // Double-click header = toggle maximize / restore (perilaku title bar OS).
   //   ukuran default        -> maximize penuh canvas
   //   maximize / sudah diubah-> kembali ke default 90% x 80%, rata tengah
   const toggleZoom = (e: React.MouseEvent) => {
-    const target = e.target as HTMLElement;
-    if (target.closest('button') || target.closest('.safari__dot')) return;
-    const host = rootRef.current?.closest('.service-frame') as HTMLElement | null;
-    if (!host || !rect) return;
-    const maxW = host.clientWidth;
-    const maxH = host.clientHeight;
-    if (maxW <= 0 || maxH <= 0) return;
+    const target = e.target as HTMLElement
+    if (target.closest('button') || target.closest('.safari__dot')) return
+    const host = rootRef.current?.closest('.service-frame') as HTMLElement | null
+    if (!host || !rect) return
+    const maxW = host.clientWidth
+    const maxH = host.clientHeight
+    if (maxW <= 0 || maxH <= 0) return
 
-    const defW = Math.max(MIN_W, Math.min(maxW - 16, Math.round(maxW * 0.9)));
-    const defH = Math.max(MIN_H, Math.min(maxH - 16, Math.round(maxH * 0.8)));
-    const isDefault = rect.w === defW && rect.h === defH;
+    const defW = Math.max(MIN_W, Math.min(maxW - 16, Math.round(maxW * 0.9)))
+    const defH = Math.max(MIN_H, Math.min(maxH - 16, Math.round(maxH * 0.8)))
+    const isDefault = rect.w === defW && rect.h === defH
 
     if (isDefault) {
-      setRect({ x: 0, y: 0, w: maxW, h: maxH });
+      setRect({ x: 0, y: 0, w: maxW, h: maxH })
     } else {
       setRect({
         x: Math.round((maxW - defW) / 2),
         y: Math.round((maxH - defH) / 2),
         w: defW,
         h: defH,
-      });
+      })
     }
-  };
+  }
 
-  const current = tabs[active];
+  const current = tabs[active]
 
   // Safari menampilkan domain di smart search field, bukan URL penuh.
-  let displayUrl = 'about:blank';
+  let displayUrl = 'about:blank'
   if (current.url) {
     try {
-      displayUrl = new URL(current.url).host.replace(/^www\./, '');
+      displayUrl = new URL(current.url).host.replace(/^www\./, '')
     } catch {
-      displayUrl = current.url;
+      displayUrl = current.url
     }
   }
 
@@ -528,7 +518,8 @@ export default function SafariWindow({
           <div className="safari__empty">
             <span className="safari__empty-label">{t('Slot showcase', 'Showcase slot')}</span>
             <p className="safari__empty-text">
-              {t('Isi', 'Fill in')} <code>url</code> {t('di', 'in')} <code>src/data/site.ts</code> {t('untuk menampilkan website di tab ini.', 'to display a website in this tab.')}
+              {t('Isi', 'Fill in')} <code>url</code> {t('di', 'in')} <code>src/data/site.ts</code>{' '}
+              {t('untuk menampilkan website di tab ini.', 'to display a website in this tab.')}
             </p>
           </div>
         )}
@@ -544,5 +535,5 @@ export default function SafariWindow({
         />
       ))}
     </div>
-  );
+  )
 }

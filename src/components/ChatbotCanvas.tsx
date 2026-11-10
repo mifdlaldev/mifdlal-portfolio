@@ -31,12 +31,28 @@ const TOPICS: Topic[] = [
     id: 'budget',
     label: 'Paket & timeline',
     msgs: [
-      { from: 'user', text: 'Bikin toko online, budgetnya berapa?', en: 'Build an online store, what budget?' },
-      { from: 'bot', text: 'Starter Rp 3,5jt (2 minggu). Grow Rp 8jt + SEO (4 minggu).', en: 'Starter IDR 3.5m (2 weeks). Grow IDR 8m + SEO (4 weeks).' },
+      {
+        from: 'user',
+        text: 'Bikin toko online, budgetnya berapa?',
+        en: 'Build an online store, what budget?',
+      },
+      {
+        from: 'bot',
+        text: 'Starter Rp 3,5jt (2 minggu). Grow Rp 8jt + SEO (4 minggu).',
+        en: 'Starter IDR 3.5m (2 weeks). Grow IDR 8m + SEO (4 weeks).',
+      },
       { from: 'user', text: 'Domain & hosting termasuk?', en: 'Domain & hosting included?' },
-      { from: 'bot', text: 'Termasuk 1 tahun. Perpanjangan Rp 900rb/tahun.', en: 'Included for 1 year. Renewal IDR 900k/year.' },
+      {
+        from: 'bot',
+        text: 'Termasuk 1 tahun. Perpanjangan Rp 900rb/tahun.',
+        en: 'Included for 1 year. Renewal IDR 900k/year.',
+      },
       { from: 'user', text: 'Revisi berapa putaran?', en: 'How many revision rounds?' },
-      { from: 'bot', text: '3 putaran per halaman, lebihnya dihitung per jam.', en: '3 rounds per page, extra billed hourly.' },
+      {
+        from: 'bot',
+        text: '3 putaran per halaman, lebihnya dihitung per jam.',
+        en: '3 rounds per page, extra billed hourly.',
+      },
     ],
     chips: ['Lihat paket', 'Konsultasi'],
     chipsEn: ['View packages', 'Consult'],
@@ -48,11 +64,23 @@ const TOPICS: Topic[] = [
     label: 'Domain & akses',
     msgs: [
       { from: 'user', text: 'Domain-nya atas nama siapa?', en: 'Whose name is the domain under?' },
-      { from: 'bot', text: 'Atas nama Anda. Saya hanya diberi akses DNS.', en: "Under your name. I'm only given DNS access." },
+      {
+        from: 'bot',
+        text: 'Atas nama Anda. Saya hanya diberi akses DNS.',
+        en: "Under your name. I'm only given DNS access.",
+      },
       { from: 'user', text: 'Kalau pindah vendor, bisa?', en: 'Can I move to another vendor?' },
-      { from: 'bot', text: 'Bisa. Auth code & akses admin diserahkan saat launch.', en: 'Yes. Auth code & admin access handed over at launch.' },
+      {
+        from: 'bot',
+        text: 'Bisa. Auth code & akses admin diserahkan saat launch.',
+        en: 'Yes. Auth code & admin access handed over at launch.',
+      },
       { from: 'user', text: 'Saya dapat admin panel penuh?', en: 'Do I get the full admin panel?' },
-      { from: 'bot', text: 'Ya, role administrator + training 30 menit.', en: 'Yes, administrator role + 30-minute training.' },
+      {
+        from: 'bot',
+        text: 'Ya, role administrator + training 30 menit.',
+        en: 'Yes, administrator role + 30-minute training.',
+      },
     ],
     chips: ['Lihat akses', 'Tanya tim'],
     chipsEn: ['View access', 'Ask team'],
@@ -63,12 +91,28 @@ const TOPICS: Topic[] = [
     id: 'revisi',
     label: 'Revisi & garansi',
     msgs: [
-      { from: 'user', text: 'Garansi setelah live berapa lama?', en: 'How long is the warranty after launch?' },
-      { from: 'bot', text: '30 hari untuk bug, gratis. Lewat itu kontrak support.', en: '30 days for bugs, free. Beyond that, a support contract.' },
+      {
+        from: 'user',
+        text: 'Garansi setelah live berapa lama?',
+        en: 'How long is the warranty after launch?',
+      },
+      {
+        from: 'bot',
+        text: '30 hari untuk bug, gratis. Lewat itu kontrak support.',
+        en: '30 days for bugs, free. Beyond that, a support contract.',
+      },
       { from: 'user', text: 'Revisi desain termasuk?', en: 'Are design revisions included?' },
-      { from: 'bot', text: '2 putaran desain + 3 putaran konten per halaman.', en: '2 design rounds + 3 content rounds per page.' },
+      {
+        from: 'bot',
+        text: '2 putaran desain + 3 putaran konten per halaman.',
+        en: '2 design rounds + 3 content rounds per page.',
+      },
       { from: 'user', text: 'Kalau minta ubah total?', en: 'What if I want a total change?' },
-      { from: 'bot', text: 'Masuk change order, estimasi dulu sebelum kerja.', en: 'It becomes a change order, estimated before work.' },
+      {
+        from: 'bot',
+        text: 'Masuk change order, estimasi dulu sebelum kerja.',
+        en: 'It becomes a change order, estimated before work.',
+      },
     ],
     chips: ['Lihat garansi', 'Konsultasi'],
     chipsEn: ['View warranty', 'Consult'],
@@ -80,11 +124,23 @@ const TOPICS: Topic[] = [
     label: 'SEO & hasil',
     msgs: [
       { from: 'user', text: 'SEO-nya beneran jalan?', en: 'Does the SEO actually work?' },
-      { from: 'bot', text: 'Meta, H1, schema, sitemap, Search Console saat launch.', en: 'Meta, H1, schema, sitemap, Search Console at launch.' },
+      {
+        from: 'bot',
+        text: 'Meta, H1, schema, sitemap, Search Console saat launch.',
+        en: 'Meta, H1, schema, sitemap, Search Console at launch.',
+      },
       { from: 'user', text: 'Berapa lama naik peringkat?', en: 'How long to rank up?' },
-      { from: 'bot', text: 'Realistis 3-6 bulan. Tanpa janji halaman 1.', en: 'Realistically 3-6 months. No page 1 promises.' },
+      {
+        from: 'bot',
+        text: 'Realistis 3-6 bulan. Tanpa janji halaman 1.',
+        en: 'Realistically 3-6 months. No page 1 promises.',
+      },
       { from: 'user', text: 'Ada laporan bulanan?', en: 'Is there a monthly report?' },
-      { from: 'bot', text: 'Ya, ringkasan trafik + kata kunci tiap awal bulan.', en: 'Yes, a traffic + keyword summary at the start of each month.' },
+      {
+        from: 'bot',
+        text: 'Ya, ringkasan trafik + kata kunci tiap awal bulan.',
+        en: 'Yes, a traffic + keyword summary at the start of each month.',
+      },
     ],
     chips: ['Lihat rincian', 'Konsultasi'],
     chipsEn: ['View details', 'Consult'],
@@ -96,11 +152,23 @@ const TOPICS: Topic[] = [
     label: 'Maintenance',
     msgs: [
       { from: 'user', text: 'Ada biaya bulanan?', en: 'Is there a monthly fee?' },
-      { from: 'bot', text: 'Maintenance Rp 450rb/bulan: update, backup, monitoring.', en: 'Maintenance IDR 450k/month: updates, backup, monitoring.' },
+      {
+        from: 'bot',
+        text: 'Maintenance Rp 450rb/bulan: update, backup, monitoring.',
+        en: 'Maintenance IDR 450k/month: updates, backup, monitoring.',
+      },
       { from: 'user', text: 'Kalau website error?', en: 'What if the website errors?' },
-      { from: 'bot', text: 'Respons 1x24 jam kerja, prioritas kalau down.', en: 'Response within 24 business hours, priority if down.' },
+      {
+        from: 'bot',
+        text: 'Respons 1x24 jam kerja, prioritas kalau down.',
+        en: 'Response within 24 business hours, priority if down.',
+      },
       { from: 'user', text: 'Bisa upgrade paket nanti?', en: 'Can I upgrade the package later?' },
-      { from: 'bot', text: 'Bisa, fitur tambahan dihitung dari scope baru.', en: 'Yes, extra features are billed from the new scope.' },
+      {
+        from: 'bot',
+        text: 'Bisa, fitur tambahan dihitung dari scope baru.',
+        en: 'Yes, extra features are billed from the new scope.',
+      },
     ],
     chips: ['Lihat paket', 'Konsultasi'],
     chipsEn: ['View packages', 'Consult'],
@@ -112,11 +180,23 @@ const TOPICS: Topic[] = [
     label: 'Serah terima',
     msgs: [
       { from: 'user', text: 'Pembayarannya bagaimana?', en: 'How is payment handled?' },
-      { from: 'bot', text: 'DP 50% saat kontrak, 50% setelah approve sebelum launch.', en: '50% down payment at contract, 50% after approval before launch.' },
+      {
+        from: 'bot',
+        text: 'DP 50% saat kontrak, 50% setelah approve sebelum launch.',
+        en: '50% down payment at contract, 50% after approval before launch.',
+      },
       { from: 'user', text: 'Apa saja yang diserahkan?', en: 'What gets handed over?' },
-      { from: 'bot', text: 'Kode, hosting, domain, analytics, manual CMS.', en: 'Code, hosting, domain, analytics, CMS manual.' },
+      {
+        from: 'bot',
+        text: 'Kode, hosting, domain, analytics, manual CMS.',
+        en: 'Code, hosting, domain, analytics, CMS manual.',
+      },
       { from: 'user', text: 'Berapa lama prosesnya?', en: 'How long does the process take?' },
-      { from: 'bot', text: 'Serah terima 3 hari kerja setelah peluncuran.', en: 'Handover 3 business days after launch.' },
+      {
+        from: 'bot',
+        text: 'Serah terima 3 hari kerja setelah peluncuran.',
+        en: 'Handover 3 business days after launch.',
+      },
     ],
     chips: ['Lihat alur', 'Konsultasi'],
     chipsEn: ['View flow', 'Consult'],
@@ -291,7 +371,9 @@ export default function ChatbotCanvas() {
       <div className="cb-browser" aria-hidden="true">
         <div className="cb-br-bar">
           <span className="cb-br-dots">
-            <span></span><span></span><span></span>
+            <span></span>
+            <span></span>
+            <span></span>
           </span>
           <span className="cb-br-url">mifdlal.com</span>
         </div>
@@ -312,27 +394,44 @@ export default function ChatbotCanvas() {
 
           {/* Hero */}
           <div className="cb-br-hero">
-            <span className="cb-br-kicker">{T('Studio web + otomatisasi AI', 'Web studio + AI automation')}</span>
+            <span className="cb-br-kicker">
+              {T('Studio web + otomatisasi AI', 'Web studio + AI automation')}
+            </span>
             <span className="cb-br-h1">
               {lang === 'en' ? (
-                <>Websites that <span className="cb-br-mark">work</span>, not just look.</>
+                <>
+                  Websites that <span className="cb-br-mark">work</span>, not just look.
+                </>
               ) : (
-                <>Website yang <span className="cb-br-mark">bekerja</span>, bukan cuma tampil.</>
+                <>
+                  Website yang <span className="cb-br-mark">bekerja</span>, bukan cuma tampil.
+                </>
               )}
             </span>
-            <span className="cb-br-sub">{T('Asisten menjawab pelanggan 24 jam, tanpa Anda ribut.', 'Assistants answer customers 24/7, without the hassle.')}</span>
+            <span className="cb-br-sub">
+              {T(
+                'Asisten menjawab pelanggan 24 jam, tanpa Anda ribut.',
+                'Assistants answer customers 24/7, without the hassle.'
+              )}
+            </span>
             <span className="cb-br-actions">
               <span className="cb-br-cta">{T('Mulai proyek', 'Start a project')}</span>
               <span className="cb-br-ghost">
-                <svg className="cb-br-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <svg
+                  className="cb-br-play"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
                   <path d="M8 5.14v13.72c0 .8.87 1.3 1.55.97l11-6.86a.99.99 0 0 0 0-1.94l-11-6.86A.99.99 0 0 0 8 5.14Z" />
                 </svg>
                 {T('Lihat preview', 'View preview')}
               </span>
             </span>
-            <span className="cb-br-trust">{T('Konsultasi 30 menit · tanpa DP', '30-minute consultation · no deposit')}</span>
+            <span className="cb-br-trust">
+              {T('Konsultasi 30 menit · tanpa DP', '30-minute consultation · no deposit')}
+            </span>
           </div>
-
 
           {/* Widget chat — pojok kanan bawah viewport browser */}
           <div className="cb-widget">
@@ -419,7 +518,16 @@ export default function ChatbotCanvas() {
               </svg>
               {/* Baterai */}
               <svg className="cb-ico cb-ico-batt" viewBox="0 0 25 12" fill="currentColor">
-                <rect x="0.5" y="0.5" width="21" height="11" rx="3" fill="none" stroke="currentColor" strokeWidth="1" />
+                <rect
+                  x="0.5"
+                  y="0.5"
+                  width="21"
+                  height="11"
+                  rx="3"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1"
+                />
                 <rect x="2" y="2" width="18" height="8" rx="1.5" />
                 <rect x="22" y="3.5" width="2" height="5" rx="1" />
               </svg>
@@ -443,9 +551,7 @@ export default function ChatbotCanvas() {
             {topic.msgs.slice(0, shown).map((m, i) => (
               <motion.div
                 key={topic.id + '-' + i}
-                className={
-                  'cb-bubble ' + (m.from === 'user' ? 'cb-bubble--out' : 'cb-bubble--in')
-                }
+                className={'cb-bubble ' + (m.from === 'user' ? 'cb-bubble--out' : 'cb-bubble--in')}
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.18, ease: 'easeOut' }}
@@ -509,7 +615,9 @@ export default function ChatbotCanvas() {
               <span className="cb-handoff-avatar">
                 <HugeiconsIcon icon={UserIcon} />
               </span>
-              <span className="cb-handoff-text">{lang === 'en' ? topic.handoffEn : topic.handoff}</span>
+              <span className="cb-handoff-text">
+                {lang === 'en' ? topic.handoffEn : topic.handoff}
+              </span>
             </motion.div>
           )}
 

@@ -30,9 +30,13 @@ import CodeComment from './CodeComment.astro'
 
       <div class="about-copy">
         <div class="section-head rise" data-rise="right">
-          <span class="fig-label" data-i18n-en="fig. 02 · about">fig. 02 · tentang</span>
+          <span class="fig-label" data-i18n-en="fig. 02 · about">
+            fig. 02 · tentang
+          </span>
           <h2 class="section-headline">
-            <span class="hello"><span data-i18n-en="Hello">Halo</span><svg
+            <span class="hello">
+              <span data-i18n-en="Hello">Halo</span>
+              <svg
                 class="hello-mark"
                 aria-hidden="true"
                 focusable="false"
@@ -42,28 +46,36 @@ import CodeComment from './CodeComment.astro'
                 stroke-width="2.6"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                ><g class="hello-mark-arm"
-                  ><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2" /><path
-                    d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2"
-                  /><path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8" /><path
-                    d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"
-                  /></g
-                ></svg
-              ></span
-            ><span data-i18n-en=", I'm Mifdlal.">, saya Mifdlal.</span>
+              >
+                <g class="hello-mark-arm">
+                  <path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2" />
+                  <path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2" />
+                  <path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8" />
+                  <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15" />
+                </g>
+              </svg>
+            </span>
+            <span data-i18n-en=", I'm Mifdlal.">, saya Mifdlal.</span>
           </h2>
         </div>
         <p class="rise" style="--rise-delay:120ms">
-          <span data-i18n-en="I'm an ">Saya seorang </span><strong>AI Automation &amp; Web Developer</strong><span data-i18n-en=" with over 2 years of experience and a Software Engineering background. I build AI automation, chatbots, websites, and web applications, using AI to make the development process more efficient."> dengan
-          pengalaman lebih dari 2 tahun dan latar belakang Rekayasa Perangkat
-          Lunak. Saya membangun AI Automation, Chatbot, Website, dan Web
-          Application dengan memanfaatkan AI untuk membantu proses pengembangan
-          menjadi lebih efisien.</span>
+          <span data-i18n-en="I'm an ">Saya seorang </span>
+          <strong>AI Automation &amp; Web Developer</strong>
+          <span data-i18n-en=" with over 2 years of experience and a Software Engineering background. I build AI automation, chatbots, websites, and web applications, using AI to make the development process more efficient.">
+            {' '}
+            dengan pengalaman lebih dari 2 tahun dan latar belakang Rekayasa Perangkat Lunak. Saya
+            membangun AI Automation, Chatbot, Website, dan Web Application dengan memanfaatkan AI
+            untuk membantu proses pengembangan menjadi lebih efisien.
+          </span>
         </p>
-        <p class="rise" style="--rise-delay:240ms" data-i18n-en="I love exploring new technologies and turning ideas into something that truly works. Have an idea or project you want to build? Let's discuss it via the contact info below.">
-          Saya senang mengeksplorasi teknologi baru dan mengubah ide menjadi
-          sesuatu yang benar-benar bisa digunakan. Punya ide atau proyek yang
-          ingin dibangun? Mari diskusikan melalui kontak yang tersedia.
+        <p
+          class="rise"
+          style="--rise-delay:240ms"
+          data-i18n-en="I love exploring new technologies and turning ideas into something that truly works. Have an idea or project you want to build? Let's discuss it via the contact info below."
+        >
+          Saya senang mengeksplorasi teknologi baru dan mengubah ide menjadi sesuatu yang
+          benar-benar bisa digunakan. Punya ide atau proyek yang ingin dibangun? Mari diskusikan
+          melalui kontak yang tersedia.
         </p>
       </div>
     </div>
@@ -139,11 +151,7 @@ import CodeComment from './CodeComment.astro'
       color-mix(in srgb, var(--color-white) 26%, transparent) 58%,
       transparent 70%
     );
-    transform: translate3d(
-      calc(var(--reflect-x) * 16%),
-      calc(var(--reflect-y) * 16%),
-      0
-    );
+    transform: translate3d(calc(var(--reflect-x) * 16%), calc(var(--reflect-y) * 16%), 0);
     will-change: transform;
   }
 
@@ -163,12 +171,11 @@ import CodeComment from './CodeComment.astro'
       color-mix(in srgb, var(--color-lemon) 52%, transparent) 24%,
       transparent 54%
     );
-    -webkit-mask-image: linear-gradient(var(--color-ink) 0 0),
-      linear-gradient(var(--color-ink) 0 0);
+    -webkit-mask-image:
+      linear-gradient(var(--color-ink) 0 0), linear-gradient(var(--color-ink) 0 0);
     -webkit-mask-clip: content-box, border-box;
     -webkit-mask-composite: xor;
-    mask-image: linear-gradient(var(--color-ink) 0 0),
-      linear-gradient(var(--color-ink) 0 0);
+    mask-image: linear-gradient(var(--color-ink) 0 0), linear-gradient(var(--color-ink) 0 0);
     mask-clip: content-box, border-box;
     mask-composite: exclude;
   }
@@ -179,7 +186,6 @@ import CodeComment from './CodeComment.astro'
     .reflect-sheen {
       opacity: 0.34;
     }
-
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -190,7 +196,6 @@ import CodeComment from './CodeComment.astro'
     .reflect-sheen {
       opacity: 0.34;
     }
-
   }
 
   /* Tangan pelukis: ikon lucide "hand" dari katalog AnimateIcons.
@@ -251,9 +256,7 @@ import CodeComment from './CodeComment.astro'
     .hello-mark {
       animation: none;
     }
-
   }
-
 
   .portrait figcaption {
     margin-top: 0.65rem;

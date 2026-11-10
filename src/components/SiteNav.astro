@@ -34,19 +34,21 @@ const links = [
 
     <nav aria-label="Navigasi utama" data-i18n-aria="Main navigation" class="nav-links">
       {links.map((l) => (
-        <a href={l.href} class="nav-link" data-i18n-en={l.en}>{l.label}</a>
+        <a href={l.href} class="nav-link" data-i18n-en={l.en}>
+          {l.label}
+        </a>
       ))}
     </nav>
 
     <div class="nav-actions">
-      <a href="#kontak" class="btn btn-nav" data-i18n-en="Start a project">Mulai Proyek</a>
+      <a href="#kontak" class="btn btn-nav" data-i18n-en="Start a project">
+        Mulai Proyek
+      </a>
     </div>
   </div>
 </header>
 
 <script is:inline src="/js/nav-scroll.js" defer></script>
-
-
 
 <style>
   .nav {
@@ -79,8 +81,11 @@ const links = [
 
   @media (prefers-reduced-motion: no-preference) {
     .nav {
-      transition: background-color var(--dur-slow) var(--ease), box-shadow var(--dur-slow) var(--ease),
-        border-color var(--dur-slow) var(--ease), color var(--dur-slow) var(--ease);
+      transition:
+        background-color var(--dur-slow) var(--ease),
+        box-shadow var(--dur-slow) var(--ease),
+        border-color var(--dur-slow) var(--ease),
+        color var(--dur-slow) var(--ease);
     }
   }
   /* Posisi fixed/top: teks putih + tombol putih dengan teks ink. */
@@ -117,7 +122,9 @@ const links = [
     .brand-word,
     .brand-logo,
     .btn-nav {
-      transition: color var(--dur-slow) var(--ease), background-color var(--dur-slow) var(--ease),
+      transition:
+        color var(--dur-slow) var(--ease),
+        background-color var(--dur-slow) var(--ease),
         border-color var(--dur-slow) var(--ease);
       /* filter tidak ikut shorthand di atas; beri transisinya sendiri. */
     }
@@ -189,7 +196,7 @@ const links = [
      tengah; width 0 -> 100% melebar dua arah sekaligus.
      currentColor supaya warna garis ikut state teks (muted/ink/paper). */
   .nav-link::after {
-    content: "";
+    content: '';
     position: absolute;
     left: 50%;
     top: calc(50% + 0.7em);
@@ -243,7 +250,9 @@ const links = [
   }
 
   @media (min-width: 860px) {
-    .nav-links { display: flex; }
+    .nav-links {
+      display: flex;
+    }
   }
 
   /* Mobile: brand + tombol CTA. Link section disembunyikan supaya

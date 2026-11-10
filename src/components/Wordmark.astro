@@ -9,7 +9,9 @@
 <section class="wordmark" data-word="MIFDLAL" aria-hidden="true">
   <span class="wm-anno wm-anno--fig">fig. 09 · wordmark</span>
   <span class="wm-anno wm-anno--spec">grid 1180 · dot 26 · 7 glyph</span>
-  <span class="wm-anno wm-anno--dim" data-dim-value>1180</span>
+  <span class="wm-anno wm-anno--dim" data-dim-value>
+    1180
+  </span>
   <span class="wm-node wm-node--tl"></span>
   <span class="wm-node wm-node--tr"></span>
   <span class="wm-node wm-node--bl"></span>
@@ -55,7 +57,11 @@
     background-size: 26px 26px;
     clip-path: polygon(
       evenodd,
-      0 0, 100% 0, 100% 100%, 0 100%, 0 0,
+      0 0,
+      100% 0,
+      100% 100%,
+      0 100%,
+      0 0,
       var(--wm-f-left) var(--wm-f-top),
       var(--wm-f-left) calc(var(--wm-f-top) + var(--wm-f-h)),
       calc(var(--wm-f-left) + var(--wm-f-w)) calc(var(--wm-f-top) + var(--wm-f-h)),
@@ -188,10 +194,22 @@
     pointer-events: none;
   }
 
-  .wm-node--tl { left: var(--wm-f-left); top: var(--wm-f-top); }
-  .wm-node--tr { left: calc(var(--wm-f-left) + var(--wm-f-w)); top: var(--wm-f-top); }
-  .wm-node--bl { left: var(--wm-f-left); top: calc(var(--wm-f-top) + var(--wm-f-h)); }
-  .wm-node--br { left: calc(var(--wm-f-left) + var(--wm-f-w)); top: calc(var(--wm-f-top) + var(--wm-f-h)); }
+  .wm-node--tl {
+    left: var(--wm-f-left);
+    top: var(--wm-f-top);
+  }
+  .wm-node--tr {
+    left: calc(var(--wm-f-left) + var(--wm-f-w));
+    top: var(--wm-f-top);
+  }
+  .wm-node--bl {
+    left: var(--wm-f-left);
+    top: calc(var(--wm-f-top) + var(--wm-f-h));
+  }
+  .wm-node--br {
+    left: calc(var(--wm-f-left) + var(--wm-f-w));
+    top: calc(var(--wm-f-top) + var(--wm-f-h));
+  }
 
   /* Teks wordmark: gradasi horizontal electric → cyan → green → lemon,
      sesuai palet situs. Pakai color langsung (bukan background-clip:text)
@@ -279,81 +297,87 @@
      2. Ukur bounding box teks (Canvas2D measureText) → isi CSS variables
         --wm-f-* untuk kotak plat, node sudut, garis dimensi, label.
         Sekali jalan + debounce resize. Tanpa rAF loop. */
-  (() => {
-    const band = document.querySelector<HTMLElement>('.wordmark');
-    const text = band?.querySelector<HTMLElement>('.wordmark-text');
-    const dimValue = band?.querySelector<HTMLElement>('[data-dim-value]');
-    if (!band || !text) return;
+  ;(() => {
+    const band = document.querySelector<HTMLElement>('.wordmark')
+    const text = band?.querySelector<HTMLElement>('.wordmark-text')
+    const dimValue = band?.querySelector<HTMLElement>('[data-dim-value]')
+    if (!band || !text) return
 
     // ── Reveal animasi ──
     if (!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
-      const addIn = () => band.classList.add('is-in');
+      const addIn = () => band.classList.add('is-in')
       const obs = new IntersectionObserver(
         (entries) => {
           if (entries.some((e) => e.isIntersecting)) {
-            addIn();
-            obs.disconnect();
+            addIn()
+            obs.disconnect()
           }
         },
         { threshold: 0.05 }
-      );
-      obs.observe(band);
-      setTimeout(addIn, 1200);
+      )
+      obs.observe(band)
+      setTimeout(addIn, 1200)
     } else {
-      band.classList.add('is-in');
+      band.classList.add('is-in')
     }
 
     // ── Ukur teks → posisi dekorasi ──
-    const canvas = document.createElement('canvas').getContext('2d');
+    const canvas = document.createElement('canvas').getContext('2d')
 
     const measure = () => {
-      if (!canvas) return;
-      const cs = getComputedStyle(text);
-      const fontSize = parseFloat(cs.fontSize);
-      canvas.font = `${cs.fontWeight} ${fontSize}px ${cs.fontFamily}`;
-      try { canvas.letterSpacing = cs.letterSpacing; } catch (e) {}
+      if (!canvas) return
+      const cs = getComputedStyle(text)
+      const fontSize = parseFloat(cs.fontSize)
+      canvas.font = `${cs.fontWeight} ${fontSize}px ${cs.fontFamily}`
+      try {
+        canvas.letterSpacing = cs.letterSpacing
+      } catch (e) {}
 
-      const word = text.textContent.trim();
-      const m = canvas.measureText(word);
-      const w = m.width;
-      const ascent = m.actualBoundingBoxAscent || fontSize * 0.8;
-      const descent = m.actualBoundingBoxDescent || fontSize * 0.2;
-      const h = ascent + descent;
+      const word = text.textContent.trim()
+      const m = canvas.measureText(word)
+      const w = m.width
+      const ascent = m.actualBoundingBoxAscent || fontSize * 0.8
+      const descent = m.actualBoundingBoxDescent || fontSize * 0.2
+      const h = ascent + descent
 
-      const bandRect = band.getBoundingClientRect();
+      const bandRect = band.getBoundingClientRect()
       // scale parallax/reveal transform via getBoundingClientRect
-      const padX = parseFloat(getComputedStyle(band).paddingLeft);
-      const padY = parseFloat(getComputedStyle(band).paddingTop);
-      const innerW = bandRect.width - padX * 2;
-      const innerH = bandRect.height - padY * 2;
+      const padX = parseFloat(getComputedStyle(band).paddingLeft)
+      const padY = parseFloat(getComputedStyle(band).paddingTop)
+      const innerW = bandRect.width - padX * 2
+      const innerH = bandRect.height - padY * 2
 
-      const left = padX + (innerW - w) / 2;
-      const top = padY + (innerH - h) / 2;
+      const left = padX + (innerW - w) / 2
+      const top = padY + (innerH - h) / 2
 
-      band.style.setProperty('--wm-f-left', Math.round(left) + 'px');
-      band.style.setProperty('--wm-f-top', Math.round(top) + 'px');
-      band.style.setProperty('--wm-f-w', Math.round(w) + 'px');
-      band.style.setProperty('--wm-f-h', Math.round(h) + 'px');
+      band.style.setProperty('--wm-f-left', Math.round(left) + 'px')
+      band.style.setProperty('--wm-f-top', Math.round(top) + 'px')
+      band.style.setProperty('--wm-f-w', Math.round(w) + 'px')
+      band.style.setProperty('--wm-f-h', Math.round(h) + 'px')
 
-      band.style.setProperty('--wm-dim-left', Math.round(left) + 'px');
-      band.style.setProperty('--wm-dim-w', Math.round(w) + 'px');
-      band.style.setProperty('--wm-dim-y', Math.round(top + h + 14) + 'px');
+      band.style.setProperty('--wm-dim-left', Math.round(left) + 'px')
+      band.style.setProperty('--wm-dim-w', Math.round(w) + 'px')
+      band.style.setProperty('--wm-dim-y', Math.round(top + h + 14) + 'px')
 
-      if (dimValue) dimValue.textContent = String(Math.round(w));
+      if (dimValue) dimValue.textContent = String(Math.round(w))
 
-      band.setAttribute('data-plate', 'true');
-      band.setAttribute('data-dim', 'true');
-    };
+      band.setAttribute('data-plate', 'true')
+      band.setAttribute('data-dim', 'true')
+    }
 
     if (document.fonts?.ready) {
-      document.fonts.ready.then(measure).catch(measure);
+      document.fonts.ready.then(measure).catch(measure)
     }
-    setTimeout(measure, 100); // fallback
+    setTimeout(measure, 100) // fallback
 
-    let resizeTimer: ReturnType<typeof setTimeout>;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(measure, 200);
-    }, { passive: true });
-  })();
+    let resizeTimer: ReturnType<typeof setTimeout>
+    window.addEventListener(
+      'resize',
+      () => {
+        clearTimeout(resizeTimer)
+        resizeTimer = setTimeout(measure, 200)
+      },
+      { passive: true }
+    )
+  })()
 </script>

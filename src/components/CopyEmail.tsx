@@ -1,8 +1,8 @@
-"use client";
+'use client'
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import UseAnimations from "react-useanimations";
-import copyIcon from "react-useanimations/lib/copy";
+import { useCallback, useEffect, useRef, useState } from 'react'
+import UseAnimations from 'react-useanimations'
+import copyIcon from 'react-useanimations/lib/copy'
 
 /* Tombol salin alamat email.
 
@@ -20,81 +20,91 @@ import copyIcon from "react-useanimations/lib/copy";
       di layar sentuh menempel setelah tap.
    4. Status "Tersalin" diumumkan lewat role="status", bukan hanya warna. */
 
-type CopyStatus = "idle" | "done" | "fail";
+type CopyStatus = 'idle' | 'done' | 'fail'
 
 const COPY_LABELS = {
-  id: { copy: (email: string) => `Salin alamat email ${email}`, done: "Tersalin", fail: "Salin manual" },
-  en: { copy: (email: string) => `Copy email address ${email}`, done: "Copied", fail: "Copy manually" },
-} as const;
+  id: {
+    copy: (email: string) => `Salin alamat email ${email}`,
+    done: 'Tersalin',
+    fail: 'Salin manual',
+  },
+  en: {
+    copy: (email: string) => `Copy email address ${email}`,
+    done: 'Copied',
+    fail: 'Copy manually',
+  },
+} as const
 
 type CopyEmailProps = {
-  email: string;
-};
+  email: string
+}
 
 export default function CopyEmail({ email }: CopyEmailProps) {
-  const [status, setStatus] = useState<CopyStatus>("idle");
-  const [mounted, setMounted] = useState(false);
-  const [lang, setLang] = useState<"id" | "en">("id");
-  const timer = useRef<number | null>(null);
+  const [status, setStatus] = useState<CopyStatus>('idle')
+  const [mounted, setMounted] = useState(false)
+  const [lang, setLang] = useState<'id' | 'en'>('id')
+  const timer = useRef<number | null>(null)
 
-  useEffect(() => setMounted(true), []);
+  useEffect(() => setMounted(true), [])
 
   useEffect(() => {
     try {
-      const p = JSON.parse(localStorage.getItem("mifdlal-prefs") || "{}");
-      if (p.lang === "en") setLang("en");
+      const p = JSON.parse(localStorage.getItem('mifdlal-prefs') || '{}')
+      if (p.lang === 'en') setLang('en')
     } catch {
       /* default id */
     }
     const onLang = (e: Event) => {
-      const v = (e as CustomEvent).detail;
-      if (v === "id" || v === "en") setLang(v);
-    };
-    window.addEventListener("mifdlal:lang", onLang);
-    return () => window.removeEventListener("mifdlal:lang", onLang);
-  }, []);
+      const v = (e as CustomEvent).detail
+      if (v === 'id' || v === 'en') setLang(v)
+    }
+    window.addEventListener('mifdlal:lang', onLang)
+    return () => window.removeEventListener('mifdlal:lang', onLang)
+  }, [])
 
   useEffect(
     () => () => {
-      if (timer.current !== null) window.clearTimeout(timer.current);
+      if (timer.current !== null) window.clearTimeout(timer.current)
     },
-    [],
-  );
+    []
+  )
 
-  const announce = useCallback((next: Exclude<CopyStatus, "idle">) => {
-    setStatus(next);
-    if (timer.current !== null) window.clearTimeout(timer.current);
-    timer.current = window.setTimeout(() => setStatus("idle"), 2200);
-  }, []);
+  const announce = useCallback((next: Exclude<CopyStatus, 'idle'>) => {
+    setStatus(next)
+    if (timer.current !== null) window.clearTimeout(timer.current)
+    timer.current = window.setTimeout(() => setStatus('idle'), 2200)
+  }, [])
 
   const copy = useCallback(async () => {
     try {
       if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(email);
+        await navigator.clipboard.writeText(email)
       } else {
         /* Fallback untuk konteks tidak aman (http, WebView lama). */
-        const field = document.createElement("textarea");
-        field.value = email;
-        field.setAttribute("readonly", "");
-        field.style.position = "fixed";
-        field.style.top = "0";
-        field.style.opacity = "0";
-        document.body.appendChild(field);
-        field.select();
+        const field = document.createElement('textarea')
+        field.value = email
+        field.setAttribute('readonly', '')
+        field.style.position = 'fixed'
+        field.style.top = '0'
+        field.style.opacity = '0'
+        document.body.appendChild(field)
+        field.select()
         /* execCommand masih satu-satunya salinan sinkron di konteks tidak aman
            (navigator.clipboard tidak tersedia di http/WebView lama). Deprecated
            di tipe DOM, jadi dipanggil lewat cast bertipe agar hint tsc bersih. */
-        const copied = (document as unknown as { execCommand(cmd: string): boolean }).execCommand("copy");
-        document.body.removeChild(field);
-        if (!copied) throw new Error("execCommand copy gagal");
+        const copied = (document as unknown as { execCommand(cmd: string): boolean }).execCommand(
+          'copy'
+        )
+        document.body.removeChild(field)
+        if (!copied) throw new Error('execCommand copy gagal')
       }
-      announce("done");
+      announce('done')
     } catch {
-      announce("fail");
+      announce('fail')
     }
-  }, [email, announce]);
+  }, [email, announce])
 
-  const labels = COPY_LABELS[lang];
+  const labels = COPY_LABELS[lang]
 
   return (
     <span className="copy-email">
@@ -116,14 +126,19 @@ export default function CopyEmail({ email }: CopyEmailProps) {
               aria-label={labels.copy(email)}
               aria-hidden={undefined}
               onClick={(event) => {
-                void copy();
-                eventProps.onClick(event);
+                void copy()
+                eventProps.onClick(event)
               }}
             />
           )}
         />
       ) : (
-        <button type="button" className="copy-email__btn" onClick={copy} aria-label={labels.copy(email)}>
+        <button
+          type="button"
+          className="copy-email__btn"
+          onClick={copy}
+          aria-label={labels.copy(email)}
+        >
           <svg
             viewBox="0 0 24 24"
             width={18}
@@ -142,8 +157,8 @@ export default function CopyEmail({ email }: CopyEmailProps) {
         </button>
       )}
       <span className="copy-email__status" role="status" aria-live="polite">
-        {status === "done" ? labels.done : status === "fail" ? labels.fail : ""}
+        {status === 'done' ? labels.done : status === 'fail' ? labels.fail : ''}
       </span>
     </span>
-  );
+  )
 }

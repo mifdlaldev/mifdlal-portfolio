@@ -7,8 +7,12 @@ import CodeComment from './CodeComment.astro'
   <CodeComment text="// proyek" textEn="// work" />
   <div class="wrap">
     <div class="section-head rise">
-      <span class="fig-label" data-i18n-en="fig. 03 · work">fig. 03 · proyek</span>
-      <h2 class="section-headline" data-i18n-en="Work you can browse">Hasil kerja yang dapat Anda lihat.</h2>
+      <span class="fig-label" data-i18n-en="fig. 03 · work">
+        fig. 03 · proyek
+      </span>
+      <h2 class="section-headline" data-i18n-en="Work you can browse">
+        Hasil kerja yang dapat Anda lihat.
+      </h2>
     </div>
 
     <ul class="project-list">
@@ -27,10 +31,7 @@ import CodeComment from './CodeComment.astro'
                   sama, bergerak mengikuti scroll — pola .service-photo-clip
                   di canvas layanan. */}
               <span class="project-photo-clip" aria-hidden="true">
-                <span
-                  class="project-photo"
-                  style={`background-image: url('${p.image}')`}
-                ></span>
+                <span class="project-photo" style={`background-image: url('${p.image}')`}></span>
               </span>
 
               {/* Foto utama: TETAP di tengah, tidak bergerak, tidak
@@ -53,18 +54,31 @@ import CodeComment from './CodeComment.astro'
               <span class="project-corner project-corner--bl" aria-hidden="true"></span>
               <span class="project-corner project-corner--br" aria-hidden="true"></span>
 
-              <span class="project-no" aria-hidden="true">{p.no}</span>
+              <span class="project-no" aria-hidden="true">
+                {p.no}
+              </span>
             </span>
 
             <span class="project-body">
-              <span class="project-role" data-i18n-en={p.roleEn}>{p.role}</span>
-              <span class="project-name" data-i18n-en={p.nameEn}>{p.name}</span>
-              <span class="project-desc" data-i18n-en={p.descriptionEn}>{p.description}</span>
+              <span class="project-role" data-i18n-en={p.roleEn}>
+                {p.role}
+              </span>
+              <span class="project-name" data-i18n-en={p.nameEn}>
+                {p.name}
+              </span>
+              <span class="project-desc" data-i18n-en={p.descriptionEn}>
+                {p.description}
+              </span>
 
               <span class="project-foot">
-                <span class="project-stack" data-i18n-en={p.stackEn?.join(' · ')}>{p.stack.join(' · ')}</span>
+                <span class="project-stack" data-i18n-en={p.stackEn?.join(' · ')}>
+                  {p.stack.join(' · ')}
+                </span>
                 <span class="project-live">
-                  live<span class="project-arrow" aria-hidden="true">↗</span>
+                  live
+                  <span class="project-arrow" aria-hidden="true">
+                    ↗
+                  </span>
                 </span>
               </span>
             </span>
@@ -407,57 +421,57 @@ import CodeComment from './CodeComment.astro'
      foto 140% tinggi frame, tepi atas -20%, pergeseran ±20% tinggi frame saat
      scroll. Hanya berlaku untuk kartu dengan field `image` (memiliki
      .project-photo-clip). Dimatikan saat prefers-reduced-motion: reduce. */
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
   if (!reduceMotion.matches) {
-    const clips = Array.from(document.querySelectorAll<HTMLElement>('.project-photo-clip'));
-    const SHIFT_MAX = 0.2; // ±20% tinggi frame (pas dengan headroom foto 140%)
-    const LERP = 1; // Lenis sudah me-smoothing scroll, tidak perlu lerp kedua
-    const current = new Map<HTMLElement, number>();
-    let running = false;
+    const clips = Array.from(document.querySelectorAll<HTMLElement>('.project-photo-clip'))
+    const SHIFT_MAX = 0.2 // ±20% tinggi frame (pas dengan headroom foto 140%)
+    const LERP = 1 // Lenis sudah me-smoothing scroll, tidak perlu lerp kedua
+    const current = new Map<HTMLElement, number>()
+    let running = false
 
     const tick = () => {
-      const vh = window.innerHeight;
-      let animating = false;
+      const vh = window.innerHeight
+      let animating = false
 
       for (const clip of clips) {
-        const rect = clip.getBoundingClientRect();
-        const inView = rect.bottom > -vh * 0.2 && rect.top < vh * 1.2;
-        if (!inView) continue;
+        const rect = clip.getBoundingClientRect()
+        const inView = rect.bottom > -vh * 0.2 && rect.top < vh * 1.2
+        if (!inView) continue
 
         // p: 0 = frame baru masuk dari bawah, 1 = frame hampir keluar di atas
-        const p = (vh - rect.top) / (vh + rect.height);
+        const p = (vh - rect.top) / (vh + rect.height)
         // target: +20% (foto turun, masuk dari bawah) -> -20% (foto naik penuh)
-        const target = (SHIFT_MAX - p * 2 * SHIFT_MAX) * rect.height;
-        const prev = current.get(clip) ?? target;
-        const next = prev + (target - prev) * LERP;
+        const target = (SHIFT_MAX - p * 2 * SHIFT_MAX) * rect.height
+        const prev = current.get(clip) ?? target
+        const next = prev + (target - prev) * LERP
 
-        current.set(clip, next);
-        clip.style.setProperty('--parallax', `${next.toFixed(1)}px`);
+        current.set(clip, next)
+        clip.style.setProperty('--parallax', `${next.toFixed(1)}px`)
 
-        if (Math.abs(target - next) > 0.5) animating = true;
+        if (Math.abs(target - next) > 0.5) animating = true
       }
 
       if (animating) {
-        window.requestAnimationFrame(tick);
+        window.requestAnimationFrame(tick)
       } else {
-        running = false;
+        running = false
       }
-    };
+    }
 
     const kick = () => {
-      if (running) return;
-      running = true;
-      window.requestAnimationFrame(tick);
-    };
+      if (running) return
+      running = true
+      window.requestAnimationFrame(tick)
+    }
 
-    kick();
+    kick()
 
     // Kartu berganti jumlah kolom saat resize (1 -> 2 -> 3 kolom) —
     // rect berubah, jadi hitung ulang posisi.
-    let rt: ReturnType<typeof setTimeout>;
+    let rt: ReturnType<typeof setTimeout>
     window.addEventListener('resize', () => {
-      clearTimeout(rt);
-      rt = setTimeout(kick, 150);
-    });
+      clearTimeout(rt)
+      rt = setTimeout(kick, 150)
+    })
   }
 </script>

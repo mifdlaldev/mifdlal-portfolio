@@ -622,11 +622,17 @@ npm run preview      # serve hasil build lokal
 npm run check        # astro check: tipe frontmatter .astro + JSX island
 npm run typecheck    # tsc --noEmit
 npm test             # unit test worker/lib.ts (vitest)
+npm run format       # rapikan format (Prettier)
+npm run format:check # pastikan format sudah rapi
 npm run check:tokens # aturan token (warna/font-size/z-index mentah)
 npm run audit        # npm audit --omit=dev
 npm run lh           # Lighthouse (perlu CHROME_PATH)
 npm run deploy       # wrangler deploy (perlu auth Cloudflare)
 ```
+
+`npm run format:check` menegakkan gaya kode lewat Prettier (tanpa titik koma, kutip
+tunggal, lebar 100). Aturannya ada di `.prettierrc.json`; berkas yang tak perlu diformat
+(md, lock file, dist) ada di `.prettierignore`. CI menolak kode yang belum diformat.
 
 `npm test` menjalankan vitest atas `worker/lib.ts`: jaring pengaman kebocoran prompt,
 transformasi SSE OpenRouter menjadi teks, dan sesi cookie bertanda tangan HMAC. Logika ini
@@ -642,6 +648,7 @@ menambahkan frontmatter `.astro` dan tipe island React. Keduanya jalan di CI.
 - `npm run check` | 0 errors, 0 warnings, 0 hints (38 file)
 - `npm run typecheck` | bersih
 - `npm test` | 17 test lulus (1 file)
+- `npm run format:check` | bersih (Prettier)
 - `npm run check:tokens` | bersih (27 file, 151 token)
 - `npm audit --omit=dev` | 0 vulnerabilities
 - Lighthouse | mobile 100/100/100/100, desktop 100/100/100/100 (FCP 1.0s/0.3s, CLS 0)

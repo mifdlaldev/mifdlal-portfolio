@@ -15,41 +15,41 @@
  * dengan mematikan JavaScript. Skrip ini menutup jalur yang dipakai pengunjung
  * biasa, bukan jalur pengembang.
  */
-(() => {
+;(() => {
   /* Zona gambar. Bingkai potret dan wadah thumbnail ikut dijaga supaya klik
      kanan di tepi bingkai tidak membocorkan menu gambar di dalamnya. */
-  const ZONE = 'img, picture, .portrait-frame, .cert-shot';
+  const ZONE = 'img, picture, .portrait-frame, .cert-shot'
 
-  const inZone = (node) => node instanceof Element && node.closest(ZONE) !== null;
+  const inZone = (node) => node instanceof Element && node.closest(ZONE) !== null
 
   const lock = (img) => {
-    img.draggable = false;
-    img.setAttribute('draggable', 'false');
-  };
+    img.draggable = false
+    img.setAttribute('draggable', 'false')
+  }
 
   const lockTree = (root) => {
-    if (root instanceof HTMLImageElement) lock(root);
-    if (root instanceof Element) root.querySelectorAll('img').forEach(lock);
-  };
+    if (root instanceof HTMLImageElement) lock(root)
+    if (root instanceof Element) root.querySelectorAll('img').forEach(lock)
+  }
 
-  lockTree(document.documentElement);
+  lockTree(document.documentElement)
 
   /* Gambar yang muncul kemudian: klon logo loop dan gambar di dialog
      sertifikat. */
   new MutationObserver((records) => {
     for (const record of records) {
       for (const node of record.addedNodes) {
-        if (node.nodeType === 1) lockTree(node);
+        if (node.nodeType === 1) lockTree(node)
       }
     }
-  }).observe(document.documentElement, { childList: true, subtree: true });
+  }).observe(document.documentElement, { childList: true, subtree: true })
 
   const block = (event) => {
-    if (inZone(event.target)) event.preventDefault();
-  };
+    if (inZone(event.target)) event.preventDefault()
+  }
 
-  document.addEventListener('dragstart', block, true);
-  document.addEventListener('contextmenu', block, true);
-  document.addEventListener('selectstart', block, true);
-  document.addEventListener('auxclick', block, true);
-})();
+  document.addEventListener('dragstart', block, true)
+  document.addEventListener('contextmenu', block, true)
+  document.addEventListener('selectstart', block, true)
+  document.addEventListener('auxclick', block, true)
+})()

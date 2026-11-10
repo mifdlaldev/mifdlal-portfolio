@@ -6,13 +6,7 @@
 
 import { describe, expect, it } from 'vitest'
 
-import {
-  checkQuota,
-  looksLikePromptDump,
-  resolveSession,
-  sseToText,
-  type Env,
-} from './lib'
+import { checkQuota, looksLikePromptDump, resolveSession, sseToText, type Env } from './lib'
 
 /* Susun ReadableStream dari potongan teks supaya bisa disuapkan ke sseToText. */
 function streamOf(parts: string[]): ReadableStream<Uint8Array> {
@@ -110,7 +104,11 @@ describe('resolveSession', () => {
 
   it('menerbitkan cookie yang ditandatangani lalu memverifikasinya', async () => {
     const secret = 'rahasia-uji'
-    const issued = await resolveSession(new Request('https://example.com/'), env({ SESSION_SECRET: secret }), '1.2.3.4')
+    const issued = await resolveSession(
+      new Request('https://example.com/'),
+      env({ SESSION_SECRET: secret }),
+      '1.2.3.4'
+    )
     expect(issued.setCookie).toContain('mfc_sid=')
     expect(issued.setCookie).toContain('HttpOnly')
     expect(issued.setCookie).toContain('Secure')
@@ -127,7 +125,11 @@ describe('resolveSession', () => {
 
   it('menolak cookie dengan tanda tangan yang diubah', async () => {
     const secret = 'rahasia-uji'
-    const issued = await resolveSession(new Request('https://example.com/'), env({ SESSION_SECRET: secret }), '1.2.3.4')
+    const issued = await resolveSession(
+      new Request('https://example.com/'),
+      env({ SESSION_SECRET: secret }),
+      '1.2.3.4'
+    )
     const [pair] = issued.setCookie!.split(';')
     const [name, value] = pair.split('=')
     const [id, issuedAt, signature] = value.split('.')
@@ -144,7 +146,11 @@ describe('resolveSession', () => {
 
   it('menerbitkan sesi baru untuk cookie yang kedaluwarsa', async () => {
     const secret = 'rahasia-uji'
-    const issued = await resolveSession(new Request('https://example.com/'), env({ SESSION_SECRET: secret }), '1.2.3.4')
+    const issued = await resolveSession(
+      new Request('https://example.com/'),
+      env({ SESSION_SECRET: secret }),
+      '1.2.3.4'
+    )
     const [name, value] = issued.setCookie!.split(';')[0].split('=')
     const [id, , signature] = value.split('.')
     const old = `${name}=${id}.${Date.now() - 40 * 24 * 60 * 60 * 1000}.${signature}`
@@ -172,8 +178,9 @@ describe('checkQuota', () => {
   })
 
   it('mengizinkan saat kuota penuh dilaporkan sebagai denied', async () => {
-    const guard = namespaceReturning(async () =>
-      new Response(JSON.stringify({ allowed: false, reason: 'session' }), { status: 200 })
+    const guard = namespaceReturning(
+      async () =>
+        new Response(JSON.stringify({ allowed: false, reason: 'session' }), { status: 200 })
     )
     expect(await checkQuota(env({ CHAT_GUARD: guard }), 'abc')).toEqual({
       allowed: false,

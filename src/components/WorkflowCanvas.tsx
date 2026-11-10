@@ -1,6 +1,6 @@
-'use client';
+'use client'
 
-import { createContext, memo, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { createContext, memo, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import {
   ReactFlow,
   Handle,
@@ -11,9 +11,9 @@ import {
   type Edge,
   type NodeProps,
   type EdgeProps,
-} from '@xyflow/react';
-import { motion } from 'motion/react';
-import { type IconHandle } from '@animateicons/react';
+} from '@xyflow/react'
+import { motion } from 'motion/react'
+import { type IconHandle } from '@animateicons/react'
 import {
   MessageSquareIcon,
   DatabaseIcon,
@@ -22,56 +22,56 @@ import {
   SendHorizontalIcon,
   BookOpenIcon,
   HeadsetIcon,
-} from '@animateicons/react/lucide';
-import { ClaudeIcon } from '@animateicons/react/huge';
-import '@xyflow/react/dist/style.css';
-import './workflow-canvas.css';
+} from '@animateicons/react/lucide'
+import { ClaudeIcon } from '@animateicons/react/huge'
+import '@xyflow/react/dist/style.css'
+import './workflow-canvas.css'
 
 /* ── Sequence ctx: node/edge yang sedang aktif (alur kerja n8n-style) ── */
-type Phase = { nodes: string[]; edges: string[]; ms: number };
+type Phase = { nodes: string[]; edges: string[]; ms: number }
 
 /* Timeline eksekusi workflow: tiap langkah ~1 detik, seperti eksekusi
    workflow di n8n/Zapier. Node menyala → sinyal melintas edge → node
    berikut menyala. Durasi total ~15 detik sebelum loop ulang. */
 const TIMELINE: Phase[] = [
-  { nodes: ['trigger'], edges: [], ms: 1200 },          // PESAN MASUK menyala
-  { nodes: [], edges: ['e1'], ms: 1000 },               // sinyal → KONTEKS PELANGGAN
+  { nodes: ['trigger'], edges: [], ms: 1200 }, // PESAN MASUK menyala
+  { nodes: [], edges: ['e1'], ms: 1000 }, // sinyal → KONTEKS PELANGGAN
   { nodes: ['koleksi'], edges: [], ms: 1200 },
-  { nodes: [], edges: ['e2'], ms: 1000 },               // sinyal → AI AGENT
+  { nodes: [], edges: ['e2'], ms: 1000 }, // sinyal → AI AGENT
   /* Brain sticky: menyala di sini dan TETAP menyala sampai ketiga cabang
      selesai dan sinyalnya kembali. Tooltip ikut terbuka selama aktif. */
-  { nodes: ['agent'], edges: [], ms: 2400 },            // brain menyala + tooltip
-  { nodes: ['agent'], edges: ['b1', 'b2', 'b3'], ms: 1000 },        // fan-out, brain tetap
+  { nodes: ['agent'], edges: [], ms: 2400 }, // brain menyala + tooltip
+  { nodes: ['agent'], edges: ['b1', 'b2', 'b3'], ms: 1000 }, // fan-out, brain tetap
   { nodes: ['agent', 't-model', 't-dokumen', 't-api'], edges: [], ms: 1300 }, // tool bekerja
-  { nodes: ['agent'], edges: ['r1', 'r2', 'r3'], ms: 1000 },        // cabang kembali ke brain
-  { nodes: [], edges: ['e3'], ms: 1000 },               // brain → CEK KEBIJAKAN (padam)
+  { nodes: ['agent'], edges: ['r1', 'r2', 'r3'], ms: 1000 }, // cabang kembali ke brain
+  { nodes: [], edges: ['e3'], ms: 1000 }, // brain → CEK KEBIJAKAN (padam)
   { nodes: ['validasi'], edges: [], ms: 1200 },
-  { nodes: [], edges: ['e4'], ms: 1000 },               // sinyal → KIRIM BALASAN
-  { nodes: ['kirim'], edges: [], ms: 1800 },            // output akhir
-];
-const PAUSE_MS = 2200; // jeda sebelum loop ulang
+  { nodes: [], edges: ['e4'], ms: 1000 }, // sinyal → KIRIM BALASAN
+  { nodes: ['kirim'], edges: [], ms: 1800 }, // output akhir
+]
+const PAUSE_MS = 2200 // jeda sebelum loop ulang
 
-const SeqCtx = createContext({ nodes: new Set<string>(), edges: new Set<string>() });
+const SeqCtx = createContext({ nodes: new Set<string>(), edges: new Set<string>() })
 const reduceMotion = () =>
-  typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
 /* ---------------------------------------------------------------- nodes --- */
 
 type TileData = {
-  label: string;
-  labelEn: string;
-  icon: 'message' | 'database' | 'brain' | 'shield-check' | 'send' | 'claude' | 'book' | 'headset';
-  tone: 'node' | 'hub' | 'tool';
-  order?: number;
+  label: string
+  labelEn: string
+  icon: 'message' | 'database' | 'brain' | 'shield-check' | 'send' | 'claude' | 'book' | 'headset'
+  tone: 'node' | 'hub' | 'tool'
+  order?: number
   /* Ukuran ikon per layout: 38 desktop, 24 mobile. Tile mobile hanya
      52px, ikon 38 akan menyentuh tepi. */
-  iconSize?: number;
-};
+  iconSize?: number
+}
 
 /* Bahasa aktif untuk label node — mockup ikut bahasa situs. */
-const LangCtx = createContext<'id' | 'en'>('id');
+const LangCtx = createContext<'id' | 'en'>('id')
 
-const ICON_SIZE = 38;
+const ICON_SIZE = 38
 
 /* Ikon ikut "hidup" saat tile menyala: outline aktif → animasi ikon jalan.
    Animasi diputar lewat ref handle (startAnimation), bukan hover, karena
@@ -81,52 +81,56 @@ const TileIcon = memo(function TileIcon({
   active,
   size = ICON_SIZE,
 }: {
-  kind: TileData['icon'];
-  active: boolean;
-  size?: number;
+  kind: TileData['icon']
+  active: boolean
+  size?: number
 }) {
-  const ref = useRef<IconHandle | null>(null);
+  const ref = useRef<IconHandle | null>(null)
 
   useEffect(() => {
-    if (!ref.current) return;
-    if (active) ref.current.startAnimation();
-    else ref.current.stopAnimation();
-  }, [active, kind]);
+    if (!ref.current) return
+    if (active) ref.current.startAnimation()
+    else ref.current.stopAnimation()
+  }, [active, kind])
 
-  const base = { size, strokeWidth: 1.5, color: 'var(--electric)' } as const;
+  const base = { size, strokeWidth: 1.5, color: 'var(--electric)' } as const
 
   switch (kind) {
     case 'message':
-      return <MessageSquareIcon ref={ref} {...base} />;
+      return <MessageSquareIcon ref={ref} {...base} />
     case 'database':
-      return <DatabaseIcon ref={ref} {...base} />;
+      return <DatabaseIcon ref={ref} {...base} />
     case 'brain':
-      return <BrainIcon ref={ref} {...base} />;
+      return <BrainIcon ref={ref} {...base} />
     case 'shield-check':
-      return <ShieldCheckIcon ref={ref} {...base} />;
+      return <ShieldCheckIcon ref={ref} {...base} />
     case 'send':
-      return <SendHorizontalIcon ref={ref} {...base} />;
+      return <SendHorizontalIcon ref={ref} {...base} />
     case 'book':
-      return <BookOpenIcon ref={ref} {...base} />;
+      return <BookOpenIcon ref={ref} {...base} />
     case 'headset':
-      return <HeadsetIcon ref={ref} {...base} />;
+      return <HeadsetIcon ref={ref} {...base} />
     case 'claude':
-      return <ClaudeIcon ref={ref} size={size} color="var(--electric)" />;
+      return <ClaudeIcon ref={ref} size={size} color="var(--electric)" />
     default:
-      return null;
+      return null
   }
-});
+})
 
 const TileNode = memo(({ id, data }: NodeProps) => {
-  const d = data as unknown as TileData;
-  const active = useContext(SeqCtx).nodes.has(id);
-  const lang = useContext(LangCtx);
-  const label = lang === 'en' ? d.labelEn : d.label;
+  const d = data as unknown as TileData
+  const active = useContext(SeqCtx).nodes.has(id)
+  const lang = useContext(LangCtx)
+  const label = lang === 'en' ? d.labelEn : d.label
   const cls =
-    d.tone === 'hub' ? 'wf-tile wf-tile--hub' : d.tone === 'tool' ? 'wf-tile wf-tile--tool' : 'wf-tile';
+    d.tone === 'hub'
+      ? 'wf-tile wf-tile--hub'
+      : d.tone === 'tool'
+        ? 'wf-tile wf-tile--tool'
+        : 'wf-tile'
 
   // Stagger berdasarkan urutan node: tile kiri masuk duluan.
-  const order = (d as any).order ?? 0;
+  const order = (d as any).order ?? 0
 
   return (
     <motion.div
@@ -147,7 +151,13 @@ const TileNode = memo(({ id, data }: NodeProps) => {
         transition={{ duration: 0.5, delay: order * 0.09, ease: [0.25, 0.46, 0.45, 0.94] }}
         tabIndex={d.tone === 'hub' ? 0 : undefined}
         role={d.tone === 'hub' ? 'button' : undefined}
-        aria-label={d.tone === 'hub' ? (lang === 'en' ? `${label}, intent classification and reply drafting` : `${label}, klasifikasi intent dan draf balasan`) : undefined}
+        aria-label={
+          d.tone === 'hub'
+            ? lang === 'en'
+              ? `${label}, intent classification and reply drafting`
+              : `${label}, klasifikasi intent dan draf balasan`
+            : undefined
+        }
       >
         <span className="wf-tile__icon">
           <TileIcon kind={d.icon} active={active} size={d.iconSize} />
@@ -158,20 +168,62 @@ const TileNode = memo(({ id, data }: NodeProps) => {
           Ikon tepat di tengah tile, konektor melintang menyeberang ikon. */}
       <span className="wf-tile__label">
         {label}
-        {d.tone === 'hub' && <span className="wf-tile__sub">{lang === 'en' ? 'intent classification + reply drafting' : 'klasifikasi intent + draf balasan'}</span>}
+        {d.tone === 'hub' && (
+          <span className="wf-tile__sub">
+            {lang === 'en'
+              ? 'intent classification + reply drafting'
+              : 'klasifikasi intent + draf balasan'}
+          </span>
+        )}
       </span>
 
       <Handle type="target" position={Position.Left} className="wf-handle" />
       <Handle type="source" position={Position.Right} className="wf-handle" />
       {d.tone === 'hub' && (
         <>
-          <Handle id="b1" type="source" position={Position.Bottom} className="wf-handle" style={{ left: '14%' }} />
-          <Handle id="b2" type="source" position={Position.Bottom} className="wf-handle" style={{ left: '50%' }} />
-          <Handle id="b3" type="source" position={Position.Bottom} className="wf-handle" style={{ left: '86%' }} />
+          <Handle
+            id="b1"
+            type="source"
+            position={Position.Bottom}
+            className="wf-handle"
+            style={{ left: '14%' }}
+          />
+          <Handle
+            id="b2"
+            type="source"
+            position={Position.Bottom}
+            className="wf-handle"
+            style={{ left: '50%' }}
+          />
+          <Handle
+            id="b3"
+            type="source"
+            position={Position.Bottom}
+            className="wf-handle"
+            style={{ left: '86%' }}
+          />
           {/* Titik masuk sinyal balik dari 3 tool — posisi identik dengan b1/b2/b3 */}
-          <Handle id="rb1" type="target" position={Position.Bottom} className="wf-handle" style={{ left: '14%' }} />
-          <Handle id="rb2" type="target" position={Position.Bottom} className="wf-handle" style={{ left: '50%' }} />
-          <Handle id="rb3" type="target" position={Position.Bottom} className="wf-handle" style={{ left: '86%' }} />
+          <Handle
+            id="rb1"
+            type="target"
+            position={Position.Bottom}
+            className="wf-handle"
+            style={{ left: '14%' }}
+          />
+          <Handle
+            id="rb2"
+            type="target"
+            position={Position.Bottom}
+            className="wf-handle"
+            style={{ left: '50%' }}
+          />
+          <Handle
+            id="rb3"
+            type="target"
+            position={Position.Bottom}
+            className="wf-handle"
+            style={{ left: '86%' }}
+          />
         </>
       )}
       {d.tone === 'tool' && (
@@ -181,56 +233,58 @@ const TileNode = memo(({ id, data }: NodeProps) => {
         </>
       )}
     </motion.div>
-  );
-});
-TileNode.displayName = 'TileNode';
+  )
+})
+TileNode.displayName = 'TileNode'
 
 /* ---------------------------------------------------------------- edges --- */
 
-const FlowEdge = memo(({ id, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, data }: EdgeProps) => {
-  const [path] = getBezierPath({
-    sourceX,
-    sourceY,
-    targetX,
-    targetY,
-    sourcePosition,
-    targetPosition,
-    curvature: 0.35,
-  });
+const FlowEdge = memo(
+  ({ id, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, data }: EdgeProps) => {
+    const [path] = getBezierPath({
+      sourceX,
+      sourceY,
+      targetX,
+      targetY,
+      sourcePosition,
+      targetPosition,
+      curvature: 0.35,
+    })
 
-  const active = useContext(SeqCtx).edges.has(id);
-  // Edge balik (r1/r2/r3): garis dasar disembunyikan — tumpang tindih dengan
-  // garis turun b1/b2/b3 yang geometrinya identik terbalik.
-  const isReturn = Boolean((data as { ret?: boolean } | undefined)?.ret);
+    const active = useContext(SeqCtx).edges.has(id)
+    // Edge balik (r1/r2/r3): garis dasar disembunyikan — tumpang tindih dengan
+    // garis turun b1/b2/b3 yang geometrinya identik terbalik.
+    const isReturn = Boolean((data as { ret?: boolean } | undefined)?.ret)
 
-  return (
-    <>
-      {!isReturn && <BaseEdge id={id} path={path} className="wf-edge" />}
-      {active && (
-        <g className="wf-signal" key={id}>
-          {/* Garis terang yang "menggambar" diri dari sumber ke tujuan */}
-          <path d={path} className="wf-edge-signal" pathLength={1} />
-          {/* Ekor sinyal (elektrik) + kepala (lemon) meluncur menyusur jalur */}
-          <path d={path} className="wf-comet wf-comet--tail" pathLength={1} />
-          <path d={path} className="wf-comet wf-comet--head" pathLength={1} />
-        </g>
-      )}
-    </>
-  );
-});
-FlowEdge.displayName = 'FlowEdge';
+    return (
+      <>
+        {!isReturn && <BaseEdge id={id} path={path} className="wf-edge" />}
+        {active && (
+          <g className="wf-signal" key={id}>
+            {/* Garis terang yang "menggambar" diri dari sumber ke tujuan */}
+            <path d={path} className="wf-edge-signal" pathLength={1} />
+            {/* Ekor sinyal (elektrik) + kepala (lemon) meluncur menyusur jalur */}
+            <path d={path} className="wf-comet wf-comet--tail" pathLength={1} />
+            <path d={path} className="wf-comet wf-comet--head" pathLength={1} />
+          </g>
+        )}
+      </>
+    )
+  }
+)
+FlowEdge.displayName = 'FlowEdge'
 
-const nodeTypes = { tile: TileNode };
-const edgeTypes = { flow: FlowEdge };
+const nodeTypes = { tile: TileNode }
+const edgeTypes = { flow: FlowEdge }
 
 /* -------------------------------------------------------------- graph --- */
 
-const NODE_W = 84;
-const HUB_W = 116;
-const TOOL_W = 80;
-const GAP = 26;
-const TOOL_GAP = 24;
-const ROW2_Y = 150;
+const NODE_W = 84
+const HUB_W = 116
+const TOOL_W = 80
+const GAP = 26
+const TOOL_GAP = 24
+const ROW2_Y = 150
 
 /* Kolom hub & baris tool tidak butuh konstanta modul: seluruh geometri
    dihitung buildGraph() dari Layout, supaya satu sumber kebenaran. */
@@ -252,13 +306,13 @@ const ROW2_Y = 150;
              w=280 (vp 360) → gap 8, nodeW 44, hub 57 → 269px (budget 274)
              w=295 (vp 390) → gap 8, nodeW 48, hub 62 → 286px (budget 289) */
 function layoutForWidth(w: number): Layout {
-  const gap = Math.round(Math.min(8, Math.max(4, w * 0.028)));
-  const budget = w * 0.98 - 4 * gap; // sisa untuk 4 tile + hub
-  let nodeW = Math.max(34, Math.round(budget / 5.3));
-  const hubOf = (n: number) => Math.round(n * 1.3);
+  const gap = Math.round(Math.min(8, Math.max(4, w * 0.028)))
+  const budget = w * 0.98 - 4 * gap // sisa untuk 4 tile + hub
+  let nodeW = Math.max(34, Math.round(budget / 5.3))
+  const hubOf = (n: number) => Math.round(n * 1.3)
   /* Penjamin: turunkan nodeW sampai total graph benar-benar ≤ 98% lebar.
      Pembulatan Math.round bisa membuat total melebihi budget 1-3px. */
-  while (4 * nodeW + hubOf(nodeW) > budget && nodeW > 34) nodeW -= 1;
+  while (4 * nodeW + hubOf(nodeW) > budget && nodeW > 34) nodeW -= 1
   return {
     nodeW,
     hubW: hubOf(nodeW),
@@ -267,26 +321,26 @@ function layoutForWidth(w: number): Layout {
     toolGap: Math.round(gap * 0.75),
     row2Y: Math.round(nodeW * 2),
     icon: Math.max(14, Math.round(nodeW * 0.46)),
-  };
+  }
 }
 
 type Layout = {
-  nodeW: number;
-  hubW: number;
-  toolW: number;
-  gap: number;
-  toolGap: number;
-  row2Y: number;
-  icon: number;
-};
+  nodeW: number
+  hubW: number
+  toolW: number
+  gap: number
+  toolGap: number
+  row2Y: number
+  icon: number
+}
 
 function buildGraph(L: Layout) {
-  const { nodeW, hubW, toolW, gap, toolGap, row2Y } = L;
-  const hubX = (nodeW + gap) * 2;
-  const hubCx = hubX + hubW / 2;
-  const toolMidX = hubCx - toolW / 2;
-  const toolLeftX = toolMidX - toolW - toolGap;
-  const toolRightX = toolMidX + toolW + toolGap;
+  const { nodeW, hubW, toolW, gap, toolGap, row2Y } = L
+  const hubX = (nodeW + gap) * 2
+  const hubCx = hubX + hubW / 2
+  const toolMidX = hubCx - toolW / 2
+  const toolLeftX = toolMidX - toolW - toolGap
+  const toolRightX = toolMidX + toolW + toolGap
 
   const mkNode = (
     id: string,
@@ -298,7 +352,7 @@ function buildGraph(L: Layout) {
     tone: TileData['tone'],
     order: number,
     width?: number,
-    className?: string,
+    className?: string
   ): Node => ({
     id,
     type: 'tile',
@@ -306,81 +360,157 @@ function buildGraph(L: Layout) {
     data: { label, labelEn, icon, tone, order, iconSize: L.icon } as TileData,
     ...(width ? { width } : {}),
     ...(className ? { className } : {}),
-  });
+  })
 
   const nodes: Node[] = [
     mkNode('trigger', 0, 0, 'PESAN MASUK', 'INCOMING MESSAGE', 'message', 'node', 0),
-    mkNode('koleksi', nodeW + gap, 0, 'KONTEKS PELANGGAN', 'CUSTOMER CONTEXT', 'database', 'node', 1),
+    mkNode(
+      'koleksi',
+      nodeW + gap,
+      0,
+      'KONTEKS PELANGGAN',
+      'CUSTOMER CONTEXT',
+      'database',
+      'node',
+      1
+    ),
     mkNode('agent', (nodeW + gap) * 2, 0, 'AI AGENT', 'AI AGENT', 'brain', 'hub', 2, hubW),
-    mkNode('validasi', (nodeW + gap) * 2 + hubW + gap, 0, 'CEK KEBIJAKAN', 'POLICY CHECK', 'shield-check', 'node', 3, undefined, 'wf-node-2line'),
-    mkNode('kirim', (nodeW + gap) * 2 + hubW + gap + nodeW + gap, 0, 'KIRIM BALASAN', 'SEND REPLY', 'send', 'node', 4, undefined, 'wf-node-2line'),
+    mkNode(
+      'validasi',
+      (nodeW + gap) * 2 + hubW + gap,
+      0,
+      'CEK KEBIJAKAN',
+      'POLICY CHECK',
+      'shield-check',
+      'node',
+      3,
+      undefined,
+      'wf-node-2line'
+    ),
+    mkNode(
+      'kirim',
+      (nodeW + gap) * 2 + hubW + gap + nodeW + gap,
+      0,
+      'KIRIM BALASAN',
+      'SEND REPLY',
+      'send',
+      'node',
+      4,
+      undefined,
+      'wf-node-2line'
+    ),
     mkNode('t-model', toolLeftX, row2Y, 'MODEL LLM', 'LLM MODEL', 'claude', 'tool', 5),
     mkNode('t-dokumen', toolMidX, row2Y, 'KNOWLEDGE BASE', 'KNOWLEDGE BASE', 'book', 'tool', 6),
     mkNode('t-api', toolRightX, row2Y, 'CRM HELPDESK', 'CRM HELPDESK', 'headset', 'tool', 7),
-  ];
+  ]
 
   const edges: Edge[] = [
     { id: 'e1', source: 'trigger', target: 'koleksi', type: 'flow' },
     { id: 'e2', source: 'koleksi', target: 'agent', type: 'flow' },
     { id: 'e3', source: 'agent', target: 'validasi', type: 'flow' },
     { id: 'e4', source: 'validasi', target: 'kirim', type: 'flow' },
-    { id: 'b1', source: 'agent', sourceHandle: 'b1', target: 't-model', targetHandle: 'in', type: 'flow' },
-    { id: 'b2', source: 'agent', sourceHandle: 'b2', target: 't-dokumen', targetHandle: 'in', type: 'flow' },
-    { id: 'b3', source: 'agent', sourceHandle: 'b3', target: 't-api', targetHandle: 'in', type: 'flow' },
+    {
+      id: 'b1',
+      source: 'agent',
+      sourceHandle: 'b1',
+      target: 't-model',
+      targetHandle: 'in',
+      type: 'flow',
+    },
+    {
+      id: 'b2',
+      source: 'agent',
+      sourceHandle: 'b2',
+      target: 't-dokumen',
+      targetHandle: 'in',
+      type: 'flow',
+    },
+    {
+      id: 'b3',
+      source: 'agent',
+      sourceHandle: 'b3',
+      target: 't-api',
+      targetHandle: 'in',
+      type: 'flow',
+    },
     // Edge balik: 3 tool → brain. Garis dasar disembunyikan (tumpang tindih
     // dengan b1/b2/b3 turun), sinyal draw + comet tetap jalan naik ke brain.
-    { id: 'r1', source: 't-model', sourceHandle: 'out', target: 'agent', targetHandle: 'rb1', type: 'flow', data: { ret: true } },
-    { id: 'r2', source: 't-dokumen', sourceHandle: 'out', target: 'agent', targetHandle: 'rb2', type: 'flow', data: { ret: true } },
-    { id: 'r3', source: 't-api', sourceHandle: 'out', target: 'agent', targetHandle: 'rb3', type: 'flow', data: { ret: true } },
-  ];
+    {
+      id: 'r1',
+      source: 't-model',
+      sourceHandle: 'out',
+      target: 'agent',
+      targetHandle: 'rb1',
+      type: 'flow',
+      data: { ret: true },
+    },
+    {
+      id: 'r2',
+      source: 't-dokumen',
+      sourceHandle: 'out',
+      target: 'agent',
+      targetHandle: 'rb2',
+      type: 'flow',
+      data: { ret: true },
+    },
+    {
+      id: 'r3',
+      source: 't-api',
+      sourceHandle: 'out',
+      target: 'agent',
+      targetHandle: 'rb3',
+      type: 'flow',
+      data: { ret: true },
+    },
+  ]
 
-  const width = (nodeW + gap) * 2 + hubW + gap + nodeW + gap + nodeW;
-  const height = row2Y + toolW + 24; // tile tool + label
-  return { nodes, edges, width, height };
+  const width = (nodeW + gap) * 2 + hubW + gap + nodeW + gap + nodeW
+  const height = row2Y + toolW + 24 // tile tool + label
+  return { nodes, edges, width, height }
 }
 
 export default function WorkflowCanvas() {
-  const [width, setWidth] = useState(0); // lebar container terukur (px)
-  const hostRef = useRef<HTMLDivElement>(null);
-  const [box, setBox] = useState({ w: 0, h: 0 });
+  const [width, setWidth] = useState(0) // lebar container terukur (px)
+  const hostRef = useRef<HTMLDivElement>(null)
+  const [box, setBox] = useState({ w: 0, h: 0 })
 
   /* Bahasa runtime — React island: label node ikut bahasa situs. */
-  const [lang, setLang] = useState<'id' | 'en'>('id');
+  const [lang, setLang] = useState<'id' | 'en'>('id')
   useEffect(() => {
     const read = () => {
-      let v: 'id' | 'en' = 'id';
+      let v: 'id' | 'en' = 'id'
       try {
-        const p = JSON.parse(localStorage.getItem('mifdlal-prefs') || '{}');
-        v = p && p.lang === 'en' ? 'en' : 'id';
+        const p = JSON.parse(localStorage.getItem('mifdlal-prefs') || '{}')
+        v = p && p.lang === 'en' ? 'en' : 'id'
       } catch {
-        v = document.documentElement.lang === 'en' ? 'en' : 'id';
+        v = document.documentElement.lang === 'en' ? 'en' : 'id'
       }
-      setLang(v);
-    };
-    read();
+      setLang(v)
+    }
+    read()
     const onLang = (e: Event) => {
-      const v = (e as CustomEvent).detail;
-      if (v === 'en' || v === 'id') setLang(v);
-    };
-    document.addEventListener('mifdlal:lang', onLang);
-    return () => document.removeEventListener('mifdlal:lang', onLang);
-  }, []);
+      const v = (e as CustomEvent).detail
+      if (v === 'en' || v === 'id') setLang(v)
+    }
+    document.addEventListener('mifdlal:lang', onLang)
+    return () => document.removeEventListener('mifdlal:lang', onLang)
+  }, [])
 
   /* Ukur container: viewport React Flow dipusatkan manual (x/y), bukan
      fitView — fitView menghasilkan zoom pecahan yang me-raster teks.
      Juga simpan lebar untuk menghitung layout fluid tile. */
   useEffect(() => {
-    const el = hostRef.current;
-    if (!el) return;
+    const el = hostRef.current
+    if (!el) return
     const ro = new ResizeObserver(() => {
-      setBox({ w: el.clientWidth, h: el.clientHeight });
-      setWidth(el.clientWidth);
-    });
-    ro.observe(el);
-    setBox({ w: el.clientWidth, h: el.clientHeight });
-    setWidth(el.clientWidth);
-    return () => ro.disconnect();
-  }, []);
+      setBox({ w: el.clientWidth, h: el.clientHeight })
+      setWidth(el.clientWidth)
+    })
+    ro.observe(el)
+    setBox({ w: el.clientWidth, h: el.clientHeight })
+    setWidth(el.clientWidth)
+    return () => ro.disconnect()
+  }, [])
 
   /* Pilih layout: desktop (>560px) pakai konstanta tetap;
      sisanya fluid dari lebar nyata. */
@@ -396,43 +526,43 @@ export default function WorkflowCanvas() {
             toolGap: TOOL_GAP,
             row2Y: ROW2_Y,
             icon: ICON_SIZE,
-          };
-    return { ...buildGraph(L), L };
-  }, [width]);
+          }
+    return { ...buildGraph(L), L }
+  }, [width])
 
-  const n = graph.nodes;
-  const e = graph.edges;
-  const [phase, setPhase] = useState(-1);
+  const n = graph.nodes
+  const e = graph.edges
+  const [phase, setPhase] = useState(-1)
 
   /* Mesin alur: jalankan timeline berulang. Setiap fase menyalakan node
      atau mengirim sinyal lewat edge, lalu lanjut ke fase berikutnya.
      Fase terakhir diikuti jeda panjang sebelum loop ulang. */
   useEffect(() => {
-    if (reduceMotion()) return;
-    let i = 0;
-    let timer = 0;
+    if (reduceMotion()) return
+    let i = 0
+    let timer = 0
 
     const step = () => {
-      const isPause = i === TIMELINE.length;
-      setPhase(isPause ? -1 : i);
-      const dur = isPause ? PAUSE_MS : TIMELINE[i].ms;
-      i = (i + 1) % (TIMELINE.length + 1);
-      timer = window.setTimeout(step, dur);
-    };
+      const isPause = i === TIMELINE.length
+      setPhase(isPause ? -1 : i)
+      const dur = isPause ? PAUSE_MS : TIMELINE[i].ms
+      i = (i + 1) % (TIMELINE.length + 1)
+      timer = window.setTimeout(step, dur)
+    }
 
     // Tunggu animasi masuk tile selesai dulu.
-    timer = window.setTimeout(step, 900);
-    return () => window.clearTimeout(timer);
-  }, []);
+    timer = window.setTimeout(step, 900)
+    return () => window.clearTimeout(timer)
+  }, [])
 
   const seq = useMemo(() => {
-    const p = phase >= 0 ? TIMELINE[phase] : { nodes: [], edges: [] };
-    return { nodes: new Set(p.nodes), edges: new Set(p.edges) };
-  }, [phase]);
+    const p = phase >= 0 ? TIMELINE[phase] : { nodes: [], edges: [] }
+    return { nodes: new Set(p.nodes), edges: new Set(p.edges) }
+  }, [phase])
 
   /* CSS custom property untuk geometri tile — dipakai workflow-canvas.css.
      Desktop tidak di-set (CSS fallback 84/116/80/72) agar tidak berubah. */
-  const isFluid = width > 0 && width < 561;
+  const isFluid = width > 0 && width < 561
   const tileVars = isFluid
     ? ({
         '--wf-node-w': `${graph.L.nodeW}px`,
@@ -446,56 +576,56 @@ export default function WorkflowCanvas() {
         '--wf-label-gap': `${Math.max(4, Math.round(graph.L.nodeW * 0.12))}px`,
         '--wf-handle': `${Math.max(4, Math.round(graph.L.nodeW * 0.13))}px`,
       } as React.CSSProperties)
-    : undefined;
+    : undefined
 
   return (
     <div className="wf-canvas" aria-hidden="true" ref={hostRef} style={tileVars}>
       <LangCtx.Provider value={lang}>
-      <SeqCtx.Provider value={seq}>
-        <ReactFlow
-          key={`wf-${isFluid ? 'fluid' : 'desktop'}-${Math.round(box.w)}`}
-          nodes={n}
-          edges={e}
-          nodeTypes={nodeTypes}
-          edgeTypes={edgeTypes}
-          /* Zoom dikunci 1 (integer) — TIDAK ada transform scale pada viewport.
+        <SeqCtx.Provider value={seq}>
+          <ReactFlow
+            key={`wf-${isFluid ? 'fluid' : 'desktop'}-${Math.round(box.w)}`}
+            nodes={n}
+            edges={e}
+            nodeTypes={nodeTypes}
+            edgeTypes={edgeTypes}
+            /* Zoom dikunci 1 (integer) — TIDAK ada transform scale pada viewport.
             fitView dihapus karena menghitung zoom pecahan (mis. 0.98) yang
             me-raster seluruh layer termasuk teks → burem. Posisi x/y
             dihitung manual agar graph pas di tengah frame tanpa penskalaan.
 
             Mobile: layout fluid (graph ≤97% lebar container) dipusatkan
             manual lewat defaultViewport, tanpa penskalaan zoom. */
-          minZoom={1}
-          maxZoom={1}
-          defaultViewport={
-            isFluid
-              ? {
-                  x: box.w > 0 ? Math.max(0, (box.w - graph.width) / 2) : 2,
-                  /* y minimum 34px: tooltip AI AGENT di atas tile baris 1. */
-                  y: box.h > 0 ? Math.max(34, (box.h - graph.height) / 2) : 34,
-                  zoom: 1,
-                }
-              : { x: 34, y: 102, zoom: 1 }
-          }
-          nodesDraggable={false}
-          nodesConnectable={false}
-          nodesFocusable={false}
-          edgesFocusable={false}
-          elementsSelectable={false}
-          panOnDrag={false}
-          panOnScroll={false}
-          selectionOnDrag={false}
-          selectNodesOnDrag={false}
-          zoomOnScroll={false}
-          zoomOnPinch={false}
-          zoomOnDoubleClick={false}
-          preventScrolling={false}
-          disableKeyboardA11y
-          elevateEdgesOnSelect={false}
-          proOptions={{ hideAttribution: true }}
+            minZoom={1}
+            maxZoom={1}
+            defaultViewport={
+              isFluid
+                ? {
+                    x: box.w > 0 ? Math.max(0, (box.w - graph.width) / 2) : 2,
+                    /* y minimum 34px: tooltip AI AGENT di atas tile baris 1. */
+                    y: box.h > 0 ? Math.max(34, (box.h - graph.height) / 2) : 34,
+                    zoom: 1,
+                  }
+                : { x: 34, y: 102, zoom: 1 }
+            }
+            nodesDraggable={false}
+            nodesConnectable={false}
+            nodesFocusable={false}
+            edgesFocusable={false}
+            elementsSelectable={false}
+            panOnDrag={false}
+            panOnScroll={false}
+            selectionOnDrag={false}
+            selectNodesOnDrag={false}
+            zoomOnScroll={false}
+            zoomOnPinch={false}
+            zoomOnDoubleClick={false}
+            preventScrolling={false}
+            disableKeyboardA11y
+            elevateEdgesOnSelect={false}
+            proOptions={{ hideAttribution: true }}
           />
         </SeqCtx.Provider>
       </LangCtx.Provider>
     </div>
-  );
+  )
 }

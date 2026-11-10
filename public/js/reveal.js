@@ -20,65 +20,65 @@
    Tanpa JS, atau saat prefers-reduced-motion, berkas ini tidak melakukan apa
    pun: pita tetap di alur normal setelah footer seperti sebelumnya. */
 
-(() => {
-  const band = document.querySelector('.wordmark');
-  const layer = document.querySelector('[data-page]');
-  const track = document.querySelector('[data-track]');
-  const shadow = document.querySelector('[data-sheet-shadow]');
-  if (!band || !layer || !track || !shadow) return;
-  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+;(() => {
+  const band = document.querySelector('.wordmark')
+  const layer = document.querySelector('[data-page]')
+  const track = document.querySelector('[data-track]')
+  const shadow = document.querySelector('[data-sheet-shadow]')
+  if (!band || !layer || !track || !shadow) return
+  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
 
-  const root = document.documentElement;
+  const root = document.documentElement
   /* Kalau browser punya scroll-timeline, seluruh animasi reveal dijalankan CSS
      di compositor. Skrip cuma menyiapkan angka dan memasang mode. */
-  const cssMode = typeof CSS !== 'undefined' && CSS.supports?.('animation-timeline: scroll()');
-  const REVEAL_RATIO = 2.0;
-  const REVEAL_MIN = 260;
+  const cssMode = typeof CSS !== 'undefined' && CSS.supports?.('animation-timeline: scroll()')
+  const REVEAL_RATIO = 2.0
+  const REVEAL_MIN = 260
 
-  let bandHeight = 0;
-  let reveal = 0;
-  let liftMax = 0;
-  let maxScroll = 0;
-  let ticking = false;
-  let progress = -1;
-  let lastPx = null;
-  let lastShadow = null;
-  let promoted = false;
+  let bandHeight = 0
+  let reveal = 0
+  let liftMax = 0
+  let maxScroll = 0
+  let ticking = false
+  let progress = -1
+  let lastPx = null
+  let lastShadow = null
+  let promoted = false
 
   const measure = () => {
-    bandHeight = band.offsetHeight;
-    reveal = Math.max(bandHeight * REVEAL_RATIO, REVEAL_MIN);
-    liftMax = Math.max(0, reveal - bandHeight);
-    track.style.paddingBottom = `${Math.round(reveal)}px`;
+    bandHeight = band.offsetHeight
+    reveal = Math.max(bandHeight * REVEAL_RATIO, REVEAL_MIN)
+    liftMax = Math.max(0, reveal - bandHeight)
+    track.style.paddingBottom = `${Math.round(reveal)}px`
     if (cssMode) {
-      root.style.setProperty('--reveal-distance', `${Math.round(reveal)}px`);
-      root.style.setProperty('--reveal-lift', `${Math.round(liftMax)}px`);
-      root.style.setProperty('--wm-band-h', `${Math.round(bandHeight)}px`);
+      root.style.setProperty('--reveal-distance', `${Math.round(reveal)}px`)
+      root.style.setProperty('--reveal-lift', `${Math.round(liftMax)}px`)
+      root.style.setProperty('--wm-band-h', `${Math.round(bandHeight)}px`)
     }
-    maxScroll = Math.max(0, root.scrollHeight - window.innerHeight);
-  };
+    maxScroll = Math.max(0, root.scrollHeight - window.innerHeight)
+  }
 
   const apply = (p) => {
-    if (p === progress) return;
-    progress = p;
+    if (p === progress) return
+    progress = p
 
     if (!cssMode) {
-      const px = Math.round(p * liftMax);
+      const px = Math.round(p * liftMax)
       if (px !== lastPx) {
-        lastPx = px;
-        layer.style.transform = px ? `translate3d(0, ${px}px, 0)` : '';
+        lastPx = px
+        layer.style.transform = px ? `translate3d(0, ${px}px, 0)` : ''
       }
 
-      const shadowOpacity = Math.round((1 - p) * 100) / 100;
+      const shadowOpacity = Math.round((1 - p) * 100) / 100
       if (shadowOpacity !== lastShadow) {
-        lastShadow = shadowOpacity;
-        shadow.style.opacity = `${shadowOpacity}`;
+        lastShadow = shadowOpacity
+        shadow.style.opacity = `${shadowOpacity}`
       }
 
-      band.style.transform = `translateY(${Math.round((1 - p) * bandHeight * 0.3)}px)`;
-      band.style.opacity = `${(0.7 + 0.3 * p).toFixed(2)}`;
+      band.style.transform = `translateY(${Math.round((1 - p) * bandHeight * 0.3)}px)`
+      band.style.opacity = `${(0.7 + 0.3 * p).toFixed(2)}`
     }
-  };
+  }
 
   /* Promosi compositor dilakukan SEKALI di interaksi scroll pertama,
      jauh sebelum zona reveal. Tanpa ini, browser mem-promote .page-layer
@@ -86,65 +86,84 @@
      rasterisasi full-page sinkron di frame tersebut = frame drop di semua
      section di atas, persis gejala yang dilaporkan. */
   const promote = () => {
-    if (promoted) return;
-    const near = window.scrollY >= maxScroll - reveal * 2.0;
+    if (promoted) return
+    const near = window.scrollY >= maxScroll - reveal * 2.0
     if (near) {
-      promoted = true;
-      layer.classList.add('is-lifting');
+      promoted = true
+      layer.classList.add('is-lifting')
     }
-  };
+  }
 
   /* Fallback: promosi paling awal — bayar biaya raster saat user mulai
      scroll, bukan di batas reveal. Sekali jalan untuk sesi ini. */
   const promoteOnInteract = () => {
     if (!promoted) {
-      promoted = true;
-      layer.classList.add('is-lifting');
+      promoted = true
+      layer.classList.add('is-lifting')
     }
-  };
-  window.addEventListener('wheel', promoteOnInteract, { passive: true });
-  window.addEventListener('touchmove', promoteOnInteract, { passive: true });
-  window.addEventListener('keydown', promoteOnInteract, { once: true });
+  }
+  window.addEventListener('wheel', promoteOnInteract, { passive: true })
+  window.addEventListener('touchmove', promoteOnInteract, { passive: true })
+  window.addEventListener('keydown', promoteOnInteract, { once: true })
 
   /* Lepas layer saat page di-unload untuk bebaskan memory GPU. */
-  window.addEventListener('pagehide', () => {
-    layer.classList.remove('is-lifting');
-  }, { once: true });
+  window.addEventListener(
+    'pagehide',
+    () => {
+      layer.classList.remove('is-lifting')
+    },
+    { once: true }
+  )
 
   const update = () => {
-    ticking = false;
-    promote();
-    const p = reveal > 0
-      ? Math.min(1, Math.max(0, (window.scrollY - (maxScroll - reveal)) / reveal))
-      : 0;
-    apply(p);
-  };
+    ticking = false
+    promote()
+    const p =
+      reveal > 0 ? Math.min(1, Math.max(0, (window.scrollY - (maxScroll - reveal)) / reveal)) : 0
+    apply(p)
+  }
 
   const onScroll = () => {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(update);
-  };
+    if (ticking) return
+    ticking = true
+    requestAnimationFrame(update)
+  }
 
   const boot = () => {
-    root.classList.add('has-reveal');
-    band.classList.add('is-fixed');
-    measure();
-    update();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', () => {
-      measure();
-      progress = -1;
-      lastPx = null;
-      lastShadow = null;
-      update();
-    }, { passive: true });
+    root.classList.add('has-reveal')
+    band.classList.add('is-fixed')
+    measure()
+    update()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener(
+      'resize',
+      () => {
+        measure()
+        progress = -1
+        lastPx = null
+        lastShadow = null
+        update()
+      },
+      { passive: true }
+    )
     /* Tinggi halaman bisa berubah setelah font/gambar selesai dimuat. */
     if (document.fonts?.ready) {
-      document.fonts.ready.then(() => { measure(); progress = -1; update(); });
+      document.fonts.ready.then(() => {
+        measure()
+        progress = -1
+        update()
+      })
     }
-    window.addEventListener('load', () => { measure(); progress = -1; update(); }, { once: true });
-  };
+    window.addEventListener(
+      'load',
+      () => {
+        measure()
+        progress = -1
+        update()
+      },
+      { once: true }
+    )
+  }
 
-  boot();
-})();
+  boot()
+})()

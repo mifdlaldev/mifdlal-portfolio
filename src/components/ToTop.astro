@@ -31,7 +31,8 @@
       fill="none"
       stroke="currentColor"
       stroke-width="1.5"
-      stroke-linecap="square"></path>
+      stroke-linecap="square"
+    ></path>
   </svg>
 </button>
 
@@ -114,18 +115,22 @@
      langsung hidden dan tombolnya lenyap seketika. */
   @media (prefers-reduced-motion: no-preference) {
     .to-top {
-      transition: opacity var(--dur-exit) var(--ease-in),
+      transition:
+        opacity var(--dur-exit) var(--ease-in),
         transform var(--dur-exit) var(--ease-in),
         visibility 0s linear var(--dur-exit),
-        background-color var(--dur-slow) var(--ease), border-color var(--dur-slow) var(--ease);
+        background-color var(--dur-slow) var(--ease),
+        border-color var(--dur-slow) var(--ease);
     }
 
     .to-top[data-visible='true'],
     .to-top:focus-visible {
-      transition: opacity var(--dur-enter) var(--ease-out),
+      transition:
+        opacity var(--dur-enter) var(--ease-out),
         transform var(--dur-enter) var(--ease-out),
         visibility 0s linear 0s,
-        background-color var(--dur-slow) var(--ease), border-color var(--dur-slow) var(--ease);
+        background-color var(--dur-slow) var(--ease),
+        border-color var(--dur-slow) var(--ease);
     }
   }
 </style>
