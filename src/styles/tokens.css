@@ -57,7 +57,6 @@
   --text-hero: clamp(2.5rem, 7vw, 5rem);
   --text-h2: clamp(1.5rem, 3.5vw, 2.125rem);
   --text-h3: clamp(1.375rem, 3.2vw, 2rem);
-  --text-lede: clamp(1.25rem, 2.5vw, 1.625rem);
   --text-sub: clamp(1.1875rem, 2.6vw, 1.4375rem);
   --text-title: 1.25rem;
   --text-title-sm: 1.125rem;
@@ -92,7 +91,6 @@
   --leading-loose: 1.7;
   --leading-wordmark: 0.74; /* wordmark raksasa: huruf menempel ke tepi pita */
   --leading-none: 1; /* status bar: angka jam tidak terpotong */
-  --chat-wall: #e8e7e1; /* background area chat HP (abu-abu, ganti wallpaper) */
   /* Teks di atas accent (electric): LATAR terang di tema terang,
      dan gelap di tema gelap — ikut --paper supaya kontras terjaga. */
   --chat-on-accent: var(--paper);
@@ -148,9 +146,6 @@
      terbaca, elemen yang pergi tidak boleh menahan pandangan. */
   --dur-enter: 260ms;
   --dur-exit: 160ms;
-  /* Animasi reveal saat scroll (kartu proyek): sengaja lambat + santai,
-     beda dari transisi UI biasa. */
-  --dur-reveal: 700ms;
   --ease: ease;
   --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --ease-in: cubic-bezier(0.4, 0, 1, 1);
@@ -181,7 +176,6 @@
   --ring-shadow-end: 0 0 0 16px rgba(42, 30, 255, 0);
 
   /* --- transparansi kertas (lokal diagram) ----------------- */
-  --paper-16: rgba(253, 252, 241, 0.16);
   --paper-60: rgba(253, 252, 241, 0.6);
 
   /* --- badge tooltip hub ----------------------------------- */
