@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   quality:
-    name: Build, Astro check, typecheck, token check, dependency audit
+    name: Build, Astro check, typecheck, unit test, token check, audit
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -32,6 +32,10 @@ jobs:
         run: npm run check
       - name: Typecheck
         run: npm run typecheck
+      - name: Unit test (worker/lib.ts)
+        # Menguji jaring pengaman kebocoran prompt, transformasi SSE, dan
+        # sesi bertanda tangan — logika worker yang tak terlihat build statis.
+        run: npm test
       - name: Token check
         run: npm run check:tokens
       - name: Dependency audit

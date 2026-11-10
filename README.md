@@ -621,11 +621,16 @@ npm run build        # build statis ke dist/
 npm run preview      # serve hasil build lokal
 npm run check        # astro check: tipe frontmatter .astro + JSX island
 npm run typecheck    # tsc --noEmit
+npm test             # unit test worker/lib.ts (vitest)
 npm run check:tokens # aturan token (warna/font-size/z-index mentah)
 npm run audit        # npm audit --omit=dev
 npm run lh           # Lighthouse (perlu CHROME_PATH)
 npm run deploy       # wrangler deploy (perlu auth Cloudflare)
 ```
+
+`npm test` menjalankan vitest atas `worker/lib.ts`: jaring pengaman kebocoran prompt,
+transformasi SSE OpenRouter menjadi teks, dan sesi cookie bertanda tangan HMAC. Logika ini
+tidak pernah tersentuh build statis, jadi tanpa test ia hanya diuji manual di produksi.
 
 `npm run check` dan `npm run typecheck` saling melengkapi: `tsc` hanya melihat
 file `.ts`/`.tsx` yang masuk `tsconfig.json include`, sedangkan `astro check`
@@ -636,6 +641,7 @@ menambahkan frontmatter `.astro` dan tipe island React. Keduanya jalan di CI.
 - `npm run build` | sukses
 - `npm run check` | 0 errors, 0 warnings, 0 hints (38 file)
 - `npm run typecheck` | bersih
+- `npm test` | 17 test lulus (1 file)
 - `npm run check:tokens` | bersih (27 file, 151 token)
 - `npm audit --omit=dev` | 0 vulnerabilities
 - Lighthouse | mobile 100/100/100/100, desktop 100/100/100/100 (FCP 1.0s/0.3s, CLS 0)

@@ -13,7 +13,8 @@
     "lh": "lighthouse http://localhost:4321/ --only-categories=performance,accessibility,best-practices,seo --output=html --chrome-flags=--headless=new --no-sandbox",
     "audit": "npm audit --omit=dev",
     "postbuild": "node scripts/csp-hash.mjs",
-    "check:tokens": "node scripts/check-tokens.mjs"
+    "check:tokens": "node scripts/check-tokens.mjs",
+    "test": "vitest run"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
@@ -30,6 +31,7 @@
     "react-dom": "^19.3.1",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3",
+    "vitest": "^5.1.0",
     "wrangler": "^4.157.0"
   },
   "allowScripts": {
