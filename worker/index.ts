@@ -246,7 +246,7 @@ export function sseToText(upstream: Response): ReadableStream<Uint8Array> {
 }
 
 async function handleChat(request: Request, env: Env): Promise<Response> {
-  if (!env.OPENROUTER_API_KEY) {
+  if (!env.CHAT_API_KEY && !env.OPENROUTER_API_KEY) {
     return json({ error: 'not_configured', message: 'Backend chat belum dikonfigurasi.' }, 503)
   }
 
