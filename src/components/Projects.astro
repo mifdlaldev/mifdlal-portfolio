@@ -16,7 +16,11 @@ import CodeComment from './CodeComment.astro'
     </div>
 
     <ul class="project-list">
-      {projects.map((p, i) => (
+      {/* Beranda menampilkan tiga kartu unggulan saja. Semua proyek tetap
+          ada di indeks /proyek/ dan halaman detailnya, ditautkan tepat di
+          bawah daftar ini. Jumlah yang ditampilkan sengaja tetap (tiga
+          kartu) supaya komposisi baris di beranda tidak berubah. */}
+      {projects.slice(0, 3).map((p, i) => (
         <li class="project-card rise" data-rise="scale" style={`--rise-delay:${i * 120}ms`}>
           <a
             href={p.live}
