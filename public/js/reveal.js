@@ -44,18 +44,37 @@
   let lastPx = null
   let lastShadow = null
   let promoted = false
+  /* Padding yang sedang terpasang di track. Dipakai untuk menghitung tinggi
+     dokumen setelah penulisan gaya tanpa perlu membacanya lagi. */
+  let padPx = 0
 
+  /* SATU layout pass per panggilan. Semua pembacaan geometri (scrollHeight,
+     offsetHeight) dilakukan SEBELUM ada penulisan gaya apa pun; penulisan
+     padding-bottom sesudahnya tidak boleh diikuti pembacaan layout lagi,
+     karena pembacaan setelah penulisan memaksa browser menyusun ulang seluruh
+     dokumen (410 KB, ±2000 elemen) untuk kedua kalinya. Tinggi dokumen baru
+     dihitung aritmetis: scrollHeight hanya berubah sebesar selisih padding
+     yang kita tulis sendiri, jadi tidak perlu diukur ulang. */
   const measure = () => {
+    const vh = window.innerHeight
+    const docH = root.scrollHeight
     bandHeight = band.offsetHeight
     reveal = Math.max(bandHeight * REVEAL_RATIO, REVEAL_MIN)
     liftMax = Math.max(0, reveal - bandHeight)
-    track.style.paddingBottom = `${Math.round(reveal)}px`
+
+    const pad = Math.round(reveal)
+    const prevPad = padPx
+    if (pad !== prevPad) {
+      track.style.paddingBottom = `${pad}px`
+      padPx = pad
+    }
+
     if (cssMode) {
-      root.style.setProperty('--reveal-distance', `${Math.round(reveal)}px`)
+      root.style.setProperty('--reveal-distance', `${pad}px`)
       root.style.setProperty('--reveal-lift', `${Math.round(liftMax)}px`)
       root.style.setProperty('--wm-band-h', `${Math.round(bandHeight)}px`)
     }
-    maxScroll = Math.max(0, root.scrollHeight - window.innerHeight)
+    maxScroll = Math.max(0, docH + (pad - prevPad) - vh)
   }
 
   const apply = (p) => {
