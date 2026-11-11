@@ -29,19 +29,19 @@ const last = crumbs.length - 1
 
 <section class="section route-head">
   <div class="wrap">
-    <nav class="crumbs" aria-label="Remah halaman" data-i18n-aria="Breadcrumb">
+    <nav class="crumbs" aria-label="Breadcrumb" data-i18n-aria-id="Remah halaman">
       <ol>
         {crumbs.map((c, i) =>
           i < last ? (
             <li>
-              <a href={c.href} data-i18n-en={c.labelEn}>
-                {c.label}
+              <a href={c.href} data-i18n-id={c.label}>
+                {c.labelEn}
               </a>
             </li>
           ) : (
             <li>
-              <span aria-current="page" data-i18n-en={c.labelEn}>
-                {c.label}
+              <span aria-current="page" data-i18n-id={c.label}>
+                {c.labelEn}
               </span>
             </li>
           )
@@ -49,15 +49,15 @@ const last = crumbs.length - 1
       </ol>
     </nav>
 
-    <span class="fig-label" data-i18n-en={figEn}>
-      {fig}
+    <span class="fig-label" data-i18n-id={fig}>
+      {figEn}
     </span>
-    <h1 class="section-headline route-title" data-i18n-en={titleEn}>
-      {title}
+    <h1 class="section-headline route-title" data-i18n-id={title}>
+      {titleEn}
     </h1>
     {lead && (
-      <p class="route-lead" data-i18n-en={leadEn}>
-        {lead}
+      <p class="route-lead" data-i18n-id={lead}>
+        {leadEn}
       </p>
     )}
   </div>

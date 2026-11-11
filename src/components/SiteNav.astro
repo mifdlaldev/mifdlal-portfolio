@@ -38,17 +38,17 @@ const links = [
       <span class="brand-word">mifdlal</span>
     </a>
 
-    <nav aria-label="Navigasi utama" data-i18n-aria="Main navigation" class="nav-links">
+    <nav aria-label="Main navigation" data-i18n-aria-id="Navigasi utama" class="nav-links">
       {links.map((l) => (
-        <a href={l.href} class="nav-link" data-i18n-en={l.en}>
-          {l.label}
+        <a href={l.href} class="nav-link" data-i18n-id={l.label}>
+          {l.en}
         </a>
       ))}
     </nav>
 
     <div class="nav-actions">
-      <a href={`${base}#kontak`} class="btn btn-nav" data-i18n-en="Start a project">
-        Mulai Proyek
+      <a href={`${base}#kontak`} class="btn btn-nav" data-i18n-id="Mulai Proyek">
+        Start a project
       </a>
     </div>
   </div>

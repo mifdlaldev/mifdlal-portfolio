@@ -43,14 +43,15 @@ export default function EncryptedText({
   encryptedClassName = 'enc-scrambled',
   revealedClassName,
 }: EncryptedTextProps) {
-  const [lang, setLang] = useState<'id' | 'en'>('id')
+  const [lang, setLang] = useState<'id' | 'en'>('en')
 
   useEffect(() => {
     try {
       const p = JSON.parse(localStorage.getItem('mifdlal-prefs') || '{}')
-      if (p.lang === 'en') setLang('en')
+      if (p.lang === 'id' || p.lang === 'en') setLang(p.lang)
+      else setLang(document.documentElement.lang === 'en' ? 'en' : 'id')
     } catch {
-      /* default id */
+      /* default en */
     }
     const onLang = (e: Event) => {
       const v = (e as CustomEvent).detail

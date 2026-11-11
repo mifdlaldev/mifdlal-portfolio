@@ -7,11 +7,11 @@ import CodeComment from './CodeComment.astro'
   <CodeComment text="// pengalaman" textEn="// experience" />
   <div class="wrap">
     <div class="section-head rise">
-      <span class="fig-label" data-i18n-en="fig. 05 · experience">
-        fig. 05 · pengalaman
+      <span class="fig-label" data-i18n-id="fig. 05 · pengalaman">
+        fig. 05 · experience
       </span>
-      <h2 class="section-headline" data-i18n-en="Experience.">
-        Pengalaman.
+      <h2 class="section-headline" data-i18n-id="Pengalaman.">
+        Experience.
       </h2>
     </div>
 
@@ -61,23 +61,23 @@ import CodeComment from './CodeComment.astro'
         experience.map((e) => (
           <li class="entry-row rise" data-rise="left">
             <div class="entry-main">
-              <h3 class="entry-title" data-i18n-en={e.roleEn}>
-                {e.role}
+              <h3 class="entry-title" data-i18n-id={e.role}>
+                {e.roleEn}
               </h3>
               <p class="entry-org">
-                <span data-i18n-en={e.orgEn}>{e.org}</span>{' '}
-                <span class="entry-kind badge" data-i18n-en={e.kindEn}>
-                  {e.kind}
+                <span data-i18n-id={e.org}>{e.orgEn}</span>{' '}
+                <span class="entry-kind badge" data-i18n-id={e.kind}>
+                  {e.kindEn}
                 </span>
               </p>
             </div>
             <p class="entry-meta">
-              <span data-i18n-en={e.periodEn}>{e.period}</span>
+              <span data-i18n-id={e.period}>{e.periodEn}</span>
               <span>{e.location}</span>
             </p>
             <ul class="entry-points">
               {e.points.map((pt, i) => (
-                <li data-i18n-en={e.pointsEn?.[i]}>{pt}</li>
+                <li data-i18n-id={pt}>{e.pointsEn?.[i]}</li>
               ))}
             </ul>
             {e.link && (
@@ -86,9 +86,9 @@ import CodeComment from './CodeComment.astro'
                 href={e.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                data-i18n-en="Proof ↗"
+                data-i18n-id="Bukti ↗"
               >
-                Bukti ↗
+                Proof ↗
               </a>
             )}
           </li>
@@ -98,11 +98,11 @@ import CodeComment from './CodeComment.astro'
 
     {experience.length === 0 && (
       <>
-        <p class="empty-note" data-i18n-en="Not filled in yet.">
-          Belum diisi
+        <p class="empty-note" data-i18n-id="Belum diisi">
+          Not filled in yet.
         </p>
-        <p class="sr-only" data-i18n-en="The experience section has not been filled in yet.">
-          Bagian pengalaman belum diisi.
+        <p class="sr-only" data-i18n-id="Bagian pengalaman belum diisi.">
+          The experience section has not been filled in yet.
         </p>
       </>
     )}

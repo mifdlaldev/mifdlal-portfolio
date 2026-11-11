@@ -475,15 +475,15 @@ export default function WorkflowCanvas() {
   const [box, setBox] = useState({ w: 0, h: 0 })
 
   /* Bahasa runtime — React island: label node ikut bahasa situs. */
-  const [lang, setLang] = useState<'id' | 'en'>('id')
+  const [lang, setLang] = useState<'id' | 'en'>('en')
   useEffect(() => {
     const read = () => {
-      let v: 'id' | 'en' = 'id'
+      let v: 'id' | 'en' = document.documentElement.lang === 'en' ? 'en' : 'id'
       try {
         const p = JSON.parse(localStorage.getItem('mifdlal-prefs') || '{}')
-        v = p && p.lang === 'en' ? 'en' : 'id'
+        if (p && (p.lang === 'id' || p.lang === 'en')) v = p.lang
       } catch {
-        v = document.documentElement.lang === 'en' ? 'en' : 'id'
+        /* biarkan default */
       }
       setLang(v)
     }

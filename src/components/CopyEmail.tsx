@@ -42,7 +42,7 @@ type CopyEmailProps = {
 export default function CopyEmail({ email }: CopyEmailProps) {
   const [status, setStatus] = useState<CopyStatus>('idle')
   const [mounted, setMounted] = useState(false)
-  const [lang, setLang] = useState<'id' | 'en'>('id')
+  const [lang, setLang] = useState<'id' | 'en'>('en')
   const timer = useRef<number | null>(null)
 
   useEffect(() => setMounted(true), [])
@@ -50,9 +50,10 @@ export default function CopyEmail({ email }: CopyEmailProps) {
   useEffect(() => {
     try {
       const p = JSON.parse(localStorage.getItem('mifdlal-prefs') || '{}')
-      if (p.lang === 'en') setLang('en')
+      if (p.lang === 'id' || p.lang === 'en') setLang(p.lang)
+      else setLang(document.documentElement.lang === 'en' ? 'en' : 'id')
     } catch {
-      /* default id */
+      /* default en */
     }
     const onLang = (e: Event) => {
       const v = (e as CustomEvent).detail

@@ -3,6 +3,24 @@
 Konten berbukti. Aturan: yang tidak ada buktinya tidak ditulis (R-17, R-36, R-38).
 Bahasa: Indonesia untuk narasi, istilah teknis English. Tanpa em dash.
 
+## 0. BAHASA SITUS (diubah 2026-11-11)
+
+Default situs adalah INGGRIS, untuk semua pengunjung, tanpa deteksi bahasa
+peramban. Alasan: pasar internasional. Mekanismenya:
+
+- Markup Astro merender teks Inggris langsung, jadi perayap mesin pencari,
+  pratinjau tautan, dan pengunjung tanpa JavaScript semuanya melihat Inggris.
+- Versi Indonesia disimpan di atribut data-i18n-id (juga data-i18n-aria-id,
+  data-i18n-meta-id, data-i18n-ph-id) dan hanya dipasang runtime i18n.js saat
+  pengunjung memilih Indonesia lewat tombol bahasa di footer.
+- Atribut data-i18n-en tidak dipakai lagi. Prop Astro tanpa akhiran (title,
+  description) berisi versi Indonesia; prop berakhiran En berisi teks yang
+  dirender (Inggris).
+- Pulau React (EncryptedText, ChatbotCanvas, WorkflowCanvas, CopyEmail,
+  LogoLoop) berdefault state 'en' dan membaca localStorage mifdlal-prefs;
+  tanpa preferensi tersimpan, ikut nilai <html lang>.
+- html lang="en", og:locale en_US + alternate id_ID, JSON-LD inLanguage en.
+
 Semua proyek di bawah sudah diverifikasi HTTP 200 (curl -L) pada 2026-10-17.
 
 ## 1. HERO

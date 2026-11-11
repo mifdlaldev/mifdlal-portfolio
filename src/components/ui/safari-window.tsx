@@ -69,15 +69,16 @@ export default function SafariWindow({ tabs }: { tabs: readonly ShowcaseTab[] })
    * public/js/i18n.js akan terhapus saat React render ulang. Simpan
    * bahasa sebagai state native, baca dari localStorage, dan dengar
    * event mifdlal:lang yang di-dispatch oleh public/js/i18n.js. */
-  const [lang, setLang] = useState<'id' | 'en'>('id')
+  const [lang, setLang] = useState<'id' | 'en'>('en')
   useEffect(() => {
     const read = () => {
-      let v: 'id' | 'en' = 'id'
+      /* Default Inggris; tanpa preferensi tersimpan ikuti <html lang>. */
+      let v: 'id' | 'en' = document.documentElement.lang === 'en' ? 'en' : 'id'
       try {
         const p = JSON.parse(localStorage.getItem('mifdlal-prefs') || '{}')
-        v = p && p.lang === 'en' ? 'en' : 'id'
+        if (p && (p.lang === 'id' || p.lang === 'en')) v = p.lang
       } catch {
-        v = document.documentElement.lang === 'en' ? 'en' : 'id'
+        /* biarkan default */
       }
       setLang(v)
     }

@@ -23,28 +23,34 @@ const pageLinks = [
 
 <footer class="footer">
   <div class="wrap footer-inner rise">
-    <nav class="footer-nav" aria-label="Navigasi halaman" data-i18n-aria="Page navigation">
+    <nav class="footer-nav" aria-label="Page navigation" data-i18n-aria-id="Navigasi halaman">
       {sections.map((s) => (
-        <a href={`${base}${s.href}`} data-i18n-en={s.en}>
-          {s.label}
+        <a href={`${base}${s.href}`} data-i18n-id={s.label}>
+          {s.en}
         </a>
       ))}
       {pageLinks.map((s) => (
-        <a href={s.href} data-i18n-en={s.en}>
-          {s.label}
+        <a href={s.href} data-i18n-id={s.label}>
+          {s.en}
         </a>
       ))}
     </nav>
 
     <div class="footer-controls">
       {/* Tema: segmented 3 slot — Sistem / Terang / Gelap */}
-      <div class="theme-seg" data-theme-seg role="group" aria-label="Tema" data-i18n-aria="Theme">
+      <div
+        class="theme-seg"
+        data-theme-seg
+        role="group"
+        aria-label="Theme"
+        data-i18n-aria-id="Tema"
+      >
         <button
           type="button"
           data-theme-value="system"
           aria-pressed="false"
-          aria-label="Tema sistem"
-          data-i18n-aria="System theme"
+          aria-label="System theme"
+          data-i18n-aria-id="Tema sistem"
         >
           <svg
             viewBox="0 0 24 24"
@@ -65,8 +71,8 @@ const pageLinks = [
           type="button"
           data-theme-value="light"
           aria-pressed="false"
-          aria-label="Tema terang"
-          data-i18n-aria="Light theme"
+          aria-label="Light theme"
+          data-i18n-aria-id="Tema terang"
         >
           <svg
             viewBox="0 0 24 24"
@@ -87,8 +93,8 @@ const pageLinks = [
           type="button"
           data-theme-value="dark"
           aria-pressed="false"
-          aria-label="Tema gelap"
-          data-i18n-aria="Dark theme"
+          aria-label="Dark theme"
+          data-i18n-aria-id="Tema gelap"
         >
           <svg
             viewBox="0 0 24 24"
@@ -114,8 +120,8 @@ const pageLinks = [
           data-lang-trigger
           aria-haspopup="listbox"
           aria-expanded="false"
-          aria-label="Pilih bahasa"
-          data-i18n-aria="Choose language"
+          aria-label="Choose language"
+          data-i18n-aria-id="Pilih bahasa"
         >
           <svg
             viewBox="0 0 24 24"
@@ -131,7 +137,7 @@ const pageLinks = [
             <circle cx="12" cy="12" r="9" />
             <path d="M3 12h18M12 3c2.5 2.6 3.8 5.8 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.8-3.8-9S9.5 5.6 12 3z" />
           </svg>
-          <span data-lang-label>Bahasa</span>
+          <span data-lang-label>English</span>
           <svg
             class="lang-chev"
             viewBox="0 0 24 24"
@@ -149,7 +155,7 @@ const pageLinks = [
         </button>
         <ul class="lang-menu" role="listbox" hidden>
           <li role="option">
-            <button type="button" data-lang-value="id" aria-pressed="true">
+            <button type="button" data-lang-value="id" aria-pressed="false">
               <span>Bahasa Indonesia</span>
               <svg
                 class="lang-check"
@@ -168,7 +174,7 @@ const pageLinks = [
             </button>
           </li>
           <li role="option">
-            <button type="button" data-lang-value="en" aria-pressed="false">
+            <button type="button" data-lang-value="en" aria-pressed="true">
               <span>English</span>
               <svg
                 class="lang-check"
@@ -441,7 +447,7 @@ const pageLinks = [
             'mifdlal-prefs',
             JSON.stringify({
               theme: val,
-              lang: (JSON.parse(localStorage.getItem('mifdlal-prefs') || '{}') || {}).lang || 'id',
+              lang: (JSON.parse(localStorage.getItem('mifdlal-prefs') || '{}') || {}).lang || 'en',
             })
           )
         } catch (err) {}

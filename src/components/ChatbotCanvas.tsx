@@ -266,15 +266,16 @@ export default function ChatbotCanvas() {
 
   /* Bahasa runtime — React island: patch DOM i18n.js terhapus saat render
      ulang, jadi simpan lang sebagai state native + dengar mifdlal:lang. */
-  const [lang, setLang] = useState<'id' | 'en'>('id')
+  const [lang, setLang] = useState<'id' | 'en'>('en')
   useEffect(() => {
     const read = () => {
-      let v: 'id' | 'en' = 'id'
+      /* Default Inggris; tanpa preferensi tersimpan ikuti <html lang>. */
+      let v: 'id' | 'en' = document.documentElement.lang === 'en' ? 'en' : 'id'
       try {
         const p = JSON.parse(localStorage.getItem('mifdlal-prefs') || '{}')
-        v = p && p.lang === 'en' ? 'en' : 'id'
+        if (p && (p.lang === 'id' || p.lang === 'en')) v = p.lang
       } catch {
-        v = document.documentElement.lang === 'en' ? 'en' : 'id'
+        /* biarkan default */
       }
       setLang(v)
     }

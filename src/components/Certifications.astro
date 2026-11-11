@@ -21,18 +21,18 @@ const certAttrs = (c: (typeof featured)[number]) => ({
   <CodeComment text="// sertifikasi" textEn="// certifications" />
   <div class="wrap">
     <div class="section-head rise">
-      <span class="fig-label" data-i18n-en="fig. 07 · certifications">
-        fig. 07 · sertifikasi
+      <span class="fig-label" data-i18n-id="fig. 07 · sertifikasi">
+        fig. 07 · certifications
       </span>
-      <h2 class="section-headline" data-i18n-en="Certifications.">
-        Sertifikasi.
+      <h2 class="section-headline" data-i18n-id="Sertifikasi.">
+        Certifications.
       </h2>
       <p
         class="section-sub"
-        data-i18n-en={`${certTotals.total} certificates from ${certTotals.issuers} issuers. Each ID can be verified directly on the issuer's verification page. Click an image to open the full certificate.`}
+        data-i18n-id={`${certTotals.total} sertifikat dari ${certTotals.issuers} penerbit. Setiap ID dapat diperiksa sendiri di halaman verifikasi penerbitnya. Klik gambar untuk membuka sertifikat penuh.`}
       >
-        {certTotals.total} sertifikat dari {certTotals.issuers} penerbit. Setiap ID dapat diperiksa
-        sendiri di halaman verifikasi penerbitnya. Klik gambar untuk membuka sertifikat penuh.
+        {certTotals.total} certificates from {certTotals.issuers} issuers. Each ID can be verified
+        directly on the issuer's verification page. Click an image to open the full certificate.
       </p>
     </div>
 
@@ -43,8 +43,8 @@ const certAttrs = (c: (typeof featured)[number]) => ({
             class="cert-trigger"
             href="#cert-dialog"
             {...certAttrs(c)}
-            aria-label={`Buka sertifikat ${c.title} dari ${c.issuer}`}
-            data-i18n-aria={`Open certificate ${c.titleEn ?? c.title} from ${c.issuer}`}
+            aria-label={`Open certificate ${c.titleEn ?? c.title} from ${c.issuer}`}
+            data-i18n-aria-id={`Buka sertifikat ${c.title} dari ${c.issuer}`}
           >
             <span class="cert-shot">
               <img
@@ -57,25 +57,22 @@ const certAttrs = (c: (typeof featured)[number]) => ({
                 decoding="async"
               />
               <CertMark id={c.slug} />
-              <span class="cert-zoom" aria-hidden="true" data-i18n-en="open">
-                buka
+              <span class="cert-zoom" aria-hidden="true" data-i18n-id="buka">
+                open
               </span>
             </span>
             <span class="cert-body">
               <span class="cert-issuer">{c.issuer}</span>
-              <span class="cert-name" data-i18n-en={c.titleEn}>
-                {c.title}
+              <span class="cert-name" data-i18n-id={c.title}>
+                {c.titleEn}
               </span>
               {c.note && (
-                <span class="cert-note" data-i18n-en={c.noteEn}>
-                  {c.note}
+                <span class="cert-note" data-i18n-id={c.note}>
+                  {c.noteEn}
                 </span>
               )}
-              <span
-                class="cert-meta"
-                data-i18n-en={`${c.dateLabelEn ?? c.dateLabel} · ID ${c.credentialId}`}
-              >
-                {c.dateLabel} · ID {c.credentialId}
+              <span class="cert-meta" data-i18n-id={`${c.dateLabel} · ID ${c.credentialId}`}>
+                {c.dateLabelEn ?? c.dateLabel} · ID {c.credentialId}
               </span>
             </span>
           </a>
@@ -92,8 +89,8 @@ const certAttrs = (c: (typeof featured)[number]) => ({
           aria-haspopup="dialog"
           aria-controls="cert-list"
         >
-          <span class="cert-more-btn-label" data-i18n-en="View all">
-            Lihat Lainnya
+          <span class="cert-more-btn-label" data-i18n-id="Lihat Lainnya">
+            View all
           </span>
           <span class="cert-more-btn-count" aria-hidden="true">
             {more.length}
@@ -101,10 +98,10 @@ const certAttrs = (c: (typeof featured)[number]) => ({
         </button>
         <p
           class="cert-more-btn-note"
-          data-i18n-en={`${certTotals.moreHackerrank} HackerRank skill certificates and ${certTotals.moreOther} Dicoding beginner classes.`}
+          data-i18n-id={`${certTotals.moreHackerrank} sertifikat keahlian HackerRank dan ${certTotals.moreOther} kelas dasar Dicoding.`}
         >
-          {certTotals.moreHackerrank} sertifikat keahlian HackerRank dan {certTotals.moreOther}{' '}
-          kelas dasar Dicoding.
+          {certTotals.moreHackerrank} HackerRank skill certificates and {certTotals.moreOther}{' '}
+          Dicoding beginner classes.
         </p>
 
         <noscript>
@@ -112,7 +109,8 @@ const certAttrs = (c: (typeof featured)[number]) => ({
             {more.map((c) => (
               <li>
                 <a href="#cert-dialog">
-                  {c.title} · {c.issuer} · {c.dateLabel} · ID {c.credentialId}
+                  {c.titleEn ?? c.title} · {c.issuer} · {c.dateLabelEn ?? c.dateLabel} · ID{' '}
+                  {c.credentialId}
                 </a>
               </li>
             ))}
@@ -148,12 +146,12 @@ const certAttrs = (c: (typeof featured)[number]) => ({
           hidden
           target="_blank"
           rel="noopener noreferrer"
-          data-i18n-en="verify on issuer site ↗"
+          data-i18n-id="verifikasi di situs penerbit ↗"
         >
-          verifikasi di situs penerbit ↗
+          verify on issuer site ↗
         </a>
-        <button class="cert-dialog-close" type="button" data-dialog-close data-i18n-en="Close">
-          Tutup
+        <button class="cert-dialog-close" type="button" data-dialog-close data-i18n-id="Tutup">
+          Close
         </button>
       </div>
     </div>
@@ -162,26 +160,26 @@ const certAttrs = (c: (typeof featured)[number]) => ({
   <dialog class="cert-list" id="cert-list" aria-labelledby="cert-list-title">
     <div class="cert-list-box" data-lenis-prevent>
       <div class="cert-list-head">
-        <p class="cert-list-fig fig-label" data-i18n-en="fig. 07b · full list">
-          fig. 07b · daftar lengkap
+        <p class="cert-list-fig fig-label" data-i18n-id="fig. 07b · daftar lengkap">
+          fig. 07b · full list
         </p>
         <h3
           class="cert-list-title"
           id="cert-list-title"
           tabindex="-1"
-          data-i18n-en="Other skill certificates"
+          data-i18n-id="Sertifikat keahlian lainnya"
         >
-          Sertifikat keahlian lainnya
+          Other skill certificates
         </h3>
         <p
           class="cert-list-meta"
-          data-i18n-en={`${more.length} certificates · ${certTotals.moreHackerrank} HackerRank · ${certTotals.moreOther} Dicoding`}
+          data-i18n-id={`${more.length} sertifikat · ${certTotals.moreHackerrank} HackerRank · ${certTotals.moreOther} Dicoding`}
         >
-          {more.length} sertifikat · {certTotals.moreHackerrank} HackerRank · {certTotals.moreOther}{' '}
-          Dicoding
+          {more.length} certificates · {certTotals.moreHackerrank} HackerRank ·{' '}
+          {certTotals.moreOther} Dicoding
         </p>
-        <button class="cert-list-close" type="button" data-cert-list-close data-i18n-en="Close">
-          Tutup
+        <button class="cert-list-close" type="button" data-cert-list-close data-i18n-id="Tutup">
+          Close
         </button>
       </div>
 
@@ -192,8 +190,8 @@ const certAttrs = (c: (typeof featured)[number]) => ({
               class="cert-trigger"
               href="#cert-dialog"
               {...certAttrs(c)}
-              aria-label={`Buka sertifikat ${c.title} dari ${c.issuer}`}
-              data-i18n-aria={`Open certificate ${c.titleEn ?? c.title} from ${c.issuer}`}
+              aria-label={`Open certificate ${c.titleEn ?? c.title} from ${c.issuer}`}
+              data-i18n-aria-id={`Buka sertifikat ${c.title} dari ${c.issuer}`}
             >
               <span class="cert-shot">
                 <img
@@ -206,20 +204,17 @@ const certAttrs = (c: (typeof featured)[number]) => ({
                   draggable="false"
                 />
                 <CertMark id={c.slug} />
-                <span class="cert-zoom" aria-hidden="true" data-i18n-en="open">
-                  buka
+                <span class="cert-zoom" aria-hidden="true" data-i18n-id="buka">
+                  open
                 </span>
               </span>
               <span class="cert-body">
                 <span class="cert-issuer">{c.issuer}</span>
-                <span class="cert-name" data-i18n-en={c.titleEn}>
-                  {c.title}
+                <span class="cert-name" data-i18n-id={c.title}>
+                  {c.titleEn}
                 </span>
-                <span
-                  class="cert-meta"
-                  data-i18n-en={`${c.dateLabelEn ?? c.dateLabel} · ID ${c.credentialId}`}
-                >
-                  {c.dateLabel} · ID {c.credentialId}
+                <span class="cert-meta" data-i18n-id={`${c.dateLabel} · ID ${c.credentialId}`}>
+                  {c.dateLabelEn ?? c.dateLabel} · ID {c.credentialId}
                 </span>
               </span>
             </a>

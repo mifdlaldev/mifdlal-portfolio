@@ -18,24 +18,29 @@
     class="chat-panel"
     role="dialog"
     aria-modal="false"
-    aria-label="Chat dengan asisten AI Mifdlal"
-    data-i18n-aria="Chat with Mifdlal's AI assistant"
+    aria-label="Chat with Mifdlal's AI assistant"
+    data-i18n-aria-id="Chat dengan asisten AI Mifdlal"
     aria-hidden="true"
   >
     <!-- ── 1. Header ─────────────────────────────────────── -->
     <header class="chat-head">
       <div class="chat-head-info">
-        <span class="chat-head-label" data-i18n-en="MIFDLAL AI ASSISTANT">
-          ASISTEN AI MIFDLAL
+        <span class="chat-head-label" data-i18n-id="ASISTEN AI MIFDLAL">
+          MIFDLAL AI ASSISTANT
         </span>
         <p
           class="chat-head-sub"
-          data-i18n-en="Ask about services, projects, stack, or timeline estimates."
+          data-i18n-id="Tanya soal layanan, proyek, stack, atau estimasi timeline."
         >
-          Tanya soal layanan, proyek, stack, atau estimasi timeline.
+          Ask about services, projects, stack, or timeline estimates.
         </p>
       </div>
-      <button class="chat-close" type="button" aria-label="Tutup chat" data-i18n-aria="Close chat">
+      <button
+        class="chat-close"
+        type="button"
+        aria-label="Close chat"
+        data-i18n-aria-id="Tutup chat"
+      >
         <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
           <path
             d="M3.5 3.5l9 9M12.5 3.5l-9 9"
@@ -51,16 +56,16 @@
     <!-- ── 2. Quick questions ────────────────────────────── -->
     <div class="chat-quick" data-chat-quick data-collapsed="false">
       <div class="chat-quick-head">
-        <span class="chat-section-label" data-i18n-en="Quick Questions">
-          Pertanyaan Cepat
+        <span class="chat-section-label" data-i18n-id="Pertanyaan Cepat">
+          Quick Questions
         </span>
         <button
           class="chat-quick-toggle"
           type="button"
           aria-expanded="true"
           aria-controls="chat-quick-list"
-          aria-label="Sembunyikan pertanyaan cepat"
-          data-i18n-aria="Hide quick questions"
+          aria-label="Hide quick questions"
+          data-i18n-aria-id="Sembunyikan pertanyaan cepat"
         >
           <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" focusable="false">
             <path
@@ -80,54 +85,54 @@
           type="button"
           data-prompt="Layanan apa saja yang ditawarkan?"
           data-prompt-en="What services do you offer?"
-          data-i18n-en="What services do you offer?"
+          data-i18n-id="Layanan apa saja yang ditawarkan?"
         >
-          Layanan apa saja yang ditawarkan?
+          What services do you offer?
         </button>
         <button
           class="chat-chip"
           type="button"
           data-prompt="Ceritakan proyek yang pernah dikerjakan"
           data-prompt-en="Tell me about your past projects"
-          data-i18n-en="Tell me about your past projects"
+          data-i18n-id="Ceritakan proyek yang pernah dikerjakan"
         >
-          Ceritakan proyek yang pernah dikerjakan
+          Tell me about your past projects
         </button>
         <button
           class="chat-chip"
           type="button"
           data-prompt="Berapa biaya bikin website?"
           data-prompt-en="How much does a website cost?"
-          data-i18n-en="How much does a website cost?"
+          data-i18n-id="Berapa biaya bikin website?"
         >
-          Berapa biaya bikin website?
+          How much does a website cost?
         </button>
         <button
           class="chat-chip"
           type="button"
           data-prompt="Berapa lama pengerjaan website?"
           data-prompt-en="How long does it take?"
-          data-i18n-en="How long does it take?"
+          data-i18n-id="Berapa lama pengerjaan website?"
         >
-          Berapa lama pengerjaan website?
+          How long does it take?
         </button>
         <button
           class="chat-chip"
           type="button"
           data-prompt="Stack teknologi apa yang digunakan?"
           data-prompt-en="What tech stack do you use?"
-          data-i18n-en="What tech stack do you use?"
+          data-i18n-id="Stack teknologi apa yang digunakan?"
         >
-          Stack teknologi apa yang digunakan?
+          What tech stack do you use?
         </button>
         <button
           class="chat-chip"
           type="button"
           data-prompt="Bagaimana cara mulai proyek?"
           data-prompt-en="How do I start a project?"
-          data-i18n-en="How do I start a project?"
+          data-i18n-id="Bagaimana cara mulai proyek?"
         >
-          Bagaimana cara mulai proyek?
+          How do I start a project?
         </button>
       </div>
     </div>
@@ -136,8 +141,8 @@
     <div
       class="chat-log"
       role="log"
-      aria-label="Percakapan"
-      data-i18n-aria="Conversation"
+      aria-label="Conversation"
+      data-i18n-aria-id="Percakapan"
       aria-live="polite"
       data-lenis-prevent
     ></div>
@@ -147,18 +152,18 @@
       <span
         class="chat-privacy-text"
         id="chat-privacy-text"
-        data-i18n-en="Privacy: this chat is only stored in your browser session. Don't send passwords, API keys, or sensitive data."
+        data-i18n-id="Privasi: chat ini hanya disimpan di sesi browser Anda. Jangan kirim password, API key, atau data sensitif."
       >
-        Privasi: chat ini hanya disimpan di sesi browser Anda. Jangan kirim password, API key, atau
-        data sensitif.
+        Privacy: this chat is only stored in your browser session. Don't send passwords, API keys,
+        or sensitive data.
       </span>
       <button
         class="chat-privacy-toggle"
         type="button"
         aria-expanded="true"
         aria-controls="chat-privacy-text"
-        aria-label="Sembunyikan teks privasi"
-        data-i18n-aria="Hide privacy text"
+        aria-label="Hide privacy text"
+        data-i18n-aria-id="Sembunyikan teks privasi"
       >
         <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" focusable="false">
           <path
@@ -175,8 +180,8 @@
 
     <!-- ── 5. Input ──────────────────────────────────────── -->
     <form class="chat-form" autocomplete="off">
-      <label class="sr-only" for="chat-field" data-i18n-en="Type your message">
-        Tulis pesan
+      <label class="sr-only" for="chat-field" data-i18n-id="Tulis pesan">
+        Type your message
       </label>
       <textarea
         id="chat-field"
@@ -190,8 +195,8 @@
       <button
         class="chat-send"
         type="submit"
-        aria-label="Kirim pesan"
-        data-i18n-aria="Send message"
+        aria-label="Send message"
+        data-i18n-aria-id="Kirim pesan"
         disabled
       >
         <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
@@ -206,8 +211,8 @@
       </button>
     </form>
     <div class="chat-counter">
-      <span class="chat-counter-text" data-counter data-i18n-en="0 / 1000 Characters">
-        0 / 1000 Karakter
+      <span class="chat-counter-text" data-counter data-i18n-id="0 / 1000 Karakter">
+        0 / 1000 Characters
       </span>
     </div>
 
@@ -221,8 +226,8 @@
     draggable="false"
     aria-expanded="false"
     aria-controls="chat-panel-aria"
-    aria-label="Buka chat asisten AI"
-    data-i18n-aria="Open AI assistant chat"
+    aria-label="Open AI assistant chat"
+    data-i18n-aria-id="Buka chat asisten AI"
   >
     <svg
       class="chat-launcher-icon"

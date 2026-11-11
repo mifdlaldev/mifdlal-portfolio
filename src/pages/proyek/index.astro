@@ -68,33 +68,33 @@ const jsonLdExtra = [
                 <span class="index-no" aria-hidden="true">
                   {p.no}
                 </span>
-                <span class="index-name" data-i18n-en={p.nameEn}>
-                  {p.name}
+                <span class="index-name" data-i18n-id={p.name}>
+                  {p.nameEn}
                 </span>
-                <span class="index-role" data-i18n-en={p.roleEn}>
-                  {p.role}
+                <span class="index-role" data-i18n-id={p.role}>
+                  {p.roleEn}
                 </span>
-                <span class="index-desc" data-i18n-en={p.descriptionEn}>
-                  {p.description}
+                <span class="index-desc" data-i18n-id={p.description}>
+                  {p.descriptionEn}
                 </span>
-                <span class="index-stack" data-i18n-en={p.stackEn?.join(' · ')}>
-                  {p.stack.join(' · ')}
+                <span class="index-stack" data-i18n-id={p.stack.join(' · ')}>
+                  {p.stackEn?.join(' · ')}
                 </span>
               </span>
-              <span class="index-more" data-i18n-en="Details">
-                Detail
+              <span class="index-more" data-i18n-id="Detail">
+                Details
               </span>
             </a>
           </li>
         ))}
       </ul>
 
-      <nav class="back rise" aria-label="Navigasi halaman" data-i18n-aria="Page navigation">
-        <a href="/layanan/" class="btn btn-ghost" data-i18n-en="Services">
-          Layanan
+      <nav class="back rise" aria-label="Page navigation" data-i18n-aria-id="Navigasi halaman">
+        <a href="/layanan/" class="btn btn-ghost" data-i18n-id="Layanan">
+          Services
         </a>
-        <a href="/#kontak" class="btn btn-primary" data-i18n-en="Start a project">
-          Mulai proyek
+        <a href="/#kontak" class="btn btn-primary" data-i18n-id="Mulai proyek">
+          Start a project
         </a>
       </nav>
     </div>

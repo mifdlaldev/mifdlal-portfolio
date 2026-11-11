@@ -61,7 +61,7 @@ const jsonld = JSON.stringify({
       name: 'Mifdlal Tsaqib Alfarras',
       url: SITE,
       email: `mailto:${contact.email}`,
-      jobTitle: 'Freelance web developer dan spesialis otomasi AI',
+      jobTitle: 'Freelance web developer and AI automation specialist',
       /* WhatsApp termasuk kanal kontak resmi (nomor dari pemilik situs). */
       contactPoint: [
         {
@@ -77,7 +77,7 @@ const jsonld = JSON.stringify({
       sameAs: contact.socials
         .filter((s) => s.id !== 'fiverr' && s.id !== 'whatsapp')
         .map((s) => s.href),
-      knowsAbout: [...services.map((s) => s.title), ...stack.map((s) => s.name)],
+      knowsAbout: [...services.map((s) => s.titleEn), ...stack.map((s) => s.name)],
       address: {
         '@type': 'PostalAddress',
         addressLocality: 'Bandung',
@@ -89,7 +89,7 @@ const jsonld = JSON.stringify({
       '@id': `${SITE}#website`,
       url: SITE,
       name: 'Mifdlal Tsaqib Alfarras',
-      inLanguage: ['id', 'en'],
+      inLanguage: ['en', 'id'],
       publisher: { '@id': PERSON_ID },
     },
     ...(isHome
@@ -98,9 +98,9 @@ const jsonld = JSON.stringify({
             '@type': 'ProfilePage',
             '@id': `${SITE}#webpage`,
             url: SITE,
-            name: title,
-            description,
-            inLanguage: 'id',
+            name: titleEn,
+            description: descriptionEn,
+            inLanguage: 'en',
             isPartOf: { '@id': `${SITE}#website` },
             mainEntity: { '@id': PERSON_ID },
             primaryImageOfPage: {
@@ -116,9 +116,9 @@ const jsonld = JSON.stringify({
             '@type': 'WebPage',
             '@id': `${PAGE_HREF}#webpage`,
             url: PAGE_HREF,
-            name: title,
-            description,
-            inLanguage: 'id',
+            name: titleEn,
+            description: descriptionEn,
+            inLanguage: 'en',
             isPartOf: { '@id': `${SITE}#website` },
             about: { '@id': PERSON_ID },
             primaryImageOfPage: {
@@ -131,9 +131,9 @@ const jsonld = JSON.stringify({
         ]),
     ...services.map((s) => ({
       '@type': 'Service',
-      name: s.title,
-      description: s.body,
-      serviceType: s.title,
+      name: s.titleEn,
+      description: s.bodyEn || s.body,
+      serviceType: s.titleEn,
       url: `${SITE}layanan/${s.slug}/`,
       areaServed: { '@type': 'Country', name: 'Indonesia' },
       provider: { '@id': PERSON_ID },
@@ -144,7 +144,7 @@ const jsonld = JSON.stringify({
 ---
 
 <!doctype html>
-<html lang="id" class={minimal ? 'page-minimal' : undefined}>
+<html lang="en" class={minimal ? 'page-minimal' : undefined}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -194,8 +194,8 @@ const jsonld = JSON.stringify({
     <!-- Font: self-hosted via @fontsource (nol CDN eksternal, nol CSP hole) -->
 
     <!-- SEO dasar -->
-    <title data-i18n-en={titleEn}>{title}</title>
-    <meta name="description" content={description} data-i18n-meta={descriptionEn} />
+    <title data-i18n-id={title}>{titleEn}</title>
+    <meta name="description" content={descriptionEn} data-i18n-meta-id={description} />
     {!noindex && <link rel="canonical" href={Astro.url} />}
     <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow'} />
 
@@ -206,8 +206,10 @@ const jsonld = JSON.stringify({
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content={title} data-i18n-meta={titleEn} />
-    <meta property="og:description" content={description} data-i18n-meta={descriptionEn} />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="id_ID" />
+    <meta property="og:title" content={titleEn} data-i18n-meta-id={title} />
+    <meta property="og:description" content={descriptionEn} data-i18n-meta-id={description} />
     <meta property="og:url" content={PAGE_HREF} />
     <meta property="og:site_name" content="Mifdlal Tsaqib Alfarras" />
     {/* og:image wajib absolut. Kartunya digambar ulang dari palet dan fonta
@@ -218,19 +220,19 @@ const jsonld = JSON.stringify({
     <meta property="og:image:height" content="630" />
     <meta
       property="og:image:alt"
-      content="Kartu mifdlal.com: nama Mifdlal Tsaqib Alfarras, web app, chatbot, dan otomasi alur kerja."
-      data-i18n-meta="mifdlal.com card: Mifdlal Tsaqib Alfarras, web app, chatbot, and workflow automation."
+      content="mifdlal.com card: Mifdlal Tsaqib Alfarras, web app, chatbot, and workflow automation."
+      data-i18n-meta-id="Kartu mifdlal.com: nama Mifdlal Tsaqib Alfarras, web app, chatbot, dan otomasi alur kerja."
     />
 
     <!-- Twitter card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} data-i18n-meta={titleEn} />
-    <meta name="twitter:description" content={description} data-i18n-meta={descriptionEn} />
+    <meta name="twitter:title" content={titleEn} data-i18n-meta-id={title} />
+    <meta name="twitter:description" content={descriptionEn} data-i18n-meta-id={description} />
     <meta name="twitter:image" content={OG_IMAGE} />
     <meta
       name="twitter:image:alt"
-      content="Kartu mifdlal.com: nama Mifdlal Tsaqib Alfarras, web app, chatbot, dan otomasi alur kerja."
-      data-i18n-meta="mifdlal.com card: Mifdlal Tsaqib Alfarras, web app, chatbot, and workflow automation."
+      content="mifdlal.com card: Mifdlal Tsaqib Alfarras, web app, chatbot, and workflow automation."
+      data-i18n-meta-id="Kartu mifdlal.com: nama Mifdlal Tsaqib Alfarras, web app, chatbot, dan otomasi alur kerja."
     />
 
     <!-- Favicon: monogram, dua versi warna mengikuti tema sistem.
@@ -309,8 +311,8 @@ const jsonld = JSON.stringify({
         style="display:none;visibility:hidden"
       ></iframe>
     </noscript>
-    <a href="#main" class="skip-link" data-i18n-en="Skip to content">
-      Lewati ke konten
+    <a href="#main" class="skip-link" data-i18n-id="Lewati ke konten">
+      Skip to content
     </a>
     <SiteNav />
     {minimal ? (

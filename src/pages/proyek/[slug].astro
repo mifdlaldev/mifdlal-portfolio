@@ -77,40 +77,34 @@ const jsonLdExtra = [
       <div class="meta rise">
         <ul class="spec-list">
           <li>
-            <span class="spec-k" data-i18n-en="Role">
-              Peran
+            <span class="spec-k" data-i18n-id="Peran">
+              Role
             </span>
-            <span class="spec-v" data-i18n-en={p.roleEn}>
-              {p.role}
+            <span class="spec-v" data-i18n-id={p.role}>
+              {p.roleEn}
             </span>
           </li>
           <li>
-            <span class="spec-k" data-i18n-en="Stack">
+            <span class="spec-k" data-i18n-id="Stack">
               Stack
             </span>
-            <span class="spec-v" data-i18n-en={p.stackEn?.join(' · ')}>
-              {p.stack.join(' · ')}
+            <span class="spec-v" data-i18n-id={p.stack.join(' · ')}>
+              {p.stackEn?.join(' · ')}
             </span>
           </li>
           <li>
-            <span class="spec-k" data-i18n-en="Status">
+            <span class="spec-k" data-i18n-id="Status">
               Status
             </span>
-            <span class="spec-v live" data-i18n-en="live, opens in a new tab">
-              live, buka di tab baru
+            <span class="spec-v live" data-i18n-id="live, buka di tab baru">
+              live, opens in a new tab
             </span>
           </li>
         </ul>
 
         <div class="actions">
-          <a
-            href={p.live}
-            class="btn btn-primary"
-            target="_blank"
-            rel="noopener noreferrer"
-            data-i18n-en="Open website"
-          >
-            Buka situs
+          <a href={p.live} class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+            <span data-i18n-id="Buka situs">Open website</span>
             <span aria-hidden="true">↗</span>
           </a>
           {p.repo && (
@@ -119,9 +113,9 @@ const jsonLdExtra = [
               class="btn btn-ghost"
               target="_blank"
               rel="noopener noreferrer"
-              data-i18n-en="Source code"
+              data-i18n-id="Kode sumber"
             >
-              Kode sumber
+              Source code
             </a>
           )}
         </div>
@@ -131,8 +125,8 @@ const jsonLdExtra = [
 
   <section class="section detail-points">
     <div class="wrap">
-      <h2 class="section-headline rise" data-i18n-en="What this project covers">
-        Isi proyek ini
+      <h2 class="section-headline rise" data-i18n-id="Isi proyek ini">
+        What this project covers
       </h2>
       <ul class="point-list">
         {p.highlights.map((h, i) => (
@@ -140,17 +134,17 @@ const jsonLdExtra = [
             <span class="point-no" aria-hidden="true">
               {String(i + 1).padStart(2, '0')}
             </span>
-            <span data-i18n-en={p.highlightsEn[i]}>{h}</span>
+            <span data-i18n-id={h}>{p.highlightsEn[i]}</span>
           </li>
         ))}
       </ul>
 
-      <nav class="back rise" aria-label="Navigasi proyek" data-i18n-aria="Project navigation">
-        <a href="/proyek/" class="btn btn-ghost" data-i18n-en="All projects">
-          Semua proyek
+      <nav class="back rise" aria-label="Project navigation" data-i18n-aria-id="Navigasi proyek">
+        <a href="/proyek/" class="btn btn-ghost" data-i18n-id="Semua proyek">
+          All projects
         </a>
-        <a href="/#kontak" class="btn btn-primary" data-i18n-en="Start a project like this">
-          Mulai proyek seperti ini
+        <a href="/#kontak" class="btn btn-primary" data-i18n-id="Mulai proyek seperti ini">
+          Start a project like this
         </a>
       </nav>
     </div>

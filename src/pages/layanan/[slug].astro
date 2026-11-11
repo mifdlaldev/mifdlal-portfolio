@@ -81,8 +81,8 @@ const jsonLdExtra = [
       </figure>
 
       <div class="covers rise">
-        <p class="covers-label" data-i18n-en="Covers">
-          Cakupan
+        <p class="covers-label" data-i18n-id="Cakupan">
+          Covers
         </p>
         <ul class="cover-list">
           {s.covers.map((c, i) => (
@@ -90,7 +90,7 @@ const jsonLdExtra = [
               <span class="cover-no" aria-hidden="true">
                 {String(i + 1).padStart(2, '0')}
               </span>
-              <span data-i18n-en={s.coversEn[i]}>{c}</span>
+              <span data-i18n-id={c}>{s.coversEn[i]}</span>
             </li>
           ))}
         </ul>
@@ -100,8 +100,8 @@ const jsonLdExtra = [
 
   <section class="section detail-steps">
     <div class="wrap">
-      <h2 class="section-headline rise" data-i18n-en="How the work runs">
-        Cara kerjanya
+      <h2 class="section-headline rise" data-i18n-id="Cara kerjanya">
+        How the work runs
       </h2>
       <ol class="step-list">
         {serviceSteps.map((st, i) => (
@@ -109,19 +109,19 @@ const jsonLdExtra = [
             <span class="step-no" aria-hidden="true">
               {String(i + 1).padStart(2, '0')}
             </span>
-            <span class="step-label" data-i18n-en={st.labelEn}>
-              {st.label}
+            <span class="step-label" data-i18n-id={st.label}>
+              {st.labelEn}
             </span>
           </li>
         ))}
       </ol>
 
-      <nav class="back rise" aria-label="Navigasi layanan" data-i18n-aria="Service navigation">
-        <a href="/layanan/" class="btn btn-ghost" data-i18n-en="All services">
-          Semua layanan
+      <nav class="back rise" aria-label="Service navigation" data-i18n-aria-id="Navigasi layanan">
+        <a href="/layanan/" class="btn btn-ghost" data-i18n-id="Semua layanan">
+          All services
         </a>
-        <a href="/#kontak" class="btn btn-primary" data-i18n-en="Discuss your project">
-          Diskusikan proyek
+        <a href="/#kontak" class="btn btn-primary" data-i18n-id="Diskusikan proyek">
+          Discuss your project
         </a>
       </nav>
     </div>

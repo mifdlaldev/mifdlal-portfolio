@@ -12,41 +12,41 @@ import CopyEmail from './CopyEmail'
   <div class="wrap">
     <div class="contact-grid">
       <div class="contact-left rise" data-rise="right">
-        <span class="fig-label" data-i18n-en="fig. 08 · contact">
-          fig. 08 · kontak
+        <span class="fig-label" data-i18n-id="fig. 08 · kontak">
+          fig. 08 · contact
         </span>
-        <h2 class="section-headline" data-i18n-en="Tell me what you want to build.">
-          Ceritakan yang ingin Anda bangun.
+        <h2 class="section-headline" data-i18n-id="Ceritakan yang ingin Anda bangun.">
+          Tell me what you want to build.
         </h2>
         <p
           class="contact-note"
-          data-i18n-en="If you're not sure where to start, just describe the problem."
+          data-i18n-id="Jika belum yakin harus mulai dari mana, tuliskan masalahnya."
         >
-          Jika belum yakin harus mulai dari mana, tuliskan masalahnya.
+          If you're not sure where to start, just describe the problem.
         </p>
 
         <ul class="spec-list">
           <li>
-            <span class="spec-k" data-i18n-en="Reply">
-              Balasan
+            <span class="spec-k" data-i18n-id="Balasan">
+              Reply
             </span>
-            <span class="spec-v" data-i18n-en="1 working day">
-              1 hari kerja
+            <span class="spec-v" data-i18n-id="1 hari kerja">
+              1 working day
             </span>
           </li>
           <li>
-            <span class="spec-k" data-i18n-en="Timezone">
-              Zona waktu
+            <span class="spec-k" data-i18n-id="Zona waktu">
+              Timezone
             </span>
-            <span class="spec-v" data-i18n-en="GMT+7 (WIB)">
+            <span class="spec-v" data-i18n-id="GMT+7 (WIB)">
               GMT+7 (WIB)
             </span>
           </li>
           <li>
-            <span class="spec-k" data-i18n-en="Location">
-              Lokasi
+            <span class="spec-k" data-i18n-id="Lokasi">
+              Location
             </span>
-            <span class="spec-v" data-i18n-en="Bandung, ID">
+            <span class="spec-v" data-i18n-id="Bandung, ID">
               Bandung, ID
             </span>
           </li>
@@ -55,12 +55,12 @@ import CopyEmail from './CopyEmail'
 
       <div class="contact-panel rise" data-rise="left">
         <div class="panel-block">
-          <p class="panel-label" data-i18n-en="Email">
+          <p class="panel-label" data-i18n-id="Email">
             Email
           </p>
           <div class="email-row">
             <a
-              href={`mailto:${contact.email}?subject=${subject}`}
+              href={`mailto:${contact.email}?subject=${subjectEn}`}
               class="contact-email"
               data-mailto={contact.email}
               data-subject-id={subject}
@@ -77,64 +77,64 @@ import CopyEmail from './CopyEmail'
             punya pasangan Inggris dan ditukar oleh runtime i18n lewat
             atribut data-wa-number / data-wa-text-id / data-wa-text-en. */}
         <div class="panel-block">
-          <p class="panel-label" data-i18n-en="WhatsApp">
+          <p class="panel-label" data-i18n-id="WhatsApp">
             WhatsApp
           </p>
           <a
             class="whatsapp-cta"
-            href={`https://wa.me/${contact.whatsapp.number}?text=${encodeURIComponent(contact.whatsapp.message)}`}
+            href={`https://wa.me/${contact.whatsapp.number}?text=${encodeURIComponent(contact.whatsapp.messageEn)}`}
             target="_blank"
             rel="noopener noreferrer"
             data-wa-number={contact.whatsapp.number}
             data-wa-text-id={contact.whatsapp.message}
             data-wa-text-en={contact.whatsapp.messageEn}
-            aria-label="Chat WhatsApp"
-            data-i18n-aria="Chat on WhatsApp"
+            aria-label="Chat on WhatsApp"
+            data-i18n-aria-id="Chat WhatsApp"
           >
             <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"></path>
             </svg>
-            <span data-i18n-en="Chat on WhatsApp">Chat lewat WhatsApp</span>
+            <span data-i18n-id="Chat lewat WhatsApp">Chat on WhatsApp</span>
           </a>
           <p
             class="whatsapp-note"
-            data-i18n-en="The fastest channel if you would rather not write an email."
+            data-i18n-id="Kanal tercepat kalau Anda lebih suka tidak menulis email."
           >
-            Kanal tercepat kalau Anda lebih suka tidak menulis email.
+            The fastest channel if you would rather not write an email.
           </p>
         </div>
 
         <div class="panel-block">
-          <p class="panel-label" data-i18n-en="What speeds up my reply:">
-            Yang mempercepat balasan
+          <p class="panel-label" data-i18n-id="Yang mempercepat balasan">
+            What speeds up my reply:
           </p>
           <ol class="brief-list">
             <li>
               <span class="brief-no" aria-hidden="true">
                 01
               </span>
-              <span data-i18n-en="Type of your business">Jenis usaha Anda</span>
+              <span data-i18n-id="Jenis usaha Anda">Type of your business</span>
             </li>
             <li>
               <span class="brief-no" aria-hidden="true">
                 02
               </span>
-              <span data-i18n-en="What you want to build or fix">
-                Yang ingin dibangun atau diperbaiki
+              <span data-i18n-id="Yang ingin dibangun atau diperbaiki">
+                What you want to build or fix
               </span>
             </li>
             <li>
               <span class="brief-no" aria-hidden="true">
                 03
               </span>
-              <span data-i18n-en="Target time or deadline">Target waktu atau tenggat</span>
+              <span data-i18n-id="Target waktu atau tenggat">Target time or deadline</span>
             </li>
             <li>
               <span class="brief-no" aria-hidden="true">
                 04
               </span>
-              <span data-i18n-en="Approximate budget, if any">
-                Perkiraan anggaran, kalau sudah ada
+              <span data-i18n-id="Perkiraan anggaran, kalau sudah ada">
+                Approximate budget, if any
               </span>
             </li>
           </ol>
@@ -143,8 +143,8 @@ import CopyEmail from './CopyEmail'
     </div>
 
     <div class="contact-social rise">
-      <p class="panel-label" data-i18n-en="Social media">
-        Media sosial
+      <p class="panel-label" data-i18n-id="Media sosial">
+        Social media
       </p>
       <SocialIcons />
     </div>

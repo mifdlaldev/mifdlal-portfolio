@@ -7,11 +7,11 @@ import CodeComment from './CodeComment.astro'
   <CodeComment text="// pendidikan" textEn="// education" />
   <div class="wrap">
     <div class="section-head rise">
-      <span class="fig-label" data-i18n-en="fig. 06 · education">
-        fig. 06 · pendidikan
+      <span class="fig-label" data-i18n-id="fig. 06 · pendidikan">
+        fig. 06 · education
       </span>
-      <h2 class="section-headline" data-i18n-en="Formal education.">
-        Pendidikan formal.
+      <h2 class="section-headline" data-i18n-id="Pendidikan formal.">
+        Formal education.
       </h2>
     </div>
 
@@ -32,18 +32,18 @@ import CodeComment from './CodeComment.astro'
         education.map((e) => (
           <li class="edu-row rise" data-rise="left">
             <div class="edu-main">
-              <h3 class="edu-title" data-i18n-en={e.institutionEn}>
-                {e.institution}
+              <h3 class="edu-title" data-i18n-id={e.institution}>
+                {e.institutionEn}
               </h3>
               <p class="edu-program">
-                <span data-i18n-en={e.programEn}>{e.program}</span>
-                <span class="edu-status badge" data-i18n-en={e.statusEn}>
-                  {e.status}
+                <span data-i18n-id={e.program}>{e.programEn}</span>
+                <span class="edu-status badge" data-i18n-id={e.status}>
+                  {e.statusEn}
                 </span>
               </p>
               {e.note && (
-                <p class="edu-note" data-i18n-en={e.noteEn}>
-                  {e.note}
+                <p class="edu-note" data-i18n-id={e.note}>
+                  {e.noteEn}
                 </p>
               )}
             </div>
@@ -58,11 +58,11 @@ import CodeComment from './CodeComment.astro'
 
     {education.length === 0 && (
       <>
-        <p class="empty-note" data-i18n-en="Not filled in yet.">
-          Belum diisi
+        <p class="empty-note" data-i18n-id="Belum diisi">
+          Not filled in yet.
         </p>
-        <p class="sr-only" data-i18n-en="The education section has not been filled in yet.">
-          Bagian pendidikan belum diisi.
+        <p class="sr-only" data-i18n-id="Bagian pendidikan belum diisi.">
+          The education section has not been filled in yet.
         </p>
       </>
     )}

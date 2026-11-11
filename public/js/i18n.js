@@ -1,10 +1,14 @@
 /**
  * i18n + tema runtime — mifdlal.com
  *
- * Pola terjemahan: teks Indonesia sebagai default (textContent node),
- * versi Inggris di atribut data-i18n-en. Saat bahasa = en, runtime
- * menimpa textContent. Tidak ada kamus terpusat di sini: teks Indonesia
- * ditulis langsung di markup Astro, versi Inggris di atribut data-i18n-en.
+ * Pola terjemahan: teks Inggris sebagai default (textContent node, dirender
+ * server), versi Indonesia di atribut data-i18n-id. Saat bahasa = id, runtime
+ * menimpa textContent dengan versi Indonesia. Tidak ada kamus terpusat di
+ * sini: teks Inggris ditulis langsung di markup Astro, versi Indonesia di
+ * atribut data-i18n-id.
+ *
+ * Karena default ada di markup, pengunjung tanpa JavaScript, perayap mesin
+ * pencari, dan pratinjau tautan semuanya melihat versi Inggris.
  *
  * Tema: data-theme="light|dark" di <html>, default "system" →
  * di-resolve via prefers-color-scheme. Preferensi disimpan di
@@ -23,7 +27,7 @@
 
   /* ---------- state ---------- */
 
-  var prefs = { theme: 'system', lang: 'id' }
+  var prefs = { theme: 'system', lang: 'en' }
   try {
     var saved = JSON.parse(localStorage.getItem(LS_KEY) || '{}')
     if (saved && typeof saved === 'object') {
@@ -74,43 +78,43 @@
 
   function applyLang(l) {
     var root = document.documentElement
-    root.lang = l === 'en' ? 'en' : 'id'
+    root.lang = l === 'id' ? 'id' : 'en'
     root.dir = 'ltr'
 
-    qsa('[data-i18n-en]').forEach(function (el) {
-      /* teks default server = Indonesia; simpan sekali untuk restore */
-      if (el.__i18nId === undefined) el.__i18nId = el.textContent
-      el.textContent = l === 'en' ? el.getAttribute('data-i18n-en') : el.__i18nId
+    qsa('[data-i18n-id]').forEach(function (el) {
+      /* teks default server = Inggris; simpan sekali untuk restore */
+      if (el.__i18nDefault === undefined) el.__i18nDefault = el.textContent
+      el.textContent = l === 'id' ? el.getAttribute('data-i18n-id') : el.__i18nDefault
     })
 
     /* aria-label (ToTop, chat panel, tombol tanpa teks) */
-    qsa('[data-i18n-aria]').forEach(function (el) {
-      if (el.__i18nAriaId === undefined) el.__i18nAriaId = el.getAttribute('aria-label')
+    qsa('[data-i18n-aria-id]').forEach(function (el) {
+      if (el.__i18nAriaDefault === undefined) el.__i18nAriaDefault = el.getAttribute('aria-label')
       el.setAttribute(
         'aria-label',
-        l === 'en' ? el.getAttribute('data-i18n-aria') : el.__i18nAriaId
+        l === 'id' ? el.getAttribute('data-i18n-aria-id') : el.__i18nAriaDefault
       )
     })
 
     /* label dropdown bahasa */
     var lbl = qs('[data-lang-label]')
-    if (lbl) lbl.textContent = l === 'en' ? 'English' : 'Bahasa'
+    if (lbl) lbl.textContent = l === 'id' ? 'Bahasa' : 'English'
 
     /* placeholder input chat */
-    qsa('[data-i18n-ph]').forEach(function (el) {
-      if (el.__i18nPh === undefined) el.__i18nPh = el.getAttribute('placeholder')
+    qsa('[data-i18n-ph-id]').forEach(function (el) {
+      if (el.__i18nPhDefault === undefined) el.__i18nPhDefault = el.getAttribute('placeholder')
       el.setAttribute(
         'placeholder',
-        l === 'en' ? el.getAttribute('data-i18n-en') || '' : el.__i18nPh
+        l === 'id' ? el.getAttribute('data-i18n-ph-id') || '' : el.__i18nPhDefault
       )
     })
 
     /* meta content (description, og:*, twitter:*) */
-    qsa('[data-i18n-meta]').forEach(function (el) {
-      if (el.__i18nMeta === undefined) el.__i18nMeta = el.getAttribute('content')
+    qsa('[data-i18n-meta-id]').forEach(function (el) {
+      if (el.__i18nMetaDefault === undefined) el.__i18nMetaDefault = el.getAttribute('content')
       el.setAttribute(
         'content',
-        l === 'en' ? el.getAttribute('data-i18n-meta') || '' : el.__i18nMeta
+        l === 'id' ? el.getAttribute('data-i18n-meta-id') || '' : el.__i18nMetaDefault
       )
     })
 
@@ -120,7 +124,7 @@
       var enSub = el.getAttribute('data-subject-en') || idSub
       el.setAttribute(
         'href',
-        'mailto:' + el.getAttribute('data-mailto') + '?subject=' + (l === 'en' ? enSub : idSub)
+        'mailto:' + el.getAttribute('data-mailto') + '?subject=' + (l === 'id' ? idSub : enSub)
       )
     })
 
@@ -133,7 +137,7 @@
         'https://wa.me/' +
           el.getAttribute('data-wa-number') +
           '?text=' +
-          encodeURIComponent(l === 'en' ? enMsg : idMsg)
+          encodeURIComponent(l === 'id' ? idMsg : enMsg)
       )
     })
   }
@@ -147,7 +151,7 @@
       b.classList.toggle('is-active', on)
     })
     var lbl = qs('[data-lang-label]')
-    if (lbl) lbl.textContent = prefs.lang === 'en' ? 'English' : 'Bahasa'
+    if (lbl) lbl.textContent = prefs.lang === 'id' ? 'Bahasa' : 'English'
     qsa('[data-lang-value]').forEach(function (b) {
       var on = b.getAttribute('data-lang-value') === prefs.lang
       b.setAttribute('aria-pressed', on ? 'true' : 'false')
