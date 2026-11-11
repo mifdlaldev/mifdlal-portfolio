@@ -135,17 +135,39 @@ const jsonld = JSON.stringify({
         event 'gtm.start' dan trigger Initialization jalan benar.
         is:inline wajib: hash sha256 script ini dihitung scripts/csp-hash.mjs
         saat postbuild dan disuntik ke CSP, sehingga CSP tetap tanpa
-        'unsafe-inline'. Atribut async membuatnya tidak memblokir render. */}
+        'unsafe-inline'.
+
+        DIMUAT SETELAH INTERAKSI (diminta performa): bootstrap asli berjalan di
+        <head> dan gtm.js-nya mengeksekusi 2 long task (280 + 253 ms pada trace
+        mobile) yang menahan cat elemen LCP. Sekarang container dimuat pada
+        interaksi pertama (scroll, sentuh, klik, tombol) atau paling lambat
+        8 detik setelah load, supaya pageview tetap tercatat untuk pengunjung
+        yang benar-benar membaca, tetapi main thread tidak direbut saat paint
+        pertama. Untuk memaksa perilaku lama (selalu saat load), ganti blok
+        arm() di bawah dengan pemanggilan start() langsung. */}
     <script is:inline>
       ;(function (w, d, s, l, i) {
-        w[l] = w[l] || []
-        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' })
-        var f = d.getElementsByTagName(s)[0],
-          j = d.createElement(s),
-          dl = l != 'dataLayer' ? '&l=' + l : ''
-        j.async = true
-        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl
-        f.parentNode.insertBefore(j, f)
+        var fired = false
+        var start = function () {
+          if (fired) return
+          fired = true
+          w[l] = w[l] || []
+          w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' })
+          var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s),
+            dl = l != 'dataLayer' ? '&l=' + l : ''
+          j.async = true
+          j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl
+          f.parentNode.insertBefore(j, f)
+        }
+        var events = ['pointerdown', 'keydown', 'touchstart', 'wheel', 'scroll']
+        var arm = function () {
+          for (var k = 0; k < events.length; k++)
+            w.addEventListener(events[k], start, { passive: true, once: true })
+          w.setTimeout(start, 8000)
+        }
+        if (d.readyState === 'complete') arm()
+        else w.addEventListener('load', arm, { once: true })
       })(window, document, 'script', 'dataLayer', 'GTM-T4TCVQP8')
     </script>
 

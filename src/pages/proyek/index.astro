@@ -46,7 +46,11 @@ const jsonLdExtra = [
     <div class="wrap">
       <ul class="index-list">
         {projects.map((p, i) => (
-          <li class="index-row rise" data-rise="up" style={`--rise-delay:${i * 90}ms`}>
+          <li
+            class={`index-row${i === 0 ? '' : ' rise'}`}
+            data-rise="up"
+            style={`--rise-delay:${i * 90}ms`}
+          >
             <a href={`/proyek/${p.slug}/`} class="index-link">
               <span class="index-shot">
                 <img
@@ -54,7 +58,8 @@ const jsonLdExtra = [
                   width="1000"
                   height="563"
                   alt=""
-                  loading="lazy"
+                  fetchpriority={i === 0 ? 'high' : undefined}
+                  loading={i === 0 ? 'eager' : 'lazy'}
                   decoding="async"
                   draggable="false"
                 />

@@ -46,7 +46,11 @@ const jsonLdExtra = [
     <div class="wrap">
       <ul class="service-index">
         {services.map((s, i) => (
-          <li class="service-index-row rise" data-rise="up" style={`--rise-delay:${i * 90}ms`}>
+          <li
+            class={`service-index-row${i === 0 ? '' : ' rise'}`}
+            data-rise="up"
+            style={`--rise-delay:${i * 90}ms`}
+          >
             <a href={`/layanan/${s.slug}/`} class="service-index-link">
               <span class="service-index-no" aria-hidden="true">
                 {s.no}

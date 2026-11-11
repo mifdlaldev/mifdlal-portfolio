@@ -67,12 +67,13 @@ const jsonLdExtra = [
 
   <section class="section detail">
     <div class="wrap detail-grid">
-      <figure class="shot rise" data-rise="scale">
+      <figure class="shot">
         <img
           src={s.image}
           width="1280"
           height="757"
           alt={`Ilustrasi layanan ${s.no}: ${s.title}`}
+          fetchpriority="high"
           loading="eager"
           decoding="async"
           draggable="false"
