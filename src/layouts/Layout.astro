@@ -19,6 +19,11 @@ interface Props {
   /* Halaman rute dalam (detail proyek/layanan): simpul JSON-LD tambahan
      disuntikkan ke @graph supaya mesin pencari membaca entitas halaman. */
   jsonLdExtra?: readonly Record<string, unknown>[]
+  /* Halaman minimal (mis. 404): hanya navbar dan isi halaman. Footer,
+     wordmark, tombol ke atas, dan widget chat tidak dirender; skrip gerak
+     dan Lenis juga tidak dimuat. Latar jadi bidang rata tanpa dot grid
+     dan tanpa bingkai blueprint. */
+  minimal?: boolean
 }
 
 const {
@@ -28,6 +33,7 @@ const {
   descriptionEn,
   noindex = false,
   jsonLdExtra = [],
+  minimal = false,
 } = Astro.props
 
 /* Satu sumber kebenaran untuk schema: semua nilai diambil dari data situs,
@@ -124,7 +130,7 @@ const jsonld = JSON.stringify({
 ---
 
 <!doctype html>
-<html lang="id">
+<html lang="id" class={minimal ? 'page-minimal' : undefined}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -293,112 +299,122 @@ const jsonld = JSON.stringify({
       Lewati ke konten
     </a>
     <SiteNav />
-    <div class="page-track" data-track>
-      <div class="page-layer" data-page>
-        <main id="main">
-          <slot />
-        </main>
-        <Footer />
-        <div class="page-shadow" data-sheet-shadow aria-hidden="true"></div>
-      </div>
-    </div>
-    <Wordmark />
-    <ToTop />
-    <SiteChat />
-    <LenisScroll />
-    <script is:inline src="/js/image-guard.js" defer></script>
-    <script is:inline src="/js/reveal.js" defer></script>
-    <script src="/js/i18n.js" defer></script>
+    {minimal ? (
+      <main id="main" class="minimal-main">
+        <slot />
+      </main>
+    ) : (
+      <>
+        <div class="page-track" data-track>
+          <div class="page-layer" data-page>
+            <main id="main">
+              <slot />
+            </main>
+            <Footer />
+            <div class="page-shadow" data-sheet-shadow aria-hidden="true"></div>
+          </div>
+        </div>
+        <Wordmark />
+        <ToTop />
+        <SiteChat />
+        <LenisScroll />
+        <script is:inline src="/js/image-guard.js" defer></script>
+        <script is:inline src="/js/reveal.js" defer></script>
+        <script src="/js/i18n.js" defer></script>
 
-    {/* Reveal saat scroll — Framer Motion. Astro membundel ini jadi modul
-        eksternal ('self'), jadi aman terhadap CSP ketat. Tiap elemen .rise
-        dianimasikan HANYA saat ±separuh masuk viewport, sekali saja, lalu
-        inline style dibersihkan supaya hover CSS elemen tetap hidup. */}
-    <script>
-      import { animate, inView } from 'motion'
+        {/* Reveal saat scroll — Framer Motion. Astro membundel ini jadi modul
+            eksternal ('self'), jadi aman terhadap CSP ketat. Tiap elemen .rise
+            dianimasikan HANYA saat ±separuh masuk viewport, sekali saja, lalu
+            inline style dibersihkan supaya hover CSS elemen tetap hidup. */}
+        <script>
+          import { animate, inView } from 'motion'
 
-      const root = document.documentElement
+          const root = document.documentElement
 
-      /* Tandai siap lebih dulu: failsafe di <head> hanya mencabut kelas js
-         kalau script ini benar-benar gagal dimuat/di-setup. */
-      const done = (el: HTMLElement) => {
-        el.style.removeProperty('opacity')
-        el.style.removeProperty('transform')
-        el.style.removeProperty('translate')
-        el.style.removeProperty('scale')
-        el.style.removeProperty('left')
-        el.style.removeProperty('top')
-        el.style.removeProperty('clipPath')
-        el.classList.add('is-in')
-      }
-
-      try {
-        const els = Array.from(document.querySelectorAll<HTMLElement>('.rise'))
-        root.dataset.riseReady = '1'
-
-        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-        if (reduce) {
-          els.forEach(done)
-        } else {
-          const FROM: Record<string, Record<string, number | string>> = {
-            up: { y: 34 },
-            left: { x: -30 },
-            right: { x: 30 },
-            scale: { scale: 0.93 },
-            wipe: { clipPath: 'inset(0 100% 0 0)' },
+          /* Tandai siap lebih dulu: failsafe di <head> hanya mencabut kelas js
+             kalau script ini benar-benar gagal dimuat/di-setup. */
+          const done = (el: HTMLElement) => {
+            el.style.removeProperty('opacity')
+            el.style.removeProperty('transform')
+            el.style.removeProperty('translate')
+            el.style.removeProperty('scale')
+            el.style.removeProperty('left')
+            el.style.removeProperty('top')
+            el.style.removeProperty('clipPath')
+            el.classList.add('is-in')
           }
 
-          els.forEach((el) => {
-            const variant = el.dataset.rise || 'up'
-            const from = FROM[variant] ?? FROM.up
-            const raw = getComputedStyle(el).getPropertyValue('--rise-delay')
-            const delay = (parseFloat(raw) || 0) / 1000
+          try {
+            const els = Array.from(document.querySelectorAll<HTMLElement>('.rise'))
+            root.dataset.riseReady = '1'
 
-            /* Ambang trigger adaptif: elemen kecil menunggu ±separuh tampil,
-               elemen tinggi (lebih tinggi dari viewport) menunggu ±75% tinggi
-               viewport supaya tetap "kelihatan penuh dulu" sebelum beranimasi
-               dan tidak pernah gagal trigger. */
-            const vh = window.innerHeight
-            const h = el.getBoundingClientRect().height || 1
-            const amount = Math.max(0.2, Math.min(0.5, (vh * 0.75) / h))
+            const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-            /* Keyframes: nilai awal -> nilai akhir. */
-            const to: Record<string, unknown> = { opacity: [0, 1] }
-            for (const [key, value] of Object.entries(from)) {
-              if (typeof value === 'number') to[key] = [value, key === 'scale' ? 1 : 0]
-              else to[key] = [value, variant === 'wipe' ? 'inset(0 0 0 0)' : value]
-            }
+            if (reduce) {
+              els.forEach(done)
+            } else {
+              const FROM: Record<string, Record<string, number | string>> = {
+                up: { y: 34 },
+                left: { x: -30 },
+                right: { x: 30 },
+                scale: { scale: 0.93 },
+                wipe: { clipPath: 'inset(0 100% 0 0)' },
+              }
 
-            let played = false
-            let stop: () => void = () => {}
-            stop = inView(
-              el,
-              () => {
-                if (played) return
-                played = true
-                animate(el, to as never, {
-                  duration: 0.75,
-                  delay,
-                  ease: [0.22, 0.61, 0.36, 1],
-                  onComplete: () => {
-                    /* Motion menulis gaya akhir ke inline style SETELAH
-                       onComplete; bersihkan di frame berikut supaya hover CSS
-                       elemen tidak tertutup inline transform:motion. */
-                    window.requestAnimationFrame(() => window.requestAnimationFrame(() => done(el)))
-                    stop()
+              els.forEach((el) => {
+                const variant = el.dataset.rise || 'up'
+                const from = FROM[variant] ?? FROM.up
+                const raw = getComputedStyle(el).getPropertyValue('--rise-delay')
+                const delay = (parseFloat(raw) || 0) / 1000
+
+                /* Ambang trigger adaptif: elemen kecil menunggu ±separuh tampil,
+                   elemen tinggi (lebih tinggi dari viewport) menunggu ±75% tinggi
+                   viewport supaya tetap "kelihatan penuh dulu" sebelum beranimasi
+                   dan tidak pernah gagal trigger. */
+                const vh = window.innerHeight
+                const h = el.getBoundingClientRect().height || 1
+                const amount = Math.max(0.2, Math.min(0.5, (vh * 0.75) / h))
+
+                /* Keyframes: nilai awal -> nilai akhir. */
+                const to: Record<string, unknown> = { opacity: [0, 1] }
+                for (const [key, value] of Object.entries(from)) {
+                  if (typeof value === 'number') to[key] = [value, key === 'scale' ? 1 : 0]
+                  else to[key] = [value, variant === 'wipe' ? 'inset(0 0 0 0)' : value]
+                }
+
+                let played = false
+                let stop: () => void = () => {}
+                stop = inView(
+                  el,
+                  () => {
+                    if (played) return
+                    played = true
+                    animate(el, to as never, {
+                      duration: 0.75,
+                      delay,
+                      ease: [0.22, 0.61, 0.36, 1],
+                      onComplete: () => {
+                        /* Motion menulis gaya akhir ke inline style SETELAH
+                           onComplete; bersihkan di frame berikut supaya hover CSS
+                           elemen tidak tertutup inline transform:motion. */
+                        window.requestAnimationFrame(() =>
+                          window.requestAnimationFrame(() => done(el))
+                        )
+                        stop()
+                      },
+                    })
                   },
-                })
-              },
-              { amount, margin: '0px 0px -8% 0px' }
-            )
-          })
-        }
-      } catch {
-        /* Gagal setup: cabut kelas js supaya semua konten tampil. */
-        root.classList.remove('js')
-      }
-    </script>
+                  { amount, margin: '0px 0px -8% 0px' }
+                )
+              })
+            }
+          } catch {
+            /* Gagal setup: cabut kelas js supaya semua konten tampil. */
+            root.classList.remove('js')
+          }
+        </script>
+      </>
+    )}
   </body>
 </html>
 
@@ -418,5 +434,45 @@ const jsonld = JSON.stringify({
   }
   .skip-link:focus {
     left: 0;
+  }
+
+  /* ── Halaman minimal (404) ────────────────────────────────────────────
+     Bidang rata putih, tanpa dot grid halaman, tanpa bayangan lapis, dan
+     tanpa bingkai blueprint section. Navbar tetap: di sini ia berdiri di
+     atas latar terang, jadi memakai state bawaan (teks ink, logo hitam). */
+  :global(.page-minimal) {
+    /* Permukaan diarahkan ke putih murni. Navbar memakai --color-paper,
+       jadi ikut putih tanpa jahitan warna di bawahnya. Di tema gelap
+       --color-white sudah memetakan ke permukaan gelap, jadi halaman tetap
+       terbaca di mode gelap. */
+    --color-paper: var(--color-white);
+    background-image: none;
+  }
+
+  :global(.page-minimal) body {
+    background-image: none;
+    /* Navbar tetap, jadi isi perlu ruang setinggi navbar. */
+    padding-block-start: var(--nav-h);
+  }
+
+  :global(.page-minimal .minimal-main) {
+    /* Ruang isi = viewport dikurangi navbar; isi dipusatkan tegak. */
+    min-height: calc(100dvh - var(--nav-h));
+    display: grid;
+    align-content: center;
+  }
+
+  :global(.page-minimal .section) {
+    background-image: none;
+    /* Pita dan bingkai dimatikan, jadi jarak section tidak diperlukan;
+       jarak datang dari .error-wrap di halaman 404. */
+    padding-block: 0;
+  }
+
+  :global(.page-minimal .section)::before,
+  :global(.page-minimal .section)::after,
+  :global(.page-minimal .section > .wrap)::before,
+  :global(.page-minimal .section > .wrap)::after {
+    display: none;
   }
 </style>

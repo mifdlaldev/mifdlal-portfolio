@@ -8,6 +8,7 @@ import Layout from '../layouts/Layout.astro'
   description="Halaman tidak ditemukan."
   descriptionEn="Page not found."
   noindex
+  minimal
 >
   <section class="section">
     <div class="wrap error-wrap">
@@ -36,7 +37,9 @@ import Layout from '../layouts/Layout.astro'
     text-align: center;
     max-width: 48rem;
     margin-inline: auto;
-    padding-block: 5rem;
+    /* Jarak kecil saja: isi sudah dipusatkan tegak oleh main. Padding besar
+       membuat halaman melebihi viewport dan memunculkan scrollbar tak perlu. */
+    padding-block: clamp(1rem, 4vh, 3rem);
   }
 
   .error-wrap .section-headline {
