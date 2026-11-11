@@ -300,9 +300,15 @@ const jsonld = JSON.stringify({
     </a>
     <SiteNav />
     {minimal ? (
-      <main id="main" class="minimal-main">
-        <slot />
-      </main>
+      <>
+        <main id="main" class="minimal-main">
+          <slot />
+        </main>
+        {/* Halaman minimal tetap memuat runtime bahasa+tema supaya bahasa
+            yang sudah dipilih pengunjung berlaku juga di sini; tanpa ini 404
+            selalu tampil Indonesia dan jadi tidak konsisten. */}
+        <script src="/js/i18n.js" defer></script>
+      </>
     ) : (
       <>
         <div class="page-track" data-track>
