@@ -433,6 +433,11 @@ import CodeComment from './CodeComment.astro'
       const vh = window.innerHeight
       let animating = false
 
+      /* Fase 1 — baca semua geometri lebih dulu. getBoundingClientRect memaksa
+         layout sinkron; kalau diselang-seling dengan penulisan gaya (seperti
+         sebelumnya) browser menyusun ulang SELURUH dokumen sekali per kartu.
+         Semua pembacaan dulu, semua penulisan kemudian = satu layout pass. */
+      const rows: { clip: HTMLElement; target: number }[] = []
       for (const clip of clips) {
         const rect = clip.getBoundingClientRect()
         const inView = rect.bottom > -vh * 0.2 && rect.top < vh * 1.2
@@ -442,6 +447,12 @@ import CodeComment from './CodeComment.astro'
         const p = (vh - rect.top) / (vh + rect.height)
         // target: +20% (foto turun, masuk dari bawah) -> -20% (foto naik penuh)
         const target = (SHIFT_MAX - p * 2 * SHIFT_MAX) * rect.height
+        rows.push({ clip, target })
+      }
+
+      /* Fase 2 — tulis. Nilai yang ditulis identik dengan sebelumnya
+         (LERP = 1 berarti next === target). */
+      for (const { clip, target } of rows) {
         const prev = current.get(clip) ?? target
         const next = prev + (target - prev) * LERP
 
