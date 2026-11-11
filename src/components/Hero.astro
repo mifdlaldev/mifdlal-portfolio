@@ -1,36 +1,48 @@
 ---
-import GradientASCII from '../components/GradientASCII'
+// Background ASCII hero sekarang vanilla (src/scripts/hero-ascii.ts), bukan
+// island React. Alasannya performa: selama komponen ini React, bundel renderer
+// React ikut dievaluasi di main thread saat load, dan di Lighthouse mobile itu
+// satu long task 3083 ms (92% TBT). Markup, kelas, dan seluruh parameter
+// render identik dengan versi React sebelumnya.
 ---
 
 <section id="hero" class="hero">
-  <!-- Background ASCII bergerak (React Bits). Dekoratif: aria-hidden di dalam komponen.
-       client:load -> hidrasi saat load karena hero selalu above the fold.
-       intro={false} -> ASCII tampil penuh sejak frame pertama, tanpa animasi reveal. -->
   <!-- Scrim atas: navbar state atas sengaja transparan supaya ASCII kelihatan
        apa adanya, jadi teksnya perlu pelindung tipis. Fade ke transparan
        supaya tidak ada garis batas yang terlihat. -->
   <div class="hero-scrim" aria-hidden="true"></div>
 
   <div class="hero-bg" aria-hidden="true">
-    <GradientASCII
-      client:idle
-      colors={['var(--electric)']}
-      shape="horizon"
-      density={1}
-      glyphOpacity={1}
-      gradientOpacity={1}
-      glow={0.5}
-      flicker={0.08}
-      grain={0.03}
-      speed={0.5}
-      mouseInteraction={false}
-      clickEffect="none"
-      lightMode={false}
-      intro={false}
-      fontFamily='"Geist Mono Variable", ui-monospace, monospace'
-    />
+    <div class="hero-ascii" data-hero-ascii>
+      <canvas class="hero-ascii-canvas" aria-hidden="true"></canvas>
+    </div>
     <div class="hero-veil"></div>
   </div>
+
+  <script>
+    import { mountHeroAscii } from '../scripts/hero-ascii'
+
+    const container = document.querySelector<HTMLElement>('[data-hero-ascii]')
+    const canvas = container?.querySelector('canvas')
+    if (container && canvas) {
+      mountHeroAscii(container, canvas, {
+        colors: ['var(--electric)'],
+        shape: 'horizon',
+        density: 1,
+        glyphOpacity: 1,
+        gradientOpacity: 1,
+        glow: 0.5,
+        flicker: 0.08,
+        grain: 0.03,
+        speed: 0.5,
+        mouseInteraction: false,
+        clickEffect: 'none',
+        lightMode: false,
+        intro: false,
+        fontFamily: '"Geist Mono Variable", ui-monospace, monospace',
+      })
+    }
+  </script>
 
   <div class="wrap hero-inner">
     <p class="fig-label" data-i18n-en="Open for projects">
@@ -89,7 +101,21 @@ import GradientASCII from '../components/GradientASCII'
     pointer-events: none;
   }
 
-  .hero-bg :global(canvas) {
+  /* Wadah ASCII + canvas. Nilai sama dengan utilitas yang dulu dipakai
+     komponen React (relative/h-full/w-full/overflow-hidden pada wadah,
+     absolute/inset-0/block/h-full/w-full pada canvas) supaya geometri dan
+     hasil render identik. Ditulis eksplisit agar tidak bergantung pada
+     utilitas Tailwind yang kebetulan ter-generate. */
+  .hero-ascii {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .hero-ascii-canvas {
+    position: absolute;
+    inset: 0;
     display: block;
     width: 100%;
     height: 100%;
