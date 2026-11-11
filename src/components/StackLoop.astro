@@ -52,6 +52,20 @@ const logos = stack.map((s) => ({ src: s.logo, alt: s.name, title: s.name, width
     height: 5.75rem;
   }
 
+  /* Section ini 244 KB dari 410 KB HTML (159 <li> hasil duplikasi marquee):
+     hampir separuh DOM halaman. Saat band berada di luar viewport, subtree-nya
+     tidak perlu di-style, di-layout, atau di-paint; browser melompatinya.
+     Containment dipasang di sini, bukan di .section--band, karena node sudut
+     section adalah saudara band (bukan keturunan) sehingga tidak ikut
+     terpotong, dan .loop-band sudah punya overflow: hidden jadi paint
+     containment tidak menambah kliping baru. contain-intrinsic-size memakai
+     tinggi band yang sudah dipatok persis (5.75rem), jadi ruang yang dipesan
+     sama dengan tinggi aslinya: tidak ada geser layout, tidak ada CLS. */
+  .loop-band {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 5.75rem;
+  }
+
   /* LogoLoop dirender di dalam <astro-island>, jadi root React bukan
      anak langsung .loop-band. Tinggi dipatok eksplisit (bukan 100%)
      supaya tidak ada dependensi sirkular tinggi yang bikin layout

@@ -38,9 +38,9 @@ import { AsciiArtStatic } from './ui/ascii-art'
               <h3 class="service-title service-title--blue" data-i18n-en={s.titleEn}>
                 {s.title}
               </h3>
-              {s.no === '01' && <ServiceBrowserIcon client:idle />}
-              {s.no === '02' && <ServiceBotIcon client:idle />}
-              {s.no === '03' && <ServiceWorkflowIcon client:idle />}
+              {s.no === '01' && <ServiceBrowserIcon client:visible />}
+              {s.no === '02' && <ServiceBotIcon client:visible />}
+              {s.no === '03' && <ServiceWorkflowIcon client:visible />}
             </div>
             <p class="service-desc" data-i18n-en={s.bodyEn}>
               {s.body}
@@ -79,7 +79,7 @@ import { AsciiArtStatic } from './ui/ascii-art'
                   WAJIB. */}
               <div class="service-ascii">
                 <AsciiArtStatic
-                  client:idle
+                  client:visible
                   src={s.image}
                   resolution={64}
                   charset="dots"

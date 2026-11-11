@@ -502,7 +502,14 @@ export default function SafariWindow({ tabs }: { tabs: readonly ShowcaseTab[] })
             <iframe
               key={`${current.url}#${reloadKey}`}
               className="safari__frame"
-              src={current.url}
+              /* `src` baru dipasang setelah viewport terukur di klien.
+                 Saat SSR `vp.h` masih 0, jadi tinggi iframe 0px — dan iframe
+                 setinggi 0px TIDAK dihormati `loading="lazy"`: Chrome langsung
+                 memuatnya. Terukur: 405 KB / 14 request dari situs showcase
+                 ikut masuk profil Lighthouse mobile sebelum section ini
+                 pernah terlihat. Tanpa `src` di HTML, iframe hanya dimuat
+                 setelah island hidrasi (= saat section benar-benar tampil). */
+              src={virtualH > 0 ? current.url : undefined}
               title={t(`Pratinjau ${current.label}`, `Preview ${current.label}`)}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
