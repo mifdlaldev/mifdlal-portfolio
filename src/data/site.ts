@@ -93,6 +93,83 @@ export const projects: readonly Project[] = [
     highlights: ['Bahasa Indonesia dan Inggris', 'Route terpisah per bahasa'],
     highlightsEn: ['Indonesian and English', 'Separate route per language'],
   },
+  {
+    no: '04',
+    name: 'Conduit',
+    role: 'Alat web',
+    roleEn: 'Web tool',
+    description:
+      'Ekstraktor sumber video dari situs hosting video, dibungkus API Express dan antarmuka React. Backend Playwright mengambil tautan unduhan langsung.',
+    descriptionEn:
+      'Extracts direct video sources from video hosting sites, wrapped in an Express API and a React frontend. A Playwright backend resolves the direct download link.',
+    stack: ['TypeScript', 'React', 'Playwright'],
+    stackEn: ['TypeScript', 'React', 'Playwright'],
+    live: 'https://conduit-iota-rust.vercel.app',
+    repo: 'https://github.com/mifdlaldev/conduit',
+    image: '/projects/conduit.webp',
+    slug: 'conduit',
+    highlights: [
+      'Backend Playwright mengambil sumber video langsung',
+      'API Express dan antarmuka React',
+      'Field URL dengan contoh format input',
+    ],
+    highlightsEn: [
+      'A Playwright backend resolves the direct video source',
+      'Express API and a React frontend',
+      'URL field with an input format example',
+    ],
+  },
+  {
+    no: '05',
+    name: 'E-Baso-Ikan',
+    role: 'E-commerce',
+    roleEn: 'E-commerce',
+    description:
+      'Toko daring untuk usaha baso ikan: katalog menu, empat produk unggulan, dan alur pesan yang ringkas, dibangun dengan Next.js dan Supabase.',
+    descriptionEn:
+      'An online storefront for a fish-ball food business: a menu catalogue, four featured products, and a short ordering flow, built with Next.js and Supabase.',
+    stack: ['Next.js', 'Supabase'],
+    stackEn: ['Next.js', 'Supabase'],
+    live: 'https://e-baso-ikan.vercel.app',
+    image: '/projects/e-baso-ikan.webp',
+    slug: 'e-baso-ikan',
+    highlights: [
+      'Katalog menu dengan empat produk unggulan',
+      'Alur pesan dari lihat menu ke checkout',
+      'Dibangun dengan Next.js dan Supabase',
+    ],
+    highlightsEn: [
+      'A menu catalogue with four featured products',
+      'An ordering flow from browsing to checkout',
+      'Built with Next.js and Supabase',
+    ],
+  },
+  {
+    no: '06',
+    name: 'Orbit CLI',
+    role: 'Alat CLI',
+    roleEn: 'CLI tool',
+    description:
+      'Generator proyek serbaguna: satu perintah menyiapkan proyek pada tujuh framework, memakai perintah create resmi tiap framework.',
+    descriptionEn:
+      'A universal project generator: one command scaffolds a project across seven frameworks, using each framework official create tool.',
+    stack: ['TypeScript', 'Node.js'],
+    stackEn: ['TypeScript', 'Node.js'],
+    live: 'https://mifdlaldev.github.io/orbit-cli/',
+    repo: 'https://github.com/mifdlaldev/orbit-cli',
+    image: '/projects/orbit-cli.webp',
+    slug: 'orbit-cli',
+    highlights: [
+      'Satu perintah untuk tujuh framework',
+      'Memakai perintah create resmi tiap framework',
+      'Setiap klaim disertai status terverifikasi',
+    ],
+    highlightsEn: [
+      'One command across seven frameworks',
+      'Uses each framework official create tool',
+      'Every claim carries a verified status',
+    ],
+  },
 ]
 /* Foto layanan: unduhan Unsplash, dipotong 16/10 oleh kanvas layanan.
    Berkas WebP di public/services/layanan-0N.webp (1280 px, sRGB, kualitas 80;

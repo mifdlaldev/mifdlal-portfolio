@@ -47,13 +47,18 @@ Komposisi baris lebar bernomor, BUKAN grid kartu identik (RHYTHM 3).
 
 04. conduit
     Fungsi: tool pengekstrak video berbasis Playwright.
-    Stack: Rust, Playwright.
+    Stack: TypeScript, React, Express, Playwright.
     Link: https://conduit-iota-rust.vercel.app
     Repo: https://github.com/mifdlaldev/conduit
+    Catatan: KONTEN.md versi 2026-10-17 menulis "Rust". Diverifikasi ulang
+    2026-11-11 lewat GitHub API (language TypeScript, topik playwright/express/
+    react) dan halaman live ("Built with TypeScript + React"). Nilai Rust
+    diganti dengan stack yang terbukti.
 
-Cadangan (tampilkan kalau 4 di atas kurang): e-baso-ikan (e-commerce bakso,
-https://e-baso-ikan.vercel.app), orbit-cli (CLI project generator,
-https://mifdlaldev.github.io/orbit-cli).
+Cadangan (DIPAKAI sejak 2026-11-11 sebagai entri 05 dan 06 di situs):
+e-baso-ikan (Next.js + Supabase, https://e-baso-ikan.vercel.app) dan
+orbit-cli (TypeScript, https://mifdlaldev.github.io/orbit-cli). Keduanya
+diverifikasi HTTP 200 dan punya repo publik di github.com/mifdlaldev.
 
 JANGAN tampilkan: AI-Agent (archived, klaim inflated), AI-Lead-Qualification-Agent
 (slideware), antigravity-customize, freelance-os.

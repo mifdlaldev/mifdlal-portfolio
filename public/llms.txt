@@ -4,7 +4,7 @@
 
 ## Halaman
 
-- [Beranda dan portofolio](https://mifdlal.com/): profil singkat, tiga proyek yang bisa dibuka, tiga layanan, pengalaman kerja, pendidikan, sertifikasi, dan kontak.
+- [Beranda dan portofolio](https://mifdlal.com/): profil singkat, enam proyek yang bisa dibuka, tiga layanan, pengalaman kerja, pendidikan, sertifikasi, dan kontak.
 - [Indeks proyek](https://mifdlal.com/proyek/): daftar semua proyek dengan tautan ke halaman detail masing-masing.
 - [Indeks layanan](https://mifdlal.com/layanan/): daftar semua layanan dengan tautan ke halaman detail masing-masing.
 
@@ -19,6 +19,9 @@
 - [PT Loka Logistics Solution](https://mifdlal.com/proyek/loka-logistics/), situs profil perusahaan logistik, WordPress: https://lokalogistics.co.id/
 - [Simulasi Lokasi Ujian UT Bandung](https://mifdlal.com/proyek/simulasi-ut-bandung/), aplikasi wizard enam langkah, Vite: https://simulasi-pemilihan-lokasi-ujian-ut.vercel.app/
 - [Mahoni-House](https://mifdlal.com/proyek/mahoni-house/), landing page villa dua bahasa, Next.js: https://mahoni-house.vercel.app
+- [Conduit](https://mifdlal.com/proyek/conduit/), ekstraktor sumber video dengan API Express dan antarmuka React, TypeScript + Playwright: https://conduit-iota-rust.vercel.app
+- [E-Baso-Ikan](https://mifdlal.com/proyek/e-baso-ikan/), toko daring baso ikan, Next.js + Supabase: https://e-baso-ikan.vercel.app
+- [Orbit CLI](https://mifdlal.com/proyek/orbit-cli/), generator proyek tujuh framework, TypeScript: https://mifdlaldev.github.io/orbit-cli/
 
 ## Kontak
 
