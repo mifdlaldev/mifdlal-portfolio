@@ -97,15 +97,15 @@ const html = `<!doctype html>
   <span class="node node--br"></span>
   <div class="inner">
     <div class="row">
-      <span class="mono m20">fig. 00 &middot; kartu identitas</span>
+      <span class="mono m20">fig. 00 &middot; identity card</span>
       <span class="mono m20">mifdlal.com</span>
     </div>
     <div class="rule"></div>
     <div class="mid">
-      <div class="mono kicker">portofolio &middot; freelance</div>
+      <div class="mono kicker">portfolio &middot; freelance</div>
       <div class="name">Mifdlal Tsaqib Alfarras</div>
       <div class="strip"><span class="a"></span><span class="b"></span></div>
-      <div class="services">web app &middot; chatbot &middot; otomasi alur kerja</div>
+      <div class="services">web app &middot; chatbot &middot; workflow automation</div>
     </div>
     <div class="foot row">
       <span class="mono m20">Bandung, ID &middot; GMT+7</span>

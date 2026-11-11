@@ -1,37 +1,37 @@
 # mifdlal.com
 
-> Portofolio dan halaman jasa Mifdlal Tsaqib Alfarras: freelance web developer dan spesialis otomasi AI, remote dari Bandung, Indonesia. Bahasa utama situs adalah Indonesia, dengan versi Inggris pada halaman yang sama.
+> Portfolio and services page of Mifdlal Tsaqib Alfarras: freelance web developer and AI automation specialist, working remotely from Bandung, Indonesia. The site's primary language is English, with an Indonesian version on the same pages.
 
-## Halaman
+## Pages
 
-- [Beranda dan portofolio](https://mifdlal.com/): profil singkat, enam proyek yang bisa dibuka, tiga layanan, pengalaman kerja, pendidikan, sertifikasi, dan kontak.
-- [Indeks proyek](https://mifdlal.com/proyek/): daftar semua proyek dengan tautan ke halaman detail masing-masing.
-- [Indeks layanan](https://mifdlal.com/layanan/): daftar semua layanan dengan tautan ke halaman detail masing-masing.
+- [Home and portfolio](https://mifdlal.com/): short profile, six projects you can open, three services, work experience, education, certifications, and contact.
+- [Project index](https://mifdlal.com/proyek/): every project with a link to its own detail page.
+- [Service index](https://mifdlal.com/layanan/): every service with a link to its own detail page.
 
-## Layanan
+## Services
 
-- [Website dan web app](https://mifdlal.com/layanan/website-web-app/): landing, profil perusahaan, e-commerce, sampai POS. Dikerjakan dari desain sampai rilis.
-- [Chatbot](https://mifdlal.com/layanan/chatbot/): balasan otomatis dan jawaban berbasis data bisnis, bukan templat tetap.
-- [Otomasi AI dan workflow](https://mifdlal.com/layanan/otomasi-ai-workflow/): AI menangani pesan masuk, merangkum konteks pelanggan, dan mengirim balasan otomatis.
+- [Websites and web apps](https://mifdlal.com/layanan/website-web-app/): landing pages, company profiles, e-commerce, up to POS systems. Handled from design through launch.
+- [Chatbots](https://mifdlal.com/layanan/chatbot/): automatic replies and answers drawn from your business data, not fixed templates.
+- [AI automation and workflow](https://mifdlal.com/layanan/otomasi-ai-workflow/): AI handles incoming messages, summarises customer context, and sends automatic replies.
 
-## Proyek
+## Projects
 
-- [PT Loka Logistics Solution](https://mifdlal.com/proyek/loka-logistics/), situs profil perusahaan logistik, WordPress: https://lokalogistics.co.id/
-- [Simulasi Lokasi Ujian UT Bandung](https://mifdlal.com/proyek/simulasi-ut-bandung/), aplikasi wizard enam langkah, Vite: https://simulasi-pemilihan-lokasi-ujian-ut.vercel.app/
-- [Mahoni-House](https://mifdlal.com/proyek/mahoni-house/), landing page villa dua bahasa, Next.js: https://mahoni-house.vercel.app
-- [Conduit](https://mifdlal.com/proyek/conduit/), ekstraktor sumber video dengan API Express dan antarmuka React, TypeScript + Playwright: https://conduit-iota-rust.vercel.app
-- [E-Baso-Ikan](https://mifdlal.com/proyek/e-baso-ikan/), toko daring baso ikan, Next.js + Supabase: https://e-baso-ikan.vercel.app
-- [Orbit CLI](https://mifdlal.com/proyek/orbit-cli/), generator proyek tujuh framework, TypeScript: https://mifdlaldev.github.io/orbit-cli/
+- [PT Loka Logistics Solution](https://mifdlal.com/proyek/loka-logistics/), logistics company profile site, WordPress: https://lokalogistics.co.id/
+- [UT Bandung Exam Location Simulator](https://mifdlal.com/proyek/simulasi-ut-bandung/), six-step wizard app, Vite: https://simulasi-pemilihan-lokasi-ujian-ut.vercel.app/
+- [Mahoni-House](https://mifdlal.com/proyek/mahoni-house/), bilingual villa landing page, Next.js: https://mahoni-house.vercel.app
+- [Conduit](https://mifdlal.com/proyek/conduit/), video source extractor with an Express API and React interface, TypeScript + Playwright: https://conduit-iota-rust.vercel.app
+- [E-Baso-Ikan](https://mifdlal.com/proyek/e-baso-ikan/), online fish-ball store, Next.js + Supabase: https://e-baso-ikan.vercel.app
+- [Orbit CLI](https://mifdlal.com/proyek/orbit-cli/), project generator for seven frameworks, TypeScript: https://mifdlaldev.github.io/orbit-cli/
 
-## Kontak
+## Contact
 
 - Email: hello@mifdlal.com
 - WhatsApp: https://wa.me/6283142121226
 - GitHub: https://github.com/mifdlaldev
 - LinkedIn: https://www.linkedin.com/in/mifdlal-tsaqib-alfarras/
 
-## Catatan teknis
+## Technical notes
 
-- Situs statis Astro, dilayani Cloudflare Workers di mifdlal.com.
-- Beranda memuat ringkasan; tiap proyek dan layanan punya halaman detail sendiri. Konten utama tetap terbaca tanpa JavaScript.
-- Peta situs: https://mifdlal.com/sitemap-index.xml
+- Static Astro site, served by Cloudflare Workers at mifdlal.com.
+- The home page carries the summary; every project and service has its own detail page. Main content stays readable without JavaScript.
+- Sitemap: https://mifdlal.com/sitemap-index.xml
