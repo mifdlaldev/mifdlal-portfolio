@@ -1,0 +1,218 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import RouteHero from '../../components/RouteHero.astro'
+import { projects } from '../../data/site'
+
+const jsonLdExtra = [
+  {
+    '@type': 'CollectionPage',
+    '@id': 'https://mifdlal.com/proyek/#page',
+    name: 'Proyek',
+    url: 'https://mifdlal.com/proyek/',
+    inLanguage: ['id', 'en'],
+    isPartOf: { '@id': 'https://mifdlal.com/#website' },
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Beranda', item: 'https://mifdlal.com/' },
+      { '@type': 'ListItem', position: 2, name: 'Proyek', item: 'https://mifdlal.com/proyek/' },
+    ],
+  },
+]
+---
+
+<Layout
+  title="Proyek | Mifdlal Tsaqib Alfarras"
+  titleEn="Work | Mifdlal Tsaqib Alfarras"
+  description={`${projects.length} proyek yang dapat dibuka sendiri. Situs perusahaan, aplikasi simulasi, dan landing page dua bahasa. Setiap tautan live dapat diperiksa.`}
+  descriptionEn={`${projects.length} projects you can browse. A company site, a simulation app, and a two-language landing page. Every live link can be checked.`}
+  jsonLdExtra={jsonLdExtra}
+>
+  <RouteHero
+    fig="fig. 10 · proyek"
+    figEn="fig. 10 · work"
+    title="Hasil kerja, satu per satu."
+    titleEn="Work, one by one."
+    lead="Tiap proyek di sini punya tautan live yang bisa Anda buka sendiri. Tidak ada klaim yang tidak bisa diperiksa."
+    leadEn="Every project here has a live link you can open yourself. No claim that cannot be checked."
+    crumbs={[
+      { label: 'Beranda', labelEn: 'Home', href: '/' },
+      { label: 'Proyek', labelEn: 'Work', href: '/proyek/' },
+    ]}
+  />
+
+  <section class="section">
+    <div class="wrap">
+      <ul class="index-list">
+        {projects.map((p, i) => (
+          <li class="index-row rise" data-rise="up" style={`--rise-delay:${i * 90}ms`}>
+            <a href={`/proyek/${p.slug}/`} class="index-link">
+              <span class="index-shot">
+                <img
+                  src={p.image}
+                  width="1000"
+                  height="563"
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  draggable="false"
+                />
+              </span>
+              <span class="index-body">
+                <span class="index-no" aria-hidden="true">
+                  {p.no}
+                </span>
+                <span class="index-name" data-i18n-en={p.nameEn}>
+                  {p.name}
+                </span>
+                <span class="index-role" data-i18n-en={p.roleEn}>
+                  {p.role}
+                </span>
+                <span class="index-desc" data-i18n-en={p.descriptionEn}>
+                  {p.description}
+                </span>
+                <span class="index-stack" data-i18n-en={p.stackEn?.join(' · ')}>
+                  {p.stack.join(' · ')}
+                </span>
+              </span>
+              <span class="index-more" data-i18n-en="Details">
+                Detail
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <nav class="back rise" aria-label="Navigasi halaman" data-i18n-aria="Page navigation">
+        <a href="/layanan/" class="btn btn-ghost" data-i18n-en="Services">
+          Layanan
+        </a>
+        <a href="/#kontak" class="btn btn-primary" data-i18n-en="Start a project">
+          Mulai proyek
+        </a>
+      </nav>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .index-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .index-row {
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .index-link {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    padding: 1.5rem 0;
+    color: inherit;
+    text-decoration: none;
+    transition:
+      background var(--dur-fast) var(--ease),
+      padding var(--dur-fast) var(--ease);
+  }
+
+  .index-link:hover {
+    background: var(--color-line-soft);
+  }
+
+  .index-link:focus-visible {
+    outline: 2px solid var(--color-electric);
+    outline-offset: 2px;
+  }
+
+  .index-shot {
+    display: block;
+    border: 1px solid var(--color-line);
+    background: var(--color-line-soft);
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+  }
+
+  .index-shot img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .index-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .index-no {
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-caps-loose);
+    color: var(--color-electric);
+  }
+
+  .index-name {
+    font-family: var(--font-display);
+    font-size: var(--text-title-sm);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-title);
+    line-height: var(--leading-title);
+    color: var(--color-ink);
+  }
+
+  .index-role {
+    font-family: var(--font-mono);
+    font-size: var(--text-cap);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .index-desc {
+    margin-top: 0.15rem;
+    font-size: var(--text-sm);
+    line-height: var(--leading-snug);
+    color: var(--color-muted);
+    max-width: 62ch;
+  }
+
+  .index-stack {
+    margin-top: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-cap);
+    letter-spacing: var(--tracking-caps-tight);
+    color: var(--color-muted);
+  }
+
+  .index-more {
+    align-self: start;
+    font-family: var(--font-mono);
+    font-size: var(--text-nav);
+    letter-spacing: var(--tracking-caps-tight);
+    text-transform: uppercase;
+    color: var(--color-electric);
+    white-space: nowrap;
+  }
+
+  .back {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2.25rem;
+  }
+
+  @media (min-width: 720px) {
+    .index-link {
+      grid-template-columns: 15rem minmax(0, 1fr) auto;
+      gap: 1.75rem;
+      align-items: center;
+    }
+  }
+</style>

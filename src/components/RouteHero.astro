@@ -1,0 +1,122 @@
+---
+/* Kepala halaman rute dalam (detail proyek / layanan).
+   Bahasa visual sama dengan section di beranda: label fig. mono, judul
+   display, jalur remah (breadcrumb) sebagai pengganti navbar anchor
+   supaya posisi pengunjung jelas di struktur multi-rute.
+   Tidak ada klaim baru: semua teks datang dari props (data situs). */
+
+export interface Crumb {
+  label: string
+  labelEn: string
+  href: string
+}
+
+interface Props {
+  /** Label fig. mis. "fig. 10 · proyek / loka-logistics". */
+  fig: string
+  figEn: string
+  title: string
+  titleEn: string
+  lead?: string
+  leadEn?: string
+  /** Remah; entri terakhir = halaman aktif (tanpa tautan). */
+  crumbs: Crumb[]
+}
+
+const { fig, figEn, title, titleEn, lead, leadEn, crumbs } = Astro.props
+const last = crumbs.length - 1
+---
+
+<section class="section route-head">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Remah halaman" data-i18n-aria="Breadcrumb">
+      <ol>
+        {crumbs.map((c, i) =>
+          i < last ? (
+            <li>
+              <a href={c.href} data-i18n-en={c.labelEn}>
+                {c.label}
+              </a>
+            </li>
+          ) : (
+            <li>
+              <span aria-current="page" data-i18n-en={c.labelEn}>
+                {c.label}
+              </span>
+            </li>
+          )
+        )}
+      </ol>
+    </nav>
+
+    <span class="fig-label" data-i18n-en={figEn}>
+      {fig}
+    </span>
+    <h1 class="section-headline route-title" data-i18n-en={titleEn}>
+      {title}
+    </h1>
+    {lead && (
+      <p class="route-lead" data-i18n-en={leadEn}>
+        {lead}
+      </p>
+    )}
+  </div>
+</section>
+
+<style>
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0 0 1.25rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .crumbs li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-caps);
+    color: var(--color-muted);
+  }
+
+  /* Pemisah antar remah: garis miring mono, bukan karakter bullet. */
+  .crumbs li + li::before {
+    content: '/';
+    color: var(--color-line);
+  }
+
+  .crumbs a {
+    color: var(--color-muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-line);
+    transition:
+      color var(--dur-fast) var(--ease),
+      border-color var(--dur-fast) var(--ease);
+  }
+
+  .crumbs a:hover {
+    color: var(--color-ink);
+    border-bottom-color: var(--color-ink);
+  }
+
+  .crumbs [aria-current='page'] {
+    color: var(--color-ink);
+  }
+
+  .route-title {
+    max-width: 24ch;
+    text-wrap: balance;
+  }
+
+  .route-lead {
+    margin: 1rem 0 0;
+    max-width: 58ch;
+    font-size: var(--text-sub);
+    line-height: var(--leading-relaxed);
+    color: var(--color-muted);
+  }
+</style>

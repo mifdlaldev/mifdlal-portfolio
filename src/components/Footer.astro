@@ -8,12 +8,28 @@ const sections = [
   { href: '#sertifikasi', label: 'Sertifikasi', en: 'Certifications' },
   { href: '#kontak', label: 'Kontak', en: 'Contact' },
 ]
+
+/* Path-aware: di beranda tautan section = anchor murni ("#proyek").
+   Di rute dalam (mis. /proyek/) anchor di-prefix "/" supaya benar-benar
+   membawa kembali ke beranda. Ditambah dua tautan rute indeks supaya
+   setiap halaman punya jalur internal ke struktur multi-rute. */
+const isHome = Astro.url.pathname === '/'
+const base = isHome ? '' : '/'
+const pageLinks = [
+  { href: '/proyek/', label: 'Semua proyek', en: 'All projects' },
+  { href: '/layanan/', label: 'Semua layanan', en: 'All services' },
+]
 ---
 
 <footer class="footer">
   <div class="wrap footer-inner rise">
     <nav class="footer-nav" aria-label="Navigasi halaman" data-i18n-aria="Page navigation">
       {sections.map((s) => (
+        <a href={`${base}${s.href}`} data-i18n-en={s.en}>
+          {s.label}
+        </a>
+      ))}
+      {pageLinks.map((s) => (
         <a href={s.href} data-i18n-en={s.en}>
           {s.label}
         </a>

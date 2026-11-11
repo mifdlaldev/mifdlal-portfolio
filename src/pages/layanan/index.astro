@@ -1,0 +1,161 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import RouteHero from '../../components/RouteHero.astro'
+import { services } from '../../data/site'
+
+const jsonLdExtra = [
+  {
+    '@type': 'CollectionPage',
+    '@id': 'https://mifdlal.com/layanan/#page',
+    name: 'Layanan',
+    url: 'https://mifdlal.com/layanan/',
+    inLanguage: ['id', 'en'],
+    isPartOf: { '@id': 'https://mifdlal.com/#website' },
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Beranda', item: 'https://mifdlal.com/' },
+      { '@type': 'ListItem', position: 2, name: 'Layanan', item: 'https://mifdlal.com/layanan/' },
+    ],
+  },
+]
+---
+
+<Layout
+  title="Layanan | Mifdlal Tsaqib Alfarras"
+  titleEn="Services | Mifdlal Tsaqib Alfarras"
+  description="Tiga layanan: website dan web app, chatbot, serta otomasi AI dan workflow. Dari desain sampai rilis, remote dari Bandung."
+  descriptionEn="Three services: websites and web apps, chatbots, and AI automation and workflow. From design to launch, remote from Bandung."
+  jsonLdExtra={jsonLdExtra}
+>
+  <RouteHero
+    fig="fig. 11 · layanan"
+    figEn="fig. 11 · services"
+    title="Yang dapat saya kerjakan."
+    titleEn="What I can build for you."
+    lead="Tiga jalur, satu cara kerja: dari desain sampai rilis. Pilih yang paling dekat dengan kebutuhan Anda, lalu ceritakan masalahnya."
+    leadEn="Three tracks, one way of working: from design to launch. Pick the closest to your needs, then describe the problem."
+    crumbs={[
+      { label: 'Beranda', labelEn: 'Home', href: '/' },
+      { label: 'Layanan', labelEn: 'Services', href: '/layanan/' },
+    ]}
+  />
+
+  <section class="section">
+    <div class="wrap">
+      <ul class="service-index">
+        {services.map((s, i) => (
+          <li class="service-index-row rise" data-rise="up" style={`--rise-delay:${i * 90}ms`}>
+            <a href={`/layanan/${s.slug}/`} class="service-index-link">
+              <span class="service-index-no" aria-hidden="true">
+                {s.no}
+              </span>
+              <span class="service-index-body">
+                <span class="service-index-title" data-i18n-en={s.titleEn}>
+                  {s.title}
+                </span>
+                <span class="service-index-desc" data-i18n-en={s.bodyEn}>
+                  {s.body}
+                </span>
+              </span>
+              <span class="service-index-more" data-i18n-en="Details">
+                Detail
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <nav class="back rise" aria-label="Navigasi halaman" data-i18n-aria="Page navigation">
+        <a href="/proyek/" class="btn btn-ghost" data-i18n-en="Work">
+          Proyek
+        </a>
+        <a href="/#kontak" class="btn btn-primary" data-i18n-en="Discuss your project">
+          Diskusikan proyek
+        </a>
+      </nav>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .service-index {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .service-index-row {
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .service-index-link {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 1.25rem;
+    align-items: baseline;
+    padding: 1.75rem 0.25rem;
+    color: inherit;
+    text-decoration: none;
+    transition: background var(--dur-fast) var(--ease);
+  }
+
+  .service-index-link:hover {
+    background: var(--color-line-soft);
+  }
+
+  .service-index-link:focus-visible {
+    outline: 2px solid var(--color-electric);
+    outline-offset: 2px;
+  }
+
+  .service-index-no {
+    font-family: var(--font-mono);
+    font-size: var(--text-title);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-caps-loose);
+    color: var(--color-electric);
+  }
+
+  .service-index-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .service-index-title {
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-heading);
+    line-height: var(--leading-heading);
+    color: var(--color-ink);
+    text-wrap: balance;
+  }
+
+  .service-index-desc {
+    max-width: 62ch;
+    font-size: var(--text-body);
+    line-height: var(--leading-relaxed);
+    color: var(--color-muted);
+  }
+
+  .service-index-more {
+    align-self: baseline;
+    font-family: var(--font-mono);
+    font-size: var(--text-nav);
+    letter-spacing: var(--tracking-caps-tight);
+    text-transform: uppercase;
+    color: var(--color-electric);
+    white-space: nowrap;
+  }
+
+  .back {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2.25rem;
+  }
+</style>

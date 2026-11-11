@@ -16,9 +16,19 @@ interface Props {
   /* Halaman non-indeks (mis. 404): keluar dari indeks mesin pencari dan
      jangan pasang canonical ke URL permintaan yang salah. */
   noindex?: boolean
+  /* Halaman rute dalam (detail proyek/layanan): simpul JSON-LD tambahan
+     disuntikkan ke @graph supaya mesin pencari membaca entitas halaman. */
+  jsonLdExtra?: readonly Record<string, unknown>[]
 }
 
-const { title, titleEn, description, descriptionEn, noindex = false } = Astro.props
+const {
+  title,
+  titleEn,
+  description,
+  descriptionEn,
+  noindex = false,
+  jsonLdExtra = [],
+} = Astro.props
 
 /* Satu sumber kebenaran untuk schema: semua nilai diambil dari data situs,
    tidak ada yang diketik ulang dari ingatan.
@@ -30,6 +40,11 @@ const { title, titleEn, description, descriptionEn, noindex = false } = Astro.pr
 const SITE = 'https://mifdlal.com/'
 const OG_IMAGE = `${SITE}og-image.png`
 const PERSON_ID = `${SITE}#person`
+
+/* URL kanonik halaman ini. Beranda = SITE; rute dalam (mis. /proyek/) =
+   URL halaman itu sendiri, tanpa query. Dipakai schema + og:url. */
+const isHome = Astro.url.pathname === '/'
+const PAGE_HREF = new URL(Astro.url.pathname, SITE).href
 
 const jsonld = JSON.stringify({
   '@context': 'https://schema.org',
@@ -57,26 +72,53 @@ const jsonld = JSON.stringify({
       inLanguage: ['id', 'en'],
       publisher: { '@id': PERSON_ID },
     },
-    {
-      '@type': 'ProfilePage',
-      '@id': `${SITE}#webpage`,
-      url: SITE,
-      name: title,
-      description,
-      inLanguage: 'id',
-      isPartOf: { '@id': `${SITE}#website` },
-      mainEntity: { '@id': PERSON_ID },
-      primaryImageOfPage: { '@type': 'ImageObject', url: OG_IMAGE, width: 1200, height: 630 },
-    },
+    ...(isHome
+      ? [
+          {
+            '@type': 'ProfilePage',
+            '@id': `${SITE}#webpage`,
+            url: SITE,
+            name: title,
+            description,
+            inLanguage: 'id',
+            isPartOf: { '@id': `${SITE}#website` },
+            mainEntity: { '@id': PERSON_ID },
+            primaryImageOfPage: {
+              '@type': 'ImageObject',
+              url: OG_IMAGE,
+              width: 1200,
+              height: 630,
+            },
+          },
+        ]
+      : [
+          {
+            '@type': 'WebPage',
+            '@id': `${PAGE_HREF}#webpage`,
+            url: PAGE_HREF,
+            name: title,
+            description,
+            inLanguage: 'id',
+            isPartOf: { '@id': `${SITE}#website` },
+            about: { '@id': PERSON_ID },
+            primaryImageOfPage: {
+              '@type': 'ImageObject',
+              url: OG_IMAGE,
+              width: 1200,
+              height: 630,
+            },
+          },
+        ]),
     ...services.map((s) => ({
       '@type': 'Service',
       name: s.title,
       description: s.body,
       serviceType: s.title,
-      url: `${SITE}#layanan`,
+      url: `${SITE}layanan/${s.slug}/`,
       areaServed: { '@type': 'Country', name: 'Indonesia' },
       provider: { '@id': PERSON_ID },
     })),
+    ...jsonLdExtra,
   ],
 })
 ---
@@ -124,7 +166,7 @@ const jsonld = JSON.stringify({
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} data-i18n-meta={titleEn} />
     <meta property="og:description" content={description} data-i18n-meta={descriptionEn} />
-    <meta property="og:url" content={Astro.url} />
+    <meta property="og:url" content={PAGE_HREF} />
     <meta property="og:site_name" content="Mifdlal Tsaqib Alfarras" />
     {/* og:image wajib absolut. Kartunya digambar ulang dari palet dan fonta
         situs sendiri lewat scripts/og-image.mjs, bukan berkas stok. */}

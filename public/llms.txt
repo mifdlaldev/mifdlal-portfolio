@@ -5,18 +5,20 @@
 ## Halaman
 
 - [Beranda dan portofolio](https://mifdlal.com/): profil singkat, tiga proyek yang bisa dibuka, tiga layanan, pengalaman kerja, pendidikan, sertifikasi, dan kontak.
+- [Indeks proyek](https://mifdlal.com/proyek/): daftar semua proyek dengan tautan ke halaman detail masing-masing.
+- [Indeks layanan](https://mifdlal.com/layanan/): daftar semua layanan dengan tautan ke halaman detail masing-masing.
 
 ## Layanan
 
-- Website dan web app: landing page, profil perusahaan, e-commerce, sampai POS. Dikerjakan dari desain sampai rilis.
-- Chatbot: balasan otomatis dan jawaban berbasis data bisnis, bukan templat tetap.
-- Otomasi AI dan workflow: AI menangani pesan masuk, merangkum konteks pelanggan, dan mengirim balasan otomatis.
+- [Website dan web app](https://mifdlal.com/layanan/website-web-app/): landing, profil perusahaan, e-commerce, sampai POS. Dikerjakan dari desain sampai rilis.
+- [Chatbot](https://mifdlal.com/layanan/chatbot/): balasan otomatis dan jawaban berbasis data bisnis, bukan templat tetap.
+- [Otomasi AI dan workflow](https://mifdlal.com/layanan/otomasi-ai-workflow/): AI menangani pesan masuk, merangkum konteks pelanggan, dan mengirim balasan otomatis.
 
 ## Proyek
 
-- PT Loka Logistics Solution, situs profil perusahaan logistik, WordPress: https://lokalogistics.co.id/
-- Simulasi Lokasi Ujian UT Bandung, aplikasi wizard enam langkah, Vite: https://simulasi-pemilihan-lokasi-ujian-ut.vercel.app/
-- Mahoni-House, landing page villa dua bahasa, Next.js: https://mahoni-house.vercel.app
+- [PT Loka Logistics Solution](https://mifdlal.com/proyek/loka-logistics/), situs profil perusahaan logistik, WordPress: https://lokalogistics.co.id/
+- [Simulasi Lokasi Ujian UT Bandung](https://mifdlal.com/proyek/simulasi-ut-bandung/), aplikasi wizard enam langkah, Vite: https://simulasi-pemilihan-lokasi-ujian-ut.vercel.app/
+- [Mahoni-House](https://mifdlal.com/proyek/mahoni-house/), landing page villa dua bahasa, Next.js: https://mahoni-house.vercel.app
 
 ## Kontak
 
@@ -27,5 +29,5 @@
 ## Catatan teknis
 
 - Situs statis Astro, dilayani Cloudflare Workers di mifdlal.com.
-- Satu halaman utama; konten utama tetap terbaca tanpa JavaScript.
+- Beranda memuat ringkasan; tiap proyek dan layanan punya halaman detail sendiri. Konten utama tetap terbaca tanpa JavaScript.
 - Peta situs: https://mifdlal.com/sitemap-index.xml

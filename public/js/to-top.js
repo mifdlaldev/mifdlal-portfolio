@@ -6,7 +6,11 @@
   const btn = document.querySelector('.to-top')
   if (!btn) return
 
-  const trigger = document.querySelector(btn.dataset.trigger || '#kontak')
+  /* Pemicu default #kontak hanya ada di beranda. Di rute dalam (mis. /proyek/)
+     section itu tidak ada, jadi jatuh ke footer: tombol muncul begitu footer
+     mendekat, yang di rute pendek berarti segera setelah konten habis. */
+  const footer = document.querySelector('footer')
+  const trigger = document.querySelector(btn.dataset.trigger || '#kontak') || footer
   if (!trigger) return
 
   /* Footer: tombol tidak boleh masuk area footer. Lift dihitung supaya tepi
@@ -15,7 +19,6 @@
      property = kompositor-only) pada ELEMEN INI SAJA. Versi lama menulis
      custom property ke :root tiap frame, yang meng-invalidasi style seluruh
      dokumen dan memicu layout+paint ulang penuh = frame drop. */
-  const footer = document.querySelector('footer')
   const chat = document.querySelector('.site-chat')
   const FOOTER_GAP = 16
   let baseBottom = 0

@@ -5,18 +5,24 @@ import logoMark from '../assets/logo-mark.png'
 // Urutan nav mengikuti urutan section di halaman, supaya arah scroll
 // klik selalu konsisten (tidak pernah melompat ke belakang).
 // Pendidikan dan sertifikasi tetap ada di halaman, tapi tidak di nav.
+//
+// Path-aware: di beranda tautan = anchor murni ("#tentang"). Di rute dalam
+// (mis. /proyek/loka-logistics) anchor di-prefix "/" supaya klik benar-benar
+// membawa kembali ke beranda dan menggulir ke section itu, bukan diam.
+const isHome = Astro.url.pathname === '/'
+const base = isHome ? '' : '/'
 const links = [
-  { href: '#tentang', label: 'Tentang', en: 'About' },
-  { href: '#proyek', label: 'Proyek', en: 'Work' },
-  { href: '#layanan', label: 'Layanan', en: 'Services' },
-  { href: '#pengalaman', label: 'Pengalaman', en: 'Experience' },
+  { href: `${base}#tentang`, label: 'Tentang', en: 'About' },
+  { href: `${base}#proyek`, label: 'Proyek', en: 'Work' },
+  { href: `${base}#layanan`, label: 'Layanan', en: 'Services' },
+  { href: `${base}#pengalaman`, label: 'Pengalaman', en: 'Experience' },
 ]
 ---
 
-<header class="nav">
+<header class="nav" data-nav-solid={isHome ? undefined : ''}>
   <div class="wrap nav-inner">
     <!-- Brand: logo monogram (tanpa kotak latar) + wordmark lowercase -->
-    <a href="#main" class="brand">
+    <a href={isHome ? '#main' : '/'} class="brand">
       <Image
         class="brand-logo"
         src={logoMark}
@@ -41,7 +47,7 @@ const links = [
     </nav>
 
     <div class="nav-actions">
-      <a href="#kontak" class="btn btn-nav" data-i18n-en="Start a project">
+      <a href={`${base}#kontak`} class="btn btn-nav" data-i18n-en="Start a project">
         Mulai Proyek
       </a>
     </div>
@@ -77,6 +83,14 @@ const links = [
     .nav.is-scrolled {
       background: var(--color-paper);
     }
+  }
+
+  /* Rute dalam tidak punya hero gelap: navbar langsung tampil solid
+     (state sama dengan .is-scrolled) supaya teks tidak putih-di-atas-kertas. */
+  .nav[data-nav-solid] {
+    border-bottom-color: var(--color-line);
+    background: var(--color-paper);
+    box-shadow: 0 4px 18px color-mix(in srgb, var(--color-ink) 6%, transparent);
   }
 
   @media (prefers-reduced-motion: no-preference) {

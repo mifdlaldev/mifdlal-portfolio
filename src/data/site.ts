@@ -20,6 +20,11 @@ export type Project = {
   /** Tangkapan layar asli di public/projects/. Wajib: kartu proyek harus
       memuat bukti visual, bukan placeholder. */
   image: string
+  /** Slug rute detail: /proyek/<slug>/. */
+  slug: string
+  /** Poin ringkas, dikutip langsung dari description di atas (KONTEN.md). */
+  highlights: readonly string[]
+  highlightsEn: readonly string[]
 }
 
 export const projects: readonly Project[] = [
@@ -36,6 +41,17 @@ export const projects: readonly Project[] = [
     stackEn: ['WordPress'],
     live: 'https://lokalogistics.co.id/',
     image: '/projects/loka-logistics.webp',
+    slug: 'loka-logistics',
+    highlights: [
+      'Layanan general, project, dan retail cargo',
+      'Visi, misi, dan area jangkauan',
+      'Formulir kontak untuk calon pelanggan',
+    ],
+    highlightsEn: [
+      'General, project, and retail cargo services',
+      'Vision, mission, and coverage areas',
+      'Contact form for prospective clients',
+    ],
   },
   {
     no: '02',
@@ -51,6 +67,15 @@ export const projects: readonly Project[] = [
     stackEn: ['Vite'],
     live: 'https://simulasi-pemilihan-lokasi-ujian-ut.vercel.app/',
     image: '/projects/ut-bandung-simulator.webp',
+    slug: 'simulasi-ut-bandung',
+    highlights: [
+      'Alur enam langkah sebelum data dikirim',
+      'Ringkasan pilihan sebagai langkah terakhir',
+    ],
+    highlightsEn: [
+      'Six-step flow before anything is submitted',
+      'A summary of the selection as the final step',
+    ],
   },
   {
     no: '03',
@@ -64,6 +89,9 @@ export const projects: readonly Project[] = [
     stackEn: ['Next.js'],
     live: 'https://mahoni-house.vercel.app',
     image: '/projects/mahoni-house.webp',
+    slug: 'mahoni-house',
+    highlights: ['Bahasa Indonesia dan Inggris', 'Route terpisah per bahasa'],
+    highlightsEn: ['Indonesian and English', 'Separate route per language'],
   },
 ]
 /* Foto layanan: unduhan Unsplash, dipotong 16/10 oleh kanvas layanan.
@@ -71,7 +99,31 @@ export const projects: readonly Project[] = [
    total 339 KB dari aslinya 772 KB). Sumber asli JPEG 1600 px dihapus dari
    repo, jejak sumbernya tetap tercatat di ASSET-LICENSES.md.
    Rincian sumber dan status lisensi: ASSET-LICENSES.md. */
-export const services = [
+export type Service = {
+  no: string
+  /** Slug rute detail: /layanan/<slug>/. */
+  slug: string
+  title: string
+  titleEn: string
+  body: string
+  bodyEn: string
+  image: string
+  /** Cakupan layanan, dikutip dari KONTEN.md bagian Layanan. */
+  covers: readonly string[]
+  coversEn: readonly string[]
+}
+
+/* Alur kerja umum, sama untuk ketiga layanan. Diturunkan dari frasa
+   "dari desain sampai rilis" pada KONTEN.md; bukan klaim tentang proyek
+   tertentu. Dipakai halaman detail layanan. */
+export const serviceSteps = [
+  { label: 'Diskusi kebutuhan', labelEn: 'Requirements discussion' },
+  { label: 'Rencana dan desain', labelEn: 'Plan and design' },
+  { label: 'Bangun dan uji', labelEn: 'Build and test' },
+  { label: 'Rilis dan serah terima', labelEn: 'Release and handover' },
+] as const
+
+export const services: readonly Service[] = [
   {
     no: '01',
     title: 'Website dan web app',
@@ -80,6 +132,9 @@ export const services = [
     bodyEn:
       'Landing pages, company profiles, e-commerce, up to POS systems. From design to launch, not just handing over files.',
     image: '/services/layanan-01.webp',
+    slug: 'website-web-app',
+    covers: ['Landing page', 'Profil perusahaan', 'E-commerce', 'POS'],
+    coversEn: ['Landing pages', 'Company profiles', 'E-commerce', 'POS systems'],
   },
   {
     no: '02',
@@ -89,6 +144,9 @@ export const services = [
     bodyEn:
       'Automatically reply to customers and answer questions based on your business data, not the same old templates.',
     image: '/services/layanan-02.webp',
+    slug: 'chatbot',
+    covers: ['Balasan otomatis', 'Jawaban dari data bisnis Anda'],
+    coversEn: ['Automatic replies', 'Answers drawn from your business data'],
   },
   {
     no: '03',
@@ -98,8 +156,15 @@ export const services = [
     bodyEn:
       'AI handles incoming messages, summarizes customer context, and sends automatic replies — your team only steps in when truly needed.',
     image: '/services/layanan-03.webp',
+    slug: 'otomasi-ai-workflow',
+    covers: ['Menangani pesan masuk', 'Merangkum konteks pelanggan', 'Mengirim balasan otomatis'],
+    coversEn: [
+      'Handles incoming messages',
+      'Summarizes customer context',
+      'Sends automatic replies',
+    ],
   },
-] as const
+]
 
 /* Tab showcase di dalam kanvas layanan 01 (Website dan web app).
    Tiap tab memuat satu situs melalui iframe. URL kosong =

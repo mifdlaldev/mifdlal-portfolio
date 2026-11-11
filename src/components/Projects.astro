@@ -86,6 +86,16 @@ import CodeComment from './CodeComment.astro'
         </li>
       ))}
     </ul>
+
+    {/* Jalur internal ke rute /proyek/: beranda tetap ringkas, indeks penuh
+        ada di halamannya sendiri. Dibuat setelah daftar supaya membaca
+        urutan yang sama seperti halaman indeks. */}
+    <p class="more-row rise">
+      <a href="/proyek/" class="more-link" data-i18n-en="Open the full project index">
+        Buka indeks proyek lengkap
+        <span aria-hidden="true">↗</span>
+      </a>
+    </p>
   </div>
 </section>
 
@@ -377,6 +387,31 @@ import CodeComment from './CodeComment.astro'
     text-transform: uppercase;
     color: var(--accent);
     white-space: nowrap;
+  }
+
+  /* Tautan indeks: satu baris mono, jarak jelas dari daftar kartu. */
+  .more-row {
+    margin: 1.75rem 0 0;
+  }
+
+  .more-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 44px;
+    font-family: var(--font-mono);
+    font-size: var(--text-nav);
+    letter-spacing: var(--tracking-caps-tight);
+    color: var(--electric);
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-line);
+    transition:
+      color var(--dur-fast) var(--ease),
+      border-color var(--dur-fast) var(--ease);
+  }
+
+  .more-link:hover {
+    border-bottom-color: var(--electric);
   }
 
   .project-arrow {
