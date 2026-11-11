@@ -103,29 +103,29 @@ const links = [
     }
   }
   /* Posisi fixed/top: teks putih + tombol putih dengan teks ink. */
-  .nav:not(.is-scrolled) .nav-link,
-  .nav:not(.is-scrolled) .brand-word {
+  .nav:not(.is-scrolled):not([data-nav-solid]) .nav-link,
+  .nav:not(.is-scrolled):not([data-nav-solid]) .brand-word {
     color: var(--color-paper);
   }
 
-  .nav:not(.is-scrolled) .nav-link:hover {
+  .nav:not(.is-scrolled):not([data-nav-solid]) .nav-link:hover {
     color: var(--color-lemon);
   }
 
   /* Logo monokrom: sumbernya hitam, jadi state terang tidak perlu filter.
      State gelap memaksa putih lewat brightness(0) lalu invert, supaya hasilnya
      putih bersih berapa pun nilai hitam aslinya. Alpha tidak tersentuh. */
-  .nav:not(.is-scrolled) .brand-logo {
+  .nav:not(.is-scrolled):not([data-nav-solid]) .brand-logo {
     filter: brightness(0) invert(1);
   }
 
-  .nav:not(.is-scrolled) .btn-nav {
+  .nav:not(.is-scrolled):not([data-nav-solid]) .btn-nav {
     background: var(--color-paper);
     color: var(--color-ink);
     border-color: var(--color-paper);
   }
 
-  .nav:not(.is-scrolled) .btn-nav:hover {
+  .nav:not(.is-scrolled):not([data-nav-solid]) .btn-nav:hover {
     background: var(--color-lemon);
     color: var(--color-ink);
     border-color: var(--color-lemon);
@@ -237,7 +237,7 @@ const links = [
     color: var(--color-ink);
   }
 
-  .nav:not(.is-scrolled) .nav-link.is-active {
+  .nav:not(.is-scrolled):not([data-nav-solid]) .nav-link.is-active {
     color: var(--color-paper);
   }
 
