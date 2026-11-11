@@ -2,12 +2,20 @@
 // Lenis smooth scroll — satu instance untuk seluruh halaman.
 // Dipasang di Layout.astro sebelum </body>.
 //
-// PERFORMA (riset 2026, lenis.dev + techpotions + aidxn):
-// - Lenis itself ringan: ~2KB, cuma lerp math + scrollTo per frame.
-//   Loop rAF yang terus berjalan BUKAN biang kerok — itu cara kerja
-//   inertia-nya. Menghentikan loop = glide hilang = scroll biasa.
-// - autoRaf: true -> Lenis mengelola loop sendiri, no race condition,
-//   no manual start/stop yang bisa memotong inertia di tengah jalan.
+// PERFORMA (terukur 2026-11-11, Lighthouse mobile Chromium 4x CPU):
+// - Loop rAF permanen TERBUKTI mahal. Dengan autoRaf: true, 9 long task
+//   (89-175 ms) tercatat atas nama file ini di TBT window: 1.098 ms total,
+//   648 ms blocking. Tiap task = callback rAF + style/layout satu frame.
+// - advance() sudah early-return saat idle, jadi biangnya bukan JS Lenis,
+//   tapi frame yang dipicunya tetap dipakai browser untuk layout. Loop yang
+//   berhenti = tidak ada pemicu frame = tidak ada layout per frame.
+// - Solusi: autoRaf: false + loop sendiri yang PARKING saat velocity ~0.
+//   Inertia tetap utuh: loop hidup terus selama masih ada gerakan, dan baru
+//   berhenti setelah animate benar-benar selesai (velocity < IDLE_VELOCITY).
+// - Bangun (wake) hanya dari niat scroll nyata: wheel, touch, key, click
+//   (termasuk anchor & tombol to-top), atau scroll native.
+// - `lenis.time` di-reset saat bangun supaya deltaTime tidak raksasa setelah
+//   lama parkir (kalau tidak, frame pertama melompat dan inertia terpotong).
 // - syncTouch: false -> touch pakai geser native (default Lenis 1.x;
 //   opsi lama `smoothTouch` sudah dihapus dari API sejak 1.1).
 // - pointer: coarse -> smoothWheel off, karena touch sudah punya
@@ -16,7 +24,7 @@
 // - prefers-reduced-motion -> lerp 1 (native scroll, no smoothing).
 // - Biang kerok frame drop sebenarnya: kerja main thread SAAT scroll
 //   (WebGL wordmark, reveal.js transform writes, content-visibility
-//   layout burst). Lenis bukan tersangka — dia cuma ~1-2% CPU.
+//   layout burst).
 ---
 
 <script>
@@ -31,18 +39,76 @@
     smoothWheel: !reduceMotion && !coarsePointer,
     syncTouch: false,
     infinite: false,
-    autoRaf: true, // Lenis manages its own rAF loop — inertia intact
+    autoRaf: false, // loop dikelola sendiri supaya bisa parkir saat idle
   })
 
   // Dipakai to-top.js dan komponen lain yang perlu scroll programatik.
   ;(window as unknown as { __lenis?: Lenis }).__lenis = lenis
 
-  /* Hentikan Lenis saat tab tidak terlihat — hemat battery + CPU.
-     Lenos.stop()/start() menghentikan loop internal dengan benar,
-     tanpa memotong inertia yang sedang berjalan. */
+  /* --- loop dengan parkir otomatis ------------------------------------- */
+  /* Kenapa bukan cuma `isScrolling`: saat roda mouse diputar, Lenis baru
+     menyetel isScrolling di onUpdate (frame berikutnya), sedangkan animate
+     sudah isRunning sejak event wheel. Gate yang hanya melihat isScrolling
+     akan memarkir loop tepat sebelum frame pertama -> inertia hilang.
+     Jadi: animate.isRunning (sinyal sebenarnya) + hold window sebagai jaring
+     pengaman kalau nama field internal Lenis berubah di rilis berikutnya. */
+  const IDLE_VELOCITY = 0.01
+  const HOLD_MS = 1200
+  let rafId: number | null = null
+  let holdUntil = 0
+
+  const internals = lenis as unknown as { animate?: { isRunning?: boolean } }
+  const active = () =>
+    performance.now() < holdUntil ||
+    Boolean(internals.animate?.isRunning) ||
+    Boolean(lenis.isScrolling) ||
+    Math.abs(lenis.velocity) > IDLE_VELOCITY
+
+  const frame = (time: number) => {
+    rafId = null
+    lenis.raf(time)
+    if (!document.hidden && active()) rafId = requestAnimationFrame(frame)
+  }
+
+  const wake = () => {
+    holdUntil = performance.now() + HOLD_MS
+    if (rafId !== null || document.hidden) return
+    // deltaTime dihitung dari lenis.time; tanpa reset, frame pertama setelah
+    // parkir panjang memakai delta raksasa dan glide langsung melompat.
+    ;(lenis as unknown as { time: number }).time = performance.now()
+    rafId = requestAnimationFrame(frame)
+  }
+
+  /* scrollTo programatik (tombol ke atas, anchor custom) juga harus bangun. */
+  const scrollTo = lenis.scrollTo.bind(lenis)
+  ;(lenis as unknown as { scrollTo: Lenis['scrollTo'] }).scrollTo = (...args) => {
+    wake()
+    scrollTo(...args)
+  }
+
+  for (const type of [
+    'wheel',
+    'touchstart',
+    'touchmove',
+    'pointerdown',
+    'keydown',
+    'click',
+    'scroll',
+  ] as const) {
+    window.addEventListener(type, wake, { passive: true, capture: true })
+  }
+
+  /* Hentikan Lenis saat tab tidak terlihat — hemat battery + CPU. */
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) lenis.stop()
-    else lenis.start()
+    if (document.hidden) {
+      lenis.stop()
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId)
+        rafId = null
+      }
+    } else {
+      lenis.start()
+    }
   })
 </script>
 

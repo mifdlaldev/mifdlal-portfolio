@@ -1,5 +1,19 @@
 /* Navbar glass: aktif begitu halaman digeser sedikit dari paling atas.
-   Same-origin (CSP script-src 'self'), passive listener, rAF-throttled. */
+   Same-origin (CSP script-src 'self'), passive listener, rAF-throttled.
+
+   PENTING (perf): versi sebelumnya memanggil update() langsung saat parse.
+   update() membaca nav.offsetHeight lalu getBoundingClientRect() untuk tiap
+   section, yang memaksa layout seluruh dokumen (402 KB) SEBELUM paint pertama.
+   Di Lighthouse mobile itu satu long task 565 ms yang menunda FCP.
+
+   Sekarang dipisah dua:
+     - applyScrolled() hanya membaca window.scrollY  -> nol layout, aman di awal
+     - spy()            membaca geometri section      -> ditunda ke idle setelah
+                                                       load, atau ke scroll pertama
+
+   Hasil visual identik: di scrollY = 0 tidak ada link yang menyala, jadi
+   melewatkan spy() saat init tidak mengubah tampilan. Saat halaman di-reload
+   di tengah dokumen, spy() menyusul di idle sehingga status aktif tetap benar. */
 ;(() => {
   const nav = document.querySelector('.nav')
   if (!nav) return
@@ -18,12 +32,17 @@
   const sections = links.map((a) => document.querySelector(a.getAttribute('href'))).filter(Boolean)
 
   let ticking = false
+  let spyDone = false
 
-  const update = () => {
-    ticking = false
+  /* Nol pembacaan layout: hanya scrollY. */
+  const applyScrolled = () => {
     nav.classList.toggle('is-scrolled', window.scrollY > THRESHOLD)
+  }
 
+  /* Satu-satunya bagian yang menyentuh geometri. */
+  const spy = () => {
     if (!sections.length) return
+    spyDone = true
 
     const line = nav.offsetHeight + 24
     let current = null
@@ -43,6 +62,12 @@
     }
   }
 
+  const update = () => {
+    ticking = false
+    applyScrolled()
+    spy()
+  }
+
   const onScroll = () => {
     if (ticking) return
     ticking = true
@@ -51,5 +76,19 @@
 
   window.addEventListener('scroll', onScroll, { passive: true })
   window.addEventListener('resize', onScroll, { passive: true })
-  update()
+
+  /* Init: state navbar saja, tanpa memaksa layout. */
+  applyScrolled()
+
+  /* Scroll-spy menyusul saat main thread sudah longgar. Kalau browser tidak
+     punya requestIdleCallback, tunggu load lalu satu tick. */
+  const warm = () => {
+    if (spyDone) return
+    spy()
+  }
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(warm, { timeout: 2000 })
+  } else {
+    window.addEventListener('load', () => window.setTimeout(warm, 0))
+  }
 })()
