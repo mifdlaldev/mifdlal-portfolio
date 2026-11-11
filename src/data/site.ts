@@ -320,8 +320,18 @@ export const stack = [
 
 export const contact = {
   email: 'hello@mifdlal.com',
+  /* WhatsApp bisnis. Nomor disimpan tanpa tanda plus, sesuai format tautan
+     wa.me. Nilai ini datang dari pemilik situs (file wa-business-mifdlal.txt),
+     bukan karangan. display dipakai untuk tampilan yang mudah dibaca. */
+  whatsapp: {
+    number: '6283142121226',
+    display: '+62 831-4212-1226',
+    message: 'Halo Mifdlal, saya ingin diskusi soal web atau otomasi AI untuk usaha saya.',
+    messageEn: 'Hi Mifdlal, I would like to discuss a website or AI automation for my business.',
+  },
   github: 'https://github.com/mifdlaldev',
   socials: [
+    { id: 'whatsapp', label: 'WhatsApp', href: 'https://wa.me/6283142121226' },
     { id: 'github', label: 'GitHub', href: 'https://github.com/mifdlaldev' },
     {
       id: 'linkedin',

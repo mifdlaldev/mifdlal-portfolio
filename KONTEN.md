@@ -92,6 +92,10 @@ Tanpa harga di situs (belum ada paket tetap). Arahkan ke kontak untuk diskusi.
 ## 5. KONTAK
 
 - Email: hello@mifdlal.com (dibuat nanti). Sementara: mifdlaltsaqibalf26@outlook.com
+- WhatsApp: +62 831-4212-1226 (tautan wa.me/6283142121226). Nomor diberikan
+  pemilik situs lewat file wa-business-mifdlal.txt, ditambahkan 2026-11-11.
+  Tujuan: kanal alternatif bagi pengunjung yang tidak mau membuka email.
+  Pesan awal terisi otomatis, versi Indonesia dan Inggris.
 - GitHub: https://github.com/mifdlaldev
 - LinkedIn: [tautan profil, isi nanti]
 - Bisnis: https://www.mtadevworks.web.id

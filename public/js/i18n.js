@@ -123,6 +123,19 @@
         'mailto:' + el.getAttribute('data-mailto') + '?subject=' + (l === 'en' ? enSub : idSub)
       )
     })
+
+    /* tautan WhatsApp: nomor tetap, pesan awal mengikuti bahasa */
+    qsa('[data-wa-number]').forEach(function (el) {
+      var idMsg = el.getAttribute('data-wa-text-id') || ''
+      var enMsg = el.getAttribute('data-wa-text-en') || idMsg
+      el.setAttribute(
+        'href',
+        'https://wa.me/' +
+          el.getAttribute('data-wa-number') +
+          '?text=' +
+          encodeURIComponent(l === 'en' ? enMsg : idMsg)
+      )
+    })
   }
 
   /* ---------- kontrol ---------- */

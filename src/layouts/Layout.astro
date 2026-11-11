@@ -62,7 +62,21 @@ const jsonld = JSON.stringify({
       url: SITE,
       email: `mailto:${contact.email}`,
       jobTitle: 'Freelance web developer dan spesialis otomasi AI',
-      sameAs: contact.socials.filter((s) => s.id !== 'fiverr').map((s) => s.href),
+      /* WhatsApp termasuk kanal kontak resmi (nomor dari pemilik situs). */
+      contactPoint: [
+        {
+          '@type': 'ContactPoint',
+          contactType: 'customer support',
+          telephone: `+${contact.whatsapp.number}`,
+          url: `${SITE}?#kontak`,
+        },
+      ],
+      /* sameAs = halaman profil tentang entitas ini. Tautan chat WhatsApp
+         bukan halaman profil, jadi dikeluarkan; kanalnya diwakili
+         contactPoint di atas. Fiverr juga keluar karena belum terverifikasi. */
+      sameAs: contact.socials
+        .filter((s) => s.id !== 'fiverr' && s.id !== 'whatsapp')
+        .map((s) => s.href),
       knowsAbout: [...services.map((s) => s.title), ...stack.map((s) => s.name)],
       address: {
         '@type': 'PostalAddress',
