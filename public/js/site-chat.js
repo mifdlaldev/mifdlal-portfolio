@@ -330,6 +330,13 @@
      (kompositor-only), bukan bottom. */
   const SECTION_ORDER = ['hero', 'sertifikasi', 'kontak']
 
+  /* Rute dalam (/layanan/, /proyek/, detail) tidak punya satu pun section di
+     SECTION_ORDER, jadi setMerged tidak pernah dipanggil dan launcher tertinggal
+     di posisi dasar 5rem: melayang 3.5rem lebih tinggi dari tombol .to-top.
+     Di halaman seperti itu posisi merged dipertahankan (sama seperti beranda
+     sebelum section kontak masuk band). */
+  const hasSectionTrack = SECTION_ORDER.some((id) => document.getElementById(id))
+
   const setMerged = (id) => {
     if (id === 'kontak') root.classList.remove('site-chat--merged')
     else root.classList.add('site-chat--merged')
@@ -337,6 +344,7 @@
 
   /* Cek sinkron sekali saat load */
   const initialCheck = () => {
+    if (!hasSectionTrack) return
     const vh = window.innerHeight
     const inBand = SECTION_ORDER.filter((id) => {
       const el = document.getElementById(id)
@@ -350,28 +358,30 @@
   }
 
   let scrollTicking = false
-  window.addEventListener(
-    'scroll',
-    () => {
-      if (scrollTicking) return
-      scrollTicking = true
-      window.requestAnimationFrame(() => {
-        const vh = window.innerHeight
-        /* Ambil section TERBAWAH yang masih di band tengah viewport —
-         kalau dua section straddle, yang bawah menang (kontak > sertifikasi). */
-        let active = null
-        for (const id of SECTION_ORDER) {
-          const el = document.getElementById(id)
-          if (!el) continue
-          const r = el.getBoundingClientRect()
-          if (r.top < vh * 0.6 && r.bottom > vh * 0.4) active = id
-        }
-        if (active) setMerged(active)
-        scrollTicking = false
-      })
-    },
-    { passive: true }
-  )
+  if (hasSectionTrack) {
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (scrollTicking) return
+        scrollTicking = true
+        window.requestAnimationFrame(() => {
+          const vh = window.innerHeight
+          /* Ambil section TERBAWAH yang masih di band tengah viewport —
+             kalau dua section straddle, yang bawah menang (kontak > sertifikasi). */
+          let active = null
+          for (const id of SECTION_ORDER) {
+            const el = document.getElementById(id)
+            if (!el) continue
+            const r = el.getBoundingClientRect()
+            if (r.top < vh * 0.6 && r.bottom > vh * 0.4) active = id
+          }
+          if (active) setMerged(active)
+          scrollTicking = false
+        })
+      },
+      { passive: true }
+    )
+  }
 
   initialCheck()
 
