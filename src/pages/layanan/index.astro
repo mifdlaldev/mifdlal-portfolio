@@ -42,7 +42,7 @@ const jsonLdExtra = [
     ]}
   />
 
-  <section class="section">
+  <section class="section service-index-section">
     <div class="wrap">
       <ul class="service-index">
         {services.map((s, i) => (
@@ -63,8 +63,18 @@ const jsonLdExtra = [
                   {s.bodyEn}
                 </span>
               </span>
-              <span class="service-index-more" data-i18n-id="Detail">
-                Details
+              <span class="service-index-covers">
+                {s.coversEn.map((cover, ci) => (
+                  <span class="service-index-cover" data-i18n-id={s.covers[ci]}>
+                    {cover}
+                  </span>
+                ))}
+              </span>
+              <span class="service-index-more">
+                <span data-i18n-id="Detail">Details</span>
+                <span class="service-index-arrow" aria-hidden="true">
+                  →
+                </span>
               </span>
             </a>
           </li>
@@ -97,17 +107,18 @@ const jsonLdExtra = [
 
   .service-index-link {
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    gap: 1.25rem;
-    align-items: baseline;
-    padding: 1.75rem 0.25rem;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    padding: 2rem 0.25rem;
     color: inherit;
     text-decoration: none;
-    transition: background var(--dur-fast) var(--ease);
+    transition: box-shadow var(--dur-fast) var(--ease);
   }
 
+  /* Hover: garis aksen kiri, bukan latar abu penuh. box-shadow inset supaya
+     tidak menggeser tata letak seperti border. */
   .service-index-link:hover {
-    background: var(--color-line-soft);
+    box-shadow: inset 2px 0 0 0 var(--color-electric);
   }
 
   .service-index-link:focus-visible {
@@ -115,9 +126,13 @@ const jsonLdExtra = [
     outline-offset: 2px;
   }
 
+  /* Nomor turun jadi eyebrow di atas judul, membentang penuh satu baris grid
+     supaya judul, cakupan, dan label Detail mulai dari garis atas yang sama.
+     Sebelumnya nomor duduk sebaris dengan judul dan bersaing jadi sorotan. */
   .service-index-no {
+    grid-column: 1 / -1;
     font-family: var(--font-mono);
-    font-size: var(--text-title);
+    font-size: var(--text-label);
     font-weight: var(--weight-bold);
     letter-spacing: var(--tracking-caps-loose);
     color: var(--color-electric);
@@ -127,6 +142,7 @@ const jsonLdExtra = [
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
+    min-width: 0;
   }
 
   .service-index-title {
@@ -144,16 +160,72 @@ const jsonLdExtra = [
     font-size: var(--text-body);
     line-height: var(--leading-relaxed);
     color: var(--color-muted);
+    text-wrap: pretty;
+  }
+
+  /* Kolom cakupan: isi rongga kanan yang sebelumnya kosong 436px. Datanya
+     sudah ada di site.ts (covers / coversEn). */
+  .service-index-covers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem 0.5rem;
+    align-content: start;
+  }
+
+  .service-index-cover {
+    max-width: 100%;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    padding: 0.3125rem 0.625rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-nav);
+    letter-spacing: var(--tracking-caps-tight);
+    text-transform: uppercase;
+    color: var(--color-muted);
+    overflow-wrap: anywhere;
   }
 
   .service-index-more {
-    align-self: baseline;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.25rem;
+    align-self: start;
     font-family: var(--font-mono);
     font-size: var(--text-nav);
     letter-spacing: var(--tracking-caps-tight);
     text-transform: uppercase;
     color: var(--color-electric);
     white-space: nowrap;
+  }
+
+  .service-index-arrow {
+    display: inline-block;
+    transition: transform var(--dur-fast) var(--ease);
+  }
+
+  .service-index-link:hover .service-index-arrow,
+  .service-index-link:focus-visible .service-index-arrow {
+    transform: translateX(0.15rem);
+  }
+
+  @media (min-width: 720px) {
+    .service-index-link {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr) auto;
+      align-items: start;
+      column-gap: 2rem;
+      row-gap: 0.5rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .service-index-link,
+    .service-index-arrow {
+      transition: none;
+    }
+
+    .service-index-link:hover .service-index-arrow {
+      transform: none;
+    }
   }
 
   .back {
