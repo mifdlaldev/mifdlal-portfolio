@@ -156,7 +156,7 @@ const pageLinks = [
         <ul class="lang-menu" role="listbox" hidden>
           <li role="option">
             <button type="button" data-lang-value="id" aria-pressed="false">
-              <span>Bahasa Indonesia</span>
+              <span>Indonesia</span>
               <svg
                 class="lang-check"
                 viewBox="0 0 24 24"
@@ -483,7 +483,7 @@ const pageLinks = [
           langMenu.querySelectorAll('button').forEach(function (b) {
             b.setAttribute('aria-pressed', b === opt ? 'true' : 'false')
           })
-          langLabel.textContent = val === 'en' ? 'English' : 'Bahasa'
+          langLabel.textContent = val === 'en' ? 'English' : 'Indonesia'
           close()
           /* Samakan state di dua listener: document (i18n.js) + window (CopyEmail island) */
           document.dispatchEvent(new CustomEvent('mifdlal:lang', { detail: val }))

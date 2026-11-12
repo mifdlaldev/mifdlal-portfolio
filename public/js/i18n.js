@@ -98,7 +98,7 @@
 
     /* label dropdown bahasa */
     var lbl = qs('[data-lang-label]')
-    if (lbl) lbl.textContent = l === 'id' ? 'Bahasa' : 'English'
+    if (lbl) lbl.textContent = l === 'id' ? 'Indonesia' : 'English'
 
     /* placeholder input chat */
     qsa('[data-i18n-ph-id]').forEach(function (el) {
@@ -151,7 +151,7 @@
       b.classList.toggle('is-active', on)
     })
     var lbl = qs('[data-lang-label]')
-    if (lbl) lbl.textContent = prefs.lang === 'id' ? 'Bahasa' : 'English'
+    if (lbl) lbl.textContent = prefs.lang === 'id' ? 'Indonesia' : 'English'
     qsa('[data-lang-value]').forEach(function (b) {
       var on = b.getAttribute('data-lang-value') === prefs.lang
       b.setAttribute('aria-pressed', on ? 'true' : 'false')
