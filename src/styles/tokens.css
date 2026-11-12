@@ -163,6 +163,21 @@
   --wf-label-gap: 10px;
   --wf-handle: 7px;
 
+  /* --- kotak kata bergilir di judul hero -------------------- */
+  /* Gaya: garis rambut + isi transparan, bukan kotak penuh warna. Chip
+     penuh sudah dipakai label "Open for projects" di atas judul, jadi
+     kotak bergaris menjaga bahasa gambar teknik situs. */
+  --flip-hair: 1px;
+  --flip-pad-block: 0.06em;
+  --flip-pad-inline: 0.3em;
+  --flip-radius: 0.14em;
+  /* Tinggi kotak = tinggi baris judul hero (--leading-display), supaya
+     baris kedua tidak bergeser. */
+  --flip-line: 1.05em;
+  --flip-perspective: 620px;
+  --flip-hold: 2600ms;
+  --flip-dur: 420ms;
+
   /* --- radius (lokal diagram) ------------------------------ */
   --radius-xl: 22px;
   --radius-lg: 18px;
