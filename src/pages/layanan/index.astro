@@ -254,7 +254,15 @@ const jsonLdExtra = [
      --space-section, baris pertama (garis atas ul + nomor 01) lahir di
      dalam pita dan menembus batas atas lembar. Dulu di sini dipasang
      clamp(3rem, 4.6vw, 4rem) untuk memangkas ritme, dan justru itu yang
-     membuat baris 01 melewati batas. */
+     membuat baris 01 melewati batas.
+
+     Ritme dipangkas dengan cara yang benar: token --space-section dikecilkan
+     HANYA di section ini, sehingga pita hatch, garis awal konten, dan padding
+     atas turun bersama dan baris 01 tetap 32px di bawah garis. Nilai 6rem
+     menggantikan 8rem: jarak lead hero ke baris pertama 225px jadi 193px. */
+  .service-index-section {
+    --space-section: clamp(4rem, 7vw, 6rem);
+  }
 
   /* Hero rute layanan: judul halaman ini butuh tingkat di atas judul baris
      (--text-h3). Token --text-h1 dipakai khusus di sini; rute lain tetap
