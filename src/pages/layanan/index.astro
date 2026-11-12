@@ -248,14 +248,13 @@ const jsonLdExtra = [
     margin-top: 2.25rem;
   }
 
-  /* Ritme halaman: jarak lead hero ke baris pertama dipangkas dari 225px
-     jadi 161px. Yang diubah hanya padding atas section daftar (64px); 64px
-     lain dari padding bawah hero dan 32px dari padding atas .wrap. Ritme
-     section global tetap, dan halaman ini tidak memakai pita komentar
-     antarsection. */
-  .service-index-section {
-    padding-block-start: clamp(3rem, 4.6vw, 4rem);
-  }
+  /* Padding atas section daftar DIBIARKAN memakai --space-section bawaan
+     .section. Pita hatch setinggi --space-section dan garis awal konten
+     berada tepat di ujung pita itu; kalau padding dipangkas di bawah
+     --space-section, baris pertama (garis atas ul + nomor 01) lahir di
+     dalam pita dan menembus batas atas lembar. Dulu di sini dipasang
+     clamp(3rem, 4.6vw, 4rem) untuk memangkas ritme, dan justru itu yang
+     membuat baris 01 melewati batas. */
 
   /* Hero rute layanan: judul halaman ini butuh tingkat di atas judul baris
      (--text-h3). Token --text-h1 dipakai khusus di sini; rute lain tetap
