@@ -162,4 +162,18 @@ const jsonLdExtra = [
     gap: 0.75rem;
     margin-top: 2.25rem;
   }
+
+  /* Hero rute layanan: judul halaman ini butuh tingkat di atas judul baris
+     (--text-h3). Token --text-h1 dipakai khusus di sini; rute lain tetap
+     memakai --text-h2 lewat .section-headline. Lead diturunkan supaya
+     selisih judul dan lead tidak lagi 1.48:1. */
+  :global(section.route-head .route-title) {
+    max-width: 20ch;
+    font-size: var(--text-h1);
+  }
+
+  :global(section.route-head .route-lead) {
+    max-width: 54ch;
+    font-size: var(--text-title-sm);
+  }
 </style>
