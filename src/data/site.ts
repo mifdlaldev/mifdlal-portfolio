@@ -256,16 +256,19 @@ export const services: readonly Service[] = [
 export const showcaseSites = [
   {
     label: 'Loka Logistics',
+    labelEn: 'Loka Logistics',
     url: 'https://lokalogistics.co.id/',
     image: '/projects/loka-logistics-view.webp',
   },
   {
     label: 'Mahoni House',
+    labelEn: 'Mahoni House',
     url: 'https://mahoni-house.vercel.app/en',
     image: '/projects/mahoni-house-view.webp',
   },
   {
     label: 'Simulasi Lokasi Ujian UT Bandung',
+    labelEn: 'UT Bandung Exam Location Simulator',
     url: 'https://simulasi-pemilihan-lokasi-ujian-ut.vercel.app/',
     image: '/projects/ut-bandung-simulator-view.webp',
   },

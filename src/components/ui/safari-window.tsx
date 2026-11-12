@@ -30,7 +30,7 @@ import './safari-window.css'
  *   terlihat adalah layout laptop.
  */
 
-type ShowcaseTab = { label: string; url: string; image: string }
+type ShowcaseTab = { label: string; labelEn: string; url: string; image: string }
 type Rect = { x: number; y: number; w: number; h: number }
 type Dir = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw'
 
@@ -471,16 +471,16 @@ export default function SafariWindow({ tabs }: { tabs: readonly ShowcaseTab[] })
         onPointerDown={startMove}
         onDoubleClick={toggleZoom}
       >
-        {tabs.map((t, i) => (
+        {tabs.map((tab, i) => (
           <button
-            key={`${t.label}-${i}`}
+            key={`${tab.label}-${i}`}
             type="button"
             role="tab"
             aria-selected={i === active}
             className={`safari__tab${i === active ? ' is-active' : ''}`}
             onClick={() => setActive(i)}
           >
-            <span className="safari__tab-label">{t.label}</span>
+            <span className="safari__tab-label">{lang === 'en' ? tab.labelEn : tab.label}</span>
             <span className="safari__tab-x" aria-hidden="true">
               <svg viewBox="0 0 24 24">
                 <path d="M6 6l12 12" />
@@ -501,7 +501,11 @@ export default function SafariWindow({ tabs }: { tabs: readonly ShowcaseTab[] })
               key={`${current.image}#${reloadKey}`}
               className="safari__frame"
               src={current.image}
-              alt={t(`Tangkapan layar ${current.label}`, `Screenshot of ${current.label}`)}
+              alt={
+                lang === 'en'
+                  ? `Screenshot of ${current.labelEn}`
+                  : `Tangkapan layar ${current.label}`
+              }
               width="1000"
               height="563"
               draggable={false}
