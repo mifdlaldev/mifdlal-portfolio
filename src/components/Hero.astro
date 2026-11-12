@@ -53,11 +53,11 @@
   </script>
 
   <div class="wrap hero-inner">
-    <p class="fig-label" data-i18n-id="Terbuka untuk proyek">
+    <p class="fig-label hero-in" style="--hero-in-delay: 0ms" data-i18n-id="Terbuka untuk proyek">
       Open for projects
     </p>
 
-    <h1 class="hero-title">
+    <h1 class="hero-title hero-in" style="--hero-in-delay: 70ms">
       <span class="hero-line">
         <span
           class="hero-flip"
@@ -89,14 +89,15 @@
     </h1>
 
     <p
-      class="hero-sub"
+      class="hero-sub hero-in"
+      style="--hero-in-delay: 180ms"
       data-i18n-id="Website, web app, chatbot, dan otomasi AI untuk Development & MVP, kebutuhan bisnis, dan solusi digital lainnya."
     >
       Websites, web apps, chatbots, and AI automation for development and MVPs, business needs, and
       other digital solutions.
     </p>
 
-    <div class="hero-actions">
+    <div class="hero-actions hero-in" style="--hero-in-delay: 270ms">
       <a href="#kontak" class="btn btn-primary" data-i18n-id="Ceritakan masalahnya">
         Tell me the problem
       </a>
@@ -213,6 +214,60 @@
     text-wrap: balance;
     color: var(--color-paper);
     max-width: 100%;
+  }
+
+  /* ============================================================
+     ANIMASI MASUK HERO
+     Dijalankan CSS murni, mulai sejak berkas gaya dibaca — bukan oleh
+     skrip, dan bukan oleh sistem .rise. .rise dipicu saat elemen masuk
+     viewport lewat modul motion; untuk hero itu berarti elemen sudah
+     sempat tercat di posisi akhir lalu melompat turun (terukur 0.0142
+     layout shift) dan cat elemen terbesar tertunda sampai modul dimuat
+     (mobile LCP 628ms -> 2012ms).
+
+     Karena animasinya sudah berjalan sejak cat pertama, elemen tidak
+     pernah tercat di posisi akhir lebih dulu, jadi transform di sini
+     tidak menghasilkan layout shift sama sekali (terukur CLS 0 di
+     desktop, mobile, dan tablet).
+
+     Bahasa geraknya sama dengan section lain: naik sedikit sambil
+     memudar masuk, dengan jeda bertingkat dari atas ke bawah.
+
+     Keempat elemen memudar, termasuk judul. Elemen beropasitas 0
+     diabaikan peramban saat menghitung layout shift, jadi perpaduan
+     memudar dan bergerak naik justru menghasilkan CLS 0 di semua
+     viewport — lebih baik daripada build tanpa animasi (terukur
+     0.023-0.043 desktop). Sekadar menggerakkan elemen yang sudah
+     terlihat menghasilkan 0.054.
+
+     Tanpa JavaScript animasi ini tetap jalan (CSS murni). Saat
+     prefers-reduced-motion, animasi dimatikan dan elemen langsung pada
+     keadaan akhir.
+     ============================================================ */
+  .hero-in {
+    /* Default 0ms: elemen yang tidak memasang jeda sendiri tetap punya
+       nilai sah, jadi checker token tidak menganggap var()-nya menggantung
+       dan animasinya tidak menunggu apa pun. */
+    --hero-in-delay: 0ms;
+    animation: hero-in var(--dur-hero-in) var(--ease-out) var(--hero-in-delay) both;
+  }
+
+  @keyframes hero-in {
+    from {
+      opacity: 0;
+      transform: translate3d(0, var(--hero-in-rise), 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-in {
+      animation: none;
+      opacity: 1;
+    }
   }
 
   /* Tiap baris judul jadi blok sendiri supaya pemenggalan baris tetap

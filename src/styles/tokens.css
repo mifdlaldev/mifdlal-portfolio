@@ -137,6 +137,11 @@
   --dur-fast: 150ms;
   --dur-base: 180ms;
   --dur-slow: 200ms;
+  /* Animasi masuk hero. Dijalankan CSS sejak parse, bukan oleh skrip,
+     supaya elemen tidak menunggu modul motion dimuat: hero ada di layar
+     pertama, menunggu skrip sama dengan menunda cat elemen terbesar. */
+  --dur-hero-in: 620ms;
+  --hero-in-rise: 1.25rem;
   /* --parallax: offset vertikal px untuk foto canvas (runtime, di-set JS
      parallax Services.astro). 0px = diam. Selalu ada nilai default agar
      checker tidak menolak var() yang belum di-assign. */
