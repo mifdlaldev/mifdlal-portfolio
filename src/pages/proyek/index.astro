@@ -42,7 +42,7 @@ const jsonLdExtra = [
     ]}
   />
 
-  <section class="section">
+  <section class="section index-section">
     <div class="wrap">
       <ul class="index-list">
         {projects.map((p, i) => (
@@ -64,25 +64,26 @@ const jsonLdExtra = [
                   draggable="false"
                 />
               </span>
-              <span class="index-body">
-                <span class="index-no" aria-hidden="true">
-                  {p.no}
-                </span>
-                <span class="index-name" data-i18n-id={p.name}>
-                  {p.nameEn}
-                </span>
-                <span class="index-role" data-i18n-id={p.role}>
-                  {p.roleEn}
-                </span>
-                <span class="index-desc" data-i18n-id={p.description}>
-                  {p.descriptionEn}
-                </span>
-                <span class="index-stack" data-i18n-id={p.stack.join(' · ')}>
-                  {p.stackEn?.join(' · ')}
-                </span>
+              <span class="index-no" aria-hidden="true">
+                {p.no}
               </span>
-              <span class="index-more" data-i18n-id="Detail">
-                Details
+              <span class="index-name" data-i18n-id={p.name}>
+                {p.nameEn || p.name}
+              </span>
+              <span class="index-role" data-i18n-id={p.role}>
+                {p.roleEn}
+              </span>
+              <span class="index-desc" data-i18n-id={p.description}>
+                {p.descriptionEn}
+              </span>
+              <span class="index-stack" data-i18n-id={p.stack.join(' · ')}>
+                {p.stackEn?.join(' · ')}
+              </span>
+              <span class="index-more">
+                <span data-i18n-id="Detail">Details</span>
+                <span class="index-arrow" aria-hidden="true">
+                  →
+                </span>
               </span>
             </a>
           </li>
@@ -113,20 +114,32 @@ const jsonLdExtra = [
     border-bottom: 1px solid var(--color-line);
   }
 
+  /* Baris daftar disusun seperti tabel, sama seperti halaman layanan: nomor
+     sebagai eyebrow di baris penuh, lalu kolom gambar, kolom teks, dan kolom
+     label Detail. Area dasar wajib dideklarasikan supaya grid-area bernama
+     tidak membentuk kolom hantu 0px. */
   .index-link {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: 1rem;
-    padding: 1.5rem 0;
+    grid-template-areas:
+      'no'
+      'shot'
+      'name'
+      'role'
+      'desc'
+      'stack'
+      'more';
+    gap: 0.75rem;
+    padding: 2rem 0;
     color: inherit;
     text-decoration: none;
-    transition:
-      background var(--dur-fast) var(--ease),
-      padding var(--dur-fast) var(--ease);
+    transition: box-shadow var(--dur-fast) var(--ease);
   }
 
+  /* Hover: garis aksen kiri inset, sama seperti halaman layanan. Inset supaya
+     tidak menggeser tata letak seperti border. */
   .index-link:hover {
-    background: var(--color-line-soft);
+    box-shadow: inset 2px 0 0 0 var(--color-electric);
   }
 
   .index-link:focus-visible {
@@ -135,7 +148,9 @@ const jsonLdExtra = [
   }
 
   .index-shot {
+    grid-area: shot;
     display: block;
+    align-self: start;
     border: 1px solid var(--color-line);
     background: var(--color-line-soft);
     aspect-ratio: 16 / 10;
@@ -149,13 +164,8 @@ const jsonLdExtra = [
     object-fit: cover;
   }
 
-  .index-body {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-  }
-
   .index-no {
+    grid-area: no;
     font-family: var(--font-mono);
     font-size: var(--text-label);
     font-weight: var(--weight-bold);
@@ -164,39 +174,48 @@ const jsonLdExtra = [
   }
 
   .index-name {
+    grid-area: name;
+    min-width: 0;
     font-family: var(--font-display);
-    font-size: var(--text-title-sm);
+    font-size: var(--text-h3);
     font-weight: var(--weight-semibold);
-    letter-spacing: var(--tracking-title);
-    line-height: var(--leading-title);
+    letter-spacing: var(--tracking-heading);
+    line-height: var(--leading-heading);
     color: var(--color-ink);
+    text-wrap: balance;
   }
 
   .index-role {
+    grid-area: role;
     font-family: var(--font-mono);
-    font-size: var(--text-cap);
+    font-size: var(--text-label);
     letter-spacing: var(--tracking-caps);
     text-transform: uppercase;
     color: var(--color-muted);
   }
 
   .index-desc {
-    margin-top: 0.15rem;
-    font-size: var(--text-sm);
-    line-height: var(--leading-snug);
-    color: var(--color-muted);
+    grid-area: desc;
     max-width: 62ch;
+    font-size: var(--text-body);
+    line-height: var(--leading-relaxed);
+    color: var(--color-muted);
+    text-wrap: pretty;
   }
 
   .index-stack {
-    margin-top: 0.35rem;
+    grid-area: stack;
     font-family: var(--font-mono);
-    font-size: var(--text-cap);
+    font-size: var(--text-label);
     letter-spacing: var(--tracking-caps-tight);
     color: var(--color-muted);
   }
 
   .index-more {
+    grid-area: more;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.25rem;
     align-self: start;
     font-family: var(--font-mono);
     font-size: var(--text-nav);
@@ -206,18 +225,101 @@ const jsonLdExtra = [
     white-space: nowrap;
   }
 
+  .index-arrow {
+    display: inline-block;
+    transition: transform var(--dur-fast) var(--ease);
+  }
+
+  .index-link:hover .index-arrow,
+  .index-link:focus-visible .index-arrow {
+    transform: translateX(0.15rem);
+  }
+
+  /* Tablet dan desktop: baris menyerupai tabel tiga kolom (gambar, teks,
+     label Detail). Susunan ini memakai token tipografi yang sama dengan
+     halaman layanan supaya judul baris, deskripsi, dan label Detail berdiri
+     pada tingkat yang identik. */
+  @media (min-width: 720px) {
+    .index-link {
+      grid-template-columns: 15rem minmax(0, 1fr) auto;
+      grid-template-areas:
+        'no    no     no'
+        'shot  name   more'
+        'shot  role   .'
+        'shot  desc   .'
+        'shot  stack  .';
+      align-items: start;
+      column-gap: 2rem;
+      row-gap: 0.4rem;
+      padding-inline: calc(3rem - var(--grid-gutter));
+    }
+
+    .index-more {
+      justify-self: end;
+    }
+
+    :global(section.route-head .wrap) {
+      padding-inline: 3rem;
+    }
+
+    .back {
+      padding-inline: calc(3rem - var(--grid-gutter));
+    }
+  }
+
+  @media (min-width: 900px) {
+    .index-link {
+      grid-template-columns: 15rem minmax(0, 0.9fr) minmax(0, 1.1fr) auto;
+      grid-template-areas:
+        'no    no    no    no'
+        'shot  name  desc  more'
+        'shot  role  desc  .'
+        'shot  .     stack .';
+    }
+  }
+
+  /* 720-1228px gutter .wrap naik ke --wrap-gutter-tablet 36px, jadi sisipan
+     baris menyesuaikan supaya totalnya tetap 3rem dari tepi dalam bingkai. */
+  @media (min-width: 720px) and (max-width: 1228px) {
+    .index-link,
+    .back {
+      padding-inline: calc(3rem - var(--wrap-gutter-tablet));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .index-link,
+    .index-arrow {
+      transition: none;
+    }
+
+    .index-link:hover .index-arrow {
+      transform: none;
+    }
+  }
+
   .back {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 0.75rem;
     margin-top: 2.25rem;
   }
 
-  @media (min-width: 720px) {
-    .index-link {
-      grid-template-columns: 15rem minmax(0, 1fr) auto;
-      gap: 1.75rem;
-      align-items: center;
-    }
+  /* Ritme disamakan dengan halaman layanan: token --space-section dikecilkan
+     hanya di section daftar, supaya pita hatch dan garis awal konten turun
+     bersama dan baris pertama tetap berdiri di bawah garis batas lembar. */
+  .index-section {
+    --space-section: clamp(4rem, 7vw, 6rem);
+  }
+
+  :global(section.route-head .route-title) {
+    max-width: 20ch;
+    font-size: var(--text-h1);
+  }
+
+  :global(section.route-head .route-lead) {
+    max-width: 54ch;
+    font-size: var(--text-title-sm);
   }
 </style>
