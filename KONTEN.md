@@ -101,9 +101,9 @@ Yang TIDAK diklaim: Laravel, mobile app, "X tahun pengalaman", klien bayaran.
 
 Tiga jasa, dari positioning vault, tiap baris fungsi konkret (bukan buzzword):
 
-- Website & web app: landing, company profile, e-commerce, POS, dari desain sampai deploy.
-- Chatbot WhatsApp: balas pelanggan otomatis, jawab pertanyaan dari data bisnis kamu.
-- Otomasi AI & workflow: hapus kerja berulang, sambungkan tool yang sudah kamu pakai.
+- Website & web app: landing page, situs profil perusahaan, toko online, POS, dari desain sampai pemasangan.
+- Chatbot WhatsApp: membalas pelanggan otomatis dan menjawab pertanyaan memakai data bisnis pelanggan.
+- Otomasi AI & workflow: AI mengerjakan bagian berulang, seperti merangkum pesan masuk dan mengirim balasan rutin.
 
 Tanpa harga di situs (belum ada paket tetap). Arahkan ke kontak untuk diskusi.
 
