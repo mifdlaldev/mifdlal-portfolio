@@ -5,19 +5,29 @@
  * mobile (catatan di kepala Hero.astro). Modul ini nol dependency dan hanya
  * menyentuh satu kotak.
  *
- * Tiga lapis (lihat CSS di Hero.astro):
- *   .hero-flip-box    slot selebar kata terpanjang. Dipatok SEKALI, jadi
- *                     kata depan dan baris kedua judul tidak pernah bergerak
- *                     saat kata berganti (nol geser untuk tetangga).
- *   .hero-flip-sizer  teks tak terlihat, satu-satunya isi yang mengalir.
- *                     Inilah alat ukur lebar: lebar sizer = lebar kata.
- *   .hero-flip-frame  bingkai garis rambut yang melilit kata yang sedang
- *                     tampil. Lebarnya dianimasikan CSS mengikuti kata,
- *                     dipusatkan dengan transform supaya tepinya bergerak
- *                     tanpa memindahkan tata letak sekitarnya.
+ * Tiga hal yang harus benar sekaligus, dan cara masing-masing dicapai:
  *
- * Jadi kotaknya tetap "ikut panjang kata" seperti yang diminta, tanpa biaya
- * pergeseran tata letak: yang bergerak hanya tepi bingkai, bukan teks lain.
+ *   1. Jarak kata depan ke kotak KONSISTEN (seperti spasi teks biasa, bukan
+ *      celah panjang saat katanya pendek).
+ *      Caranya: bingkai menempel tepi KIRI slot, lebarnya mengikuti kata.
+ *      Tepi kiri bingkai selalu berjarak sama dari kata depan.
+ *
+ *   2. Tata letak tidak bergeser (nol ongkos CLS).
+ *      Caranya: lebar SLOT dipatok sekali selebar kata terpanjang dari
+ *      KEDUA bahasa, dan sizer di markup sudah berisi kata itu. Skrip tidak
+ *      pernah menyusutkan lebar slot, jadi tata letak dasar tidak pernah
+ *      bergerak: kata depan diam, keputusan wrap di layar kecil stabil, dan
+ *      pindah bahasa pun tidak menggeser apa pun. Pergantian lebar bingkai
+ *      terjadi di dalam slot lewat properti width pada elemen absolut, dan
+ *      itu tidak menggeser apa pun.
+ *
+ *   3. Baris tetap terlihat di tengah.
+ *      Karena judul rata tengah dan bingkai menempel kiri, isi baris jadi
+ *      condong ke kiri saat katanya pendek. Skrip menggeser seluruh grup
+ *      (kata depan + kotak) lewat transform translateX sebesar setengah
+ *      selisih lebar. Transform TIDAK dihitung sebagai layout shift, jadi
+ *      perbaikan ini gratis dari sisi CLS - dan sekaligus inilah "layout
+ *      flip"-nya: teks di sekitarnya ikut bergerak sedikit.
  *
  * Bahasa: daftar kata punya pasangan Indonesia/Inggris dan ditukar saat
  * peristiwa mifdlal:lang datang, pola yang sama dengan tautan email dan
@@ -58,14 +68,20 @@ export function mountHeroWordFlip(root: HTMLElement): void {
   const box = root.querySelector<HTMLElement>('[data-flip-box]')
   const frame = root.querySelector<HTMLElement>('[data-flip-frame]')
   const word = root.querySelector<HTMLElement>('[data-flip-word]')
+  const fit = root.querySelector<HTMLElement>('[data-flip-fit]')
   const sizer = root.querySelector<HTMLElement>('[data-flip-sizer]')
-  if (!box || !frame || !word || !sizer) return
+  if (!box || !frame || !word || !fit || !sizer) return
 
   const lists: Record<Lang, string[]> = {
     id: splitList(root.getAttribute('data-words-id')),
     en: splitList(root.getAttribute('data-words-en')),
   }
   if (lists.en.length < 2) return
+
+  /** Kata pematok lebar slot: terpanjang dari KEDUA bahasa. Isi awal sizer
+      di markup memakai kata ini juga, jadi lebar slot sudah benar sejak cat
+      pertama, sebelum skrip jalan, dan tidak pernah berubah sesudahnya. */
+  const reserved = [...lists.id, ...lists.en].reduce((a, b) => (b.length > a.length ? b : a), '')
 
   const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
 
@@ -76,6 +92,7 @@ export function mountHeroWordFlip(root: HTMLElement): void {
   let lang: Lang = readLang()
   let words: string[] = []
   let widths: number[] = []
+  let slot = 0
   let index = 0
   let timer = 0
   let running = false
@@ -85,31 +102,44 @@ export function mountHeroWordFlip(root: HTMLElement): void {
     return list.length > 1 ? list : lists.en
   }
 
-  /* ---------- ukur ---------- */
-
-  /** Lebar tiap kata diukur dari sizer (padding + border termasuk karena
-      box-sizing: border-box). Slot dipatok selebar kata terpanjang SEKALI;
-      bingkai mengikuti kata yang sedang tampil. */
+  /** Ukur lebar bingkai untuk tiap kata, lalu KEMBALIKAN sizer ke kata
+      pematok. Sizer adalah satu-satunya isi yang mengalir di dalam slot,
+      jadi kalau dia dibiarkan berisi kata pendek lebar slot ikut menyusut
+      dan tata letak bergeser. Patokannya kata terpanjang dari KEDUA bahasa:
+      dengan begitu pindah bahasa pun tidak mengubah lebar slot. */
   function measure() {
-    const previous = sizer!.textContent
     widths = words.map((w) => {
       sizer!.textContent = w
       return sizer!.getBoundingClientRect().width
     })
-    sizer!.textContent = previous
-
-    /* Slot: lebar tetap = kata terpanjang, supaya tetangga diam. */
-    box!.style.width = `${Math.ceil(Math.max(...widths))}px`
-    frame!.style.width = `${Math.ceil(widths[index])}px`
+    sizer!.textContent = reserved
+    slot = Math.ceil(sizer!.getBoundingClientRect().width)
   }
 
-  /** Bingkai mengikuti kata (dianimasikan CSS). Slot tidak disentuh. */
-  function sizeFrame(i: number) {
-    frame!.style.width = `${Math.ceil(widths[i])}px`
-  }
-
+  /** Pindahkan nama kata ke pengukur di dalam bingkai: bingkai menyesuaikan
+      lebarnya sendiri lewat tata letak biasa, bukan lewat properti yang
+      dipasang skrip. Dengan begitu tidak ada perubahan ukuran yang terjadi
+      sesudah cat pertama, jadi tidak ada pergeseran tata letak dari kotak. */
   function show(i: number) {
-    word!.textContent = words[i]
+    const text = words[i]
+    word!.textContent = text
+    fit!.textContent = text
+    /* Geser grup supaya isi baris tetap terlihat di tengah. Transform tidak
+       dihitung sebagai layout shift, jadi pergeseran ini gratis. */
+    const stacked = syncStacked()
+    root.style.setProperty('--flip-shift', stacked ? '0px' : `${(slot - widths[i]) / 2}px`)
+  }
+
+  /** Deteksi apakah baris benar-benar terbelah dua (kata depan satu baris,
+      kotak di baris berikutnya). Mengembalikan true kalau terbelah. */
+  function syncStacked(): boolean {
+    const lead = root.querySelector<HTMLElement>('.hero-flip-lead')
+    if (!lead) return false
+    const lr = lead.getBoundingClientRect()
+    const br = box!.getBoundingClientRect()
+    const stacked = br.top > lr.top + lr.height / 2
+    box!.classList.toggle('is-stacked', stacked)
+    return stacked
   }
 
   /* ---------- siklus ---------- */
@@ -124,10 +154,9 @@ export function mountHeroWordFlip(root: HTMLElement): void {
       if (!running) return
 
       index = (index + 1) % words.length
+      /* Kata, lebar bingkai, dan geseran berganti di sini, saat kata lama
+         sudah tak terlihat, jadi tidak ada lompatan yang kasatmata. */
       show(index)
-      /* Lebar bingkai dipasang sekarang, saat kata sedang tak terlihat. */
-      sizeFrame(index)
-      sizer!.textContent = words[index]
 
       /* Pindah ke sudut awal tanpa transisi, lalu lepas supaya transisi
          masuk berjalan dari sudut itu. */
@@ -158,21 +187,18 @@ export function mountHeroWordFlip(root: HTMLElement): void {
     window.clearTimeout(timer)
   }
 
-  /* ---------- bahasa ---------- */
-
   function applyLang() {
     const next = readLang()
     if (next === lang) return
     stop()
     lang = next
     words = pick()
-    /* Kata pertama bahasa baru dipasang tanpa animasi: ini pergantian
-       setelan, bukan giliran kata. */
+    box!.classList.remove('is-flip', 'is-in', 'is-hold')
+    /* Pindah setelan, bukan giliran kata: pasang kata pertama tanpa animasi.
+       Lebar slot tidak berubah, jadi tidak ada pergeseran tata letak. */
+    measure()
     index = 0
     show(index)
-    sizer!.textContent = words[0]
-    box!.classList.remove('is-flip', 'is-in', 'is-hold')
-    measure()
     start()
   }
 
@@ -180,20 +206,20 @@ export function mountHeroWordFlip(root: HTMLElement): void {
     applyLang()
   }
 
-  /* ---------- pasang ---------- */
-
   words = pick()
-  index = 0
-  /* Pasang kata + ukur lebar sedini mungkin (sebelum cat pertama), supaya
-     pengunjung berbahasa Indonesia tidak melihat kata Inggris sekejap dan
-     slot tidak melebar setelah halaman terlihat. */
-  show(index)
-  /* Transisi lebar dimatikan untuk pengukuran pertama: nilai awalnya harus
-     muncul seketika, bukan dianimasikan dari nol. */
-  frame.style.transition = 'none'
+
+  /* Pasang ukuran sedini mungkin (sebelum cat pertama): ukur lebar tiap kata
+     lalu tampilkan kata pertama tanpa animasi, supaya pengunjung berbahasa
+     Indonesia tidak melihat kata Inggris sekejap. Transisi lebar dimatikan
+     dulu agar nilai awal muncul seketika, bukan dianimasikan. */
   measure()
+  frame.style.transition = 'none'
+  root.style.transition = 'none'
+  index = 0
+  show(index)
   requestAnimationFrame(() => {
     frame.style.transition = ''
+    root.style.transition = ''
   })
 
   document.addEventListener('mifdlal:lang', onLang)
@@ -222,10 +248,12 @@ export function mountHeroWordFlip(root: HTMLElement): void {
       stop()
       box!.classList.remove('is-flip', 'is-in', 'is-hold')
       frame.style.transition = 'none'
-      sizeFrame(index)
+      root.style.transition = 'none'
       measure()
+      show(index)
       requestAnimationFrame(() => {
         frame.style.transition = ''
+        root.style.transition = ''
       })
       if (wasRunning) start()
     }, 150)

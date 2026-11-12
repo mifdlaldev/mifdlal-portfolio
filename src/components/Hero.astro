@@ -23,6 +23,13 @@
     import { mountHeroAscii } from '../scripts/hero-ascii'
     import { mountHeroWordFlip } from '../scripts/hero-flip'
 
+    /* Kotak kata bergilir dipasang LEBIH DULU, sebelum mesin ASCII: kunci
+       lebar slot harus terjadi sedini mungkin. Mesin ASCII menyiapkan
+       kanvas dan worker, dan kalau dia jalan dulu, penguncian lebar datang
+       terlambat dan terhitung sebagai pergeseran tata letak. */
+    const flipRoot = document.querySelector<HTMLElement>('[data-hero-flip]')
+    if (flipRoot) mountHeroWordFlip(flipRoot)
+
     const container = document.querySelector<HTMLElement>('[data-hero-ascii]')
     const canvas = container?.querySelector('canvas')
     if (container && canvas) {
@@ -43,9 +50,6 @@
         fontFamily: '"Geist Mono Variable", ui-monospace, monospace',
       })
     }
-
-    const flipRoot = document.querySelector<HTMLElement>('[data-hero-flip]')
-    if (flipRoot) mountHeroWordFlip(flipRoot)
   </script>
 
   <div class="wrap hero-inner">
@@ -66,6 +70,9 @@
           </span>
           <span class="hero-flip-box" data-flip-box>
             <span class="hero-flip-frame" data-flip-frame>
+              <span class="hero-flip-fit" data-flip-fit aria-hidden="true">
+                Need
+              </span>
               <span class="hero-flip-word" data-flip-word>
                 Need
               </span>
@@ -240,6 +247,11 @@
     white-space: nowrap;
     /* Jarak ke kata di sebelahnya, sama seperti spasi teks. */
     gap: 0.26em;
+    /* Pergeseran optis: skrip menggeser seluruh grup lewat transform supaya
+       blok yang terlihat tetap di tengah saat lebar kotak berubah. Transform
+       tidak dihitung sebagai layout shift, jadi tidak ada ongkos CLS. */
+    transform: translateX(var(--flip-shift, 0px));
+    transition: transform var(--flip-dur) var(--ease-out);
   }
 
   /* Kata depan judul ("Build What You"): tetap satu frasa, tidak dipotong
@@ -250,14 +262,15 @@
 
   /* Kotak: tiga lapis.
      - .hero-flip-box   slot. Lebarnya dipatok sekali selebar kata
-       terpanjang, jadi kata depan dan baris kedua judul tidak pernah
-       bergerak saat kata berganti (nol geser untuk tetangga).
-     - .hero-flip-sizer teks tak terlihat di dalam slot. Karena hanya ini
-       yang mengalir, lebarnya = lebar slot, sebelum maupun sesudah skrip
-       jalan (tanpa JavaScript pun kotak tampil utuh).
-     - .hero-flip-frame bingkai garis rambut yang melilit kata yang sedang
-       tampil dan lebar-nya dianimasikan CSS. Dipusatkan dengan transform,
-       jadi tepinya bergerak tanpa memindahkan tata letak sekitarnya. */
+       terpanjang (px dari skrip), jadi tata letak dasar tidak pernah
+       bergerak: kata depan diam dan keputusan wrap di layar kecil stabil.
+     - .hero-flip-sizer teks tak terlihat, satu-satunya isi yang mengalir.
+       Skrip memakainya untuk mengukur lebar tiap kata.
+     - .hero-flip-frame bingkai garis rambut menempel tepi KIRI slot,
+       lebarnya dianimasikan mengikuti kata. Karena menempel kiri dan
+       absolut, tepi kirinya selalu sejauh jarak yang sama dari kata depan:
+       jarak antar teks konsisten seperti spasi teks biasa, bukan celah
+       panjang saat katanya pendek. */
   .hero-flip-box {
     position: relative;
     display: inline-block;
@@ -278,13 +291,12 @@
 
   .hero-flip-frame {
     position: absolute;
-    /* Bingkai dilebihkan sedikit melewati kotak (offset negatif) supaya
-       descender huruf seperti 'g' tidak menyentuh garis bawah. Karena
-       bingkai ini absolut, pelebaran itu tidak menggeser apa pun. */
+    /* Bingkai dilebihkan sedikit melewati slot (offset negatif atas/bawah)
+       supaya descender huruf seperti 'g' tidak menyentuh garis bawah.
+       Kiri menempel tepi slot, jadi jarak dari kata depan selalu sama. */
     top: calc(-1 * var(--flip-pad-block));
     bottom: calc(-1 * var(--flip-pad-block));
-    left: 50%;
-    transform: translateX(-50%);
+    left: 0;
     padding-inline: var(--flip-pad-inline);
     /* Warna garis ikut warna teks judul (currentColor), bukan --color-line:
        hero selalu berlatar gelap sementara judulnya krem, jadi garis
@@ -298,8 +310,28 @@
     background: none;
     /* Kata berputar keluar dari kotak: potong di tepinya. */
     overflow: hidden;
-    /* Lebar dipasang skrip dalam px, jadi bisa dianimasikan. */
-    transition: width var(--flip-dur) var(--ease-out);
+    /* Lebar mengikuti isi: elemen absolut menyusut ke lebar anak
+       mengalirnya (.hero-flip-fit). Tidak ada properti lebar yang dipasang
+       skrip, jadi tidak ada satu pun perubahan ukuran yang bisa terhitung
+       sebagai layout shift. */
+    width: fit-content;
+  }
+
+  /* Pengukur mengalir di dalam bingkai: satu-satunya isi yang menentukan
+     lebar kotak. Tak terlihat, tebal hurufnya sama dengan kata asli. */
+  .hero-flip-fit {
+    display: block;
+    visibility: hidden;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  /* Saat baris terbelah dua di layar kecil (kata depan satu baris, kotak di
+     baris berikutnya), kata depan tidak lagi di sebelah kotak, jadi menempel
+     kiri tidak ada gunanya: bingkai dipusatkan supaya baris tetap seimbang. */
+  .hero-flip-box.is-stacked .hero-flip-frame {
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   /* Bayangan tipis saat kotak sedang berganti kata. */

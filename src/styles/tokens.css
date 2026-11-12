@@ -177,6 +177,10 @@
   --flip-perspective: 620px;
   --flip-hold: 2600ms;
   --flip-dur: 420ms;
+  /* Pergeseran optis grup kata supaya baris tetap terlihat di tengah saat
+     bingkai mengikuti kata pendek. Dipasang skrip (transform), jadi tidak
+     pernah memicu layout shift. */
+  --flip-shift: 0px;
 
   /* --- radius (lokal diagram) ------------------------------ */
   --radius-xl: 22px;
