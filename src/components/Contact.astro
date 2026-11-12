@@ -38,8 +38,12 @@ import CopyEmail from './CopyEmail'
             <span class="spec-k" data-i18n-id="Zona waktu">
               Timezone
             </span>
-            <span class="spec-v" data-i18n-id="GMT+7 (WIB)">
-              GMT+7 (WIB)
+            {/* Jam WIB dipasang public/js/clock.js. Penanda waktu duduk di
+                elemen sendiri supaya applyLang() tidak menimpanya: i18n
+                hanya menulis ulang textContent elemen ber-data-i18n-id. */}
+            <span class="spec-v">
+              <span data-i18n-id="GMT+7 (WIB)">GMT+7 (WIB)</span>
+              <time class="spec-clock" data-clock hidden></time>
             </span>
           </li>
           <li>
@@ -151,6 +155,11 @@ import CopyEmail from './CopyEmail'
   </div>
 </section>
 
+{/* Skrip jam ikut ke setiap halaman yang memasang komponen ini. defer
+    supaya tidak memblokir parse; blok ini hanya hidup di beranda karena
+    Contact hanya dipakai di sana. */}
+<script is:inline src="/js/clock.js" defer></script>
+
 <style>
   .contact-grid {
     display: grid;
@@ -199,6 +208,12 @@ import CopyEmail from './CopyEmail'
     font-family: var(--font-mono);
     font-size: var(--text-data);
     color: var(--color-ink);
+  }
+
+  /* Jam WIB: pemisah dan waktunya satu kesatuan, jadi bila barisnya sempit
+     bagian waktu pindah utuh ke baris berikutnya, tidak terbelah. */
+  .spec-clock {
+    white-space: nowrap;
   }
 
   .spec-v a {
