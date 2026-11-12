@@ -208,6 +208,16 @@ import { AsciiArtStatic } from './ui/ascii-art'
     min-width: 0;
   }
 
+  /* Versi Inggris judul 03 ("AI automation and workflow") lebih panjang dari
+     versi Indonesianya, tapi tetap melipat jadi dua baris. Kotak judul sendiri
+     diberi lebar oleh teks sebelum dilipat, jadi kotaknya melar sampai tepi
+     kolom dan ikon terlempar jauh ke kanan: sisa rongga sekitar 190px. Batas
+     ini memangkas kotak itu sehingga ikon kembali dekat ke judul. Hanya
+     berlaku saat html lang = en; versi Indonesia tidak tersentuh. */
+  html[lang='en'] .service-row:nth-child(3) .service-title {
+    max-width: 7em;
+  }
+
   .service-no {
     font-family: var(--font-mono);
     font-size: calc(var(--text-label) + 0.125rem);
