@@ -9,7 +9,7 @@ import './safari-window.css'
  *                       tab overview
  *   baris 2 tab bar   : tab terpisah di bawah toolbar; tab aktif
  *                       berwarna kertas sehingga menonjol dari bar
- *   baris 3 viewport  : iframe situs showcase
+ *   baris 3 viewport  : tangkapan layar statis situs showcase
  *
  * Perilaku (sesuai permintaan operator):
  * - Tiga tombol traffic light dirender TETAPI SEMUA dinonaktifkan
@@ -20,16 +20,17 @@ import './safari-window.css'
  *   tidak bisa diperkecil di bawah ukuran default 90% x 80% frame.
  * - Window BISA dipindah dengan drag di area kosong toolbar/tab bar,
  *   terbatas di dalam batas canvas (tidak bisa keluar .service-frame).
- * - Konten tab = iframe asli ke situs (bukan screenshot). Situs yang
- *   mengirim X-Frame-Options/CSP frame-ancestors akan tampil kosong —
- *   daftarkan domain yang diizinkan di public/_headers (frame-src).
- * - iframe dirender pada lebar virtual tetap 1024px (laptop klasik
- *   1024×768) lalu diskalakan fit-to-width. 1024 ada di atas breakpoint
- *   992px situs, jadi nav horizontal dan hero tetap proporsional seperti
- *   di laptop — bukan layout tablet (800px) atau teks 6px (1280px).
+ * - Konten tab = gambar WebP statis dari public/projects/ (bukan iframe
+ *   ke situs asli). Tidak ada request ke domain pihak ketiga, jadi tidak
+ *   ada HTML/CSS/JS/font/tracker luar yang ikut termuat dan tidak ada
+ *   konten di luar kendali yang tampil di portofolio.
+ * - Gambar dirender pada lebar virtual 1200px lalu diskalakan
+ *   fit-to-width (matematika sama seperti waktu masih iframe). Tangkapan
+ *   layarnya sendiri dibuat pada viewport desktop, jadi layout yang
+ *   terlihat adalah layout laptop.
  */
 
-type ShowcaseTab = { label: string; url: string }
+type ShowcaseTab = { label: string; url: string; image: string }
 type Rect = { x: number; y: number; w: number; h: number }
 type Dir = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw'
 
@@ -38,22 +39,17 @@ const DIRS: readonly Dir[] = ['n', 's', 'e', 'w', 'ne', 'nw', 'se', 'sw']
 const MIN_W = 240
 const MIN_H = 180
 
-/* Resolusi virtual tetap 1200px.
-   Kenapa 1200, bukan 1024 atau 1280:
-   - Breakpoint nav situs showcase BUKAN 992px. Di main.css:
-       @media (max-width:1100px){ .site-nav{display:none} .nav-toggle{display:inline-flex} }
-     Artinya di 1024px (percobaan sebelumnya) nav horizontal disembunyikan
-     dan diganti tombol "Menu" + hamburger — tampilan tablet, bukan laptop.
-   - 1200 > 1100 sehingga nav horizontal tampil, container 1180px aktif,
-     dan grid desktop penuh (bukan single-column).
-   - 1280 tidak dipakai: skalanya jatuh terlalu kecil di window showcase.
-   Konsekuensi: skala tetap mengikuti lebar window (fit-to-width).
+/* Lebar virtual tempat tangkapan layar dirender, lalu diskalakan
+   fit-to-width oleh transform.
+   Kenapa 1200: tangkapan layar panel 01 dibuat pada viewport desktop
+   (1355x768 diambil, disimpan 1000x563). Pada 1200px kontainer situs
+   yang tertangkap masih tampil dalam tata letak desktop penuh; inilah
+   skala acuan supaya gambar tampak seperti jendela laptop.
+   Konsekuensi: skala mengikuti lebar window (fit-to-width).
 
-   Layar kecil (<720px): resolusi turun ke 768px (layout tablet showcase,
-   nav hamburger) karena skala 1200->300px (0.25) membuat teks tak terbaca.
-   768 -> 0.4 tetap kecil tapi dapat dibaca, dan layout tablet showcase
-   memang dirancang untuk lebar tersebut. */
-const VIRTUAL_W = 1200 // desktop penuh: di atas breakpoint 1100px situs (nav horizontal)
+   Layar kecil (<720px): lebar virtual turun ke 768px karena skala
+   1200 -> 300px (0.25) membuat detail gambar tak terbaca. */
+const VIRTUAL_W = 1200 // acuan desktop: lebar tempat tangkapan layar tampil seperti jendela laptop
 const VIRTUAL_W_MOBILE = 768 // 420-719px: tablet/ponsel besar
 const VIRTUAL_W_TINY = 480 // ≤320px: iPhone SE, Display Zoom, layar lipat (floor 320px)
 
@@ -61,7 +57,7 @@ export default function SafariWindow({ tabs }: { tabs: readonly ShowcaseTab[] })
   const rootRef = useRef<HTMLDivElement>(null)
   const [rect, setRect] = useState<Rect | null>(null)
   const [active, setActive] = useState(0)
-  // Kenaikkan nilai ini memaksa iframe di-mount ulang = reload halaman.
+  // Kenaikkan nilai ini memaksa elemen konten di-mount ulang = muat ulang gambarnya.
   const [reloadKey, setReloadKey] = useState(0)
   const reload = () => setReloadKey((k) => k + 1)
 
@@ -179,7 +175,7 @@ export default function SafariWindow({ tabs }: { tabs: readonly ShowcaseTab[] })
     return () => ro.disconnect()
   }, [])
 
-  // Ukuran viewport untuk menghitung skala render iframe.
+  // Ukuran viewport untuk menghitung skala render gambar.
   const viewportRef = useRef<HTMLDivElement>(null)
   const [vp, setVp] = useState({ w: 0, h: 0 })
 
@@ -198,8 +194,8 @@ export default function SafariWindow({ tabs }: { tabs: readonly ShowcaseTab[] })
   const virtualW =
     vp.w > 0 && vp.w <= 240 ? VIRTUAL_W_TINY : vp.w > 0 && vp.w < 420 ? VIRTUAL_W_MOBILE : VIRTUAL_W
   const scale = vp.w > 0 ? vp.w / virtualW : 1
-  // Tinggi virtual: tinggi viewport dibagi skala -> iframe memenuhi area
-  // konten, sama seperti mengubah tinggi window browser laptop.
+  // Tinggi virtual: tinggi viewport dibagi skala -> gambar memenuhi area
+  // konten persis, sama seperti mengubah tinggi window browser laptop.
   const virtualH = scale > 0 ? Math.round(vp.h / scale) : 0
 
   // Pointer drag: pindahkan window (toolbar) atau perbesar (handle).
@@ -495,26 +491,22 @@ export default function SafariWindow({ tabs }: { tabs: readonly ShowcaseTab[] })
         ))}
       </div>
 
-      {/* Baris 3 — konten: iframe asli ke situs showcase, dirender pada
-          lebar laptop (1024px) lalu diskalakan agar muat window. */}
+      {/* Baris 3 — konten: tangkapan layar statis situs showcase dari
+          public/projects/, dirender pada lebar virtual 1200px lalu
+          diskalakan agar muat window (matematika sama seperti sebelumnya). */}
       <div className="safari__viewport" ref={viewportRef}>
-        {current.url ? (
+        {current.image ? (
           <div className="safari__stage">
-            <iframe
-              key={`${current.url}#${reloadKey}`}
+            <img
+              key={`${current.image}#${reloadKey}`}
               className="safari__frame"
-              /* `src` baru dipasang setelah viewport terukur di klien.
-                 Saat SSR `vp.h` masih 0, jadi tinggi iframe 0px — dan iframe
-                 setinggi 0px TIDAK dihormati `loading="lazy"`: Chrome langsung
-                 memuatnya. Terukur: 405 KB / 14 request dari situs showcase
-                 ikut masuk profil Lighthouse mobile sebelum section ini
-                 pernah terlihat. Tanpa `src` di HTML, iframe hanya dimuat
-                 setelah island hidrasi (= saat section benar-benar tampil). */
-              src={virtualH > 0 ? current.url : undefined}
-              title={t(`Pratinjau ${current.label}`, `Preview ${current.label}`)}
+              src={current.image}
+              alt={t(`Tangkapan layar ${current.label}`, `Screenshot of ${current.label}`)}
+              width="1000"
+              height="563"
+              draggable={false}
               loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+              decoding="async"
               style={{
                 width: `${virtualW}px`,
                 height: `${virtualH}px`,
@@ -526,8 +518,11 @@ export default function SafariWindow({ tabs }: { tabs: readonly ShowcaseTab[] })
           <div className="safari__empty">
             <span className="safari__empty-label">{t('Slot showcase', 'Showcase slot')}</span>
             <p className="safari__empty-text">
-              {t('Isi', 'Fill in')} <code>url</code> {t('di', 'in')} <code>src/data/site.ts</code>{' '}
-              {t('untuk menampilkan website di tab ini.', 'to display a website in this tab.')}
+              {t('Isi', 'Fill in')} <code>image</code> {t('di', 'in')} <code>src/data/site.ts</code>{' '}
+              {t(
+                'untuk menampilkan tangkapan layar di tab ini.',
+                'to display a screenshot in this tab.'
+              )}
             </p>
           </div>
         )}

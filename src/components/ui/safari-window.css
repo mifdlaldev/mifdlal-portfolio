@@ -366,7 +366,7 @@ body.is-moving-safari .safari__tablist {
   cursor: nesw-resize;
 }
 
-/* Saat resize, iframe tidak boleh menangkap pointer. */
+/* Saat resize, elemen konten tidak boleh menangkap pointer. */
 body.is-resizing-safari .safari__frame {
   pointer-events: none;
 }
@@ -386,9 +386,9 @@ body.is-resizing-safari .safari {
   overflow: hidden;
 }
 
-/* Panggung: iframe dirender pada lebar laptop (1280px) lalu diskalakan
-   turun agar muat. Layout di dalam iframe tetap desktop 1:1 — media query
-   situs mengevaluasi 1280px, bukan lebar window yang sempit. */
+/* Panggung: tangkapan layar dirender pada lebar virtual 1200px lalu
+   diskalakan turun agar muat window. Lebar virtual berarti gambar
+   selalu tampil seolah jendela selebar laptop, bukan tablet. */
 .safari__stage {
   position: absolute;
   inset: 0;
@@ -400,6 +400,21 @@ body.is-resizing-safari .safari {
   display: block;
   transform-origin: top left;
   background: var(--paper);
+  /* Reset global img,video menetapkan max-width 100% + height auto.
+     Keduanya harus dimatikan di sini: gambar memang dirender pada lebar
+     virtual 1200px lalu diskalakan oleh transform, dan tingginya sudah
+     ditulis inline supaya rasio viewport terjaga. Tanpa override ini
+     lebar terpotong ke lebar window lalu menyusut dua kali. */
+  max-width: none;
+  max-height: none;
+  height: auto;
+  /* Tangkapan layar mengisi penuh area konten, jadi tidak pernah ada
+     bilah kosong di dalam jendela. object-position top center: bagian
+     atas gambar (nav + hero situs) selalu utuh; kelebihannya dipotong
+     dari bawah saat area window lebih lebar dari rasio gambar, dan
+     dari kiri-kanan secara seimbang saat area window lebih sempit. */
+  object-fit: cover;
+  object-position: top center;
 }
 
 /* ---------- state kosong ---------- */
@@ -434,7 +449,7 @@ body.is-resizing-safari .safari {
   color: var(--color-ink);
 }
 
-/* ---------- drag pindah: iframe tidak menangkap pointer ---------- */
+/* ---------- drag pindah: konten tidak menangkap pointer ---------- */
 
 body.is-moving-safari {
   user-select: none;
@@ -518,7 +533,7 @@ body.is-moving-safari .safari__frame {
 
 /* ── Tier 320px: toolbar & tab dipadatkan ───────────────────────
    Frame 240px (viewport 320 − gutter 40×2). Window 224px.
-   Toolbar 30px, tab bar 22px → konten iframe dapat sisa maksimal.
+   Toolbar 30px, tab bar 22px → konten gambar dapat sisa maksimal.
    Tab tunggal dilebarkan agar judul tidak ter-ellipsis. */
 @media (max-width: 320px) {
   .safari__toolbar {

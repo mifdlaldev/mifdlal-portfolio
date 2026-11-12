@@ -90,8 +90,9 @@ import { AsciiArtStatic } from './ui/ascii-art'
               </div>
 
               {/* Showcase browser window — hanya di layanan 01.
-                  Window macOS-style dengan tab: tiap tab memuat situs showcase
-                  lewat iframe. Resize bebas dari 8 pinggiran; tombol window
+                  Window macOS-style dengan tab: tiap tab memuat tangkapan
+                  layar statis situs showcase dari public/projects/.
+                  Resize bebas dari 8 pinggiran; tombol window
                   semua dinonaktifkan. Mengambang di atas foto + ASCII. */}
               {s.no === '01' && <SafariWindow client:visible tabs={showcaseSites} />}
 
@@ -440,7 +441,7 @@ import { AsciiArtStatic } from './ui/ascii-art'
   }
 
   /* Layar kecil: frame lebih tinggi (4/3) supaya toolbar + tab bar +
-     konten iframe punya ruang vertikal. Ketiga canvas (01 Safari, 02
+     konten gambar punya ruang vertikal. Ketiga canvas (01 Safari, 02
      chatbot, 03 workflow) memakai .service-frame yang sama. */
   @media (max-width: 719px) {
     .service-frame {
@@ -488,7 +489,7 @@ import { AsciiArtStatic } from './ui/ascii-art'
      Event listener di fase capture: diblokir sebelum elemen lain
      menanganinya. Cakupan: klik kanan dan long-press di seluruh area
      .service-frame beserta turunannya (foto, ASCII, tiles, window Safari,
-     iframe). Menu sistem (Inspect Element, View Page Source, dll.) tidak
+     gambar). Menu sistem (Inspect Element, View Page Source, dll.) tidak
      pernah muncul di area canvas. -->
 <script>
   document.addEventListener(

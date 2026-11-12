@@ -244,14 +244,31 @@ export const services: readonly Service[] = [
 ]
 
 /* Tab showcase di dalam kanvas layanan 01 (Website dan web app).
-   Tiap tab memuat satu situs melalui iframe. URL kosong =
-   panel placeholder lokal (bukan iframe eksternal).
-   Tambah/ubah URL di sini; domain baru juga wajib didaftarkan di
-   Content-Security-Policy (frame-src) pada public/_headers. */
+   Tiap tab memuat SATU tangkapan layar statis dari public/projects/,
+   bukan iframe ke situs asli. Konsekuensinya: pengunjung tidak lagi
+   memuat HTML/CSS/JS/font/tracker situs pihak ketiga, jadi tidak ada
+   byte atau request dari domain luar dan tidak ada permukaan yang
+   berada di luar kendali kita. `url` tetap disimpan karena label
+   domain di address bar SafariWindow dihitung dari situ.
+   Tiga entri di bawah sengaja memakai tiga proyek teratas section
+   Proyek supaya kedua bagian menampilkan hal yang sama.
+   Berkas tangkapan layar: public/projects/<slug>-view.webp, 1000x563. */
 export const showcaseSites = [
-  { label: 'Loka Logistics', url: 'https://lokalogistics.co.id/' },
-  { label: 'Mahoni House', url: 'https://mahoni-house.vercel.app/en' },
-  { label: 'Orbit CLI', url: 'https://mifdlaldev.github.io/orbit-cli/' },
+  {
+    label: 'Loka Logistics',
+    url: 'https://lokalogistics.co.id/',
+    image: '/projects/loka-logistics-view.webp',
+  },
+  {
+    label: 'Mahoni House',
+    url: 'https://mahoni-house.vercel.app/en',
+    image: '/projects/mahoni-house-view.webp',
+  },
+  {
+    label: 'Simulasi Lokasi Ujian UT Bandung',
+    url: 'https://simulasi-pemilihan-lokasi-ujian-ut.vercel.app/',
+    image: '/projects/ut-bandung-simulator-view.webp',
+  },
 ] as const
 
 export const stack = [
