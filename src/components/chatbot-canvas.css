@@ -297,7 +297,10 @@
   height: 56%;
 }
 
-/* ── Widget chat — pojok kanan bawah viewport browser ────── */
+/* ── Widget chat — pojok kanan bawah viewport browser ──────
+   Latar SOLID (--paper penuh). Sebelumnya color-mix 92% + blur,
+   dan halaman di belakangnya tembus samar. Kartu melayang di atas
+   mockup, jadi tidak butuh efek kaca. */
 .cb-widget {
   position: absolute;
   right: 5%;
@@ -306,9 +309,7 @@
   z-index: var(--z-raise);
   border-radius: var(--radius-lg);
   border: 1px solid var(--ink-16);
-  background: color-mix(in oklab, var(--paper) 92%, transparent);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  background: var(--paper);
   box-shadow: var(--shadow-wf-tile);
   overflow: hidden;
 }
