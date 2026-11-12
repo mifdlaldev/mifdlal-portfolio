@@ -135,12 +135,12 @@ export const projects: readonly Project[] = [
     slug: 'e-baso-ikan',
     highlights: [
       'Katalog menu dengan empat produk unggulan',
-      'Alur pesan dari lihat menu ke checkout',
+      'Alur pesan: pilih menu, isi keranjang, checkout',
       'Dibangun dengan Next.js dan Supabase',
     ],
     highlightsEn: [
       'A menu catalogue with four featured products',
-      'An ordering flow from browsing to checkout',
+      'An ordering flow that covers menu, cart, and checkout',
       'Built with Next.js and Supabase',
     ],
   },

@@ -218,7 +218,7 @@
   const CHAT_STR = {
     id: {
       greeting:
-        'Halo! Saya asisten AI Mifdlal. Tanya soal layanan, proyek, atau stack — jawaban berdasarkan profil di situs ini.',
+        'Halo! Saya asisten AI Mifdlal. Tanya soal layanan, proyek, atau stack. Jawaban berdasarkan profil di situs ini.',
       error: 'Gagal mengirim. Coba lagi.',
       counter: 'Karakter',
       typing: 'mengetik...',
@@ -229,7 +229,7 @@
     },
     en: {
       greeting:
-        "Hi! I'm Mifdlal's AI assistant. Ask about services, projects, or stack — answers based on the profile on this site.",
+        "Hi! I'm Mifdlal's AI assistant. Ask about services, projects, or stack. Answers based on the profile on this site.",
       error: 'Failed to send. Try again.',
       counter: 'Characters',
       typing: 'typing...',

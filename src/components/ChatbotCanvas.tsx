@@ -401,18 +401,18 @@ export default function ChatbotCanvas() {
             <span className="cb-br-h1">
               {lang === 'en' ? (
                 <>
-                  Websites that <span className="cb-br-mark">work</span>, not just look.
+                  Websites that <span className="cb-br-mark">do the job</span>.
                 </>
               ) : (
                 <>
-                  Website yang <span className="cb-br-mark">bekerja</span>, bukan cuma tampil.
+                  Website yang <span className="cb-br-mark">mengerjakan tugasnya</span>.
                 </>
               )}
             </span>
             <span className="cb-br-sub">
               {T(
-                'Asisten menjawab pelanggan 24 jam, tanpa Anda ribut.',
-                'Assistants answer customers 24/7, without the hassle.'
+                'Asisten menjawab pelanggan 24 jam, termasuk di luar jam kerja.',
+                'Assistants answer customers 24/7, including outside working hours.'
               )}
             </span>
             <span className="cb-br-actions">
