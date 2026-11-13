@@ -280,11 +280,12 @@
     }
   }
 
-  /* Mobile: kotak plat, garis dimensi, dan angka lebarnya dilepas. Pada lebar
-     ini ketiganya bertumpuk dengan huruf dan terbaca sebagai potongan gambar.
-     Lembar dalamnya tetap dipakai supaya huruf tetap punya alas. */
+  /* Mobile: kotak plat, lembar di belakang huruf, garis dimensi, dan angka
+     lebarnya dilepas. Pada lebar ini ketiganya bertumpuk dengan huruf dan
+     terbaca sebagai potongan gambar. */
   @media (max-width: 719px) {
     .wordmark[data-plate='true']::before,
+    .wordmark[data-plate='true'] .wm-sheet,
     .wordmark[data-dim='true']::after,
     .wordmark[data-dim='true'] .wm-anno--dim {
       display: none;
