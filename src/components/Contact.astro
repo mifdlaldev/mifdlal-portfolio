@@ -80,7 +80,7 @@ import CopyEmail from './CopyEmail'
             Nomor dan pesan awal disimpan sekali di data situs; teks pesan
             punya pasangan Inggris dan ditukar oleh runtime i18n lewat
             atribut data-wa-number / data-wa-text-id / data-wa-text-en. */}
-        <div class="panel-block">
+        <div class="panel-block panel-block--wa">
           <p class="panel-label" data-i18n-id="WhatsApp">
             WhatsApp
           </p>
@@ -496,6 +496,41 @@ import CopyEmail from './CopyEmail'
       align-items: center;
       justify-content: space-between;
       gap: 1.5rem;
+    }
+  }
+
+  /* Di rentang tablet dengan grid satu kolom (560-859px) panel kontak
+     selebar kolom, jadi baris email dan blok WhatsApp yang sempit
+     meninggalkan separuh kanan kartu menganggur. Di situ baris email
+     dilebarkan: tautan mailto mengisi ruang tersisa sehingga garis
+     bawahnya membentang sampai tepi kanan panel dan tombol salin duduk di
+     ujungnya, sedangkan tombol WhatsApp dan catatannya berbagi satu baris.
+     Di bawah 560px isi panel sudah memenuhi lebar kartu, dan dari 860px
+     panel berbagi grid dua kolom jadi tidak ada ruang menganggur. */
+  @media (min-width: 560px) and (max-width: 859px) {
+    .email-row {
+      justify-content: space-between;
+    }
+
+    .contact-email {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .panel-block--wa {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: center;
+      column-gap: 1.5rem;
+      row-gap: 0.75rem;
+    }
+
+    .panel-block--wa > .panel-label {
+      grid-column: 1 / -1;
+    }
+
+    .whatsapp-note {
+      max-width: none;
     }
   }
 
