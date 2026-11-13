@@ -687,25 +687,38 @@ const certAttrs = (c: (typeof featured)[number]) => ({
     }
   }
 
-  /* Delapan kartu unggulan: baris penutup hanya berisi dua kartu, jadi
-     grid dipecah menjadi enam kolom (tiap kartu dua kolom) dan dua kartu
-     terakhir diletakkan di tengah supaya tidak ada sel kosong selebar
-     satu kartu di kolom ketiga. Penjaga :has() membuat blok ini mati
-     sendiri begitu jumlah kartu unggulan bukan delapan lagi. */
-  @media (min-width: 980px) {
-    .cert-grid:has(> .cert-card:nth-child(8):last-child) {
+  /* Kartu unggulan terakhir (Dicoding AWS) disembunyikan HANYA di rentang
+     tablet, tempat grid berisi dua kolom sehingga sembilan kartu
+     menyisakan satu sel kosong di baris penutup. Di mobile (satu kolom)
+     dan laptop (tiga kolom) sembilan kartu habis dibagi kolom, jadi
+     kartunya tetap tampil. Daftar sertifikat di dialog tidak ikut kena. */
+  @media (min-width: 620px) and (max-width: 1228px) {
+    .cert-grid:not(.cert-grid--list) > .cert-card:last-child {
+      display: none;
+    }
+  }
+
+  /* Di sub-rentang tablet atas (980-1228px) grid berisi tiga kolom tetapi
+     hanya delapan kartu yang tampil, jadi baris penutup berisi dua kartu
+     dan dipusatkan lewat grid enam kolom supaya tidak menyisakan sel
+     kosong di kolom ketiga. Penjaga :has() mematikan blok ini begitu
+     jumlah kartu unggulan berubah. */
+  @media (min-width: 980px) and (max-width: 1228px) {
+    .cert-grid:not(.cert-grid--list):has(> .cert-card:nth-child(9):last-child) {
       grid-template-columns: repeat(6, minmax(0, 1fr));
     }
 
-    .cert-grid:has(> .cert-card:nth-child(8):last-child) > .cert-card {
+    .cert-grid:not(.cert-grid--list):has(> .cert-card:nth-child(9):last-child) > .cert-card {
       grid-column: span 2;
     }
 
-    .cert-grid:has(> .cert-card:nth-child(8):last-child) > .cert-card:nth-last-child(2) {
+    .cert-grid:not(.cert-grid--list):has(> .cert-card:nth-child(9):last-child)
+      > .cert-card:nth-last-child(3) {
       grid-column: 2 / span 2;
     }
 
-    .cert-grid:has(> .cert-card:nth-child(8):last-child) > .cert-card:last-child {
+    .cert-grid:not(.cert-grid--list):has(> .cert-card:nth-child(9):last-child)
+      > .cert-card:nth-last-child(2) {
       grid-column: 4 / span 2;
     }
   }
