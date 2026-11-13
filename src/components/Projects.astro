@@ -443,6 +443,32 @@ import CodeComment from './CodeComment.astro'
     }
   }
 
+  /* Rentang dua kolom (720-979px): tiga kartu menyisakan satu sel kosong di
+     kanan kartu terakhir. Kartu sisa itu dibentangkan penuh lalu ditata
+     mendatar (foto kiri, keterangan kanan) supaya tidak ada sel yang
+     menganggur. Tinggi kartu mengikuti foto (rasio 16/10 bawaan), bukan
+     min-height, supaya sisi keterangan tidak menyisakan rongga. */
+  @media (min-width: 720px) and (max-width: 979px) {
+    .project-card:last-child {
+      grid-column: 1 / -1;
+    }
+
+    .project-card:last-child .project-link {
+      flex-direction: row;
+    }
+
+    .project-card:last-child .project-shot {
+      flex: 0 0 46%;
+      align-self: flex-start;
+      border-right: 1px solid var(--color-line);
+      border-bottom: 0;
+    }
+
+    .project-card:last-child:hover .project-shot {
+      border-right-color: var(--accent);
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .project-card,
     .project-shot-img,
