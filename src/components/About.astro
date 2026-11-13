@@ -16,7 +16,7 @@ import CodeComment from './CodeComment.astro'
             alt="Mifdlal Tsaqib Alfarras"
             draggable="false"
             widths={[400, 560, 720, 900]}
-            sizes="(min-width: 800px) 34vw, 92vw"
+            sizes="(min-width: 720px) 34vw, 92vw"
             format="webp"
             quality={82}
             loading="lazy"
@@ -297,7 +297,9 @@ import CodeComment from './CodeComment.astro'
     font-weight: var(--weight-semibold);
   }
 
-  @media (min-width: 800px) {
+  /* Dua kolom mulai dari lebar tablet: foto di kiri, teks di kanan. Di bawah
+     720px keduanya menumpuk karena kolom foto akan lebih sempit dari 15rem. */
+  @media (min-width: 720px) {
     .about-grid {
       grid-template-columns: minmax(15rem, 0.78fr) minmax(0, 1.22fr);
       gap: clamp(3rem, 7vw, 7rem);
