@@ -5,7 +5,7 @@
 ## Pages
 
 - [Home and portfolio](https://mifdlal.com/): short profile, five projects you can open, three services, work experience, education, certifications, and contact.
-- [Project index](https://mifdlal.com/proyek/): every project with a link to its own detail page.
+- [Project index](https://mifdlal.com/proyek/): five projects with a screenshot each, and a live link on the home page for every one.
 - [Service index](https://mifdlal.com/layanan/): the three services, each with a one-line description.
 
 ## Services
@@ -16,11 +16,11 @@
 
 ## Projects
 
-- [PT Loka Logistics Solution](https://mifdlal.com/proyek/loka-logistics/), logistics company profile site, WordPress: https://lokalogistics.co.id/
-- [UT Bandung Exam Location Simulator](https://mifdlal.com/proyek/simulasi-ut-bandung/), six-step wizard app, Vite: https://simulasi-pemilihan-lokasi-ujian-ut.vercel.app/
-- [Mahoni-House](https://mifdlal.com/proyek/mahoni-house/), bilingual villa landing page, Next.js: https://mahoni-house.vercel.app
-- [Conduit](https://mifdlal.com/proyek/conduit/), video source extractor with an Express API and React interface, TypeScript + Playwright: https://conduit-iota-rust.vercel.app
-- [Orbit CLI](https://mifdlal.com/proyek/orbit-cli/), project generator for seven frameworks, TypeScript: https://mifdlaldev.github.io/orbit-cli/
+- [PT Loka Logistics Solution](https://lokalogistics.co.id/), logistics company profile site, WordPress.
+- [UT Bandung Exam Location Simulator](https://simulasi-pemilihan-lokasi-ujian-ut.vercel.app/), six-step wizard app, Vite.
+- [Mahoni-House](https://mahoni-house.vercel.app), bilingual villa landing page, Next.js.
+- [Conduit](https://conduit-iota-rust.vercel.app), video source extractor with an Express API and React interface, TypeScript + Playwright.
+- [Orbit CLI](https://mifdlaldev.github.io/orbit-cli/), project generator for seven frameworks, TypeScript.
 
 ## Contact
 
@@ -32,5 +32,5 @@
 ## Technical notes
 
 - Static Astro site, served by Cloudflare Workers at mifdlal.com.
-- The home page carries the summary; every project has its own detail page. Service detail pages are not published yet. Main content stays readable without JavaScript.
+- The home page carries the summary; project and service detail pages are not published yet. Main content stays readable without JavaScript.
 - Sitemap: https://mifdlal.com/sitemap-index.xml

@@ -51,7 +51,7 @@ const jsonLdExtra = [
             data-rise="up"
             style={`--rise-delay:${i * 90}ms`}
           >
-            <a href={`/proyek/${p.slug}/`} class="index-link">
+            <div class="index-link">
               <span class="index-shot">
                 <img
                   src={p.image}
@@ -79,13 +79,7 @@ const jsonLdExtra = [
               <span class="index-stack" data-i18n-id={p.stack.join(' · ')}>
                 {p.stackEn?.join(' · ')}
               </span>
-              <span class="index-more">
-                <span data-i18n-id="Detail">Details</span>
-                <span class="index-arrow" aria-hidden="true">
-                  →
-                </span>
-              </span>
-            </a>
+            </div>
           </li>
         ))}
       </ul>
@@ -115,9 +109,9 @@ const jsonLdExtra = [
   }
 
   /* Baris daftar disusun seperti tabel, sama seperti halaman layanan: nomor
-     sebagai eyebrow di baris penuh, lalu kolom gambar, kolom teks, dan kolom
-     label Detail. Area dasar wajib dideklarasikan supaya grid-area bernama
-     tidak membentuk kolom hantu 0px. */
+     sebagai eyebrow di baris penuh, lalu kolom gambar, kolom teks. Area dasar
+     wajib dideklarasikan supaya grid-area bernama tidak membentuk kolom hantu
+     0px. Baris bukan tautan lagi: halaman detail proyek belum diterbitkan. */
   .index-link {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
@@ -127,24 +121,9 @@ const jsonLdExtra = [
       'name'
       'role'
       'desc'
-      'stack'
-      'more';
+      'stack';
     gap: 0.75rem;
     padding: 2rem 0;
-    color: inherit;
-    text-decoration: none;
-    transition: box-shadow var(--dur-fast) var(--ease);
-  }
-
-  /* Hover: garis aksen kiri inset, sama seperti halaman layanan. Inset supaya
-     tidak menggeser tata letak seperti border. */
-  .index-link:hover {
-    box-shadow: inset 2px 0 0 0 var(--color-electric);
-  }
-
-  .index-link:focus-visible {
-    outline: 2px solid var(--color-electric);
-    outline-offset: 2px;
   }
 
   .index-shot {
@@ -211,51 +190,22 @@ const jsonLdExtra = [
     color: var(--color-muted);
   }
 
-  .index-more {
-    grid-area: more;
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.25rem;
-    align-self: start;
-    font-family: var(--font-mono);
-    font-size: var(--text-nav);
-    letter-spacing: var(--tracking-caps-tight);
-    text-transform: uppercase;
-    color: var(--color-electric);
-    white-space: nowrap;
-  }
-
-  .index-arrow {
-    display: inline-block;
-    transition: transform var(--dur-fast) var(--ease);
-  }
-
-  .index-link:hover .index-arrow,
-  .index-link:focus-visible .index-arrow {
-    transform: translateX(0.15rem);
-  }
-
-  /* Tablet dan desktop: baris menyerupai tabel tiga kolom (gambar, teks,
-     label Detail). Susunan ini memakai token tipografi yang sama dengan
-     halaman layanan supaya judul baris, deskripsi, dan label Detail berdiri
-     pada tingkat yang identik. */
+  /* Tablet dan desktop: baris menyerupai tabel (kolom gambar, kolom teks).
+     Susunan ini memakai token tipografi yang sama dengan halaman layanan
+     supaya judul baris dan deskripsi berdiri pada tingkat yang identik. */
   @media (min-width: 720px) {
     .index-link {
-      grid-template-columns: 15rem minmax(0, 1fr) auto;
+      grid-template-columns: 15rem minmax(0, 1fr);
       grid-template-areas:
-        'no    no     no'
-        'shot  name   more'
-        'shot  role   .'
-        'shot  desc   .'
-        'shot  stack  .';
+        'no    no'
+        'shot  name'
+        'shot  role'
+        'shot  desc'
+        'shot  stack';
       align-items: start;
       column-gap: 2rem;
       row-gap: 0.4rem;
       padding-inline: calc(3rem - var(--grid-gutter));
-    }
-
-    .index-more {
-      justify-self: end;
     }
 
     :global(section.route-head .wrap) {
@@ -269,12 +219,12 @@ const jsonLdExtra = [
 
   @media (min-width: 900px) {
     .index-link {
-      grid-template-columns: 15rem minmax(0, 0.9fr) minmax(0, 1.1fr) auto;
+      grid-template-columns: 15rem minmax(0, 0.9fr) minmax(0, 1.1fr);
       grid-template-areas:
-        'no    no    no    no'
-        'shot  name  desc  more'
-        'shot  role  desc  .'
-        'shot  .     stack .';
+        'no    no    no'
+        'shot  name  desc'
+        'shot  role  desc'
+        'shot  .     stack';
     }
   }
 
@@ -284,17 +234,6 @@ const jsonLdExtra = [
     .index-link,
     .back {
       padding-inline: calc(3rem - var(--wrap-gutter-tablet));
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .index-link,
-    .index-arrow {
-      transition: none;
-    }
-
-    .index-link:hover .index-arrow {
-      transform: none;
     }
   }
 
