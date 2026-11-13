@@ -134,7 +134,6 @@ const jsonld = JSON.stringify({
       name: s.titleEn,
       description: s.bodyEn || s.body,
       serviceType: s.titleEn,
-      url: `${SITE}layanan/${s.slug}/`,
       areaServed: { '@type': 'Country', name: 'Indonesia' },
       provider: { '@id': PERSON_ID },
     })),

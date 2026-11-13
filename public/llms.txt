@@ -6,13 +6,13 @@
 
 - [Home and portfolio](https://mifdlal.com/): short profile, six projects you can open, three services, work experience, education, certifications, and contact.
 - [Project index](https://mifdlal.com/proyek/): every project with a link to its own detail page.
-- [Service index](https://mifdlal.com/layanan/): every service with a link to its own detail page.
+- [Service index](https://mifdlal.com/layanan/): the three services, each with a one-line description.
 
 ## Services
 
-- [Websites and web apps](https://mifdlal.com/layanan/website-web-app/): landing pages, company profiles, e-commerce, up to POS systems. Handled from design through launch.
-- [Chatbots](https://mifdlal.com/layanan/chatbot/): automatic replies and answers drawn from your business data, not fixed templates.
-- [AI automation and workflow](https://mifdlal.com/layanan/otomasi-ai-workflow/): AI handles incoming messages, summarises customer context, and sends automatic replies.
+- Websites and web apps: landing pages, company profiles, e-commerce, up to POS systems. Handled from design through launch.
+- Chatbots: automatic replies and answers drawn from your business data, not fixed templates.
+- AI automation and workflow: AI handles incoming messages, summarises customer context, and sends automatic replies.
 
 ## Projects
 
@@ -33,5 +33,5 @@
 ## Technical notes
 
 - Static Astro site, served by Cloudflare Workers at mifdlal.com.
-- The home page carries the summary; every project and service has its own detail page. Main content stays readable without JavaScript.
+- The home page carries the summary; every project has its own detail page. Service detail pages are not published yet. Main content stays readable without JavaScript.
 - Sitemap: https://mifdlal.com/sitemap-index.xml
