@@ -121,31 +121,6 @@ export const projects: readonly Project[] = [
   },
   {
     no: '05',
-    name: 'E-Baso-Ikan',
-    role: 'E-commerce',
-    roleEn: 'E-commerce',
-    description:
-      'Toko daring untuk usaha baso ikan: katalog menu, empat produk unggulan, dan alur pesan yang ringkas, dibangun dengan Next.js dan Supabase.',
-    descriptionEn:
-      'An online storefront for a fish-ball food business: a menu catalogue, four featured products, and a short ordering flow, built with Next.js and Supabase.',
-    stack: ['Next.js', 'Supabase'],
-    stackEn: ['Next.js', 'Supabase'],
-    live: 'https://e-baso-ikan.vercel.app',
-    image: '/projects/e-baso-ikan.webp',
-    slug: 'e-baso-ikan',
-    highlights: [
-      'Katalog menu dengan empat produk unggulan',
-      'Alur pesan: pilih menu, isi keranjang, checkout',
-      'Dibangun dengan Next.js dan Supabase',
-    ],
-    highlightsEn: [
-      'A menu catalogue with four featured products',
-      'An ordering flow that covers menu, cart, and checkout',
-      'Built with Next.js and Supabase',
-    ],
-  },
-  {
-    no: '06',
     name: 'Orbit CLI',
     role: 'Alat CLI',
     roleEn: 'CLI tool',

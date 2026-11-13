@@ -4,7 +4,7 @@
 
 ## Pages
 
-- [Home and portfolio](https://mifdlal.com/): short profile, six projects you can open, three services, work experience, education, certifications, and contact.
+- [Home and portfolio](https://mifdlal.com/): short profile, five projects you can open, three services, work experience, education, certifications, and contact.
 - [Project index](https://mifdlal.com/proyek/): every project with a link to its own detail page.
 - [Service index](https://mifdlal.com/layanan/): the three services, each with a one-line description.
 
@@ -20,7 +20,6 @@
 - [UT Bandung Exam Location Simulator](https://mifdlal.com/proyek/simulasi-ut-bandung/), six-step wizard app, Vite: https://simulasi-pemilihan-lokasi-ujian-ut.vercel.app/
 - [Mahoni-House](https://mifdlal.com/proyek/mahoni-house/), bilingual villa landing page, Next.js: https://mahoni-house.vercel.app
 - [Conduit](https://mifdlal.com/proyek/conduit/), video source extractor with an Express API and React interface, TypeScript + Playwright: https://conduit-iota-rust.vercel.app
-- [E-Baso-Ikan](https://mifdlal.com/proyek/e-baso-ikan/), online fish-ball store, Next.js + Supabase: https://e-baso-ikan.vercel.app
 - [Orbit CLI](https://mifdlal.com/proyek/orbit-cli/), project generator for seven frameworks, TypeScript: https://mifdlaldev.github.io/orbit-cli/
 
 ## Contact
