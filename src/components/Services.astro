@@ -428,6 +428,20 @@ import { AsciiArtStatic } from './ui/ascii-art'
   /* Layer animasi alur kerja (layanan 03) ditangani komponen WorkflowCanvas
      (React Flow), posisinya absolute di dalam .service-frame, menumpuk di atas foto. */
 
+  /* Tablet satu kolom (720-799px): baris teks berdiri di atas panel diagram,
+     jadi nomor, judul beserta ikonnya, dan paragrafnya dipusatkan supaya
+     seimbang terhadap panel selebar konten. Sejak 800px barisnya kembali dua
+     kolom dan teksnya rata kiri seperti semula. */
+  @media (min-width: 720px) and (max-width: 799px) {
+    .service-text {
+      text-align: center;
+    }
+
+    .service-title-row {
+      justify-content: center;
+    }
+  }
+
   /* Zigzag: baris ganjil teks di kiri, baris genap panel di kiri. */
   @media (min-width: 800px) {
     .service-row {
