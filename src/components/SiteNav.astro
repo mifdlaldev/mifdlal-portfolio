@@ -50,7 +50,40 @@ const links = [
       <a href={`${base}#kontak`} class="btn btn-nav" data-i18n-id="Mulai Proyek">
         Start a project
       </a>
+
+      {/* Pemicu menu ringkas: hanya tampil di bawah 860px. Label "Menu"
+          dibiarkan tanpa terjemahan karena sama di dua bahasa. */}
+      <button
+        type="button"
+        class="nav-burger"
+        data-nav-burger
+        aria-label="Menu"
+        aria-expanded="false"
+        aria-controls="nav-menu"
+      >
+        <span class="nav-burger-bar" aria-hidden="true"></span>
+        <span class="nav-burger-bar" aria-hidden="true"></span>
+        <span class="nav-burger-bar" aria-hidden="true"></span>
+      </button>
     </div>
+  </div>
+
+  {/* Panel menu ringkas: satu kolom, tautan section lalu aksi utama. */}
+  <div class="nav-menu" id="nav-menu" data-nav-menu hidden>
+    <nav
+      class="wrap nav-menu-inner"
+      aria-label="Main navigation"
+      data-i18n-aria-id="Navigasi utama"
+    >
+      {links.map((l) => (
+        <a href={l.href} class="nav-menu-link" data-i18n-id={l.label}>
+          {l.en}
+        </a>
+      ))}
+      <a href={`${base}#kontak`} class="btn btn-nav nav-menu-cta" data-i18n-id="Mulai Proyek">
+        Start a project
+      </a>
+    </nav>
   </div>
 </header>
 
@@ -105,7 +138,8 @@ const links = [
   /* Posisi fixed/top: teks putih + tombol putih dengan teks ink. */
   /* Teks di atas hero: platnya gelap di kedua tema, jadi warnanya tetap. */
   .nav:not(.is-scrolled):not([data-nav-solid]) .nav-link,
-  .nav:not(.is-scrolled):not([data-nav-solid]) .brand-word {
+  .nav:not(.is-scrolled):not([data-nav-solid]) .brand-word,
+  .nav:not(.is-scrolled):not([data-nav-solid]) .nav-burger {
     color: var(--paper-plate);
   }
 
@@ -266,18 +300,170 @@ const links = [
     border-color: var(--color-electric);
   }
 
+  /* --- pemicu menu ringkas (di bawah 860px) --- */
+  .nav-burger {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid color-mix(in srgb, currentColor 34%, transparent);
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--color-ink);
+    cursor: pointer;
+  }
+
+  .nav-burger-bar {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: currentColor;
+  }
+
+  /* Terbuka: dua baris luar jadi silang, baris tengah hilang. */
+  .nav-burger[aria-expanded='true'] .nav-burger-bar:first-child {
+    transform: translateY(6px) rotate(45deg);
+  }
+
+  .nav-burger[aria-expanded='true'] .nav-burger-bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  .nav-burger[aria-expanded='true'] .nav-burger-bar:last-child {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  /* --- panel menu ringkas --- */
+  .nav-menu {
+    position: absolute;
+    inset-inline: 0;
+    top: 100%;
+    background: var(--color-paper);
+    border-bottom: 1px solid var(--color-line);
+    box-shadow: 0 18px 32px color-mix(in srgb, var(--color-ink) 12%, transparent);
+  }
+
+  .nav-menu[hidden] {
+    display: none;
+  }
+
+  .nav-menu-inner {
+    display: grid;
+    gap: 0.25rem;
+    padding-block: 0.75rem 1.5rem;
+  }
+
+  .nav-menu-link {
+    display: block;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--color-line);
+    font-family: var(--font-mono);
+    font-size: var(--text-nav);
+    font-weight: 500;
+    letter-spacing: var(--tracking-caps-tight);
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--color-ink);
+    transition: color var(--dur-fast) var(--ease);
+  }
+
+  .nav-menu-link:hover,
+  .nav-menu-link.is-active {
+    color: var(--color-electric);
+  }
+
+  .nav-menu-cta {
+    justify-self: start;
+    margin-block-start: 1rem;
+  }
+
+  /* Panel terbuka = navbar dipaksa solid di kedua tema, supaya teks kertas
+     tidak jatuh di atas kertas. Rantai :not() disamakan dengan aturan state
+     hero supaya menang tanpa !important. */
+  .nav.is-menu-open {
+    border-bottom-color: var(--color-line);
+    background: var(--color-paper);
+    box-shadow: 0 4px 18px color-mix(in srgb, var(--color-ink) 6%, transparent);
+  }
+
+  .nav.is-menu-open:not(.is-scrolled):not([data-nav-solid]) .nav-link,
+  .nav.is-menu-open:not(.is-scrolled):not([data-nav-solid]) .brand-word,
+  .nav.is-menu-open:not(.is-scrolled):not([data-nav-solid]) .nav-burger {
+    color: var(--color-ink);
+  }
+
+  .nav.is-menu-open:not(.is-scrolled):not([data-nav-solid]) .brand-logo {
+    filter: var(--mark-filter);
+  }
+
   @media (min-width: 860px) {
     .nav-links {
       display: flex;
     }
+
+    /* Dari 860px ke atas nav lengkap tampil, jadi pemicu dan panel mati. */
+    .nav-burger,
+    .nav-menu {
+      display: none;
+    }
   }
 
-  /* Mobile: brand + tombol CTA. Link section disembunyikan supaya
-     tidak berdesakan, tapi aksi utama tetap bisa dijangkau. */
+  /* Di bawah 860px: brand + pemicu menu. Tautan section dan aksi utama
+     pindah ke panel supaya baris nav tidak berdesakan. */
   @media (max-width: 859px) {
     .nav-inner {
       grid-template-columns: auto 1fr;
       gap: 0.75rem;
     }
+
+    .nav-actions .btn-nav {
+      display: none;
+    }
   }
 </style>
+
+<script is:inline>
+  ;(function () {
+    var nav = document.querySelector('.nav')
+    var burger = document.querySelector('[data-nav-burger]')
+    var menu = document.querySelector('[data-nav-menu]')
+    if (!nav || !burger || !menu) return
+
+    function setOpen(open) {
+      menu.hidden = !open
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false')
+      nav.classList.toggle('is-menu-open', open)
+    }
+
+    burger.addEventListener('click', function () {
+      setOpen(menu.hidden)
+    })
+
+    /* Klik di luar navbar menutup panel. */
+    document.addEventListener('click', function (e) {
+      if (!menu.hidden && !nav.contains(e.target)) setOpen(false)
+    })
+
+    /* Escape menutup dan mengembalikan fokus ke pemicu. */
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !menu.hidden) {
+        setOpen(false)
+        burger.focus()
+      }
+    })
+
+    /* Menuju satu section: panel tutup supaya section-nya terlihat. */
+    menu.addEventListener('click', function (e) {
+      if (e.target.closest('a')) setOpen(false)
+    })
+
+    /* Melebar ke nav lengkap: panel tidak boleh tertinggal terbuka. */
+    window.addEventListener('resize', function () {
+      if (!menu.hidden && window.matchMedia('(min-width: 860px)').matches) setOpen(false)
+    })
+  })()
+</script>

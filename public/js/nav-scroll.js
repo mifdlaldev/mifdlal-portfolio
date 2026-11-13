@@ -28,7 +28,7 @@
      sampai bawah halaman karena tidak ada section nav lagi sesudahnya.
      Dengan garis baca, begitu section berikutnya (pendidikan) mengisi garis
      itu, tidak ada link yang cocok dan semua link padam. */
-  const links = Array.from(nav.querySelectorAll('.nav-links a[href^="#"]'))
+  const links = Array.from(nav.querySelectorAll('.nav-link[href^="#"], .nav-menu-link[href^="#"]'))
   const sections = links.map((a) => document.querySelector(a.getAttribute('href'))).filter(Boolean)
 
   let ticking = false
