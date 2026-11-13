@@ -25,6 +25,20 @@
   --danger: #e74c3c;
   --white: #ffffff;
 
+  /* --- plat tetap -------------------------------------------
+     Dipakai elemen yang memang berdiri di atas plat gelap atau di atas
+     aksen terang: kanvas hero, tabir, bayangan, tombol di atas plat, dan
+     teks aksen di atas plat. Nilainya sama dengan primitif tema terang,
+     jadi tema terang tidak berubah sedikit pun, sedangkan tema gelap
+     tidak ikut membalik plat yang seharusnya tetap gelap. */
+  --ink-plate: #1a1522;
+  --paper-plate: #fdfcf1;
+  --on-lemon: #1a1522;
+  --accent-on-plate: var(--lemon);
+  --logo-filter: brightness(0) saturate(100%);
+  /* Monogram merek sebuah PNG hitam beralfa: dibalik saat tema gelap. */
+  --mark-filter: none;
+
   /* --- palet dark (diaktifkan [data-theme="dark"] di html) ---
      Blueprint malam: kertas biru tua, tinta pucat. Aksen electric
      diterangkan agar kontras di atas kertas gelap; lemon tetap. */
@@ -241,6 +255,11 @@
    seluruh halaman ikut berubah tanpa menyentuh komponen.
    ============================================================ */
 [data-theme='dark'] {
+  /* Plat yang membalik jadi terang: teks aksennya harus jadi gelap, dan
+     logo monokrom dipaksa putih supaya tidak menghilang di kertas gelap. */
+  --accent-on-plate: var(--ink-dark-bg);
+  --logo-filter: brightness(0) invert(1);
+  --mark-filter: invert(1);
   --paper: var(--ink-dark-bg);
   --ink-900: var(--ink-dark-text);
   --ink-70: var(--ink-dark-muted);
@@ -260,6 +279,11 @@
 /* Mode "system": ikut preferensi peramban. */
 @media (prefers-color-scheme: dark) {
   :root[data-theme='system'] {
+    /* Plat yang membalik jadi terang: teks aksennya harus jadi gelap, dan
+       logo monokrom dipaksa putih supaya tidak menghilang di kertas gelap. */
+    --accent-on-plate: var(--ink-dark-bg);
+    --logo-filter: brightness(0) invert(1);
+    --mark-filter: invert(1);
     --paper: var(--ink-dark-bg);
     --ink-900: var(--ink-dark-text);
     --ink-70: var(--ink-dark-muted);

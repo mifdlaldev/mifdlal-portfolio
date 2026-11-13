@@ -103,9 +103,10 @@ const links = [
     }
   }
   /* Posisi fixed/top: teks putih + tombol putih dengan teks ink. */
+  /* Teks di atas hero: platnya gelap di kedua tema, jadi warnanya tetap. */
   .nav:not(.is-scrolled):not([data-nav-solid]) .nav-link,
   .nav:not(.is-scrolled):not([data-nav-solid]) .brand-word {
-    color: var(--color-paper);
+    color: var(--paper-plate);
   }
 
   .nav:not(.is-scrolled):not([data-nav-solid]) .nav-link:hover {
@@ -120,14 +121,14 @@ const links = [
   }
 
   .nav:not(.is-scrolled):not([data-nav-solid]) .btn-nav {
-    background: var(--color-paper);
-    color: var(--color-ink);
-    border-color: var(--color-paper);
+    background: var(--paper-plate);
+    color: var(--ink-plate);
+    border-color: var(--paper-plate);
   }
 
   .nav:not(.is-scrolled):not([data-nav-solid]) .btn-nav:hover {
     background: var(--color-lemon);
-    color: var(--color-ink);
+    color: var(--on-lemon);
     border-color: var(--color-lemon);
   }
 
@@ -172,6 +173,8 @@ const links = [
     height: 30px;
     width: auto;
     flex-shrink: 0;
+    /* Sumbernya hitam; di tema gelap dibalik lewat token. */
+    filter: var(--mark-filter);
   }
 
   .brand-word {
@@ -238,7 +241,7 @@ const links = [
   }
 
   .nav:not(.is-scrolled):not([data-nav-solid]) .nav-link.is-active {
-    color: var(--color-paper);
+    color: var(--paper-plate);
   }
 
   .nav-actions {

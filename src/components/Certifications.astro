@@ -314,8 +314,8 @@ const certAttrs = (c: (typeof featured)[number]) => ({
     font-size: var(--text-cap);
     letter-spacing: var(--tracking-caps);
     text-transform: uppercase;
-    color: var(--color-paper);
-    background: color-mix(in srgb, var(--ink-900) 78%, transparent);
+    color: var(--paper-plate);
+    background: color-mix(in srgb, var(--ink-plate) 78%, transparent);
     opacity: 0;
     transition: opacity var(--dur-fast) var(--ease);
   }
@@ -469,7 +469,7 @@ const certAttrs = (c: (typeof featured)[number]) => ({
   }
 
   .cert-dialog::backdrop {
-    background: color-mix(in srgb, var(--ink-900) 82%, transparent);
+    background: color-mix(in srgb, var(--ink-plate) 82%, transparent);
   }
 
   .cert-dialog-box {
@@ -594,7 +594,7 @@ const certAttrs = (c: (typeof featured)[number]) => ({
   }
 
   .cert-list::backdrop {
-    background: color-mix(in srgb, var(--ink-900) 82%, transparent);
+    background: color-mix(in srgb, var(--ink-plate) 82%, transparent);
   }
 
   .cert-list-box {

@@ -325,7 +325,7 @@ import CopyEmail from './CopyEmail'
   .whatsapp-cta:hover {
     background: var(--color-lemon);
     border-color: var(--color-lemon);
-    color: var(--color-ink);
+    color: var(--on-lemon);
   }
 
   .whatsapp-note {
@@ -333,7 +333,9 @@ import CopyEmail from './CopyEmail'
     max-width: 34ch;
     font-size: var(--text-body);
     line-height: var(--leading-relaxed);
-    color: color-mix(in srgb, var(--color-paper) 82%, transparent);
+    /* Tanpa campuran transparan: kartu biru tetap biru terang di kedua
+       tema, jadi teksnya harus pekat supaya kontrasnya lolos ambang. */
+    color: var(--color-paper);
   }
 
   /* Baris email: tautan mailto + tombol salin. Tombol dirender oleh island
@@ -458,14 +460,14 @@ import CopyEmail from './CopyEmail'
     font-size: var(--text-data);
     font-weight: var(--weight-bold);
     letter-spacing: var(--tracking-caps-tight);
-    color: var(--color-lemon);
+    color: var(--accent-on-plate);
     transition: color var(--dur-fast) var(--ease);
   }
 
   /* Hanya di perangkat berpointer: di layar sentuh hover menempel. */
   @media (hover: hover) {
     .brief-list li:hover {
-      color: var(--color-ink);
+      color: var(--on-lemon);
       border-bottom-color: transparent;
     }
 
@@ -474,7 +476,7 @@ import CopyEmail from './CopyEmail'
     }
 
     .brief-list li:hover .brief-no {
-      color: var(--color-ink);
+      color: var(--on-lemon);
     }
   }
 

@@ -436,7 +436,7 @@
   z-index: var(--z-band);
   height: clamp(190px, 96%, 330px);
   aspect-ratio: 962 / 1978;
-  filter: drop-shadow(0 12px 22px color-mix(in oklab, var(--ink-900) 30%, transparent));
+  filter: drop-shadow(0 12px 22px color-mix(in oklab, var(--ink-plate) 30%, transparent));
 }
 
 .cb-frame-img {

@@ -159,7 +159,7 @@
     height: clamp(7rem, 14vw, 10rem);
     background: linear-gradient(
       to bottom,
-      color-mix(in srgb, var(--color-ink) 52%, transparent),
+      color-mix(in srgb, var(--ink-plate) 52%, transparent),
       transparent
     );
     pointer-events: none;
@@ -212,7 +212,8 @@
     font-weight: 700;
     margin: 0;
     text-wrap: balance;
-    color: var(--color-paper);
+    /* Plat di belakang judul selalu gelap, jadi warnanya tidak ikut tema. */
+    color: var(--paper-plate);
     max-width: 100%;
   }
 
@@ -399,7 +400,7 @@
     position: absolute;
     inset: 0;
     z-index: var(--z-below);
-    background: color-mix(in srgb, var(--color-ink) 22%, transparent);
+    background: color-mix(in srgb, var(--ink-plate) 22%, transparent);
     opacity: 0;
     pointer-events: none;
   }

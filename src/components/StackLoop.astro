@@ -135,7 +135,8 @@ const logos = stack.map((s) => ({ src: s.logo, alt: s.name, title: s.name, width
      Hover menaikkan opasitas, bukan mengembalikan warna merek — palet
      dikunci empat warna. */
   .loop-band :global(img) {
-    filter: brightness(0) saturate(100%);
+    /* Logo selalu monokrom; arah tintanya mengikuti tema lewat token. */
+    filter: var(--logo-filter);
     opacity: 0.62;
     transition: opacity var(--dur-base) var(--ease);
   }

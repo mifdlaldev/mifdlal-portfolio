@@ -196,8 +196,8 @@ import CodeComment from './CodeComment.astro'
        dasar sendiri. Gradien biru elektrik -> ink, senada canvas. */
     background: linear-gradient(
       160deg,
-      color-mix(in srgb, var(--electric) 60%, var(--ink-900)) 0%,
-      var(--ink-900) 72%
+      color-mix(in srgb, var(--electric) 60%, var(--ink-plate)) 0%,
+      var(--ink-plate) 72%
     );
   }
 
@@ -211,7 +211,7 @@ import CodeComment from './CodeComment.astro'
     left: 0;
     right: 0;
     height: 140%;
-    background-color: var(--ink-900);
+    background-color: var(--ink-plate);
     background-size: cover;
     background-position: top center;
     filter: blur(16px) saturate(0.7) contrast(1.05) brightness(0.85);
@@ -239,7 +239,7 @@ import CodeComment from './CodeComment.astro'
     background: linear-gradient(
       to bottom,
       transparent 45%,
-      color-mix(in srgb, var(--ink-900) 45%, transparent)
+      color-mix(in srgb, var(--ink-plate) 45%, transparent)
     );
     pointer-events: none;
     z-index: var(--z-content);
@@ -301,16 +301,16 @@ import CodeComment from './CodeComment.astro'
        jendela browser menunjukkan latar parallax buram di belakang. */
     border: 1px solid color-mix(in srgb, var(--paper) 60%, transparent);
     box-shadow:
-      0 2px 8px color-mix(in srgb, var(--ink-900) 35%, transparent),
-      0 12px 32px color-mix(in srgb, var(--ink-900) 25%, transparent);
+      0 2px 8px color-mix(in srgb, var(--ink-plate) 35%, transparent),
+      0 12px 32px color-mix(in srgb, var(--ink-plate) 25%, transparent);
     transition: box-shadow var(--dur-fast) var(--ease);
   }
 
   /* Kartu disorot: bayangan foto mengambang menipis. */
   .project-card:hover .project-shot-img {
     box-shadow:
-      0 4px 12px color-mix(in srgb, var(--ink-900) 40%, transparent),
-      0 18px 44px color-mix(in srgb, var(--ink-900) 30%, transparent);
+      0 4px 12px color-mix(in srgb, var(--ink-plate) 40%, transparent),
+      0 18px 44px color-mix(in srgb, var(--ink-plate) 30%, transparent);
   }
 
   /* Nomor menempel di atas gambar seperti pelat nomor pada gambar teknik:
