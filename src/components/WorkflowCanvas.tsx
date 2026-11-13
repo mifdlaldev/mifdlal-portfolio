@@ -286,20 +286,31 @@ const GAP = 26
 const TOOL_GAP = 24
 const ROW2_Y = 150
 
+/* Padding tepi minimum di dalam frame, lebar graph desktop (556px), dan
+   ambang mode fluid. Layout desktop hanya dipakai kalau panel masih
+   memuat graph dengan padding sekurang-kurangnya EDGE_PAD di kiri dan
+   kanan; di bawah itu layout fluid (skala turun, terpusat otomatis)
+   supaya graph tidak pernah terpotong di tepi kanan. */
+const EDGE_PAD = 34
+const GRAPH_W = (NODE_W + GAP) * 4 + HUB_W
+const FLUID_MAX = GRAPH_W + EDGE_PAD * 2
+
 /* Kolom hub & baris tool tidak butuh konstanta modul: seluruh geometri
    dihitung buildGraph() dari Layout, supaya satu sumber kebenaran. */
 
 /* ── Layout responsif ─────────────────────────────────────────
-   Desktop: graph penuh 556px lebar (lihat konstanta di atas).
-   Mobile (<560px): frame hanya ~295px → semua ukuran diperkecil
-   (NODE 52, HUB 68, GAP 8) sehingga total 296px muat tanpa penskalaan
-   zoom (zoom pecahan dihindari karena me-raster teks → burem). */
-/* Tier 320px dihapus — diganti layout fluid di layoutForWidth(). */
+   Desktop (panel ≥ 624px): graph penuh 556px lebar, konstanta di atas.
+   Fluid (panel < 624px): semua ukuran diturunkan dari lebar panel nyata
+   supaya graph muat tanpa penskalaan zoom (zoom pecahan dihindari
+   karena me-raster teks → burem). Tier 320px dihapus, digantikan
+   layoutForWidth(). */
 
 /* Layout fluid: semua ukuran diturunkan dari lebar container nyata.
-   Dipakai untuk lebar < 561px (mobile/tablet kecil). Total lebar graph
-   = 4*nodeW + hubW + 4*gap, dijaga ≤ 97% lebar container agar tidak
-   pernah terpotong di lebar mana pun (320, 360, 390, 430, 480...).
+   Dipakai untuk panel < FLUID_MAX (624px) — mobile sampai tablet satu
+   kolom. Total lebar graph = 4*nodeW + hubW + 4*gap, dijaga ≤ 98% lebar
+   container agar tidak pernah terpotong di lebar mana pun (320, 360,
+   390, 430, 480, 560, 620). Tile tidak pernah lebih besar dari tile
+   desktop (NODE_W) supaya tidak ada lompatan ukuran di perbatasan mode.
 
    Verifikasi (penjamin while-loop):
              w=240 (vp 320) → gap 7, nodeW 38, hub 49 → 233px (budget 235)
@@ -308,7 +319,7 @@ const ROW2_Y = 150
 function layoutForWidth(w: number): Layout {
   const gap = Math.round(Math.min(8, Math.max(4, w * 0.028)))
   const budget = w * 0.98 - 4 * gap // sisa untuk 4 tile + hub
-  let nodeW = Math.max(34, Math.round(budget / 5.3))
+  let nodeW = Math.max(34, Math.min(NODE_W, Math.round(budget / 5.3)))
   const hubOf = (n: number) => Math.round(n * 1.3)
   /* Penjamin: turunkan nodeW sampai total graph benar-benar ≤ 98% lebar.
      Pembulatan Math.round bisa membuat total melebihi budget 1-3px. */
@@ -512,11 +523,11 @@ export default function WorkflowCanvas() {
     return () => ro.disconnect()
   }, [])
 
-  /* Pilih layout: desktop (>560px) pakai konstanta tetap;
-     sisanya fluid dari lebar nyata. */
+  /* Pilih layout: desktop hanya kalau graph masih muat dengan padding
+     tepi EDGE_PAD di kedua sisi; sisanya fluid dari lebar nyata. */
   const graph = useMemo(() => {
     const L: Layout =
-      width > 0 && width < 561
+      width > 0 && width < FLUID_MAX
         ? layoutForWidth(width)
         : {
             nodeW: NODE_W,
@@ -562,7 +573,7 @@ export default function WorkflowCanvas() {
 
   /* CSS custom property untuk geometri tile — dipakai workflow-canvas.css.
      Desktop tidak di-set (CSS fallback 84/116/80/72) agar tidak berubah. */
-  const isFluid = width > 0 && width < 561
+  const isFluid = width > 0 && width < FLUID_MAX
   const tileVars = isFluid
     ? ({
         '--wf-node-w': `${graph.L.nodeW}px`,
@@ -593,8 +604,9 @@ export default function WorkflowCanvas() {
             me-raster seluruh layer termasuk teks → burem. Posisi x/y
             dihitung manual agar graph pas di tengah frame tanpa penskalaan.
 
-            Mobile: layout fluid (graph ≤97% lebar container) dipusatkan
-            manual lewat defaultViewport, tanpa penskalaan zoom. */
+            Dua mode, keduanya terpusat horizontal:
+            fluid (panel < 624px) — graph ≤98% lebar panel, dipusatkan manual;
+            desktop (panel ≥ 624px) — konstanta tetap dipusatkan manual. */
             minZoom={1}
             maxZoom={1}
             defaultViewport={
@@ -605,7 +617,15 @@ export default function WorkflowCanvas() {
                     y: box.h > 0 ? Math.max(34, (box.h - graph.height) / 2) : 34,
                     zoom: 1,
                   }
-                : { x: 34, y: 102, zoom: 1 }
+                : {
+                    /* Dipusatkan dari lebar panel nyata (dulu x tetap 34 →
+                       graph menempel kiri begitu panel lebih lebar dari
+                       graph). Mode ini hanya jalan saat panel ≥ 624px
+                       sehingga hasilnya selalu ≥ EDGE_PAD di kedua sisi. */
+                    x: box.w > 0 ? Math.round((box.w - graph.width) / 2) : EDGE_PAD,
+                    y: 102,
+                    zoom: 1,
+                  }
             }
             nodesDraggable={false}
             nodesConnectable={false}
