@@ -18,6 +18,14 @@
    rekayasa perangkat lunak, jadi tidak sejalan dengan
    positioning situs. Kalau nanti mau ditampilkan, tinggal
    tambah entri + render gambarnya.
+
+   Kurasi: sertifikat Dicoding 'Belajar Dasar Cloud dan Gen AI
+   di AWS' (slug aws-cloud-genai, ID 1RXYW586MZVM) juga TIDAK
+   dimasukkan. Sebagai kartu terakhir dia sendirian di baris
+   penutup grid dua kolom sehingga menyisakan satu sel kosong
+   selebar satu kartu. Entri lengkapnya ada di riwayat git
+   berkas ini kalau nanti mau dipasang lagi (gambar di
+   public/certs/aws-cloud-genai*.webp masih ada).
    ============================================================ */
 
 export type Certificate = {
@@ -163,23 +171,6 @@ export const featured: readonly Certificate[] = [
     note: '10 jam pelatihan, 1-6 Agustus 2026. Nomor sertifikat dipakai untuk verifikasi.',
     noteEn:
       '10 hours of training, 1-6 August 2026. The certificate number is used for verification.',
-    width: 1400,
-    height: 991,
-    thumbWidth: 640,
-    thumbHeight: 453,
-  },
-  {
-    slug: 'aws-cloud-genai',
-    title: 'Belajar Dasar Cloud dan Gen AI di AWS',
-    titleEn: 'Cloud and Gen AI Fundamentals on AWS',
-    issuer: 'Dicoding',
-    date: '2026-07-25',
-    dateLabel: '25 Jul 2026',
-    credentialId: '1RXYW586MZVM',
-    verifyUrl: dicoding('1RXYW586MZVM'),
-    note: 'Dasar AWS Cloud: layanan komputasi, infrastruktur global, model biaya. Berlaku sampai 25 Jul 2029.',
-    noteEn:
-      'AWS Cloud fundamentals: compute services, global infrastructure, cost model. Valid until 25 Jul 2029.',
     width: 1400,
     height: 991,
     thumbWidth: 640,
