@@ -280,6 +280,17 @@
     }
   }
 
+  /* Mobile: kotak plat, garis dimensi, dan angka lebarnya dilepas. Pada lebar
+     ini ketiganya bertumpuk dengan huruf dan terbaca sebagai potongan gambar.
+     Lembar dalamnya tetap dipakai supaya huruf tetap punya alas. */
+  @media (max-width: 719px) {
+    .wordmark[data-plate='true']::before,
+    .wordmark[data-dim='true']::after,
+    .wordmark[data-dim='true'] .wm-anno--dim {
+      display: none;
+    }
+  }
+
   /* Mode reveal (dipasang /js/reveal.js): pita keluar dari alur dan menempel
      di dasar viewport. z-index TETAP di bawah page-layer (--z-below = -1):
      lapis atas yang opak menutup pita selama scroll biasa, lalu terangkat
