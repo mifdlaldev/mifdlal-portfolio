@@ -5,7 +5,7 @@
 ## Pages
 
 - [Home and portfolio](https://mifdlal.com/): short profile, five projects you can open, three services, work experience, education, certifications, and contact.
-- [Project index](https://mifdlal.com/proyek/): five projects with a screenshot each, and a live link on the home page for every one.
+- [Project index](https://mifdlal.com/proyek/): five projects with a screenshot each, plus title, role, description, and the stack used.
 - [Service index](https://mifdlal.com/layanan/): the three services, each with a one-line description.
 
 ## Services
