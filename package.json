@@ -30,7 +30,7 @@
     "@types/react-dom": "^19.3.0",
     "astro": "^7.4.7",
     "lighthouse": "^13.6.0",
-    "prettier": "^3.9.10",
+    "prettier": "^3.10.0",
     "prettier-plugin-astro": "^1.1.2",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
